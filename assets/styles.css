@@ -1,6 +1,7 @@
 html,
 body {
   font-family: 'HK Grotesk', 'Helvetica Neue', Helvetica, sans-serif;
+  background-color: #f1f1f1;
 }
 a {
   color: #a75252;
@@ -12,8 +13,26 @@ a {
 .imageList a {
   font-size: 1.3em;
 }
-.navbar-inverse {
-  background-color: #964a4a;
+.navbar-default {
+  background-color: #fff;
+  color: #111;
+}
+.navbar-default a.navbar-brand,
+.navbar-default a.navbar-brand:hover {
+  color: #964a4a;
+  text-transform: uppercase;
+}
+.navbar-default .navbar-nav > li > a,
+.navbar-default .dropdown-menu > li > a {
+  color: #111;
+}
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .dropdown-menu > li > a:hover {
+  background: #fbfbfb;
+  color: #111;
+}
+ol.page-breadcrumb {
+  background-color: #fbfbfb;
 }
 .panel-body {
   padding: 5px;

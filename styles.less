@@ -1,10 +1,17 @@
 // out: assets/styles.css
 
 @col-brand: #964a4a;
+@col-navbar: #fff;
+@col-bg: #f1f1f1;
+
+@col-black:#111;
+@col-lightgrey:#fbfbfb;
+
 @padding-panel: 5px;
 
 html, body {
     font-family: 'HK Grotesk', 'Helvetica Neue', Helvetica, sans-serif;
+    background-color: @col-bg;
 }
 
 a {
@@ -21,11 +28,29 @@ a {
         font-size: 1.3em;
     }
 }
-
-.navbar-inverse {
-    background-color: @col-brand;
+.metaphacts-header-navbar.navbar {
+    // height: 150px;
 }
 
+.navbar-default {
+    background-color: @col-navbar;
+    color: @col-black;
+    a.navbar-brand, a.navbar-brand:hover  {
+        color: @col-brand;
+        text-transform: uppercase;
+    }
+    .navbar-nav>li>a, .dropdown-menu>li>a {
+        color: @col-black;
+        &:hover {
+            background: @col-lightgrey;
+            color:@col-black
+        }
+    }
+}
+
+ol.page-breadcrumb {
+    background-color: @col-lightgrey;
+}
 .panel-body {
     padding: @padding-panel;
 }
