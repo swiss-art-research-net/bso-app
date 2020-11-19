@@ -3,6 +3,10 @@
 @col-brand: #964a4a;
 @padding-panel: 5px;
 
+html, body {
+    font-family: 'HK Grotesk', 'Helvetica Neue', Helvetica, sans-serif;
+}
+
 a {
     color: lighten(@col-brand, 5%);
     font-weight: bold;
@@ -25,3 +29,40 @@ a {
 .panel-body {
     padding: @padding-panel;
 }
+
+// Fonts
+
+@font-face {
+    font-family: 'HK Grotesk';
+    font-style: normal;
+    font-weight: 200;
+    src: url("/assets/fonts/HKGrotesk-Light.woff2") format("woff2"), url("/assets/fonts/HKGrotesk-Light.woff") format("woff");
+  }
+  @font-face {
+    font-family: 'HK Grotesk';
+    font-style: normal;
+    font-weight: 500;
+    src: url("/assets/fonts/HKGrotesk-Medium.woff2") format("woff2"), url("/assets/fonts/HKGrotesk-Medium.woff") format("woff");
+  }
+  
+  @font-face {
+    font-family: 'HK Grotesk';
+    font-style: normal;
+    font-weight: bold;
+    src: url("/assets/fonts/HKGrotesk-Bold.woff2") format("woff2"), url("/assets/fonts/HKGrotesk-Bold.woff") format("woff");
+  }
+  
+  @font-face {
+    font-family: 'HK Grotesk';
+    font-style: normal;
+    font-weight: normal;
+    src: url("/assets/fonts/HKGrotesk-Regular.woff2") format("woff2"), url("/assets/fonts/HKGrotesk-Regular.woff") format("woff");
+  }
+  
+  @font-face {
+    font-family: 'HK Grotesk';
+    font-style: normal;
+    font-weight: normal;
+    src: url("/assets/fonts/HKGrotesk-Regular.woff2") format("woff2"), url("/assets/fonts/HKGrotesk-Regular.woff") format("woff");
+  }
+  
