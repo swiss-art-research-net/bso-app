@@ -14,12 +14,7 @@
                     <mp-label iri="{{iri}}"></mp-label>
                 </div>
                 <div class="description">
-                    <semantic-query
-                        query="SELECT ?created_or_produced_date_label WHERE {
-                            BIND(<{{iri}}> as ?subject)
-                            [[> queryPartial:objectDate]]
-                        }"
-                    ></semantic-query>
+                    <mp-description iri="{{iri}}"></mp-description>
                 </div>
             </bs-col>
         </bs-row>
