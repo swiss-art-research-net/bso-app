@@ -1,1 +1,2 @@
 deploymentTitle=Bilder der Schweiz Online
+preferredThumbnails = <http://www.researchspace.org/ontology/PX_has_main_representation>,<http://www.cidoc-crm.org/cidoc-crm/P138i_has_representation>,{ \n?subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?iiif_image .\nBIND(CONCAT(STR(?iiif_image)\\,"/pct:12\\,10\\,75\\,50/300\\,/0/default.jpg") as ?value)\n}
