@@ -12,7 +12,7 @@
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E22_Man-Made_Object>", "label": "Thing", "thumbnail": "../images/fcs/things.svg"},
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E21_Person>", "label": "Actor", "thumbnail": "../images/fcs/actors.svg"},
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E53_Place>", "label": "Place", "thumbnail": "../images/fcs/places.svg"},
-        {"iri": "<http://rs.swissartresearch.net/Time>", "label": "Time", "thumbnail": "../images/fcs/dates.svg"},
+        {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E52_Time-Span>", "label": "Time", "thumbnail": "../images/fcs/dates.svg"},
         {"iri": "<http://rs.swissartresearch.net/Concept>", "label": "Concept", "thumbnail": "../images/fcs/concepts.svg"}
       ],
       "relations": [
@@ -37,11 +37,6 @@
       ]
     }'
 
-    categories='{
-      "<http://rs.swissartresearch.net/Time>": [{
-        "kind": "date-range"
-      }]
-    }'
     relations='{
       "<http://rs.swissartresearch.net/Thing_by_Actor>": [{
         "kind": "resource",
@@ -76,18 +71,6 @@
         <h4>Filter</h4>
         <semantic-search-facet
           open-by-default=true
-          value-relations='{
-            "<http://www.cidoc-crm.org/cidoc-crm/P128_carries>": {
-              "kind": "date-range",
-              "valuesQuery": "
-                 SELECT ?dateBeginValue ?dateEndValue WHERE {
-                   ?subject crm:P128_carries/crm:P94i_was_created_by/crm:P4_has_time-span/crm:P82_at_some_time_within ?time .
-                   FILTER(STRLEN(?time) = 4) .
-                   BIND(STRDT(CONCAT(?time, \"-01-01\"), xsd:date) as ?dateBeginValue) .
-                   BIND(STRDT(CONCAT(?time, \"-01-01\"), xsd:date) as ?dateEndValue) .
-              } ORDER BY ?dateBeginValue"
-             }
-          }'
           default-value-queries='{
             "resource": "
               SELECT ?value ?label (COUNT(DISTINCT $subject) AS ?count) WHERE {
