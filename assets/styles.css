@@ -37,6 +37,17 @@ ol.page-breadcrumb {
 .panel-body {
   padding: 5px;
 }
+.bso-component.object .image img {
+  width: 100%;
+}
+.bso-component.object .panel-body {
+  padding: 0;
+}
+.bso-component .title {
+  font-weight: bold;
+  font-size: 1.3em;
+  padding-top: 0.8em;
+}
 @font-face {
   font-family: 'HK Grotesk';
   font-style: normal;

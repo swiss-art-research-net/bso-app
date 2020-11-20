@@ -1,1 +1,20 @@
-[[> partial:panelObject iri="https://resource.swissartresearch.net/artwork/f33b0330-d53d-41f8-a7b8-3334be547d0b"]]
+<bs-row>
+    <bs-col md="10" md-offset="1">
+        <h2>Components</h2>
+
+        <h3>Object Panel</h3>
+
+        <semantic-query
+            query="SELECT ?subject WHERE {
+                ?subject a crm:E22_Man-Made_Object
+            } LIMIT 10"
+            template="{{> template}}"
+        >
+            <template id="template">
+                {{#each bindings}}
+                    {{> partial:panelObject iri=subject.value}}
+                {{/each}}
+            </template>
+        </semantic-query>
+    </bs-col>
+</bs-row>

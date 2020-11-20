@@ -1,5 +1,27 @@
-<mp-resource-thumbnail iri="[[iri]]"">
-    <mp-resource-thumbnail-fallback>
-      <span>Image not found!</span>
-    </mp-resource-thumbnail-fallback>
-  </mp-resource-thumbnail>
+
+<div class="bso-component object">
+    <bs-panel>
+        <bs-row>
+            <bs-col class="image" md="3" sm="6">
+                <mp-resource-thumbnail iri="{{iri}}"">
+                    <mp-resource-thumbnail-fallback>
+                    <span>Image not found!</span>
+                    </mp-resource-thumbnail-fallback>
+                </mp-resource-thumbnail>
+            </bs-col>
+            <bs-col md="9" sm="6">
+                <div class="title">
+                    <mp-label iri="{{iri}}"></mp-label>
+                </div>
+                <div class="description">
+                    <semantic-query
+                        query="SELECT ?created_or_produced_date_label WHERE {
+                            BIND(<{{iri}}> as ?subject)
+                            [[> queryPartial:objectDate]]
+                        }"
+                    ></semantic-query>
+                </div>
+            </bs-col>
+        </bs-row>
+    </bs-panel>
+</div>
