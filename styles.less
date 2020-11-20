@@ -3,6 +3,7 @@
 @col-brand: #964a4a;
 @col-navbar: #fff;
 @col-bg: #f1f1f1;
+@col-panels: #fff;
 
 @col-black:#111;
 @col-lightgrey:#fbfbfb;
@@ -19,17 +20,29 @@ a {
     font-weight: bold;
 }
 
+h2 {
+    padding-top: 2rem;
+}
+
 .content {
     padding-top: 3em;
+}
+
+.facet {
+    background-color: @col-panels;
+    .facet__category-selector-holder {
+        display: none;
+    }
+}
+
+.gap {
+    margin-bottom: 2rem;
 }
 
 .imageList {
     a {
         font-size: 1.3em;
     }
-}
-.metaphacts-header-navbar.navbar {
-    // height: 150px;
 }
 
 .navbar-default {
@@ -53,6 +66,12 @@ ol.page-breadcrumb {
 }
 .panel-body {
     padding: @padding-panel;
+}
+
+.panelView {
+    .DataTable--table-grid-layout {
+        display: block !important;
+    }
 }
 
 .bso-component {

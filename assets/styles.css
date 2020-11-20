@@ -7,8 +7,20 @@ a {
   color: #a75252;
   font-weight: bold;
 }
+h2 {
+  padding-top: 2rem;
+}
 .content {
   padding-top: 3em;
+}
+.facet {
+  background-color: #fff;
+}
+.facet .facet__category-selector-holder {
+  display: none;
+}
+.gap {
+  margin-bottom: 2rem;
 }
 .imageList a {
   font-size: 1.3em;
@@ -36,6 +48,9 @@ ol.page-breadcrumb {
 }
 .panel-body {
   padding: 5px;
+}
+.panelView .DataTable--table-grid-layout {
+  display: block !important;
 }
 .bso-component.object .image img {
   width: 100%;
