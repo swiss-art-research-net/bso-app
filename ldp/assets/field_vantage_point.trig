@@ -41,23 +41,31 @@
   <http://rs.swissartresearch.net/instances/fields/vantage_point> a <http://www.w3.org/ns/ldp#Resource>,
       prov:Entity, <http://www.metaphacts.com/ontology/fields#Field>;
     <http://www.metaphacts.com/ontology/fields#range> crm:E53_Place;
+    <http://www.metaphacts.com/ontology/fields#selectPattern> _:t113432;
+    <http://www.metaphacts.com/ontology/fields#insertPattern> _:t113430;
     <http://www.metaphacts.com/ontology/fields#domain> crm:E36_Visual_Item;
     rdfs:label "Vantage Point"@en;
-    prov:generatedAtTime "2020-11-23T10:32:53.603Z"^^xsd:dateTime;
-    <http://www.metaphacts.com/ontology/fields#insertPattern> _:t113380;
+    <http://www.metaphacts.com/ontology/fields#askPattern> _:t113431;
     prov:wasAttributedTo User:admin;
     rdfs:comment "The (fictive) location from which a view is depicted";
-    <http://www.metaphacts.com/ontology/fields#selectPattern> _:t113381 .
+    prov:generatedAtTime "2020-11-23T12:11:54.452Z"^^xsd:dateTime .
   
-  _:t113380 a sp:Query;
-    sp:text """PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+  _:t113430 a sp:Query;
+    sp:text """PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
 PREFIX vocab: <https://resource.swissartresearch.net/vocab>
 INSERT { 
   $subject crm:P138_represents $value .
-  $value crm:P2_has_type vocab:vantagePoint .
+  $value crm:P2_has_type vocab:vantagePoint ;
+    rdfs:label \"Vantage Point\".
 } WHERE {}""" .
   
-  _:t113381 a sp:Query;
+  _:t113431 a sp:Query;
+    sp:text """ASK {
+	FILTER(REGEX(STR(?value), \"https://s.geo.admin.ch/\\\\w{10}\", \"i\"))
+}""" .
+  
+  _:t113432 a sp:Query;
     sp:text """PREFIX sari: <http://rs.swissartresearch.net/type/vantagePoint>
 PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
 PREFIX vocab: <https://resource.swissartresearch.net/vocab>
@@ -66,10 +74,10 @@ SELECT ?value WHERE {
   ?value crm:P2_has_type vocab:vantagePoint
 }""" .
   
-  _:node1enq7hffqx111 <http://www.w3.org/ns/ldp#contains> <http://rs.swissartresearch.net/instances/fields/vantage_point> .
+  _:node1enq7hffqx168 <http://www.w3.org/ns/ldp#contains> <http://rs.swissartresearch.net/instances/fields/vantage_point> .
 }
 
 {
-  _:node1enq7hffqx111 a <http://www.w3.org/ns/ldp#Container>, <http://www.w3.org/ns/ldp#Resource>,
+  _:node1enq7hffqx168 a <http://www.w3.org/ns/ldp#Container>, <http://www.w3.org/ns/ldp#Resource>,
       prov:Entity .
 }

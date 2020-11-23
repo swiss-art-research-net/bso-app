@@ -2,13 +2,25 @@
 <semantic-form
     subject='[[urlParam "objectiri"]]'
     fields='[[fieldDefinitions
-    visual_item="http://rs.swissartresearch.net/instances/fields/object_carries_visual_item"]]'
+        visual_item="http://rs.swissartresearch.net/instances/fields/object_carries_visual_item"
+    ]]'
 >
     <semantic-form-composite-input 
-        for="visual_item"
-        fields='[[fieldDefinitions]]'
+        for='visual_item'
+        fields='[[fieldDefinitions
+            vantage_point="http://rs.swissartresearch.net/instances/fields/vantage_point"
+        ]]'
     >
-
+        <semantic-form-composite-input
+            for='vantage_point'
+            fields='[[fieldDefinitions
+                url="http://rs.swissartresearch.net/instances/fields/swisstopo_url"    
+            ]]'>
+            <semantic-form-text-input for='url'></semantic-form-text-input>
+        </semantic-form-composite-input>
     </semantic-form-composite-input>
+
+    <button name="submit" class="btn btn-default">Save</button>
+    <button name="reset" class="btn btn-default">Reset</button>
 
 </semantic-form>
