@@ -70,7 +70,16 @@ ol.page-breadcrumb {
   padding: 0;
 }
 .bso-component.header {
+  position: relative;
+  top: 44px;
   background-color: #fff;
+  overflow: hidden;
+  padding: 1rem;
+  height: calc(2rem + 100px);
+}
+.bso-component.header .image img {
+  height: 100px;
+  width: auto;
 }
 .bso-component .title {
   font-weight: bold;

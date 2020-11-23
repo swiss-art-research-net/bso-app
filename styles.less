@@ -10,6 +10,8 @@
 @col-black:#111;
 @col-lightgrey:#fbfbfb;
 
+@height-breadrumb:44px;
+
 @padding-panel: 5px;
 
 html, body {
@@ -102,7 +104,17 @@ ol.page-breadcrumb {
         }
     }
     &.header {
+        @height: 100px;
+        position: relative;
+        top: @height-breadrumb;
         background-color: @col-navbar;
+        overflow: hidden;
+        padding: 1rem;
+        height: calc(2rem + @height);
+        .image img {
+            height:@height;
+            width: auto;
+        }
     }
     .title {
         font-weight: bold;
