@@ -10,6 +10,17 @@ a {
 h2 {
   padding-top: 2rem;
 }
+.btn.btn-primary {
+  background-color: #8c133a;
+  border-color: #9e1541;
+}
+.btn.btn-primary:hover {
+  background-color: #b9194d;
+}
+.btn.btn-primary,
+.btn.btn-primary a {
+  color: #fff;
+}
 .content {
   padding-top: 3em;
 }

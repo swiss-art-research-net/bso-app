@@ -1,10 +1,12 @@
 // out: assets/styles.css
 
 @col-brand: #964a4a;
+@col-button-primary: #8c133a;
 @col-navbar: #fff;
 @col-bg: #f1f1f1;
 @col-panels: #fff;
 
+@col-white:#fff;
 @col-black:#111;
 @col-lightgrey:#fbfbfb;
 
@@ -22,6 +24,19 @@ a {
 
 h2 {
     padding-top: 2rem;
+}
+
+.btn {
+    &.btn-primary {
+        background-color: @col-button-primary;
+        border-color: lighten(@col-button-primary,4%);
+        &:hover {
+            background-color: lighten(@col-button-primary,10%);  
+        }
+        &, a {
+            color: @col-white;
+        }
+    }
 }
 
 .content {
