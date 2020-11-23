@@ -14,15 +14,17 @@
                 </bs-col>
                 <bs-col md="7" sm="6">
                     <div class="title">
-                            <mp-label iri="{{iri}}"></mp-label>
+                        <mp-label iri="{{iri}}"></mp-label>
                     </div>
                     <div class="description">
                         <mp-description iri="{{iri}}"></mp-description>
                     </div>
                 </bs-col>
-                <bs-col md="2" sm="12">
-                    [[> partial:buttonEditObjectMeta]]
-                </bs-col>
+                {{#if displayMenu}}
+                    <bs-col md="2" sm="12">
+                        [[> partial:buttonEditObjectMeta]]
+                    </bs-col>
+                {{/if}}
             </bs-row>
         </bs-panel>
     </semantic-link>

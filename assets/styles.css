@@ -69,6 +69,9 @@ ol.page-breadcrumb {
 .bso-component.object .panel-body {
   padding: 0;
 }
+.bso-component.header {
+  background-color: #fff;
+}
 .bso-component .title {
   font-weight: bold;
   font-size: 1.3em;
