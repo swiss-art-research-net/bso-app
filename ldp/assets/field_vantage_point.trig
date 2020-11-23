@@ -41,16 +41,16 @@
   <http://rs.swissartresearch.net/instances/fields/vantage_point> a <http://www.w3.org/ns/ldp#Resource>,
       prov:Entity, <http://www.metaphacts.com/ontology/fields#Field>;
     <http://www.metaphacts.com/ontology/fields#range> crm:E53_Place;
-    <http://www.metaphacts.com/ontology/fields#selectPattern> _:t113432;
-    <http://www.metaphacts.com/ontology/fields#insertPattern> _:t113430;
+    <http://www.metaphacts.com/ontology/fields#selectPattern> <http://rs.swissartresearch.net/instances/fields/vantage_point/select>;
+    <http://www.metaphacts.com/ontology/fields#insertPattern> <http://rs.swissartresearch.net/instances/fields/vantage_point/insert>;
     <http://www.metaphacts.com/ontology/fields#domain> crm:E36_Visual_Item;
     rdfs:label "Vantage Point"@en;
-    <http://www.metaphacts.com/ontology/fields#askPattern> _:t113431;
+    <http://www.metaphacts.com/ontology/fields#askPattern> <http://rs.swissartresearch.net/instances/fields/vantage_point/ask>;
     prov:wasAttributedTo User:admin;
     rdfs:comment "The (fictive) location from which a view is depicted";
     prov:generatedAtTime "2020-11-23T12:11:54.452Z"^^xsd:dateTime .
   
-  _:t113430 a sp:Query;
+  <http://rs.swissartresearch.net/instances/fields/vantage_point/insert> a sp:Query;
     sp:text """PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
 PREFIX vocab: <https://resource.swissartresearch.net/vocab>
@@ -60,12 +60,12 @@ INSERT {
     rdfs:label \"Vantage Point\".
 } WHERE {}""" .
   
-  _:t113431 a sp:Query;
+  <http://rs.swissartresearch.net/instances/fields/vantage_point/ask> a sp:Query;
     sp:text """ASK {
 	FILTER(REGEX(STR(?value), \"https://s.geo.admin.ch/\\\\w{10}\", \"i\"))
 }""" .
   
-  _:t113432 a sp:Query;
+  <http://rs.swissartresearch.net/instances/fields/vantage_point/select> a sp:Query;
     sp:text """PREFIX sari: <http://rs.swissartresearch.net/type/vantagePoint>
 PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
 PREFIX vocab: <https://resource.swissartresearch.net/vocab>
@@ -74,10 +74,5 @@ SELECT ?value WHERE {
   ?value crm:P2_has_type vocab:vantagePoint
 }""" .
   
-  _:node1enq7hffqx168 <http://www.w3.org/ns/ldp#contains> <http://rs.swissartresearch.net/instances/fields/vantage_point> .
-}
-
-{
-  _:node1enq7hffqx168 a <http://www.w3.org/ns/ldp#Container>, <http://www.w3.org/ns/ldp#Resource>,
-      prov:Entity .
+  <http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer> <http://www.w3.org/ns/ldp#contains> <http://rs.swissartresearch.net/instances/fields/vantage_point> .
 }
