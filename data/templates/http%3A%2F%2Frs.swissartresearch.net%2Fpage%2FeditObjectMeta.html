@@ -1,4 +1,14 @@
 
 <semantic-form
-    subject="[[urlParam "objectiri"]]"
-></semantic-form>
+    subject='[[urlParam "objectiri"]]'
+    fields='[[fieldDefinitions
+    visual_item="http://rs.swissartresearch.net/instances/fields/object_carries_visual_item"]]'
+>
+    <semantic-form-composite-input 
+        for="visual_item"
+        fields='[[fieldDefinitions]]'
+    >
+
+    </semantic-form-composite-input>
+
+</semantic-form>
