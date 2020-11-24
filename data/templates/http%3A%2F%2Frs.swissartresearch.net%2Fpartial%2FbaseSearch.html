@@ -1,119 +1,128 @@
-
-<style>
-    .facet-relations{
-        min-width: 200px;
-}
-</style>
-
-  <semantic-search
-    optimizer=blazegraph
-    search-profile='{
-      "categories": [
+<semantic-search
+categories='{
+  "<http://www.cidoc-crm.org/cidoc-crm/E52_Time-Span>": [{
+    "kind": "date-range",
+    "queryPattern": "{
+      $subject ?__relation__ ?date .
+      FILTER(?date >= ?__dateBeginValue__ && ?date <= ?__dateEndValue__)
+    }"
+  }]
+}'
+search-profile='{
+    "categories": [
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E22_Man-Made_Object>", "label": "Thing", "thumbnail": "../images/fcs/things.svg"},
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E21_Person>", "label": "Actor", "thumbnail": "../images/fcs/actors.svg"},
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E53_Place>", "label": "Place", "thumbnail": "../images/fcs/places.svg"},
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E52_Time-Span>", "label": "Time", "thumbnail": "../images/fcs/dates.svg"},
         {"iri": "<http://rs.swissartresearch.net/Concept>", "label": "Concept", "thumbnail": "../images/fcs/concepts.svg"}
       ],
-      "relations": [
-        {
-          "iri": "<http://rs.swissartresearch.net/Thing_by_Actor>",
-          "hasDomain": "<http://www.cidoc-crm.org/cidoc-crm/E22_Man-Made_Object>",
-          "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E21_Person>",
-          "label": "by"
-        },
-        {
-          "iri": "<http://rs.swissartresearch.net/Thing_depicts_Place>",
-          "hasDomain": "<http://www.cidoc-crm.org/cidoc-crm/E22_Man-Made_Object>",
-          "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E53_Place>",
-          "label": "depicts"
-        },
-        {
-          "iri": "<http://rs.swissartresearch.net/Actor_is_creator_of_Thing>",
-          "hasDomain": "<http://www.cidoc-crm.org/cidoc-crm/E21_Person>",
-          "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E22_Man-Made_Object>",
-          "label": "is creator of"
-        }
-      ]
-    }'
+    "relations": [
+      {
+        "iri": "<http://rs.swissartresearch.net/Thing_by_Actor>",
+        "hasDomain": "<http://www.cidoc-crm.org/cidoc-crm/E22_Man-Made_Object>",
+        "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E21_Person>",
+        "label": "by"
+      },
+      {
+        "iri": "<http://rs.swissartresearch.net/Thing_from_Time>",
+        "hasDomain": "<http://www.cidoc-crm.org/cidoc-crm/E22_Man-Made_Object>",
+        "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E52_Time-Span>",
+        "label": "from"
+      },
+      {
+        "iri": "<http://rs.swissartresearch.net/Thing_depicts_Place>",
+        "hasDomain": "<http://www.cidoc-crm.org/cidoc-crm/E22_Man-Made_Object>",
+        "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E53_Place>",
+        "label": "depicts"
+      },
+      {
+        "iri": "<http://rs.swissartresearch.net/Actor_is_creator_of_Thing>",
+        "hasDomain": "<http://www.cidoc-crm.org/cidoc-crm/E21_Person>",
+        "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E22_Man-Made_Object>",
+        "label": "is creator of"
+      }
+    ]
+  }'
+relations='{
+  "<http://rs.swissartresearch.net/Thing_by_Actor>": [{
+    "kind": "resource",
+    "queryPattern": "
+      {
+        ?subject crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by ?__value__ .
+      }
+    "
+  }],
+  "<http://rs.swissartresearch.net/Thing_depicts_Place>": [{
+    "kind": "resource",
+    "queryPattern": "
+      {
+        ?subject crm:P128_carries/crm:P138_represents ?__value__ .
+        ?__value__ a crm:E53_Place .
+      }
+    "
+  }],
+  "<http://rs.swissartresearch.net/Thing_from_Time>": [{
+    "kind": "date-range",
+    "queryPattern": "
+      {
+        ?subject crm:P108i_was_produced_by/crm:P4_has_time-span ?date .
+        ?date crm:P82a_begin_of_the_begin ?begin ;
+          crm:P82b_end_of_the_end ?end .
+        FILTER(?begin <= ?__dateEndValue__) .
+        FILTER(?end >= ?__dateBeginValue__) .
+      }
+    "
+  }],
+  "<http://rs.swissartresearch.net/Actor_is_creator_of_Thing>": [{
+    "kind": "resource",
+    "queryPattern": "
+      {
+        ?__value__ crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by ?subject.
+    }
+  "
+  }]
+}'
+>
 
-    relations='{
-      "<http://rs.swissartresearch.net/Thing_by_Actor>": [{
-        "kind": "resource",
-        "queryPattern": "
-          {
-            ?subject crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by ?__value__ .
-          }
-        "
-      }],
-      "<http://rs.swissartresearch.net/Thing_depicts_Place>": [{
-        "kind": "resource",
-        "queryPattern": "
-          {
-            ?subject crm:P128_carries/crm:P138_represents ?__value__ .
-          }
-        "
-      }],
-      "<http://rs.swissartresearch.net/Actor_is_creator_of_Thing>": [{
-        "kind": "resource",
-        "queryPattern": "
-          {
-            ?__value__ crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by ?subject.
-          }
-        "
-      }]
+  [[> @partial-block ]]
+
+  <semantic-search-facet-breadcrumbs>
+  </semantic-search-facet-breadcrumbs>
+
+  <semantic-search-facet
+    open-by-default="true"
+    value-relations='{
+      "<http://rs.swissartresearch.net/Thing_from_Time>": {
+        "kind": "date-range",
+        "valuesQuery":"
+          SELECT ?dateBeginValue ?dateEndValue WHERE {
+            ?subject crm:P108i_was_produced_by/crm:P4_has_time-span ?date .
+            ?date crm:P82a_begin_of_the_begin ?dateBeginValue ;
+              crm:P82b_end_of_the_end ?dateEndValue .
+          } ORDER BY ?dateBeginValue"
+      }
     }'
   >
-    [[> @partial-block ]]
-  
-    <div data-flex-layout="row stretch-stretch">
-      <div data-flex-self="size-1of3" style="flex: 0 0 0;">
-        <h4>Filter</h4>
-        <semantic-search-facet
-          open-by-default=true
-          default-value-queries='{
-            "resource": "
-              SELECT ?value ?label (COUNT(DISTINCT $subject) AS ?count) WHERE {
-                FILTER(?__facetRelationPattern__)
-                {
-                  ?value (rdfs:label|crm:P3_has_note|crm:P82_at_some_time_within) ?label.
-                } UNION {
-                  ?value (crm:P1_is_identified_by/crm:P3_has_note) ?label.
-                }
-              } GROUP BY ?value ?label ORDER BY ?label
-            "
-          }'
-        ></semantic-search-facet>
-      </div>
-  
-      <semantic-search-result-holder>
-        <div data-flex-self="md-full" class="panelView">
-          <semantic-search-result>
-            <semantic-table 
-              id="table-result"
-              query="SELECT ?subject WHERE {  
-              }" 
-              tuple-template='{{> gridTemplate}}'
-              options='{"showFilter": false}'
-            >
-              <template id="gridTemplate">
-                {{> partial:panelObject iri=subject.value displayMenu="true"}}
-              </template>
-            </semantic-table>
-          </semantic-search-result>
 
-          <div class="pull-right" style="display: flex;">
-            <semantic-search-result>
-              <mp-sparql-download id='csv-result' query="SELECT ?subject WHERE { }"
-                                  header="text/csv"
-                                  filename="csv-result.csv"
-                                  >
-                <button class="btn btn-default" style="margin-right:10px">Download CSV</button>
-              </mp-sparql-download>
-            </semantic-search-result>
-          </div>
-        </div>
-      </semantic-search-result-holder>
-    </div>
-  </semantic-search>
+  </semantic-search-facet>
   
+  <semantic-search-result-holder>
+
+    <semantic-search-result>
+      <div class="panelView">
+        <semantic-table 
+          id="panel-result"
+          query="SELECT ?subject WHERE {}" 
+          tuple-template='{{> gridTemplate}}'
+          options='{"showFilter": false}'
+        >
+          <template id="gridTemplate">
+            {{> partial:panelObject iri=subject.value displayMenu="true"}}
+          </template>
+        </semantic-table>
+      </div>
+    </semantic-search-result>
+
+  </semantic-search-result-holder>
+
+</semantic-search>
