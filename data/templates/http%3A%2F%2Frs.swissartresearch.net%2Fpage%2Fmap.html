@@ -1,0 +1,20 @@
+
+<semantic-map
+query='
+  SELECT ?wkt ?label ?artwork WHERE {
+        ?artwork rdfs:label ?label;
+            crm:P128_carries/crm:P138_represents ?place .
+        ?place a crm:E53_Place ;
+            rdfs:label ?description ;
+            crmdig:L54_is_same-as ?wdPlace .
+
+        ?wdPlace wdt:P625 ?wkt .
+  }
+'
+tuple-template='{{> template }}'
+>
+  <template id='template'>
+    <semantic-link iri="{{artwork.value}}">{{label.value}}</semantic-link>
+    <mp-resource-thumbnail iri="{{artwork.value}}""></mp-resource-thumbnail>
+  </template>
+</semantic-map>
