@@ -1,0 +1,68 @@
+@prefix mpo: <http://www.metaphacts.com/ontology/fields> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sp: <http://spinrdf.org/sp#> .
+
+{{#each fields}}
+
+    <{{ ../prefix }}{{ id }}/context> {
+
+        <{{ ../prefix }}{{ id }}> 
+        {{#if label}}
+            rdfs:label "{{ label }}" ;
+        {{/if}}
+        {{#if description}}
+            rdfs:comment "{{ description }}" ;
+        {{/if}}
+        {{#if minOccurs}}
+            mpo:minOccurs "{{ minOccurs }}" ;
+        {{/if}}
+        {{#if maxOccurs}}
+            mpo:maxOccurs "{{ maxOccurs }}" ;
+        {{/if}}
+        {{#if datatype}}
+            mpo:xsdDataType <{{ datatype }}> ;
+        {{/if}}
+        {{#if domain}}
+            mpo:domain <{{ domain }}> ;
+        {{/if}}
+        {{#if range}}
+            mpo:range <{{ range }}> ;
+        {{/if}}
+        {{#each queries }}
+            {{#if insert}}
+                mpo:insertPattern <{{ ../../prefix }}{{../id}}/query/insert> ;
+            {{/if}}
+            {{#if select}}
+                mpo:selectPattern <{{ ../../prefix }}{{../id}}/query/select> ;
+            {{/if}}
+            {{#if ask}}
+                mpo:askPattern <{{ ../../prefix }}{{../id}}/query/ask> ;
+            {{/if}}
+            {{#if delete}}
+                mpo:deletePattern <{{ ../../prefix }}{{../id}}/query/delete> ;
+            {{/if}}
+        {{/each}}
+    
+        a mpo:Field .
+
+        {{#each queries }}
+            {{#if insert}}
+                <{{ ../../prefix }}{{../id}}/query/insert> a sp:Query;
+                    sp:text """{{ insert }}""" .
+            {{/if}}
+            {{#if select}}
+                <{{ ../../prefix }}{{../id}}/query/select> a sp:Query;
+                    sp:text """{{ select }}""" .
+            {{/if}}
+            {{#if ask}}
+                <{{ ../../prefix }}{{../id}}/query/ask> a sp:Query;
+                    sp:text """{{ ask }}""" .
+            {{/if}}
+            {{#if delete}}
+                <{{ ../../prefix }}{{../id}}/query/delete> a sp:Query;
+                    sp:text """{{ delete }}""" .
+            {{/if}}
+        {{/each}}
+    
+    }
+{{/each}}

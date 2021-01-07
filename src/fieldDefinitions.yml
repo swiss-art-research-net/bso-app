@@ -1,0 +1,48 @@
+output: ../ldp/assets/fieldDefinitions.trig
+
+prefix: http://rs.swissartresearch.net/instances/fields/
+container: http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer
+
+fields:
+          
+    - id: creator_of_object
+      label: Creator
+      description: The creator of the artwork 
+      queries:
+        - insert: 'INSERT { 
+          ?creation crm:P14_carried_out_by $value .
+        } WHERE {
+          BIND(CONCAT(STR($subject), "/creation") as ?creation)
+        }'
+        
+        - select: 'SELECT ?value ?label WHERE {
+          $subject crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by $value.
+          ?value rdfs:label ?label.
+        }'
+
+    - id: label
+      label: Label
+      description: A human-readable label for the entity
+      minOccurs: 1
+      maxOccurs: 1
+      queries:
+        - insert: 'INSERT { 
+            $subject rdfs:label $value .
+          } WHERE {}'
+        - select: 'SELECT ?value WHERE {
+            $subject rdfs:label ?value .
+          }'
+    
+    - id: object_carries_visual_item
+      label: Visual Item
+      description: The E36 Visual Item carried by the E22 Human-Made Object
+      minOccurs: 1
+      maxOccurs: 1
+      domain: crm:E22_Man-Made_Object
+      range: crm:E36_Visual_item
+      queries:
+        - insert: 'INSERT { $subject crm:P128_carries $value} WHERE {}'
+        - select: 'SELECT ?value ?label WHERE {
+            $subject crm:P128_carries ?value.
+            ?value a crm:E36_Visual_Item.
+          }'
