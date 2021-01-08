@@ -1,10 +1,23 @@
-@prefix mpo: <http://www.metaphacts.com/ontology/fields> .
+@prefix ldp: <http://www.w3.org/ns/ldp#> .
+@prefix mpo: <http://www.metaphacts.com/ontology/fields#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix sp: <http://spinrdf.org/sp#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer/context> {
+  <http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer> rdfs:comment "Container to store field definitions.";
+    a ldp:Container, ldp:Resource, prov:Entity ;
+    rdfs:label "Form Container";
+    prov:wasAttributedTo <http://www.metaphacts.com/resource/user/admin>;
+    prov:generatedAtTime "2020-04-06T13:49:19.238+03:00"^^xsd:dateTime .
+}
 
 {{#each fields}}
 
     <{{ ../prefix }}{{ id }}/context> {
+
+        <http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer> ldp:contains <{{ ../prefix }}{{ id }}> .
 
         <{{ ../prefix }}{{ id }}> 
         {{#if label}}
@@ -20,7 +33,7 @@
             mpo:maxOccurs "{{ maxOccurs }}" ;
         {{/if}}
         {{#if datatype}}
-            mpo:xsdDataType <{{ datatype }}> ;
+            mpo:xsdDatatype {{ datatype }} ;
         {{/if}}
         {{#if domain}}
             mpo:domain <{{ domain }}> ;

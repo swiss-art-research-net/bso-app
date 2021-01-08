@@ -8,6 +8,7 @@ fields:
     - id: creator_of_object
       label: Creator
       description: The creator of the artwork 
+      datatype: xsd:anyURI
       queries:
         - insert: 'INSERT { 
           ?creation crm:P14_carried_out_by $value .
@@ -20,9 +21,25 @@ fields:
           ?value rdfs:label ?label.
         }'
 
+    - id: object_depicts
+      label: Depicts
+      description: The entity that is depicted by the object
+      datatype: xsd:anyURI
+      queries:
+        - select: 'SELECT ?value ?label WHERE {
+            $subject crm:P128_carries/crm:P138_represents ?value .
+            ?value rdfs:label ?label .
+          }'
+        - insert: 'INSERT {
+            ?work crm:P138_represents $value .
+          } WHERE {
+            $subject crm:P128_carries ?work .
+          }'
+
     - id: label
       label: Label
       description: A human-readable label for the entity
+      datatype: xsd:string
       minOccurs: 1
       maxOccurs: 1
       queries:
@@ -36,13 +53,14 @@ fields:
     - id: object_carries_visual_item
       label: Visual Item
       description: The E36 Visual Item carried by the E22 Human-Made Object
+      datatype: xsd:anyURI
       minOccurs: 1
       maxOccurs: 1
       domain: crm:E22_Man-Made_Object
       range: crm:E36_Visual_item
       queries:
         - insert: 'INSERT { $subject crm:P128_carries $value} WHERE {}'
-        - select: 'SELECT ?value ?label WHERE {
+        - select: 'SELECT ?value WHERE {
             $subject crm:P128_carries ?value.
             ?value a crm:E36_Visual_Item.
           }'
