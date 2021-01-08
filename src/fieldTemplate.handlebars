@@ -1,3 +1,4 @@
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
 @prefix ldp: <http://www.w3.org/ns/ldp#> .
 @prefix mpo: <http://www.metaphacts.com/ontology/fields#> .
 @prefix prov: <http://www.w3.org/ns/prov#> .
@@ -36,10 +37,10 @@
             mpo:xsdDatatype {{ datatype }} ;
         {{/if}}
         {{#if domain}}
-            mpo:domain <{{ domain }}> ;
+            mpo:domain {{ domain }} ;
         {{/if}}
         {{#if range}}
-            mpo:range <{{ range }}> ;
+            mpo:range {{ range }} ;
         {{/if}}
         {{#each queries }}
             {{#if insert}}
