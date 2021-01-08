@@ -14,8 +14,7 @@ try {
 } catch (err) {
     console.error(err);
 }
-
-const output = handlebars.compile(template)(data);
+const output = handlebars.compile(template, { noEscape: true })(data);
 
 try {
     fs.writeFileSync(data.output, output);
