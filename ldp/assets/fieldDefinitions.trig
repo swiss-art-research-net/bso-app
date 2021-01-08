@@ -5,6 +5,7 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix sp: <http://spinrdf.org/sp#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix User: <http://www.metaphacts.com/resource/user/> .
 
 <http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer/context> {
   <http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer> rdfs:comment "Container to store field definitions.";
@@ -26,7 +27,9 @@
                 mpo:insertPattern <http://rs.swissartresearch.net/instances/fields/creator_of_object/query/insert> ;
                 mpo:selectPattern <http://rs.swissartresearch.net/instances/fields/creator_of_object/query/select> ;
     
-        a mpo:Field .
+        a mpo:Field, ldp:Resource, prov:Entity ;
+        prov:wasAttributedTo User:admin ;
+        prov:generatedAtTime "2021-01-08T11:43:46.111Z"^^xsd:dateTime .
 
                 <http://rs.swissartresearch.net/instances/fields/creator_of_object/query/insert> a sp:Query;
                     sp:text """INSERT {  ?creation crm:P14_carried_out_by $value . } WHERE { BIND(CONCAT(STR($subject), "/creation") as ?creation) }""" .
@@ -46,7 +49,9 @@
                 mpo:selectPattern <http://rs.swissartresearch.net/instances/fields/object_depicts/query/select> ;
                 mpo:insertPattern <http://rs.swissartresearch.net/instances/fields/object_depicts/query/insert> ;
     
-        a mpo:Field .
+        a mpo:Field, ldp:Resource, prov:Entity ;
+        prov:wasAttributedTo User:admin ;
+        prov:generatedAtTime "2021-01-08T11:43:46.111Z"^^xsd:dateTime .
 
                 <http://rs.swissartresearch.net/instances/fields/object_depicts/query/select> a sp:Query;
                     sp:text """SELECT ?value ?label WHERE { $subject crm:P128_carries/crm:P138_represents ?value . ?value rdfs:label ?label . }""" .
@@ -68,7 +73,9 @@
                 mpo:insertPattern <http://rs.swissartresearch.net/instances/fields/label/query/insert> ;
                 mpo:selectPattern <http://rs.swissartresearch.net/instances/fields/label/query/select> ;
     
-        a mpo:Field .
+        a mpo:Field, ldp:Resource, prov:Entity ;
+        prov:wasAttributedTo User:admin ;
+        prov:generatedAtTime "2021-01-08T11:43:46.111Z"^^xsd:dateTime .
 
                 <http://rs.swissartresearch.net/instances/fields/label/query/insert> a sp:Query;
                     sp:text """INSERT {  $subject rdfs:label $value . } WHERE {}""" .
@@ -92,7 +99,9 @@
                 mpo:insertPattern <http://rs.swissartresearch.net/instances/fields/object_carries_visual_item/query/insert> ;
                 mpo:selectPattern <http://rs.swissartresearch.net/instances/fields/object_carries_visual_item/query/select> ;
     
-        a mpo:Field .
+        a mpo:Field, ldp:Resource, prov:Entity ;
+        prov:wasAttributedTo User:admin ;
+        prov:generatedAtTime "2021-01-08T11:43:46.111Z"^^xsd:dateTime .
 
                 <http://rs.swissartresearch.net/instances/fields/object_carries_visual_item/query/insert> a sp:Query;
                     sp:text """INSERT { $subject crm:P128_carries $value} WHERE {}""" .

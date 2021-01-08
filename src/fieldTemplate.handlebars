@@ -5,6 +5,7 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix sp: <http://spinrdf.org/sp#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix User: <http://www.metaphacts.com/resource/user/> .
 
 <http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer/context> {
   <http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer> rdfs:comment "Container to store field definitions.";
@@ -57,7 +58,9 @@
             {{/if}}
         {{/each}}
     
-        a mpo:Field .
+        a mpo:Field, ldp:Resource, prov:Entity ;
+        prov:wasAttributedTo User:admin ;
+        prov:generatedAtTime "2021-01-08T11:43:46.111Z"^^xsd:dateTime .
 
         {{#each queries }}
             {{#if insert}}
