@@ -79,7 +79,7 @@ relations='{
     "kind": "date-range",
     "queryPattern": "
       {
-        ?subject crm:P108i_was_produced_by/crm:P4_has_time-span ?date .
+        ?subject (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P4_has_time-span ?date .
         ?date crm:P82a_begin_of_the_begin ?begin ;
           crm:P82b_end_of_the_end ?end .
         FILTER(?begin <= ?__dateEndValue__) .
@@ -110,7 +110,7 @@ relations='{
         "kind": "date-range",
         "valuesQuery":"
           SELECT ?dateBeginValue ?dateEndValue WHERE {
-            ?subject crm:P108i_was_produced_by/crm:P4_has_time-span ?date .
+            ?subject (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P4_has_time-span ?date .
             ?date crm:P82a_begin_of_the_begin ?dateBeginValue ;
               crm:P82b_end_of_the_end ?dateEndValue .
           } ORDER BY ?dateBeginValue"
