@@ -16,6 +16,25 @@
 }
 
 
+    <http://rs.swissartresearch.net/instances/fields/collection/context> {
+
+        <http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer> ldp:contains <http://rs.swissartresearch.net/instances/fields/collection> .
+
+        <http://rs.swissartresearch.net/instances/fields/collection> 
+            rdfs:label "Collection" ;
+            rdfs:comment "The holding collection or institution of the work" ;
+            mpo:xsdDatatype xsd:anyURI ;
+                mpo:selectPattern <http://rs.swissartresearch.net/instances/fields/collection/query/select> ;
+    
+        a mpo:Field, ldp:Resource, prov:Entity ;
+        prov:wasAttributedTo User:admin ;
+        prov:generatedAtTime "2021-01-08T11:43:46.111Z"^^xsd:dateTime .
+
+                <http://rs.swissartresearch.net/instances/fields/collection/query/select> a sp:Query;
+                    sp:text """SELECT ?value ?label WHERE { $subject crm:P109_has_former_or_current_curator ?value . ?value rdfs:label ?label . }""" .
+    
+    }
+
     <http://rs.swissartresearch.net/instances/fields/creator_of_object/context> {
 
         <http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer> ldp:contains <http://rs.swissartresearch.net/instances/fields/creator_of_object> .

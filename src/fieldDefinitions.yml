@@ -4,7 +4,17 @@ prefix: http://rs.swissartresearch.net/instances/fields/
 container: http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer
 
 fields:
-          
+
+    - id: collection
+      label: Collection
+      description: The holding collection or institution of the work
+      datatype: xsd:anyURI
+      queries:
+        - select: 'SELECT ?value ?label WHERE {
+            $subject crm:P109_has_former_or_current_curator ?value .
+            ?value rdfs:label ?label .
+          }'
+            
     - id: creator_of_object
       label: Creator
       description: The creator of the artwork 
