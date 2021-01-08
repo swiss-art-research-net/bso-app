@@ -61,6 +61,6 @@ fields:
       queries:
         - insert: 'INSERT { $subject crm:P128_carries $value} WHERE {}'
         - select: 'SELECT ?value WHERE {
-            $subject crm:P128_carries ?value.
-            ?value a crm:E36_Visual_Item.
+            $subject crm:P128_carries ?value .
+            ?value a crm:E36_Visual_Item .
           }'

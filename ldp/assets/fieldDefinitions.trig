@@ -1,3 +1,4 @@
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
 @prefix ldp: <http://www.w3.org/ns/ldp#> .
 @prefix mpo: <http://www.metaphacts.com/ontology/fields#> .
 @prefix prov: <http://www.w3.org/ns/prov#> .
@@ -86,8 +87,8 @@
             mpo:minOccurs "1" ;
             mpo:maxOccurs "1" ;
             mpo:xsdDatatype xsd:anyURI ;
-            mpo:domain <crm:E22_Man-Made_Object> ;
-            mpo:range <crm:E36_Visual_item> ;
+            mpo:domain crm:E22_Man-Made_Object ;
+            mpo:range crm:E36_Visual_item ;
                 mpo:insertPattern <http://rs.swissartresearch.net/instances/fields/object_carries_visual_item/query/insert> ;
                 mpo:selectPattern <http://rs.swissartresearch.net/instances/fields/object_carries_visual_item/query/select> ;
     
@@ -96,6 +97,6 @@
                 <http://rs.swissartresearch.net/instances/fields/object_carries_visual_item/query/insert> a sp:Query;
                     sp:text """INSERT { $subject crm:P128_carries $value} WHERE {}""" .
                 <http://rs.swissartresearch.net/instances/fields/object_carries_visual_item/query/select> a sp:Query;
-                    sp:text """SELECT ?value WHERE { $subject crm:P128_carries ?value. ?value a crm:E36_Visual_Item. }""" .
+                    sp:text """SELECT ?value WHERE { $subject crm:P128_carries ?value . ?value a crm:E36_Visual_Item . }""" .
     
     }
