@@ -126,7 +126,7 @@ relations='{
       <div class="panelView">
         <semantic-table 
           id="panel-result"
-          query="SELECT ?subject WHERE {}" 
+          query="SELECT ?subject WHERE {} ORDER BY ?subject" 
           tuple-template='{{> gridTemplate}}'
           options='{"showFilter": false}'
         >
