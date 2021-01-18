@@ -82,8 +82,8 @@ relations='{
         ?subject (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P4_has_time-span ?date .
         ?date crm:P82a_begin_of_the_begin ?begin ;
           crm:P82b_end_of_the_end ?end .
-        FILTER(?begin <= ?__dateEndValue__) .
-        FILTER(?end >= ?__dateBeginValue__) .
+        FILTER(STRDT(STR(?begin), xsd:date) <= ?__dateEndValue__) .
+        FILTER(STRDT(STR(?end), xsd:date) >= ?__dateBeginValue__) .
       }
     "
   }],
