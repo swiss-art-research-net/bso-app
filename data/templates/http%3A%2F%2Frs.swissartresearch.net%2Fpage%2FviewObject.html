@@ -22,7 +22,11 @@
                 uri="[[ resolvePrefix 'page:viewImage']]"
                 urlqueryparam-imageiri="{{IIIFimage.value}}"
                 >
-                <img src="{{IIIFimage.value}}/full/300,/0/default.jpg">
+                <mp-resource-thumbnail iri="[[#if objectiri]][[objectiri]][[else]][[ urlParam 'objectiri' ]][[/if]]">
+                    <mp-resource-thumbnail-fallback>
+                        <span>Image not found!</span>
+                    </mp-resource-thumbnail-fallback>
+                </mp-resource-thumbnail>
             </semantic-link>
         </bs-panel>
     </template>
