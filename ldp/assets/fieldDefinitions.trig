@@ -31,7 +31,7 @@
         prov:generatedAtTime "2021-01-08T11:43:46.111Z"^^xsd:dateTime .
 
                 <http://rs.swissartresearch.net/instances/fields/collection/query/select> a sp:Query;
-                    sp:text """SELECT ?value ?label WHERE { $subject crm:P109_has_former_or_current_curator ?value . ?value rdfs:label ?label . }""" .
+                    sp:text """SELECT ?value WHERE { $subject crm:P109_has_former_or_current_curator ?value . }""" .
     
     }
 
@@ -53,7 +53,7 @@
                 <http://rs.swissartresearch.net/instances/fields/creator_of_object/query/insert> a sp:Query;
                     sp:text """INSERT {  ?creation crm:P14_carried_out_by $value . } WHERE { BIND(CONCAT(STR($subject), "/creation") as ?creation) }""" .
                 <http://rs.swissartresearch.net/instances/fields/creator_of_object/query/select> a sp:Query;
-                    sp:text """SELECT ?value ?label WHERE { $subject crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by $value. ?value rdfs:label ?label. }""" .
+                    sp:text """SELECT ?value WHERE { $subject crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by $value. }""" .
     
     }
 
@@ -73,7 +73,7 @@
         prov:generatedAtTime "2021-01-08T11:43:46.111Z"^^xsd:dateTime .
 
                 <http://rs.swissartresearch.net/instances/fields/object_depicts/query/select> a sp:Query;
-                    sp:text """SELECT ?value ?label WHERE { $subject crm:P128_carries/crm:P138_represents ?value . ?value rdfs:label ?label . }""" .
+                    sp:text """SELECT ?value WHERE { $subject crm:P128_carries/crm:P138_represents ?value . }""" .
                 <http://rs.swissartresearch.net/instances/fields/object_depicts/query/insert> a sp:Query;
                     sp:text """INSERT { ?work crm:P138_represents $value . } WHERE { $subject crm:P128_carries ?work . }""" .
     
