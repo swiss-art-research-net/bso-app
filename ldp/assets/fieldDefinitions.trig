@@ -1,24 +1,24 @@
 @prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
 @prefix ldp: <http://www.w3.org/ns/ldp#> .
-@prefix mpo: <http://www.metaphacts.com/ontology/fields#> .
+@prefix mpo: <http://www.researchspace.org/resource/system/fields/> .
 @prefix prov: <http://www.w3.org/ns/prov#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix sp: <http://spinrdf.org/sp#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix User: <http://www.metaphacts.com/resource/user/> .
+@prefix User: <http://www.researchspace.org/resource/user/> .
 
-<http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer/context> {
-  <http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer> rdfs:comment "Container to store field definitions.";
+<http://www.researchspace.org/resource/system/fieldDefinitionContainer/context> {
+  <http://www.researchspace.org/resource/system/fieldDefinitionContainer> rdfs:comment "Container to store field definitions.";
     a ldp:Container, ldp:Resource, prov:Entity ;
     rdfs:label "Form Container";
-    prov:wasAttributedTo <http://www.metaphacts.com/resource/user/admin>;
+    prov:wasAttributedTo User:admin ;
     prov:generatedAtTime "2020-04-06T13:49:19.238+03:00"^^xsd:dateTime .
 }
 
 
     <http://rs.swissartresearch.net/instances/fields/collection/context> {
 
-        <http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer> ldp:contains <http://rs.swissartresearch.net/instances/fields/collection> .
+        <http://www.researchspace.org/resource/system/fieldDefinitionContainer> ldp:contains <http://rs.swissartresearch.net/instances/fields/collection> .
 
         <http://rs.swissartresearch.net/instances/fields/collection> 
             rdfs:label "Collection" ;
@@ -37,7 +37,7 @@
 
     <http://rs.swissartresearch.net/instances/fields/creator_of_object/context> {
 
-        <http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer> ldp:contains <http://rs.swissartresearch.net/instances/fields/creator_of_object> .
+        <http://www.researchspace.org/resource/system/fieldDefinitionContainer> ldp:contains <http://rs.swissartresearch.net/instances/fields/creator_of_object> .
 
         <http://rs.swissartresearch.net/instances/fields/creator_of_object> 
             rdfs:label "Creator" ;
@@ -59,7 +59,7 @@
 
     <http://rs.swissartresearch.net/instances/fields/object_depicts/context> {
 
-        <http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer> ldp:contains <http://rs.swissartresearch.net/instances/fields/object_depicts> .
+        <http://www.researchspace.org/resource/system/fieldDefinitionContainer> ldp:contains <http://rs.swissartresearch.net/instances/fields/object_depicts> .
 
         <http://rs.swissartresearch.net/instances/fields/object_depicts> 
             rdfs:label "Depicts" ;
@@ -81,7 +81,7 @@
 
     <http://rs.swissartresearch.net/instances/fields/label/context> {
 
-        <http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer> ldp:contains <http://rs.swissartresearch.net/instances/fields/label> .
+        <http://www.researchspace.org/resource/system/fieldDefinitionContainer> ldp:contains <http://rs.swissartresearch.net/instances/fields/label> .
 
         <http://rs.swissartresearch.net/instances/fields/label> 
             rdfs:label "Label" ;
@@ -105,7 +105,7 @@
 
     <http://rs.swissartresearch.net/instances/fields/object_carries_visual_item/context> {
 
-        <http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer> ldp:contains <http://rs.swissartresearch.net/instances/fields/object_carries_visual_item> .
+        <http://www.researchspace.org/resource/system/fieldDefinitionContainer> ldp:contains <http://rs.swissartresearch.net/instances/fields/object_carries_visual_item> .
 
         <http://rs.swissartresearch.net/instances/fields/object_carries_visual_item> 
             rdfs:label "Visual Item" ;
