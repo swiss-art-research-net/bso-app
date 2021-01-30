@@ -27,6 +27,9 @@ h2 {
 .facet {
   background-color: #fff;
 }
+.facet .facet-relations {
+  width: auto;
+}
 .facet .facet__category-selector-holder {
   display: none;
 }
@@ -61,6 +64,9 @@ ol.page-breadcrumb {
   padding: 5px;
 }
 .panelView .DataTable--table-grid-layout {
+  display: block !important;
+}
+.griddle-custom-row {
   display: block !important;
 }
 .bso-component.object .image img {
