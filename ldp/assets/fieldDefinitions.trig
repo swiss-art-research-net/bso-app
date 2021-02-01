@@ -67,7 +67,7 @@
                 <http://rs.swissartresearch.net/instances/fields/creator_of_object/query/insert> a sp:Query;
                     sp:text """INSERT {  ?creation crm:P14_carried_out_by $value . } WHERE { BIND(CONCAT(STR($subject), "/creation") as ?creation) }""" .
                 <http://rs.swissartresearch.net/instances/fields/creator_of_object/query/select> a sp:Query;
-                    sp:text """SELECT ?value WHERE { $subject crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by $value. }""" .
+                    sp:text """SELECT ?value ?label WHERE { $subject crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by ?value. OPTIONAL { BIND(URI(CONCAT(STR($subject), "/meta")) as ?subject_meta ) ?value crm:P1_is_identified_by ?appellation . ?appellation rdfs:label ?label ; crm:P70i_is_documented_in ?subject_meta .  } }""" .
     
     }
 
