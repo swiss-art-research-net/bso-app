@@ -1,17 +1,27 @@
 @prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
 @prefix ldp: <http://www.w3.org/ns/ldp#> .
-@prefix mpo: <http://www.metaphacts.com/ontology/fields#> .
+@prefix rsfield: <http://www.researchspace.org/resource/system/fields/> .
+@prefix mpfield: <http://www.metaphacts.com/ontology/fields#> .
 @prefix prov: <http://www.w3.org/ns/prov#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix sp: <http://spinrdf.org/sp#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix User: <http://www.metaphacts.com/resource/user/> .
+@prefix rsuser: <http://www.researchspace.org/resource/user/> .
+@prefix mpuser: <http://www.metaphacts.com/resource/user/> .
+
+<http://www.researchspace.org/resource/system/fieldDefinitionContainer/context> {
+  <http://www.researchspace.org/resource/system/fieldDefinitionContainer> rdfs:comment "Container to store field definitions.";
+    a ldp:Container, ldp:Resource, prov:Entity ;
+    rdfs:label "Form Container";
+    prov:wasAttributedTo rsuser:admin ;
+    prov:generatedAtTime "2020-04-06T13:49:19.238+03:00"^^xsd:dateTime .
+}
 
 <http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer/context> {
   <http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer> rdfs:comment "Container to store field definitions.";
     a ldp:Container, ldp:Resource, prov:Entity ;
     rdfs:label "Form Container";
-    prov:wasAttributedTo <http://www.metaphacts.com/resource/user/admin>;
+    prov:wasAttributedTo mpuser:admin;
     prov:generatedAtTime "2020-04-06T13:49:19.238+03:00"^^xsd:dateTime .
 }
 
@@ -19,6 +29,7 @@
 
     <{{ ../prefix }}{{ id }}/context> {
 
+        <http://www.researchspace.org/resource/system/fieldDefinitionContainer> ldp:contains <{{ ../prefix }}{{ id }}> .
         <http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer> ldp:contains <{{ ../prefix }}{{ id }}> .
 
         <{{ ../prefix }}{{ id }}> 
@@ -29,37 +40,42 @@
             rdfs:comment "{{ description }}" ;
         {{/if}}
         {{#if minOccurs}}
-            mpo:minOccurs "{{ minOccurs }}" ;
+            rsfield:minOccurs "{{ minOccurs }}" ; 
+            mpfield:minOccurs "{{ minOccurs }}" ;
         {{/if}}
         {{#if maxOccurs}}
-            mpo:maxOccurs "{{ maxOccurs }}" ;
+            rsfield:maxOccurs "{{ maxOccurs }}" ; 
+            mpfield:maxOccurs "{{ maxOccurs }}" ;
         {{/if}}
         {{#if datatype}}
-            mpo:xsdDatatype {{ datatype }} ;
+            rsfield:xsdDatatype {{ datatype }} ; 
+            mpfield:xsdDatatype {{ datatype }} ;
         {{/if}}
         {{#if domain}}
-            mpo:domain {{ domain }} ;
+            rsfield:domain {{ domain }} ; 
+            mpfield:domain {{ domain }} ;
         {{/if}}
         {{#if range}}
-            mpo:range {{ range }} ;
+            rsfield:range {{ range }} ; 
+            mpfield:range {{ range }} ;
         {{/if}}
         {{#each queries }}
             {{#if insert}}
-                mpo:insertPattern <{{ ../../prefix }}{{../id}}/query/insert> ;
+                rsfield:insertPattern <{{ ../../prefix }}{{../id}}/query/insert> ; mpfield:insertPattern <{{ ../../prefix }}{{../id}}/query/insert> ;
             {{/if}}
             {{#if select}}
-                mpo:selectPattern <{{ ../../prefix }}{{../id}}/query/select> ;
+                rsfield:selectPattern <{{ ../../prefix }}{{../id}}/query/select> ; mpfield:selectPattern <{{ ../../prefix }}{{../id}}/query/select> ;
             {{/if}}
             {{#if ask}}
-                mpo:askPattern <{{ ../../prefix }}{{../id}}/query/ask> ;
+                rsfield:askPattern <{{ ../../prefix }}{{../id}}/query/ask> ; mpfield:askPattern <{{ ../../prefix }}{{../id}}/query/ask> ;
             {{/if}}
             {{#if delete}}
-                mpo:deletePattern <{{ ../../prefix }}{{../id}}/query/delete> ;
+                rsfield:deletePattern <{{ ../../prefix }}{{../id}}/query/delete> ; mpfield:deletePattern <{{ ../../prefix }}{{../id}}/query/delete> ;
             {{/if}}
         {{/each}}
     
-        a mpo:Field, ldp:Resource, prov:Entity ;
-        prov:wasAttributedTo User:admin ;
+        a rsfield:Field, mpfield:Field, ldp:Resource, prov:Entity ;
+        prov:wasAttributedTo rsuser:admin ;
         prov:generatedAtTime "2021-01-08T11:43:46.111Z"^^xsd:dateTime .
 
         {{#each queries }}
