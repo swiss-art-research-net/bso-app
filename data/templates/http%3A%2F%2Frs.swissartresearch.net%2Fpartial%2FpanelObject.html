@@ -1,12 +1,13 @@
 
 <div class="bso-component object">
     <semantic-link
+        key="object-link-{{iri}}"
         iri="page:viewObject"
         urlqueryparam-objectiri="{{iri}}">
         <bs-panel>
             <bs-row>
                 <bs-col class="image" md="3" sm="6">
-                    <mp-resource-thumbnail iri="{{iri}}"">
+                    <mp-resource-thumbnail key="object-thumbnail-{{iri}}" iri="{{iri}}">
                         <mp-resource-thumbnail-fallback>
                             <span>Image not found!</span>
                         </mp-resource-thumbnail-fallback>
@@ -14,10 +15,10 @@
                 </bs-col>
                 <bs-col md="7" sm="6">
                     <div class="title">
-                        <mp-label iri="{{iri}}"></mp-label>
+                        <mp-label key="object-label-{{iri}}" iri="{{iri}}"></mp-label>
                     </div>
                     <div class="description">
-                        <mp-description iri="{{iri}}"></mp-description>
+                        <mp-description key="object-description-{{iri}}" iri="{{iri}}"></mp-description>
                     </div>
                 </bs-col>
                 {{#if displayMenu}}
