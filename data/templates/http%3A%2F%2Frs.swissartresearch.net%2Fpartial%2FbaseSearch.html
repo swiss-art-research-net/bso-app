@@ -1,4 +1,5 @@
 <semantic-search
+limit='100000'
 categories='{
   "<http://www.cidoc-crm.org/cidoc-crm/E52_Time-Span>": [{
     "kind": "date-range",
@@ -14,6 +15,7 @@ search-profile='{
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E39_Actor>", "label": "Actor", "thumbnail": "../images/fcs/actors.svg"},
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E53_Place>", "label": "Place", "thumbnail": "../images/fcs/places.svg"},
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E52_Time-Span>", "label": "Time", "thumbnail": "../images/fcs/dates.svg"},
+        {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E55_Type>", "label": "Type", "thumbnail": "../images/fcs/concepts.svg"},
         {"iri": "<http://rs.swissartresearch.net/Concept>", "label": "Concept", "thumbnail": "../images/fcs/concepts.svg"}
       ],
     "relations": [
@@ -39,6 +41,12 @@ search-profile='{
         "iri": "<http://rs.swissartresearch.net/Thing_depicts_Place>",
         "hasDomain": "<http://www.cidoc-crm.org/cidoc-crm/E22_Man-Made_Object>",
         "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E53_Place>",
+        "label": "depicts"
+      },
+      {
+        "iri": "<http://rs.swissartresearch.net/Thing_depicts_Type>",
+        "hasDomain": "<http://www.cidoc-crm.org/cidoc-crm/E22_Man-Made_Object>",
+        "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E55_Type>",
         "label": "depicts"
       },
       {
@@ -75,15 +83,24 @@ relations='{
       }
     "
   }],
+  "<http://rs.swissartresearch.net/Thing_depicts_Type>": [{
+    "kind": "resource",
+    "queryPattern": "
+      {
+        ?subject crm:P128_carries/crm:P138_represents ?__value__ .
+        ?__value__ a crm:E55_Type .
+      }
+    "
+  }],
   "<http://rs.swissartresearch.net/Thing_from_Time>": [{
     "kind": "date-range",
     "queryPattern": "
       {
-        ?subject crm:P108i_was_produced_by/crm:P4_has_time-span ?date .
+        ?subject (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P4_has_time-span ?date .
         ?date crm:P82a_begin_of_the_begin ?begin ;
           crm:P82b_end_of_the_end ?end .
-        FILTER(?begin <= ?__dateEndValue__) .
-        FILTER(?end >= ?__dateBeginValue__) .
+        FILTER(STRDT(STR(?begin), xsd:date) <= ?__dateEndValue__) .
+        FILTER(STRDT(STR(?end), xsd:date) >= ?__dateBeginValue__) .
       }
     "
   }],
@@ -110,7 +127,7 @@ relations='{
         "kind": "date-range",
         "valuesQuery":"
           SELECT ?dateBeginValue ?dateEndValue WHERE {
-            ?subject crm:P108i_was_produced_by/crm:P4_has_time-span ?date .
+            ?subject (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P4_has_time-span ?date .
             ?date crm:P82a_begin_of_the_begin ?dateBeginValue ;
               crm:P82b_end_of_the_end ?dateEndValue .
           } ORDER BY ?dateBeginValue"
@@ -126,7 +143,8 @@ relations='{
       <div class="panelView">
         <semantic-table 
           id="panel-result"
-          query="SELECT ?subject WHERE {}" 
+          prefetch-labels="false"
+          query="SELECT ?subject WHERE {} ORDER BY ?subject" 
           tuple-template='{{> gridTemplate}}'
           options='{"showFilter": false}'
         >

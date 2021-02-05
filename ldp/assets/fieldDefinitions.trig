@@ -1,79 +1,95 @@
 @prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
 @prefix ldp: <http://www.w3.org/ns/ldp#> .
-@prefix mpo: <http://www.metaphacts.com/ontology/fields#> .
+@prefix rsfield: <http://www.researchspace.org/resource/system/fields/> .
+@prefix mpfield: <http://www.metaphacts.com/ontology/fields#> .
 @prefix prov: <http://www.w3.org/ns/prov#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix sp: <http://spinrdf.org/sp#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix User: <http://www.metaphacts.com/resource/user/> .
+@prefix rsuser: <http://www.researchspace.org/resource/user/> .
+@prefix mpuser: <http://www.metaphacts.com/resource/user/> .
+
+<http://www.researchspace.org/resource/system/fieldDefinitionContainer/context> {
+  <http://www.researchspace.org/resource/system/fieldDefinitionContainer> rdfs:comment "Container to store field definitions.";
+    a ldp:Container, ldp:Resource, prov:Entity ;
+    rdfs:label "Form Container";
+    prov:wasAttributedTo rsuser:admin ;
+    prov:generatedAtTime "2020-04-06T13:49:19.238+03:00"^^xsd:dateTime .
+}
 
 <http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer/context> {
   <http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer> rdfs:comment "Container to store field definitions.";
     a ldp:Container, ldp:Resource, prov:Entity ;
     rdfs:label "Form Container";
-    prov:wasAttributedTo <http://www.metaphacts.com/resource/user/admin>;
+    prov:wasAttributedTo mpuser:admin;
     prov:generatedAtTime "2020-04-06T13:49:19.238+03:00"^^xsd:dateTime .
 }
 
 
     <http://rs.swissartresearch.net/instances/fields/collection/context> {
 
+        <http://www.researchspace.org/resource/system/fieldDefinitionContainer> ldp:contains <http://rs.swissartresearch.net/instances/fields/collection> .
         <http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer> ldp:contains <http://rs.swissartresearch.net/instances/fields/collection> .
 
         <http://rs.swissartresearch.net/instances/fields/collection> 
             rdfs:label "Collection" ;
             rdfs:comment "The holding collection or institution of the work" ;
-            mpo:xsdDatatype xsd:anyURI ;
-                mpo:selectPattern <http://rs.swissartresearch.net/instances/fields/collection/query/select> ;
+            rsfield:xsdDatatype xsd:anyURI ; 
+            mpfield:xsdDatatype xsd:anyURI ;
+                rsfield:selectPattern <http://rs.swissartresearch.net/instances/fields/collection/query/select> ; mpfield:selectPattern <http://rs.swissartresearch.net/instances/fields/collection/query/select> ;
     
-        a mpo:Field, ldp:Resource, prov:Entity ;
-        prov:wasAttributedTo User:admin ;
+        a rsfield:Field, mpfield:Field, ldp:Resource, prov:Entity ;
+        prov:wasAttributedTo rsuser:admin ;
         prov:generatedAtTime "2021-01-08T11:43:46.111Z"^^xsd:dateTime .
 
                 <http://rs.swissartresearch.net/instances/fields/collection/query/select> a sp:Query;
-                    sp:text """SELECT ?value ?label WHERE { $subject crm:P109_has_former_or_current_curator ?value . ?value rdfs:label ?label . }""" .
+                    sp:text """SELECT ?value WHERE { $subject crm:P109_has_former_or_current_curator ?value . }""" .
     
     }
 
     <http://rs.swissartresearch.net/instances/fields/creator_of_object/context> {
 
+        <http://www.researchspace.org/resource/system/fieldDefinitionContainer> ldp:contains <http://rs.swissartresearch.net/instances/fields/creator_of_object> .
         <http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer> ldp:contains <http://rs.swissartresearch.net/instances/fields/creator_of_object> .
 
         <http://rs.swissartresearch.net/instances/fields/creator_of_object> 
             rdfs:label "Creator" ;
             rdfs:comment "The creator of the artwork" ;
-            mpo:xsdDatatype xsd:anyURI ;
-                mpo:insertPattern <http://rs.swissartresearch.net/instances/fields/creator_of_object/query/insert> ;
-                mpo:selectPattern <http://rs.swissartresearch.net/instances/fields/creator_of_object/query/select> ;
+            rsfield:xsdDatatype xsd:anyURI ; 
+            mpfield:xsdDatatype xsd:anyURI ;
+                rsfield:insertPattern <http://rs.swissartresearch.net/instances/fields/creator_of_object/query/insert> ; mpfield:insertPattern <http://rs.swissartresearch.net/instances/fields/creator_of_object/query/insert> ;
+                rsfield:selectPattern <http://rs.swissartresearch.net/instances/fields/creator_of_object/query/select> ; mpfield:selectPattern <http://rs.swissartresearch.net/instances/fields/creator_of_object/query/select> ;
     
-        a mpo:Field, ldp:Resource, prov:Entity ;
-        prov:wasAttributedTo User:admin ;
+        a rsfield:Field, mpfield:Field, ldp:Resource, prov:Entity ;
+        prov:wasAttributedTo rsuser:admin ;
         prov:generatedAtTime "2021-01-08T11:43:46.111Z"^^xsd:dateTime .
 
                 <http://rs.swissartresearch.net/instances/fields/creator_of_object/query/insert> a sp:Query;
                     sp:text """INSERT {  ?creation crm:P14_carried_out_by $value . } WHERE { BIND(CONCAT(STR($subject), "/creation") as ?creation) }""" .
                 <http://rs.swissartresearch.net/instances/fields/creator_of_object/query/select> a sp:Query;
-                    sp:text """SELECT ?value ?label WHERE { $subject crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by $value. ?value rdfs:label ?label. }""" .
+                    sp:text """SELECT ?value ?label WHERE { $subject crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by ?value. OPTIONAL { BIND(URI(CONCAT(STR($subject), "/meta")) as ?subject_meta ) ?value crm:P1_is_identified_by ?appellation . ?appellation rdfs:label ?label ; crm:P70i_is_documented_in ?subject_meta .  } }""" .
     
     }
 
     <http://rs.swissartresearch.net/instances/fields/object_depicts/context> {
 
+        <http://www.researchspace.org/resource/system/fieldDefinitionContainer> ldp:contains <http://rs.swissartresearch.net/instances/fields/object_depicts> .
         <http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer> ldp:contains <http://rs.swissartresearch.net/instances/fields/object_depicts> .
 
         <http://rs.swissartresearch.net/instances/fields/object_depicts> 
             rdfs:label "Depicts" ;
             rdfs:comment "The entity that is depicted by the object" ;
-            mpo:xsdDatatype xsd:anyURI ;
-                mpo:selectPattern <http://rs.swissartresearch.net/instances/fields/object_depicts/query/select> ;
-                mpo:insertPattern <http://rs.swissartresearch.net/instances/fields/object_depicts/query/insert> ;
+            rsfield:xsdDatatype xsd:anyURI ; 
+            mpfield:xsdDatatype xsd:anyURI ;
+                rsfield:selectPattern <http://rs.swissartresearch.net/instances/fields/object_depicts/query/select> ; mpfield:selectPattern <http://rs.swissartresearch.net/instances/fields/object_depicts/query/select> ;
+                rsfield:insertPattern <http://rs.swissartresearch.net/instances/fields/object_depicts/query/insert> ; mpfield:insertPattern <http://rs.swissartresearch.net/instances/fields/object_depicts/query/insert> ;
     
-        a mpo:Field, ldp:Resource, prov:Entity ;
-        prov:wasAttributedTo User:admin ;
+        a rsfield:Field, mpfield:Field, ldp:Resource, prov:Entity ;
+        prov:wasAttributedTo rsuser:admin ;
         prov:generatedAtTime "2021-01-08T11:43:46.111Z"^^xsd:dateTime .
 
                 <http://rs.swissartresearch.net/instances/fields/object_depicts/query/select> a sp:Query;
-                    sp:text """SELECT ?value ?label WHERE { $subject crm:P128_carries/crm:P138_represents ?value . ?value rdfs:label ?label . }""" .
+                    sp:text """SELECT ?value WHERE { $subject crm:P128_carries/crm:P138_represents ?value . }""" .
                 <http://rs.swissartresearch.net/instances/fields/object_depicts/query/insert> a sp:Query;
                     sp:text """INSERT { ?work crm:P138_represents $value . } WHERE { $subject crm:P128_carries ?work . }""" .
     
@@ -81,19 +97,23 @@
 
     <http://rs.swissartresearch.net/instances/fields/label/context> {
 
+        <http://www.researchspace.org/resource/system/fieldDefinitionContainer> ldp:contains <http://rs.swissartresearch.net/instances/fields/label> .
         <http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer> ldp:contains <http://rs.swissartresearch.net/instances/fields/label> .
 
         <http://rs.swissartresearch.net/instances/fields/label> 
             rdfs:label "Label" ;
             rdfs:comment "A human-readable label for the entity" ;
-            mpo:minOccurs "1" ;
-            mpo:maxOccurs "1" ;
-            mpo:xsdDatatype xsd:string ;
-                mpo:insertPattern <http://rs.swissartresearch.net/instances/fields/label/query/insert> ;
-                mpo:selectPattern <http://rs.swissartresearch.net/instances/fields/label/query/select> ;
+            rsfield:minOccurs "1" ; 
+            mpfield:minOccurs "1" ;
+            rsfield:maxOccurs "1" ; 
+            mpfield:maxOccurs "1" ;
+            rsfield:xsdDatatype xsd:string ; 
+            mpfield:xsdDatatype xsd:string ;
+                rsfield:insertPattern <http://rs.swissartresearch.net/instances/fields/label/query/insert> ; mpfield:insertPattern <http://rs.swissartresearch.net/instances/fields/label/query/insert> ;
+                rsfield:selectPattern <http://rs.swissartresearch.net/instances/fields/label/query/select> ; mpfield:selectPattern <http://rs.swissartresearch.net/instances/fields/label/query/select> ;
     
-        a mpo:Field, ldp:Resource, prov:Entity ;
-        prov:wasAttributedTo User:admin ;
+        a rsfield:Field, mpfield:Field, ldp:Resource, prov:Entity ;
+        prov:wasAttributedTo rsuser:admin ;
         prov:generatedAtTime "2021-01-08T11:43:46.111Z"^^xsd:dateTime .
 
                 <http://rs.swissartresearch.net/instances/fields/label/query/insert> a sp:Query;
@@ -105,21 +125,27 @@
 
     <http://rs.swissartresearch.net/instances/fields/object_carries_visual_item/context> {
 
+        <http://www.researchspace.org/resource/system/fieldDefinitionContainer> ldp:contains <http://rs.swissartresearch.net/instances/fields/object_carries_visual_item> .
         <http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer> ldp:contains <http://rs.swissartresearch.net/instances/fields/object_carries_visual_item> .
 
         <http://rs.swissartresearch.net/instances/fields/object_carries_visual_item> 
             rdfs:label "Visual Item" ;
             rdfs:comment "The E36 Visual Item carried by the E22 Human-Made Object" ;
-            mpo:minOccurs "1" ;
-            mpo:maxOccurs "1" ;
-            mpo:xsdDatatype xsd:anyURI ;
-            mpo:domain crm:E22_Man-Made_Object ;
-            mpo:range crm:E36_Visual_item ;
-                mpo:insertPattern <http://rs.swissartresearch.net/instances/fields/object_carries_visual_item/query/insert> ;
-                mpo:selectPattern <http://rs.swissartresearch.net/instances/fields/object_carries_visual_item/query/select> ;
+            rsfield:minOccurs "1" ; 
+            mpfield:minOccurs "1" ;
+            rsfield:maxOccurs "1" ; 
+            mpfield:maxOccurs "1" ;
+            rsfield:xsdDatatype xsd:anyURI ; 
+            mpfield:xsdDatatype xsd:anyURI ;
+            rsfield:domain crm:E22_Man-Made_Object ; 
+            mpfield:domain crm:E22_Man-Made_Object ;
+            rsfield:range crm:E36_Visual_item ; 
+            mpfield:range crm:E36_Visual_item ;
+                rsfield:insertPattern <http://rs.swissartresearch.net/instances/fields/object_carries_visual_item/query/insert> ; mpfield:insertPattern <http://rs.swissartresearch.net/instances/fields/object_carries_visual_item/query/insert> ;
+                rsfield:selectPattern <http://rs.swissartresearch.net/instances/fields/object_carries_visual_item/query/select> ; mpfield:selectPattern <http://rs.swissartresearch.net/instances/fields/object_carries_visual_item/query/select> ;
     
-        a mpo:Field, ldp:Resource, prov:Entity ;
-        prov:wasAttributedTo User:admin ;
+        a rsfield:Field, mpfield:Field, ldp:Resource, prov:Entity ;
+        prov:wasAttributedTo rsuser:admin ;
         prov:generatedAtTime "2021-01-08T11:43:46.111Z"^^xsd:dateTime .
 
                 <http://rs.swissartresearch.net/instances/fields/object_carries_visual_item/query/insert> a sp:Query;

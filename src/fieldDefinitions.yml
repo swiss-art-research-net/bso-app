@@ -10,9 +10,8 @@ fields:
       description: The holding collection or institution of the work
       datatype: xsd:anyURI
       queries:
-        - select: 'SELECT ?value ?label WHERE {
+        - select: 'SELECT ?value WHERE {
             $subject crm:P109_has_former_or_current_curator ?value .
-            ?value rdfs:label ?label .
           }'
             
     - id: creator_of_object
@@ -27,8 +26,13 @@ fields:
         }'
         
         - select: 'SELECT ?value ?label WHERE {
-          $subject crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by $value.
-          ?value rdfs:label ?label.
+          $subject crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by ?value.
+          OPTIONAL {
+            BIND(URI(CONCAT(STR($subject), "/meta")) as ?subject_meta )
+            ?value crm:P1_is_identified_by ?appellation .
+            ?appellation rdfs:label ?label ;
+              crm:P70i_is_documented_in ?subject_meta . 
+          }
         }'
 
     - id: object_depicts
@@ -36,9 +40,8 @@ fields:
       description: The entity that is depicted by the object
       datatype: xsd:anyURI
       queries:
-        - select: 'SELECT ?value ?label WHERE {
+        - select: 'SELECT ?value WHERE {
             $subject crm:P128_carries/crm:P138_represents ?value .
-            ?value rdfs:label ?label .
           }'
         - insert: 'INSERT {
             ?work crm:P138_represents $value .

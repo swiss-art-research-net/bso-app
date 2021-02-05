@@ -6,9 +6,7 @@ query='
             crm:P128_carries/crm:P138_represents ?place .
         ?place a crm:E53_Place ;
             rdfs:label ?description ;
-            crmdig:L54_is_same-as ?wdPlace .
-
-        ?wdPlace wdt:P625 ?wkt .
+            (crmdig:L54_is_same-as/wdt:P625)|crm:P168_place_is_defined_by ?wkt .
   }
 '
 tuple-template='{{> template }}'

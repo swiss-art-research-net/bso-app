@@ -27,7 +27,7 @@
           {{value.value.value}}
         {{/ifCond}}
         {{#ifCond field.xsdDatatype.value "=="  "http://www.w3.org/2001/XMLSchema#anyURI"}}
-            <semantic-link iri="{{value.value.value}}"></semantic-link>
+            <semantic-link iri="{{value.value.value}}">{{#if value.label}}{{ value.label }}{{/if}}</semantic-link>
         {{/ifCond}}
       </dd>
     {{/each}}
