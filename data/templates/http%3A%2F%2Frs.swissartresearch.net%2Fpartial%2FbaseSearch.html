@@ -54,6 +54,12 @@ search-profile='{
         "hasDomain": "<http://www.cidoc-crm.org/cidoc-crm/E39_Actor>",
         "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E22_Man-Made_Object>",
         "label": "is creator of"
+      },
+      {
+        "iri": "<http://rs.swissartresearch.net/Actor_carried_out_creations_of_Type>",
+        "hasDomain": "<http://www.cidoc-crm.org/cidoc-crm/E39_Actor>",
+        "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E55_Type>",
+        "label": "acted as"
       }
     ]
   }'
@@ -109,8 +115,15 @@ relations='{
     "queryPattern": "
       {
         ?__value__ crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by ?subject.
-    }
-  "
+    }"
+  }],
+  "<http://rs.swissartresearch.net/Actor_carried_out_creations_of_Type>": [{
+    "kind": "resource",
+    "queryPattern": "
+      {
+        ?creation crm:P14_carried_out_by ?subject ;
+          crm:P2_has_type ?__value__ .
+    }"
   }]
 }'
 >
@@ -120,6 +133,9 @@ relations='{
   <semantic-search-facet-breadcrumbs>
   </semantic-search-facet-breadcrumbs>
 
+  <semantic-search-query-keyword-type id='keywordTypeQuery1'>
+  </semantic-search-query-keyword-type>
+  
   <semantic-search-facet
     open-by-default="true"
     value-relations='{
@@ -136,7 +152,7 @@ relations='{
   >
 
   </semantic-search-facet>
-  
+
   <semantic-search-result-holder>
 
     <semantic-search-result>
@@ -144,7 +160,7 @@ relations='{
         <semantic-table 
           id="panel-result"
           prefetch-labels="false"
-          query="SELECT ?subject WHERE {} ORDER BY ?subject" 
+          query="SELECT DISTINCT ?subject WHERE {} ORDER BY ?subject" 
           tuple-template='{{> gridTemplate}}'
           options='{"showFilter": false}'
         >

@@ -26,6 +26,7 @@ h2 {
 }
 .facet {
   background-color: #fff;
+  margin-bottom: 1rem;
 }
 .facet .facet-relations {
   width: auto;
@@ -56,6 +57,13 @@ h2 {
 .navbar-default .dropdown-menu > li > a:hover {
   background: #fbfbfb;
   color: #111;
+}
+.no-image {
+  background-color: #e2e2f7;
+  min-height: 10em;
+  line-height: 10em;
+  text-align: center;
+  color: #fff;
 }
 ol.page-breadcrumb {
   background-color: #fbfbfb;

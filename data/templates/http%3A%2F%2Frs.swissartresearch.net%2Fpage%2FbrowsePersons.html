@@ -8,9 +8,9 @@
 
 <semantic-search-query-constant
 
-  domain='<http://www.cidoc-crm.org/cidoc-crm/E22_Man-Made_Object>'
+  domain='<http://www.cidoc-crm.org/cidoc-crm/E39_Actor>'
   query='
-    SELECT ?subject WHERE {
+    SELECT DISTINCT ?subject WHERE {
       ?subject a crm:E39_Actor, sari:Person .
     }
   '
