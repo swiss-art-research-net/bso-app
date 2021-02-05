@@ -1,0 +1,31 @@
+
+[[> partial:pageHeader]]
+[[> partial:contentHeader]]
+
+<semantic-table
+    query='SELECT ?subject ?label (GROUP_CONCAT(DISTINCT ?role;SEPARATOR="/") as ?roles) WHERE {
+        ?subject a crm:E39_Actor ;
+            rdfs:label ?label .
+        FILTER EXISTS {
+            ?event crm:P14_carried_out_by ?subject .
+        }
+
+        OPTIONAL {
+            ?event crm:P14_carried_out_by ?subject ;
+                crm:P2_has_type/rdfs:label ?role .
+        }
+    } GROUP BY ?subject ?label'
+    prefetch-labels='false'
+    number-of-displayed-rows='100'
+    options='{
+        "enableGrouping": true,
+        "showFilter": true
+    }'
+    column-configuration='[
+      {"variableName": "subject"},
+      {"variableName": "roles", "showFilter": true, "filterType": "multiselect"}
+    ]'
+></semantic-table>
+
+[[> partial:contentFooter]]
+[[> partial:pageFooter]]
