@@ -6,6 +6,14 @@
           {{deploymentTitle}}
         </a>
       </bs-navbar-brand>
+      <bs-nav>
+        <mp-resource-link-container iri="page:browseImages">
+          <bs-nav-item>Images</bs-nav-item>
+        </mp-resource-link-container>
+        <mp-resource-link-container iri="page:listActors">
+          <bs-nav-item>Actors</bs-nav-item>
+        </mp-resource-link-container>
+      </bs-nav>
     </div>
     <bs-navbar-toggle />
   </bs-navbar-header>
@@ -31,7 +39,8 @@
           <mp-resource-link-container propagate-link="true" iri='http://www.metaphacts.com/resource/assets/Ontologies'>
             <bs-menu-item>Ontologies</bs-menu-item>
           </mp-resource-link-container>
-          <mp-resource-link-container propagate-link="true" iri='http://www.metaphacts.com/resource/assets/QueryTemplates'>
+          <mp-resource-link-container propagate-link="true"
+            iri='http://www.metaphacts.com/resource/assets/QueryTemplates'>
             <bs-menu-item>Query Templates</bs-menu-item>
           </mp-resource-link-container>
           <mp-resource-link-container propagate-link="true" iri='http://www.metaphacts.com/resource/assets/Fields'>
@@ -43,7 +52,8 @@
           </mp-resource-link-container>
         </bs-nav-dropdown>
         <bs-nav title='Data Import & Export'>
-          <mp-resource-link-container propagate-link="true" iri='http://www.metaphacts.com/resource/admin/DataImportExport'>
+          <mp-resource-link-container propagate-link="true"
+            iri='http://www.metaphacts.com/resource/admin/DataImportExport'>
             <bs-nav-item><i class='fa fa-cloud-upload'></i></bs-nav-item>
           </mp-resource-link-container>
         </bs-nav>

@@ -3,7 +3,7 @@
 [[> partial:contentHeader]]
 
 <semantic-table
-    query='SELECT ?subject ?label (GROUP_CONCAT(DISTINCT ?role;SEPARATOR="/") as ?roles) WHERE {
+    query='SELECT DISTINCT ?subject (SAMPLE(?label) as ?label_example) (GROUP_CONCAT(DISTINCT ?role;SEPARATOR="/") as ?roles) (COUNT(?work) as ?num_works) WHERE {
         ?subject a crm:E39_Actor ;
             rdfs:label ?label .
         FILTER EXISTS {
@@ -11,20 +11,36 @@
         }
 
         OPTIONAL {
-            ?event crm:P14_carried_out_by ?subject ;
-                crm:P2_has_type/rdfs:label ?role .
+            ?work a crm:E36_Visual_Item ;
+                crm:P94i_was_created_by ?creation .
+            ?creation crm:P14_carried_out_by ?subject .
+            OPTIONAL {
+                ?creation crm:P9_consists_of ?subcreation .
+                ?subcreation crm:P14_carried_out_by ?subject ;
+                    crm:P2_has_type/rdfs:label ?role .
+            }
+                
         }
-    } GROUP BY ?subject ?label'
+    } GROUP BY ?subject'
     prefetch-labels='false'
     number-of-displayed-rows='100'
     options='{
         "showFilter": true
     }'
     column-configuration='[
-      {"variableName": "subject"},
-      {"variableName": "roles", "showFilter": true, "filterType": "multiselect"}
+      {
+        "variableName": "label_example", 
+        "displayName": "Name",
+        "cellTemplate": "{{> name }}"
+    },
+      {"variableName": "roles", "displayName": "Role", "showFilter": true, "filterType": "multiselect"},
+      {"variableName": "num_works"}
     ]'
-></semantic-table>
+>
+    <template id="name">
+        <semantic-link iri="{{subject.value}}"></semantic-link>
+    </template>
+</semantic-table>
 
 [[> partial:contentFooter]]
 [[> partial:pageFooter]]
