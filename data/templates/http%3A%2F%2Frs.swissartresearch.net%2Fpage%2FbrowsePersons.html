@@ -1,0 +1,22 @@
+
+[[> partial:pageHeader]]
+[[> partial:contentHeader]]
+
+<h2 class="gap">Browse all persons</h2>
+
+[[#> partial:baseSearch]]
+
+<semantic-search-query-constant
+
+  domain='<http://www.cidoc-crm.org/cidoc-crm/E22_Man-Made_Object>'
+  query='
+    SELECT ?subject WHERE {
+      ?subject a crm:E39_Actor, sari:Person .
+    }
+  '
+></semantic-search-query-constant>
+
+[[/ partial:baseSearch]]
+
+[[> partial:contentFooter]]
+[[> partial:pageFooter]]
