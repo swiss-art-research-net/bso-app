@@ -13,12 +13,19 @@ search-profile='{
     "categories": [
         {"iri": "<http://rs.swissartresearch.net/search/Object>", "label": "Object", "thumbnail": "../images/fcs/things.svg"},
         {"iri": "<http://rs.swissartresearch.net/search/Person>", "label": "Person", "thumbnail": "../images/fcs/actors.svg"},
+        {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E39_Actor>", "label": "Actor", "thumbnail": "../images/fcs/actors.svg"},
         {"iri": "<http://rs.swissartresearch.net/search/Place>", "label": "Place", "thumbnail": "../images/fcs/places.svg"},
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E52_Time-Span>", "label": "Time", "thumbnail": "../images/fcs/dates.svg"},
         {"iri": "<http://rs.swissartresearch.net/search/Type>", "label": "Type", "thumbnail": "../images/fcs/concepts.svg"},
         {"iri": "<http://rs.swissartresearch.net/search/Concept>", "label": "Concept", "thumbnail": "../images/fcs/concepts.svg"}
       ],
     "relations": [
+      {
+        "iri": "<http://rs.swissartresearch.net/Thing_part_of_Thing>",
+        "hasDomain": "<http://rs.swissartresearch.net/search/Object>",
+        "hasRange": "<http://rs.swissartresearch.net/search/Object>",
+        "label": "part of"
+      },
       {
         "iri": "<http://rs.swissartresearch.net/Thing_by_Actor>",
         "hasDomain": "<http://rs.swissartresearch.net/search/Object>",
@@ -28,7 +35,7 @@ search-profile='{
       {
         "iri": "<http://rs.swissartresearch.net/Thing_held_by_Actor>",
         "hasDomain": "<http://rs.swissartresearch.net/search/Object>",
-        "hasRange": "<http://rs.swissartresearch.net/search/Person>",
+        "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E39_Actor>",
         "label": "held by"
       },
       {
@@ -58,6 +65,14 @@ search-profile='{
     ]
   }'
 relations='{
+  "<http://rs.swissartresearch.net/Thing_part_of_Thing>": [{
+    "kind": "resource",
+    "queryPattern": "
+      {
+        ?subject crm:P46i_forms_part_of ?__value__ .
+      }
+    "
+  }],
   "<http://rs.swissartresearch.net/Thing_by_Actor>": [{
     "kind": "resource",
     "queryPattern": "
