@@ -50,12 +50,6 @@ search-profile='{
         "label": "depicts"
       },
       {
-        "iri": "<http://rs.swissartresearch.net/Actor_is_creator_of_Thing>",
-        "hasDomain": "<http://rs.swissartresearch.net/search/Person>",
-        "hasRange": "<http://rs.swissartresearch.net/search/Object>",
-        "label": "is creator of"
-      },
-      {
         "iri": "<http://rs.swissartresearch.net/Actor_carried_out_creations_of_Type>",
         "hasDomain": "<http://rs.swissartresearch.net/search/Person>",
         "hasRange": "<http://rs.swissartresearch.net/search/Type>",
@@ -109,13 +103,6 @@ relations='{
         FILTER(STRDT(STR(?end), xsd:date) >= ?__dateBeginValue__) .
       }
     "
-  }],
-  "<http://rs.swissartresearch.net/Actor_is_creator_of_Thing>": [{
-    "kind": "resource",
-    "queryPattern": "
-      {
-        ?__value__ crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by ?subject.
-    }"
   }],
   "<http://rs.swissartresearch.net/Actor_carried_out_creations_of_Type>": [{
     "kind": "resource",
