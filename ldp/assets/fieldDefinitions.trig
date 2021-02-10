@@ -83,6 +83,7 @@
             mpfield:xsdDatatype xsd:anyURI ;
                 rsfield:selectPattern <http://rs.swissartresearch.net/instances/fields/object_depicts/query/select> ; mpfield:selectPattern <http://rs.swissartresearch.net/instances/fields/object_depicts/query/select> ;
                 rsfield:insertPattern <http://rs.swissartresearch.net/instances/fields/object_depicts/query/insert> ; mpfield:insertPattern <http://rs.swissartresearch.net/instances/fields/object_depicts/query/insert> ;
+                rsfield:valueSetPattern <http://rs.swissartresearch.net/instances/fields/object_depicts/query/values> ; mpfield:valueSetPattern <http://rs.swissartresearch.net/instances/fields/object_depicts/query/values> ;
     
         a rsfield:Field, mpfield:Field, ldp:Resource, prov:Entity ;
         prov:wasAttributedTo rsuser:admin ;
@@ -92,6 +93,8 @@
                     sp:text """SELECT ?value WHERE { $subject crm:P128_carries/crm:P138_represents ?value . }""" .
                 <http://rs.swissartresearch.net/instances/fields/object_depicts/query/insert> a sp:Query;
                     sp:text """INSERT { ?work crm:P138_represents $value . } WHERE { $subject crm:P128_carries ?work . }""" .
+                <http://rs.swissartresearch.net/instances/fields/object_depicts/query/values> a sp:Query;
+                    sp:text """SELECT ?value ?label ?type WHERE { VALUES(?type) { (search:Person) (search:Place) (search:Type) } ?value a ?type ; rdfs:label ?label . } ORDER BY ?label""" .
     
     }
 
@@ -103,8 +106,6 @@
         <http://rs.swissartresearch.net/instances/fields/label> 
             rdfs:label "Label" ;
             rdfs:comment "A human-readable label for the entity" ;
-            rsfield:minOccurs "1" ; 
-            mpfield:minOccurs "1" ;
             rsfield:maxOccurs "1" ; 
             mpfield:maxOccurs "1" ;
             rsfield:xsdDatatype xsd:string ; 

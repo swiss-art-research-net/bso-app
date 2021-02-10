@@ -48,12 +48,21 @@ fields:
           } WHERE {
             $subject crm:P128_carries ?work .
           }'
+        - values: 'SELECT ?value ?label ?type WHERE {
+            VALUES(?type) {
+              (search:Person)
+              (search:Place)
+              (search:Type)
+            }
+            ?value a ?type ;
+              rdfs:label ?label .
+          } ORDER BY ?label'
 
     - id: label
       label: Label
       description: A human-readable label for the entity
       datatype: xsd:string
-      minOccurs: 1
+      minOccurs: 0
       maxOccurs: 1
       queries:
         - insert: 'INSERT { 

@@ -72,6 +72,9 @@
             {{#if delete}}
                 rsfield:deletePattern <{{ ../../prefix }}{{../id}}/query/delete> ; mpfield:deletePattern <{{ ../../prefix }}{{../id}}/query/delete> ;
             {{/if}}
+            {{#if values}}
+                rsfield:valueSetPattern <{{ ../../prefix }}{{../id}}/query/values> ; mpfield:valueSetPattern <{{ ../../prefix }}{{../id}}/query/values> ;
+            {{/if}}
         {{/each}}
     
         a rsfield:Field, mpfield:Field, ldp:Resource, prov:Entity ;
@@ -94,6 +97,10 @@
             {{#if delete}}
                 <{{ ../../prefix }}{{../id}}/query/delete> a sp:Query;
                     sp:text """{{ delete }}""" .
+            {{/if}}
+            {{#if values}}
+                <{{ ../../prefix }}{{../id}}/query/values> a sp:Query;
+                    sp:text """{{ values }}""" .
             {{/if}}
         {{/each}}
     
