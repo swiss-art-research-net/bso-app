@@ -13,6 +13,8 @@ fields:
       label: Collection
       description: The holding collection or institution of the work
       datatype: xsd:anyURI
+      domain: crm:E22_Man-Made_Object
+      range: crm:E39_Actor
       queries:
         - select: 'SELECT ?value WHERE {
             $subject crm:P109_has_former_or_current_curator ?value .
@@ -22,6 +24,8 @@ fields:
       label: Creator
       description: The creator of the artwork 
       datatype: xsd:anyURI
+      domain: crm:E22_Man-Made_Object
+      range: crm:E39_Actor
       queries:
         - insert: 'INSERT { 
           ?creation crm:P14_carried_out_by $value .
@@ -43,6 +47,8 @@ fields:
       label: Created
       description: Objects that were created by an actor
       datatype: xsd:anyURI
+      domain: crm:E39_Actor
+      range: crm:E22_Man-Made_Object
       queries:
         - select: 'SELECT ?value ?label WHERE {
           ?value crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by $subject ;
@@ -60,6 +66,8 @@ fields:
       label: Depicts
       description: The entity that is depicted by the object
       datatype: xsd:anyURI
+      domain: crm:E22_Man-Made_Object
+      range: crm:E1_CRM_Entity
       queries:
         - select: 'SELECT ?value WHERE {
             $subject crm:P128_carries/crm:P138_represents ?value .

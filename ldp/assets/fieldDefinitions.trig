@@ -36,6 +36,10 @@
             rdfs:comment "The holding collection or institution of the work" ;
             rsfield:xsdDatatype xsd:anyURI ; 
             mpfield:xsdDatatype xsd:anyURI ;
+            rsfield:domain crm:E22_Man-Made_Object ; 
+            mpfield:domain crm:E22_Man-Made_Object ;
+            rsfield:range crm:E39_Actor ; 
+            mpfield:range crm:E39_Actor ;
                 rsfield:selectPattern <http://rs.swissartresearch.net/instances/fields/collection/query/select> ; mpfield:selectPattern <http://rs.swissartresearch.net/instances/fields/collection/query/select> ;
     
         a rsfield:Field, mpfield:Field, ldp:Resource, prov:Entity ;
@@ -57,6 +61,10 @@
             rdfs:comment "The creator of the artwork" ;
             rsfield:xsdDatatype xsd:anyURI ; 
             mpfield:xsdDatatype xsd:anyURI ;
+            rsfield:domain crm:E22_Man-Made_Object ; 
+            mpfield:domain crm:E22_Man-Made_Object ;
+            rsfield:range crm:E39_Actor ; 
+            mpfield:range crm:E39_Actor ;
                 rsfield:insertPattern <http://rs.swissartresearch.net/instances/fields/creator_of_object/query/insert> ; mpfield:insertPattern <http://rs.swissartresearch.net/instances/fields/creator_of_object/query/insert> ;
                 rsfield:selectPattern <http://rs.swissartresearch.net/instances/fields/creator_of_object/query/select> ; mpfield:selectPattern <http://rs.swissartresearch.net/instances/fields/creator_of_object/query/select> ;
     
@@ -81,6 +89,10 @@
             rdfs:comment "Objects that were created by an actor" ;
             rsfield:xsdDatatype xsd:anyURI ; 
             mpfield:xsdDatatype xsd:anyURI ;
+            rsfield:domain crm:E39_Actor ; 
+            mpfield:domain crm:E39_Actor ;
+            rsfield:range crm:E22_Man-Made_Object ; 
+            mpfield:range crm:E22_Man-Made_Object ;
                 rsfield:selectPattern <http://rs.swissartresearch.net/instances/fields/objects_created/query/select> ; mpfield:selectPattern <http://rs.swissartresearch.net/instances/fields/objects_created/query/select> ;
     
         a rsfield:Field, mpfield:Field, ldp:Resource, prov:Entity ;
@@ -88,7 +100,7 @@
         prov:generatedAtTime "2021-01-08T11:43:46.111Z"^^xsd:dateTime .
 
                 <http://rs.swissartresearch.net/instances/fields/objects_created/query/select> a sp:Query;
-                    sp:text """SELECT ?value ?label WHERE { ?value crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by $subject ; rdfs:label ?object_label . OPTIONAL { ?value crm:P128_carries/crm:P94i_was_created_by/crm:P9_consists_of ?subcreation . ?subcreation crm:P14_carried_out_by $subject ; crm:P2_has_type/rdfs:label ?role_label . } BIND(IF(BOUND(?role), CONCAT(?object_label, " (", ?role_label, ")"), ?object_label) as ?label) } """ .
+                    sp:text """SELECT ?value ?label WHERE { ?value crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by $subject ; rdfs:label ?object_label . OPTIONAL { ?value crm:P128_carries/crm:P94i_was_created_by/crm:P9_consists_of ?subcreation . ?subcreation crm:P14_carried_out_by $subject ; crm:P2_has_type/rdfs:label ?role_label . } BIND(IF(BOUND(?role_label), CONCAT(?object_label, " (", ?role_label, ")"), ?object_label) as ?label) } """ .
     
     }
 
@@ -102,6 +114,10 @@
             rdfs:comment "The entity that is depicted by the object" ;
             rsfield:xsdDatatype xsd:anyURI ; 
             mpfield:xsdDatatype xsd:anyURI ;
+            rsfield:domain crm:E22_Man-Made_Object ; 
+            mpfield:domain crm:E22_Man-Made_Object ;
+            rsfield:range crm:E1_CRM_Entity ; 
+            mpfield:range crm:E1_CRM_Entity ;
                 rsfield:selectPattern <http://rs.swissartresearch.net/instances/fields/object_depicts/query/select> ; mpfield:selectPattern <http://rs.swissartresearch.net/instances/fields/object_depicts/query/select> ;
                 rsfield:insertPattern <http://rs.swissartresearch.net/instances/fields/object_depicts/query/insert> ; mpfield:insertPattern <http://rs.swissartresearch.net/instances/fields/object_depicts/query/insert> ;
                 rsfield:valueSetPattern <http://rs.swissartresearch.net/instances/fields/object_depicts/query/values> ; mpfield:valueSetPattern <http://rs.swissartresearch.net/instances/fields/object_depicts/query/values> ;
