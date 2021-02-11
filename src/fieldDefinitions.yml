@@ -39,6 +39,23 @@ fields:
           }
         }'
 
+    - id: objects_created
+      label: Created
+      description: Objects that were created by an actor
+      datatype: xsd:anyURI
+      queries:
+        - select: 'SELECT ?value ?label WHERE {
+          ?value crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by $subject ;
+            rdfs:label ?object_label .
+          OPTIONAL {
+            ?value crm:P128_carries/crm:P94i_was_created_by/crm:P9_consists_of ?subcreation .
+            ?subcreation crm:P14_carried_out_by $subject ;
+              crm:P2_has_type/rdfs:label ?role_label .
+          }
+          BIND(IF(BOUND(?role_label), CONCAT(?object_label, " (", ?role_label, ")"), ?object_label) as ?label)
+        }
+        '
+
     - id: object_depicts
       label: Depicts
       description: The entity that is depicted by the object

@@ -71,6 +71,27 @@
     
     }
 
+    <http://rs.swissartresearch.net/instances/fields/objects_created/context> {
+
+        <http://www.researchspace.org/resource/system/fieldDefinitionContainer> ldp:contains <http://rs.swissartresearch.net/instances/fields/objects_created> .
+        <http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer> ldp:contains <http://rs.swissartresearch.net/instances/fields/objects_created> .
+
+        <http://rs.swissartresearch.net/instances/fields/objects_created> 
+            rdfs:label "Created" ;
+            rdfs:comment "Objects that were created by an actor" ;
+            rsfield:xsdDatatype xsd:anyURI ; 
+            mpfield:xsdDatatype xsd:anyURI ;
+                rsfield:selectPattern <http://rs.swissartresearch.net/instances/fields/objects_created/query/select> ; mpfield:selectPattern <http://rs.swissartresearch.net/instances/fields/objects_created/query/select> ;
+    
+        a rsfield:Field, mpfield:Field, ldp:Resource, prov:Entity ;
+        prov:wasAttributedTo rsuser:admin ;
+        prov:generatedAtTime "2021-01-08T11:43:46.111Z"^^xsd:dateTime .
+
+                <http://rs.swissartresearch.net/instances/fields/objects_created/query/select> a sp:Query;
+                    sp:text """SELECT ?value ?label WHERE { ?value crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by $subject ; rdfs:label ?object_label . OPTIONAL { ?value crm:P128_carries/crm:P94i_was_created_by/crm:P9_consists_of ?subcreation . ?subcreation crm:P14_carried_out_by $subject ; crm:P2_has_type/rdfs:label ?role_label . } BIND(IF(BOUND(?role), CONCAT(?object_label, " (", ?role_label, ")"), ?object_label) as ?label) } """ .
+    
+    }
+
     <http://rs.swissartresearch.net/instances/fields/object_depicts/context> {
 
         <http://www.researchspace.org/resource/system/fieldDefinitionContainer> ldp:contains <http://rs.swissartresearch.net/instances/fields/object_depicts> .
