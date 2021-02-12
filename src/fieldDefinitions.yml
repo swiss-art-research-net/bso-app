@@ -3,7 +3,7 @@ output: ../ldp/assets/fieldDefinitions.trig
 prefix: http://rs.swissartresearch.net/instances/fields/
 container: http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer
 namespaces:
-  crm: http://www.cidoc-crm.org/cidoc/crm/
+  crm: http://www.cidoc-crm.org/cidoc-crm/
   rdfs: http://www.w3.org/2000/01/rdf-schema#
   search: http://rs.swissartresearch.net/search/
 
