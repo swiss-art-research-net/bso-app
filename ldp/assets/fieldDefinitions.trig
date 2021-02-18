@@ -28,7 +28,7 @@
             mpfield:range crm:E39_Actor ;
     
         a mpfield:Field, ldp:Resource, prov:Entity ;
-        prov:wasAttributedTo rsuser:admin ;
+        prov:wasAttributedTo mpuser:admin ;
         prov:generatedAtTime "2021-01-08T11:43:46.111Z"^^xsd:dateTime .
 
     
@@ -45,7 +45,7 @@
             mpfield:range crm:E39_Actor ;
     
         a mpfield:Field, ldp:Resource, prov:Entity ;
-        prov:wasAttributedTo rsuser:admin ;
+        prov:wasAttributedTo mpuser:admin ;
         prov:generatedAtTime "2021-01-08T11:43:46.111Z"^^xsd:dateTime .
 
     
@@ -62,7 +62,7 @@
             mpfield:range crm:E22_Man-Made_Object ;
     
         a mpfield:Field, ldp:Resource, prov:Entity ;
-        prov:wasAttributedTo rsuser:admin ;
+        prov:wasAttributedTo mpuser:admin ;
         prov:generatedAtTime "2021-01-08T11:43:46.111Z"^^xsd:dateTime .
 
     
@@ -80,7 +80,7 @@
                 mpfield:valueSetPattern <http://rs.swissartresearch.net/instances/fields/object_depicts/query/values> ;
     
         a mpfield:Field, ldp:Resource, prov:Entity ;
-        prov:wasAttributedTo rsuser:admin ;
+        prov:wasAttributedTo mpuser:admin ;
         prov:generatedAtTime "2021-01-08T11:43:46.111Z"^^xsd:dateTime .
 
                 <http://rs.swissartresearch.net/instances/fields/object_depicts/query/values> a sp:Query;
@@ -98,7 +98,7 @@
             mpfield:xsdDatatype xsd:string ;
     
         a mpfield:Field, ldp:Resource, prov:Entity ;
-        prov:wasAttributedTo rsuser:admin ;
+        prov:wasAttributedTo mpuser:admin ;
         prov:generatedAtTime "2021-01-08T11:43:46.111Z"^^xsd:dateTime .
 
     
@@ -117,7 +117,7 @@
             mpfield:range crm:E36_Visual_item ;
     
         a mpfield:Field, ldp:Resource, prov:Entity ;
-        prov:wasAttributedTo rsuser:admin ;
+        prov:wasAttributedTo mpuser:admin ;
         prov:generatedAtTime "2021-01-08T11:43:46.111Z"^^xsd:dateTime .
 
     
