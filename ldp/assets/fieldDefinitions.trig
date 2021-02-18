@@ -54,9 +54,9 @@
         prov:generatedAtTime "2021-01-08T11:43:46.111Z"^^xsd:dateTime .
 
                 <http://rs.swissartresearch.net/instances/fields/creator_of_object/query/insert> a sp:Query;
-                    sp:text """INSERT { ?creation crm:P14_carried_out_by $value . } WHERE { BIND(CONCAT(STR($subject), &quot;/creation&quot;) as ?creation) }""" .
+                    sp:text """INSERT { ?creation crm:P14_carried_out_by $value . } WHERE { BIND(CONCAT(STR($subject), "/creation") as ?creation) }""" .
                 <http://rs.swissartresearch.net/instances/fields/creator_of_object/query/select> a sp:Query;
-                    sp:text """SELECT ?value ?label WHERE { $subject crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by ?value. OPTIONAL { BIND(URI(CONCAT(STR($subject), &quot;/meta&quot;)) as ?subject_meta ) ?value crm:P1_is_identified_by ?appellation . ?appellation rdfs:label ?label ; crm:P70i_is_documented_in ?subject_meta . } }""" .
+                    sp:text """SELECT ?value ?label WHERE { $subject crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by ?value. OPTIONAL { BIND(URI(CONCAT(STR($subject), "/meta")) as ?subject_meta ) ?value crm:P1_is_identified_by ?appellation . ?appellation rdfs:label ?label ; crm:P70i_is_documented_in ?subject_meta . } }""" .
     
     }
     <http://rs.swissartresearch.net/instances/fields/objects_created/context> {
@@ -76,7 +76,7 @@
         prov:generatedAtTime "2021-01-08T11:43:46.111Z"^^xsd:dateTime .
 
                 <http://rs.swissartresearch.net/instances/fields/objects_created/query/select> a sp:Query;
-                    sp:text """SELECT ?value ?label WHERE { ?value crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by $subject ; rdfs:label ?object_label . OPTIONAL { ?value crm:P128_carries/crm:P94i_was_created_by/crm:P9_consists_of ?subcreation . ?subcreation crm:P14_carried_out_by $subject ; crm:P2_has_type/rdfs:label ?role_label . } BIND(IF(BOUND(?role_label), CONCAT(?object_label, &quot; (&quot;, ?role_label, &quot;)&quot;), ?object_label) as ?label) } """ .
+                    sp:text """SELECT ?value ?label WHERE { ?value crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by $subject ; rdfs:label ?object_label . OPTIONAL { ?value crm:P128_carries/crm:P94i_was_created_by/crm:P9_consists_of ?subcreation . ?subcreation crm:P14_carried_out_by $subject ; crm:P2_has_type/rdfs:label ?role_label . } BIND(IF(BOUND(?role_label), CONCAT(?object_label, " (", ?role_label, ")"), ?object_label) as ?label) } """ .
     
     }
     <http://rs.swissartresearch.net/instances/fields/object_depicts/context> {
