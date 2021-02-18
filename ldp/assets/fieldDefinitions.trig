@@ -26,11 +26,14 @@
             mpfield:xsdDatatype xsd:anyURI ;
             mpfield:domain crm:E22_Man-Made_Object ;
             mpfield:range crm:E39_Actor ;
+                mpfield:selectPattern <http://rs.swissartresearch.net/instances/fields/collection/query/select> ;
     
         a mpfield:Field, ldp:Resource, prov:Entity ;
         prov:wasAttributedTo mpuser:admin ;
         prov:generatedAtTime "2021-01-08T11:43:46.111Z"^^xsd:dateTime .
 
+                <http://rs.swissartresearch.net/instances/fields/collection/query/select> a sp:Query;
+                    sp:text """SELECT ?value WHERE { $subject crm:P109_has_former_or_current_curator ?value . }""" .
     
     }
     <http://rs.swissartresearch.net/instances/fields/creator_of_object/context> {
@@ -43,11 +46,17 @@
             mpfield:xsdDatatype xsd:anyURI ;
             mpfield:domain crm:E22_Man-Made_Object ;
             mpfield:range crm:E39_Actor ;
+                mpfield:insertPattern <http://rs.swissartresearch.net/instances/fields/creator_of_object/query/insert> ;
+                mpfield:selectPattern <http://rs.swissartresearch.net/instances/fields/creator_of_object/query/select> ;
     
         a mpfield:Field, ldp:Resource, prov:Entity ;
         prov:wasAttributedTo mpuser:admin ;
         prov:generatedAtTime "2021-01-08T11:43:46.111Z"^^xsd:dateTime .
 
+                <http://rs.swissartresearch.net/instances/fields/creator_of_object/query/insert> a sp:Query;
+                    sp:text """INSERT { ?creation crm:P14_carried_out_by $value . } WHERE { BIND(CONCAT(STR($subject), &quot;/creation&quot;) as ?creation) }""" .
+                <http://rs.swissartresearch.net/instances/fields/creator_of_object/query/select> a sp:Query;
+                    sp:text """SELECT ?value ?label WHERE { $subject crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by ?value. OPTIONAL { BIND(URI(CONCAT(STR($subject), &quot;/meta&quot;)) as ?subject_meta ) ?value crm:P1_is_identified_by ?appellation . ?appellation rdfs:label ?label ; crm:P70i_is_documented_in ?subject_meta . } }""" .
     
     }
     <http://rs.swissartresearch.net/instances/fields/objects_created/context> {
@@ -60,11 +69,14 @@
             mpfield:xsdDatatype xsd:anyURI ;
             mpfield:domain crm:E39_Actor ;
             mpfield:range crm:E22_Man-Made_Object ;
+                mpfield:selectPattern <http://rs.swissartresearch.net/instances/fields/objects_created/query/select> ;
     
         a mpfield:Field, ldp:Resource, prov:Entity ;
         prov:wasAttributedTo mpuser:admin ;
         prov:generatedAtTime "2021-01-08T11:43:46.111Z"^^xsd:dateTime .
 
+                <http://rs.swissartresearch.net/instances/fields/objects_created/query/select> a sp:Query;
+                    sp:text """SELECT ?value ?label WHERE { ?value crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by $subject ; rdfs:label ?object_label . OPTIONAL { ?value crm:P128_carries/crm:P94i_was_created_by/crm:P9_consists_of ?subcreation . ?subcreation crm:P14_carried_out_by $subject ; crm:P2_has_type/rdfs:label ?role_label . } BIND(IF(BOUND(?role_label), CONCAT(?object_label, &quot; (&quot;, ?role_label, &quot;)&quot;), ?object_label) as ?label) } """ .
     
     }
     <http://rs.swissartresearch.net/instances/fields/object_depicts/context> {
@@ -77,14 +89,17 @@
             mpfield:xsdDatatype xsd:anyURI ;
             mpfield:domain crm:E22_Man-Made_Object ;
             mpfield:range crm:E1_CRM_Entity ;
-                mpfield:valueSetPattern <http://rs.swissartresearch.net/instances/fields/object_depicts/query/values> ;
+                mpfield:selectPattern <http://rs.swissartresearch.net/instances/fields/object_depicts/query/select> ;
+                mpfield:insertPattern <http://rs.swissartresearch.net/instances/fields/object_depicts/query/insert> ;
     
         a mpfield:Field, ldp:Resource, prov:Entity ;
         prov:wasAttributedTo mpuser:admin ;
         prov:generatedAtTime "2021-01-08T11:43:46.111Z"^^xsd:dateTime .
 
-                <http://rs.swissartresearch.net/instances/fields/object_depicts/query/values> a sp:Query;
-                    sp:text """SELECT ?value ?label ?type WHERE { VALUES(?type) { (search:Person) (search:Place) (search:Type) } ?value a ?type ; rdfs:label ?label . } ORDER BY ?label""" .
+                <http://rs.swissartresearch.net/instances/fields/object_depicts/query/select> a sp:Query;
+                    sp:text """SELECT ?value WHERE { $subject crm:P128_carries/crm:P138_represents ?value . }""" .
+                <http://rs.swissartresearch.net/instances/fields/object_depicts/query/insert> a sp:Query;
+                    sp:text """INSERT { ?work crm:P138_represents $value . } WHERE { $subject crm:P128_carries ?work . }""" .
     
     }
     <http://rs.swissartresearch.net/instances/fields/label/context> {
@@ -96,11 +111,17 @@
             rdfs:comment "A human-readable label for the entity" ;
             mpfield:maxOccurs "1" ;
             mpfield:xsdDatatype xsd:string ;
+                mpfield:insertPattern <http://rs.swissartresearch.net/instances/fields/label/query/insert> ;
+                mpfield:selectPattern <http://rs.swissartresearch.net/instances/fields/label/query/select> ;
     
         a mpfield:Field, ldp:Resource, prov:Entity ;
         prov:wasAttributedTo mpuser:admin ;
         prov:generatedAtTime "2021-01-08T11:43:46.111Z"^^xsd:dateTime .
 
+                <http://rs.swissartresearch.net/instances/fields/label/query/insert> a sp:Query;
+                    sp:text """INSERT { $subject rdfs:label $value . } WHERE {}""" .
+                <http://rs.swissartresearch.net/instances/fields/label/query/select> a sp:Query;
+                    sp:text """SELECT ?value WHERE { $subject rdfs:label ?value . }""" .
     
     }
     <http://rs.swissartresearch.net/instances/fields/object_carries_visual_item/context> {
@@ -115,10 +136,16 @@
             mpfield:xsdDatatype xsd:anyURI ;
             mpfield:domain crm:E22_Man-Made_Object ;
             mpfield:range crm:E36_Visual_item ;
+                mpfield:insertPattern <http://rs.swissartresearch.net/instances/fields/object_carries_visual_item/query/insert> ;
+                mpfield:selectPattern <http://rs.swissartresearch.net/instances/fields/object_carries_visual_item/query/select> ;
     
         a mpfield:Field, ldp:Resource, prov:Entity ;
         prov:wasAttributedTo mpuser:admin ;
         prov:generatedAtTime "2021-01-08T11:43:46.111Z"^^xsd:dateTime .
 
+                <http://rs.swissartresearch.net/instances/fields/object_carries_visual_item/query/insert> a sp:Query;
+                    sp:text """INSERT { $subject crm:P128_carries $value} WHERE {}""" .
+                <http://rs.swissartresearch.net/instances/fields/object_carries_visual_item/query/select> a sp:Query;
+                    sp:text """SELECT ?value WHERE { $subject crm:P128_carries ?value . ?value a crm:E36_Visual_Item . }""" .
     
     }
