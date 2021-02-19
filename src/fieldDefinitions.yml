@@ -62,6 +62,16 @@ fields:
         }
         '
 
+    - id: object_creation_date
+      label: Creation date
+      description: The date an object has been created
+      domain: crm:E22_Man-Made_Object
+      range: crm:E52_Time-Span
+      queries:
+        - select: 'SELECT ?value WHERE {
+            $subject crm:P128_carries/crm:P94i_was_created_by/crm:P4_has_time-span ?value
+          }'
+
     - id: object_depicts
       label: Depicts
       description: The entity that is depicted by the object
@@ -114,4 +124,14 @@ fields:
         - select: 'SELECT ?value WHERE {
             $subject crm:P128_carries ?value .
             ?value a crm:E36_Visual_Item .
+          }'
+
+    - id: object_production_date
+      label: Production date
+      description: The date an object has been produced
+      domain: crm:E22_Man-Made_Object
+      range: crm:E52_Time-Span
+      queries:
+        - select: 'SELECT ?value WHERE {
+            $subject crm:P108i_was_produced_by/crm:P4_has_time-span ?value
           }'
