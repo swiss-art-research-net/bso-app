@@ -67,7 +67,7 @@ h2 {
     }
 }
 
-.navbar-default {
+.navbar {
     background-color: @col-navbar;
     color: @col-black;
     a.navbar-brand, a.navbar-brand:hover  {
@@ -81,6 +81,10 @@ h2 {
             color:@col-black
         }
     }
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: @col-brand;
 }
 
 .no-image {
@@ -119,6 +123,7 @@ ol.page-breadcrumb {
         .panel-body {
             padding: 0;
         }
+        margin: 1rem 0;
     }
     &.header {
         @height: 100px;
@@ -133,6 +138,11 @@ ol.page-breadcrumb {
             width: auto;
         }
     }
+
+    .card-body {
+        padding: 0;
+    }
+
     .title {
         font-weight: bold;
         font-size: 1.3em;

@@ -40,23 +40,26 @@ h2 {
 .imageList a {
   font-size: 1.3em;
 }
-.navbar-default {
+.navbar {
   background-color: #fff;
   color: #111;
 }
-.navbar-default a.navbar-brand,
-.navbar-default a.navbar-brand:hover {
+.navbar a.navbar-brand,
+.navbar a.navbar-brand:hover {
   color: #964a4a;
   text-transform: uppercase;
 }
-.navbar-default .navbar-nav > li > a,
-.navbar-default .dropdown-menu > li > a {
+.navbar .navbar-nav > li > a,
+.navbar .dropdown-menu > li > a {
   color: #111;
 }
-.navbar-default .navbar-nav > li > a:hover,
-.navbar-default .dropdown-menu > li > a:hover {
+.navbar .navbar-nav > li > a:hover,
+.navbar .dropdown-menu > li > a:hover {
   background: #fbfbfb;
   color: #111;
+}
+.navbar-light .navbar-nav .nav-link {
+  color: #964a4a;
 }
 .no-image {
   background-color: #e2e2f7;
@@ -77,6 +80,9 @@ ol.page-breadcrumb {
 .griddle-custom-row {
   display: block !important;
 }
+.bso-component.object {
+  margin: 1rem 0;
+}
 .bso-component.object .image img {
   width: 100%;
 }
@@ -94,6 +100,9 @@ ol.page-breadcrumb {
 .bso-component.header .image img {
   height: 100px;
   width: auto;
+}
+.bso-component .card-body {
+  padding: 0;
 }
 .bso-component .title {
   font-weight: bold;
