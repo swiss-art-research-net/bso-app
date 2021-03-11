@@ -1,0 +1,25 @@
+
+[[> partial:pageHeader]]
+[[> partial:contentHeader]]
+
+<semantic-query
+    query="SELECT ?type (COUNT(?artwork) as ?num) WHERE {
+      ?artwork crm:P128_carries ?work .
+      ?work crm:P138_represents ?type .
+      ?type a crm:E55_Type
+    } GROUP BY ?type"
+    template="{{> template}}"
+>
+    <template id="template">
+        {{#each bindings}}
+            <span style="font-size:{{num.value}}px">
+                <semantic-link
+                    iri="{{type.value}}"
+                ></semantic-link>
+            </span>
+        {{/each}}
+    </template>
+</semantic-query>
+
+[[> partial:contentFooter]]
+[[> partial:pageFooter]]
