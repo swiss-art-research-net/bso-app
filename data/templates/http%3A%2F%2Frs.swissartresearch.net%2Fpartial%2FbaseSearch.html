@@ -15,6 +15,7 @@ search-profile='{
         {"iri": "<http://rs.swissartresearch.net/search/Person>", "label": "Person", "thumbnail": "../images/fcs/actors.svg"},
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E39_Actor>", "label": "Actor", "thumbnail": "../images/fcs/actors.svg"},
         {"iri": "<http://rs.swissartresearch.net/search/Place>", "label": "Place", "thumbnail": "../images/fcs/places.svg"},
+        {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E53_Place>", "label": "Place", "thumbnail": "../images/fcs/places.svg"},
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E52_Time-Span>", "label": "Time", "thumbnail": "../images/fcs/dates.svg"},
         {"iri": "<http://rs.swissartresearch.net/search/Type>", "label": "Type", "thumbnail": "../images/fcs/concepts.svg"},
         {"iri": "<http://rs.swissartresearch.net/search/Concept>", "label": "Concept", "thumbnail": "../images/fcs/concepts.svg"},
@@ -86,6 +87,12 @@ search-profile='{
         "hasDomain": "<http://rs.swissartresearch.net/search/Person>",
         "hasRange": "<http://rs.swissartresearch.net/search/Type>",
         "label": "acted as"
+      },
+      {
+        "iri": "<http://rs.swissartresearch.net/Place_same_as_Place>",
+        "hasDomain": "<http://rs.swissartresearch.net/search/Place>",
+        "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E53_Place>",
+        "label": "same as"
       }
     ]
   }'
@@ -179,6 +186,13 @@ relations='{
         ?creation crm:P14_carried_out_by ?subject ;
           crm:P2_has_type ?__value__ .
     }"
+  }],
+  "<http://rs.swissartresearch.net/Place_same_as_Place>": [{
+    "kind": "resource",
+    "queryPattern": "
+      {
+        ?subject crmdig:L54_is_same-as  ?__value__ .
+    }"
   }]
 }'
 >
@@ -210,7 +224,12 @@ relations='{
 
   <semantic-search-result-holder>
 
+    
     <semantic-search-result>
+      <mp-sparql-result-counts id="search_results_count"
+        query="SELECT DISTINCT * {}"
+        template='<div>{{#if hasLimit}} <bs-alert bs-style="warning"> Showing {{numberOfResults}} of {{totalNumberOfResults}} matches. <strong>Please, refine your search.</strong> </bs-alert> {{else}} <p>Found <em>{{numberOfResults}}</em> results</p>{{/if}}</div>'>
+      </mp-sparql-result-counts>
       <div class="panelView">
         <semantic-table 
           id="panel-result"
