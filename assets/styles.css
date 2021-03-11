@@ -80,6 +80,9 @@ ol.page-breadcrumb {
 .griddle-custom-row {
   display: block !important;
 }
+.QueryBuilder--searchClause {
+  background-color: #fff;
+}
 .bso-component.object {
   margin: 1rem 0;
 }
