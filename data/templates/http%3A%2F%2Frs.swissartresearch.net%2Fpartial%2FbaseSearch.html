@@ -17,14 +17,21 @@ search-profile='{
         {"iri": "<http://rs.swissartresearch.net/search/Place>", "label": "Place", "thumbnail": "../images/fcs/places.svg"},
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E52_Time-Span>", "label": "Time", "thumbnail": "../images/fcs/dates.svg"},
         {"iri": "<http://rs.swissartresearch.net/search/Type>", "label": "Type", "thumbnail": "../images/fcs/concepts.svg"},
-        {"iri": "<http://rs.swissartresearch.net/search/Concept>", "label": "Concept", "thumbnail": "../images/fcs/concepts.svg"}
+        {"iri": "<http://rs.swissartresearch.net/search/Concept>", "label": "Concept", "thumbnail": "../images/fcs/concepts.svg"},
+        {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E57_Material>", "label": "Material", "thumbnail": "../images/fcs/things.svg"}
       ],
     "relations": [
       {
-        "iri": "<http://rs.swissartresearch.net/Thing_part_of_Thing>",
+        "iri": "<http://rs.swissartresearch.net/Thing_acquired_through_Type>",
         "hasDomain": "<http://rs.swissartresearch.net/search/Object>",
-        "hasRange": "<http://rs.swissartresearch.net/search/Object>",
-        "label": "part of"
+        "hasRange": "<http://rs.swissartresearch.net/search/Type>",
+        "label": "acquired through"
+      },
+      {
+        "iri": "<http://rs.swissartresearch.net/Thing_acquired_from_Actor>",
+        "hasDomain": "<http://rs.swissartresearch.net/search/Object>",
+        "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E39_Actor>",
+        "label": "acquired from"
       },
       {
         "iri": "<http://rs.swissartresearch.net/Thing_by_Actor>",
@@ -39,9 +46,27 @@ search-profile='{
         "label": "held by"
       },
       {
+        "iri": "<http://rs.swissartresearch.net/Thing_of_Type>",
+        "hasDomain": "<http://rs.swissartresearch.net/search/Object>",
+        "hasRange": "<http://rs.swissartresearch.net/search/Type>",
+        "label": "of type"
+      },
+      {
+        "iri": "<http://rs.swissartresearch.net/Thing_part_of_Thing>",
+        "hasDomain": "<http://rs.swissartresearch.net/search/Object>",
+        "hasRange": "<http://rs.swissartresearch.net/search/Object>",
+        "label": "part of"
+      },
+      {
         "iri": "<http://rs.swissartresearch.net/Thing_from_Time>",
         "hasDomain": "<http://rs.swissartresearch.net/search/Object>",
         "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E52_Time-Span>",
+        "label": "from"
+      },
+      {
+        "iri": "<http://rs.swissartresearch.net/Thing_from_Material>",
+        "hasDomain": "<http://rs.swissartresearch.net/search/Object>",
+        "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E57_Material>",
         "label": "from"
       },
       {
@@ -65,6 +90,18 @@ search-profile='{
     ]
   }'
 relations='{
+  "<http://rs.swissartresearch.net/Thing_acquired_through_Type>": [{
+    "kind": "resource",
+    "queryPattern": "{
+      ?subject crm:P24i_changed_ownership_through/crm:P2_has_type ?__value__ .
+    }"
+  }],
+  "<http://rs.swissartresearch.net/Thing_acquired_from_Actor>": [{
+    "kind": "resource",
+    "queryPattern": "{
+      ?subject crm:P24i_changed_ownership_through/crm:P23_transferred_title_from ?__value__ .
+    }"
+  }],
   "<http://rs.swissartresearch.net/Thing_part_of_Thing>": [{
     "kind": "resource",
     "queryPattern": "
@@ -98,12 +135,28 @@ relations='{
       }
     "
   }],
+  "<http://rs.swissartresearch.net/Thing_of_Type>": [{
+    "kind": "resource",
+    "queryPattern": "
+      {
+        ?subject crm:P2_has_type ?__value__ .
+      }
+    "
+  }],
   "<http://rs.swissartresearch.net/Thing_depicts_Type>": [{
     "kind": "resource",
     "queryPattern": "
       {
         ?subject crm:P128_carries/crm:P138_represents ?__value__ .
         ?__value__ a search:Type .
+      }
+    "
+  }],
+  "<http://rs.swissartresearch.net/Thing_from_Material>": [{
+    "kind": "resource",
+    "queryPattern": "
+      {
+        ?subject crm:P45_consists_of ?__value__ .
       }
     "
   }],
