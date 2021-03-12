@@ -87,7 +87,7 @@ fields:
           } WHERE {
             $subject crm:P128_carries ?work .
           }'
-        - values: 'SELECT ?value ?label ?type WHERE {
+        - valueSet: 'SELECT ?value ?label ?type WHERE {
             VALUES(?type) {
               (search:Person)
               (search:Place)

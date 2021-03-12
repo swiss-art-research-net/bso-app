@@ -4,7 +4,7 @@
 from sariFieldDefinitionsGenerator import generator
 
 inputFile = './fieldDefinitions.yml'
-outputFile = '../ldp/assets/fieldDefinitions.trig'
+outputFile = '../ldp/fields/fieldDefinitions.trig'
 
 model = generator.loadSourceFromFile(inputFile)
 
