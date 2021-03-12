@@ -1,5 +1,28 @@
 <mp-field-visualization
   subject="[[urlParam param]]"
   fields="[[> partial:fieldDefinitions]]"
-  template="{{> partial:fieldBasedVisualisation subject='[[#if iri]][[iri]][[else]][[urlParam param]][[/if]]'}}"
-></mp-field-visualization>
+  template="{{> template }}"
+>
+  <template id="template">
+    [[> partial:fieldBasedVisualisation ]]
+  </template>
+</mp-field-visualization>
+<mp-field-visualization subject="[[urlParam param]]" fields='[[> partial:fieldDefinitions]]' template="{{> template}}">
+<template id="template">
+  <div>
+    {{#each fields as |field|}}
+      {{#if field.values}}
+        Field: <i>{{field.label.value}}</i><br>
+        Values:
+        <ol>
+          {{#each field.values as |value|}}
+            <li>
+              {{value.value.value}}              
+            </li>
+          {{/each}}
+        </ol>
+      {{/if}}
+    {{/each}}
+  </div>
+</template>
+</mp-field-visualization>
