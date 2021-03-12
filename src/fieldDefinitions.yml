@@ -97,7 +97,8 @@ fields:
             ?value a ?type ;
               rdfs:label ?label .
             ?label bds:search ?__token__ .
-          } ORDER BY ?label'
+          } ORDER BY ?label
+          LIMIT 10'
         - valueSet: 'SELECT ?value ?label ?type WHERE {
             VALUES(?type) {
               (search:Person)

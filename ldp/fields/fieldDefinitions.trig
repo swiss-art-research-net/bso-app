@@ -122,7 +122,7 @@
                 <http://rs.swissartresearch.net/instances/fields/object_depicts/query/insert> a sp:Query;
                     sp:text """INSERT { ?work crm:P138_represents $value . } WHERE { $subject crm:P128_carries ?work . }""" .
                 <http://rs.swissartresearch.net/instances/fields/object_depicts/query/autosuggestion> a sp:Query;
-                    sp:text """PREFIX bds: <http://www.bigdata.com/rdf/search#> SELECT DISTINCT ?value ?label ?type WHERE { VALUES(?type) { (search:Person) (search:Place) (search:Type) } ?value a ?type ; rdfs:label ?label . ?label bds:search ?__token__ . } ORDER BY ?label""" .
+                    sp:text """PREFIX bds: <http://www.bigdata.com/rdf/search#> SELECT DISTINCT ?value ?label ?type WHERE { VALUES(?type) { (search:Person) (search:Place) (search:Type) } ?value a ?type ; rdfs:label ?label . ?label bds:search ?__token__ . } ORDER BY ?label LIMIT 10""" .
                 <http://rs.swissartresearch.net/instances/fields/object_depicts/query/values> a sp:Query;
                     sp:text """SELECT ?value ?label ?type WHERE { VALUES(?type) { (search:Person) (search:Place) (search:Type) } ?value a ?type ; rdfs:label ?label . } ORDER BY ?label""" .
     
