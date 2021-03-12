@@ -31,12 +31,12 @@
 >
 
     <semantic-form-text-input for="label"></semantic-form-text-input>
-    <semantic-form-select-input for="depicts" template="{{> template}}">
+    <semantic-form-autocomplete-input for="depicts" template="{{> template}}">
         <template id="template">
             {{log label}}
             {{label.value}} ({{typeLabel.value}})
         </template>
-    </semantic-form-select-input>
+    </semantic-form-autocomplete-input>
 
     <button name="submit" class="btn btn-default">Save</button>
     <button name="reset" class="btn btn-default">Reset</button>
