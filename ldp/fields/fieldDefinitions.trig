@@ -110,6 +110,7 @@
             mpfield:range crm:E1_CRM_Entity ;
                 mpfield:selectPattern <http://rs.swissartresearch.net/instances/fields/object_depicts/query/select> ;
                 mpfield:insertPattern <http://rs.swissartresearch.net/instances/fields/object_depicts/query/insert> ;
+                mpfield:autosuggestionPattern <http://rs.swissartresearch.net/instances/fields/object_depicts/query/autosuggestion> ;
                 mpfield:valueSetPattern <http://rs.swissartresearch.net/instances/fields/object_depicts/query/values> ;
     
         a mpfield:Field, ldp:Resource, prov:Entity ;
@@ -120,6 +121,8 @@
                     sp:text """SELECT ?value WHERE { $subject crm:P128_carries/crm:P138_represents ?value . }""" .
                 <http://rs.swissartresearch.net/instances/fields/object_depicts/query/insert> a sp:Query;
                     sp:text """INSERT { ?work crm:P138_represents $value . } WHERE { $subject crm:P128_carries ?work . }""" .
+                <http://rs.swissartresearch.net/instances/fields/object_depicts/query/autosuggestion> a sp:Query;
+                    sp:text """PREFIX bds: <http://www.bigdata.com/rdf/search#> SELECT DISTINCT ?value ?label ?type WHERE { VALUES(?type) { (search:Person) (search:Place) (search:Type) } ?value a ?type ; rdfs:label ?label . ?label bds:search ?__token__ . } ORDER BY ?label""" .
                 <http://rs.swissartresearch.net/instances/fields/object_depicts/query/values> a sp:Query;
                     sp:text """SELECT ?value ?label ?type WHERE { VALUES(?type) { (search:Person) (search:Place) (search:Type) } ?value a ?type ; rdfs:label ?label . } ORDER BY ?label""" .
     
