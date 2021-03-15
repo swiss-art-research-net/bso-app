@@ -9,7 +9,7 @@
           {{#ifCond field.xsdDatatype.value "=="  "http://www.w3.org/2001/XMLSchema#anyURI"}}
             <semantic-link iri="{{value.value.value}}"></semantic-link>
           {{else}}
-            {{value.value.value}}
+            {{ value.label }}
           {{/ifCond}}
           </dd>
         {{/each}}
