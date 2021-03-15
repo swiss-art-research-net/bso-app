@@ -11,7 +11,8 @@
         ?subject (crm:P128_carries/crm:P94i_was_created_by) ?creation.
         ?creation crm:P9_consists_of ?subcreation.
         ?subcreation crm:P14_carried_out_by ?actor;
-          crm:P2_has_type ?creation_type.
+          crm:P2_has_type ?creation_type .
+        ?creation_type rdfs:label ?creation_type_label .
       }"
     template="{{> template}}"
 >
@@ -32,6 +33,7 @@
         ?creation crm:P9_consists_of ?subcreation.
         ?subcreation crm:P14_carried_out_by ?actor;
           crm:P2_has_type ?creation_type.
+        ?creation_type rdfs:label ?creation_type_label .
       }"
     template="{{> template}}"
 >
