@@ -52,11 +52,15 @@ fields:
             ?creation crm:P9_consists_of ?subcreation .
             ?subcreation crm:P14_carried_out_by ?actor ;
               crm:P2_has_type ?creation_type .
-            ?creation_type rdfs:label ?creation_type_label .
             {
               SELECT ?actor (SAMPLE(?actor_labels) as ?actor_label) {
                 ?actor rdfs:label ?actor_labels .
               } GROUP BY ?actor
+            }
+            {
+              SELECT ?creation_type (SAMPLE(?creation_type_labels) as ?creation_type_label) {
+                ?creation_type rdfs:label ?creation_type_labels .
+              } GROUP BY ?creation_type
             }
             BIND(?actor as ?value)
             BIND(CONCAT(?actor_label, " (", ?creation_type_label, ")") as ?label)
@@ -71,11 +75,15 @@ fields:
             ?production crm:P9_consists_of ?subproduction .
             ?subproduction crm:P14_carried_out_by ?actor ;
               crm:P2_has_type ?production_type .
-            ?production_type rdfs:label ?production_type_label .
             {
               SELECT ?actor (SAMPLE(?actor_labels) as ?actor_label) {
                 ?actor rdfs:label ?actor_labels .
               } GROUP BY ?actor
+            }
+            {
+              SELECT ?production_type (SAMPLE(?production_type_labels) as ?production_type_label) {
+                ?production_type rdfs:label ?production_type_labels .
+              } GROUP BY ?production_type
             }
             BIND(?actor as ?value)
             BIND(CONCAT(?actor_label, " (", ?production_type_label, ")") as ?label)
