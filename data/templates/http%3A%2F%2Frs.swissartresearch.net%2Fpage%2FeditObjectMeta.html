@@ -21,6 +21,7 @@
 </div>
 
 [[> partial:contentHeader]]
+
 <semantic-form
     subject='[[urlParam "objectiri"]]'
     persistence='ldp'
@@ -35,6 +36,14 @@
             {{label.value}} ({{typeLabel.value}})
         </template>
     </semantic-form-autocomplete-input>
+    <semantic-form-composite-input
+        for="object_subcreations"
+        fields='[[> partial:fieldDefinitions]]'
+       
+    >
+        <semantic-form-select-input for="P14_carried_out_by"></semantic-form-select-input>
+        <semantic-form-select-input for="P2_has_type"></semantic-form-select-input>
+    </semantic-form-composite-input>
 
     <button name="submit" class="btn btn-primary">Save</button>
     <button name="reset" class="btn btn-secondary">Reset</button>

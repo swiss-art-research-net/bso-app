@@ -8,40 +8,6 @@ namespaces:
   search: http://rs.swissartresearch.net/search/
 
 fields:
-
-    - id: collection
-      label: Collection
-      description: The holding collection or institution of the work
-      datatype: xsd:anyURI
-      domain: crm:E22_Man-Made_Object
-      range: crm:E39_Actor
-      queries:
-        - select: 'SELECT ?value WHERE {
-            $subject crm:P109_has_former_or_current_curator ?value .
-          }'
-            
-    - id: creator_of_object
-      label: Creator
-      description: The creator of the artwork 
-      datatype: xsd:anyURI
-      domain: crm:E22_Man-Made_Object
-      range: crm:E39_Actor
-      queries:
-        - insert: 'INSERT { 
-          ?creation crm:P14_carried_out_by $value .
-        } WHERE {
-          BIND(CONCAT(STR($subject), "/creation") as ?creation)
-        }'
-        
-        - select: 'SELECT ?value ?label WHERE {
-          $subject crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by ?value.
-          OPTIONAL {
-            BIND(URI(CONCAT(STR($subject), "/meta")) as ?subject_meta )
-            ?value crm:P1_is_identified_by ?appellation .
-            ?appellation rdfs:label ?label ;
-              crm:P70i_is_documented_in ?subject_meta . 
-          }
-        }'
       
     - id: actors_involved_in_creation_of_object
       label: Persons/Actors involved in creation
@@ -88,7 +54,55 @@ fields:
             BIND(?actor as ?value)
             BIND(CONCAT(?actor_label, " (", ?production_type_label, ")") as ?label)
           }'
+
+    - id: collection
+      label: Collection
+      description: The holding collection or institution of the work
+      datatype: xsd:anyURI
+      domain: crm:E22_Man-Made_Object
+      range: crm:E39_Actor
+      queries:
+        - select: 'SELECT ?value WHERE {
+            $subject crm:P109_has_former_or_current_curator ?value .
+          }'
+            
+    - id: creator_of_object
+      label: Creator
+      description: The creator of the artwork 
+      datatype: xsd:anyURI
+      domain: crm:E22_Man-Made_Object
+      range: crm:E39_Actor
+      queries:
+        - insert: 'INSERT { 
+          ?creation crm:P14_carried_out_by $value .
+        } WHERE {
+          BIND(CONCAT(STR($subject), "/creation") as ?creation)
+        }'
+        
+        - select: 'SELECT ?value ?label WHERE {
+          $subject crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by ?value.
+          OPTIONAL {
+            BIND(URI(CONCAT(STR($subject), "/meta")) as ?subject_meta )
+            ?value crm:P1_is_identified_by ?appellation .
+            ?appellation rdfs:label ?label ;
+              crm:P70i_is_documented_in ?subject_meta . 
+          }
+        }'
  
+    - id: label
+      label: Label
+      description: A human-readable label for the entity
+      datatype: xsd:string
+      minOccurs: 0
+      maxOccurs: 1
+      queries:
+        - insert: 'INSERT { 
+            $subject rdfs:label $value .
+          } WHERE {}'
+        - select: 'SELECT ?value WHERE {
+            $subject rdfs:label ?value .
+          }'
+    
     - id: objects_created
       label: Created
       description: Objects that were created by an actor
@@ -156,20 +170,18 @@ fields:
           } ORDER BY ?label
           LIMIT 100'
 
-    - id: label
-      label: Label
-      description: A human-readable label for the entity
-      datatype: xsd:string
-      minOccurs: 0
-      maxOccurs: 1
+    - id: object_subcreations
+      label: Creation Roles
+      descriptions: The sub-creations for an object
+      datatype: xsd:anyURI
+      domain: crm:E22_Man-Made_Object
+      range: crm:E65_Creation
       queries:
-        - insert: 'INSERT { 
-            $subject rdfs:label $value .
-          } WHERE {}'
         - select: 'SELECT ?value WHERE {
-            $subject rdfs:label ?value .
+            $subject crm:P128_carries/crm:P94i_was_created_by ?creation .
+            ?creation crm:P9_consists_of ?value .
           }'
-    
+
     - id: object_carries_visual_item
       label: Visual Item
       description: The E36 Visual Item carried by the E22 Human-Made Object
@@ -193,4 +205,23 @@ fields:
       queries:
         - select: 'SELECT ?value WHERE {
             $subject crm:P108i_was_produced_by/crm:P4_has_time-span ?value
+          }'
+
+    - id: P2_has_type
+      label: Type
+      datatype: xsd:anyURI
+      queries:
+        - select: 'SELECT ?value WHERE {
+            $subject crm:P2_has_type ?value .
+          }'
+
+    - id: P14_carried_out_by
+      label: Person
+      description: The person or actor carrying out an event
+      datatype: xsd:anyURI
+      minOccurs: 1
+      maxOccurs: 1
+      queries:
+        - select: 'SELECT ?value WHERE {
+            $subject crm:P14_carried_out_by ?value .
           }'

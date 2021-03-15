@@ -1,5 +1,23 @@
 [
     {
+        "id" : "actors_involved_in_creation_of_object",
+
+            "label": "Persons/Actors involved in creation",
+            "xsdDatatype" : "xsd:string",
+                "selectPattern" : "SELECT ?value ?label WHERE { $subject crm:P128_carries/crm:P94i_was_created_by ?creation . ?creation crm:P9_consists_of ?subcreation . ?subcreation crm:P14_carried_out_by ?actor ; crm:P2_has_type ?creation_type . { SELECT ?actor (SAMPLE(?actor_labels) as ?actor_label) { ?actor rdfs:label ?actor_labels . } GROUP BY ?actor } { SELECT ?creation_type (SAMPLE(?creation_type_labels) as ?creation_type_label) { ?creation_type rdfs:label ?creation_type_labels . } GROUP BY ?creation_type } BIND(?actor as ?value) BIND(CONCAT(?actor_label, \" (\", ?creation_type_label, \")\") as ?label) }",
+        "iri" : "http://rs.swissartresearch.net/instances/fields/actors_involved_in_creation_of_object"
+    },
+
+    {
+        "id" : "actors_involved_in_production_of_object",
+
+            "label": "Persons/Actors involved in production",
+            "xsdDatatype" : "xsd:string",
+                "selectPattern" : "SELECT ?value ?label WHERE { $subject crm:P108i_was_produced_by ?production . ?production crm:P9_consists_of ?subproduction . ?subproduction crm:P14_carried_out_by ?actor ; crm:P2_has_type ?production_type . { SELECT ?actor (SAMPLE(?actor_labels) as ?actor_label) { ?actor rdfs:label ?actor_labels . } GROUP BY ?actor } { SELECT ?production_type (SAMPLE(?production_type_labels) as ?production_type_label) { ?production_type rdfs:label ?production_type_labels . } GROUP BY ?production_type } BIND(?actor as ?value) BIND(CONCAT(?actor_label, \" (\", ?production_type_label, \")\") as ?label) }",
+        "iri" : "http://rs.swissartresearch.net/instances/fields/actors_involved_in_production_of_object"
+    },
+
+    {
         "id" : "collection",
 
             "label": "Collection",
@@ -25,21 +43,15 @@
     },
 
     {
-        "id" : "actors_involved_in_creation_of_object",
+        "id" : "label",
 
-            "label": "Persons/Actors involved in creation",
+            "label": "Label",
+            "description" : "A human-readable label for the entity",
+            "maxOccurs" : "1",
             "xsdDatatype" : "xsd:string",
-                "selectPattern" : "SELECT ?value ?label WHERE { $subject crm:P128_carries/crm:P94i_was_created_by ?creation . ?creation crm:P9_consists_of ?subcreation . ?subcreation crm:P14_carried_out_by ?actor ; crm:P2_has_type ?creation_type . { SELECT ?actor (SAMPLE(?actor_labels) as ?actor_label) { ?actor rdfs:label ?actor_labels . } GROUP BY ?actor } { SELECT ?creation_type (SAMPLE(?creation_type_labels) as ?creation_type_label) { ?creation_type rdfs:label ?creation_type_labels . } GROUP BY ?creation_type } BIND(?actor as ?value) BIND(CONCAT(?actor_label, \" (\", ?creation_type_label, \")\") as ?label) }",
-        "iri" : "http://rs.swissartresearch.net/instances/fields/actors_involved_in_creation_of_object"
-    },
-
-    {
-        "id" : "actors_involved_in_production_of_object",
-
-            "label": "Persons/Actors involved in production",
-            "xsdDatatype" : "xsd:string",
-                "selectPattern" : "SELECT ?value ?label WHERE { $subject crm:P108i_was_produced_by ?production . ?production crm:P9_consists_of ?subproduction . ?subproduction crm:P14_carried_out_by ?actor ; crm:P2_has_type ?production_type . { SELECT ?actor (SAMPLE(?actor_labels) as ?actor_label) { ?actor rdfs:label ?actor_labels . } GROUP BY ?actor } { SELECT ?production_type (SAMPLE(?production_type_labels) as ?production_type_label) { ?production_type rdfs:label ?production_type_labels . } GROUP BY ?production_type } BIND(?actor as ?value) BIND(CONCAT(?actor_label, \" (\", ?production_type_label, \")\") as ?label) }",
-        "iri" : "http://rs.swissartresearch.net/instances/fields/actors_involved_in_production_of_object"
+                "insertPattern" : "INSERT { $subject rdfs:label $value . } WHERE {}",
+                "selectPattern" : "SELECT ?value WHERE { $subject rdfs:label ?value . }",
+        "iri" : "http://rs.swissartresearch.net/instances/fields/label"
     },
 
     {
@@ -81,15 +93,14 @@
     },
 
     {
-        "id" : "label",
+        "id" : "object_subcreations",
 
-            "label": "Label",
-            "description" : "A human-readable label for the entity",
-            "maxOccurs" : "1",
-            "xsdDatatype" : "xsd:string",
-                "insertPattern" : "INSERT { $subject rdfs:label $value . } WHERE {}",
-                "selectPattern" : "SELECT ?value WHERE { $subject rdfs:label ?value . }",
-        "iri" : "http://rs.swissartresearch.net/instances/fields/label"
+            "label": "Creation Roles",
+            "xsdDatatype" : "xsd:anyURI",
+            "domain" : "crm:E22_Man-Made_Object",
+            "range" : "crm:E65_Creation",
+                "selectPattern" : "SELECT ?value WHERE { $subject crm:P128_carries/crm:P94i_was_created_by ?creation . ?creation crm:P9_consists_of ?value . }",
+        "iri" : "http://rs.swissartresearch.net/instances/fields/object_subcreations"
     },
 
     {
@@ -116,6 +127,27 @@
             "range" : "crm:E52_Time-Span",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P108i_was_produced_by/crm:P4_has_time-span ?value }",
         "iri" : "http://rs.swissartresearch.net/instances/fields/object_production_date"
+    },
+
+    {
+        "id" : "P2_has_type",
+
+            "label": "Type",
+            "xsdDatatype" : "xsd:anyURI",
+                "selectPattern" : "SELECT ?value WHERE { $subject crm:P2_has_type ?value . }",
+        "iri" : "http://rs.swissartresearch.net/instances/fields/P2_has_type"
+    },
+
+    {
+        "id" : "P14_carried_out_by",
+
+            "label": "Person",
+            "description" : "The person or actor carrying out an event",
+            "minOccurs" : "1",
+            "maxOccurs" : "1",
+            "xsdDatatype" : "xsd:anyURI",
+                "selectPattern" : "SELECT ?value WHERE { $subject crm:P14_carried_out_by ?value . }",
+        "iri" : "http://rs.swissartresearch.net/instances/fields/P14_carried_out_by"
     }
 
 ]
