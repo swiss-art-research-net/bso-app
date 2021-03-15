@@ -125,7 +125,7 @@ fields:
       domain: crm:E22_Man-Made_Object
       range: crm:E1_CRM_Entity
       queries:
-        - select: 'SELECT ?value WHERE {
+        - select: 'SELECT DISTINCT ?value WHERE {
             $subject crm:P128_carries/crm:P138_represents ?value .
           }'
         - insert: 'INSERT {
