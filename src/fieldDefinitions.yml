@@ -153,7 +153,8 @@ fields:
             }
             ?value a ?type ;
               rdfs:label ?label .
-          } ORDER BY ?label'
+          } ORDER BY ?label
+          LIMIT 100'
 
     - id: label
       label: Label
