@@ -6,7 +6,15 @@
 [[> partial:fieldsTable iri=objectiri param="objectiri" ]]
 <semantic-link
     iri="[[#if objectiri]][[objectiri]][[else]][[ urlParam 'objectiri' ]][[/if]]"
->View raw</semantic-link>
+><button type="button" class="btn btn-primary btn-xs">View raw</button></semantic-link>
+
+[[#if objectiri]]
+[[objectiri]]
+    [[> partial:buttonEditObjectMeta iri=objectiri]]
+[[else]]
+    [[> partial:buttonEditObjectMeta iri=(urlParam 'objectiri')]]
+[[/if]]
+
 <semantic-table
     query="SELECT DISTINCT ?image ?IIIFimage WHERE {
         <[[#if objectiri]][[objectiri]][[else]][[ urlParam 'objectiri' ]][[/if]]> crm:P128_carries ?work .

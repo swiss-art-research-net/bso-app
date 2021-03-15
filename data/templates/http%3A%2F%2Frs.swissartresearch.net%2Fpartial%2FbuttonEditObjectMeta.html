@@ -1,6 +1,6 @@
 <semantic-link
     iri="[[ resolvePrefix "page:editObjectMeta"]]"
-    urlqueryparam-objectiri="{{iri}}"
+    urlqueryparam-objectiri="[[#if iri]][[iri]][[else]]{{iri}}[[/if]]"
     >
     <button type="button" class="btn btn-primary btn-xs">Edit Metadata</button>
 </semantic-link>
