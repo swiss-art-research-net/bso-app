@@ -15,7 +15,7 @@
         OPTIONAL {
             ?creation_type rdfs:label ?creation_type_label_original .
         }
-        BIND(IF(!BOUND(?creation_type_label_original), STRAFTER(STR(?creation_type), 'https://resource.swissartresearch.net/role/'), ?creation_type_label) as ?creation_type_label)
+        BIND(IF(!BOUND(?creation_type_label_original), STRAFTER(STR(?creation_type), 'https://resource.swissartresearch.net/role/'), ?creation_type_label_original) as ?creation_type_label)
       } GROUP BY ?subject ?actor"
     template="{{> template}}"
 >
@@ -37,7 +37,7 @@
         ?subcreation crm:P14_carried_out_by ?actor;
           crm:P2_has_type ?creation_type.
         ?creation_type rdfs:label ?creation_type_label_original .
-        BIND(IF(!BOUND(?creation_type_label_original), STRAFTER(STR(?creation_type), 'https://resource.swissartresearch.net/role/'), ?creation_type_label) as ?creation_type_label)
+        BIND(IF(!BOUND(?creation_type_label_original), STRAFTER(STR(?creation_type), 'https://resource.swissartresearch.net/role/'), ?creation_type_label_original) as ?creation_type_label)
       } GROUP BY ?subject ?actor"
     template="{{> template}}"
 >
