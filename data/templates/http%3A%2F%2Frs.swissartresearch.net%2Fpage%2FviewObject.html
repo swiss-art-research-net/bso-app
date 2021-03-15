@@ -6,7 +6,7 @@
 [[> partial:fieldsTable iri=objectiri param="objectiri" ]]
 
 <semantic-query
-    query="SELECT DISTINCT ?subject ?actor (GROUP_CONCAT(?creation_type_label; SEPARATOR='/') as ?creation_type_labels) WHERE {
+    query="SELECT DISTINCT ?subject ?actor (GROUP_CONCAT(?creation_type_label; SEPARATOR=', ') as ?creation_type_labels) WHERE {
         BIND(<[[#if objectiri]][[objectiri]][[else]][[ urlParam 'objectiri' ]][[/if]]> as $subject)
         ?subject (crm:P128_carries/crm:P94i_was_created_by) ?creation.
         ?creation crm:P9_consists_of ?subcreation.
@@ -15,7 +15,7 @@
         OPTIONAL {
             ?creation_type rdfs:label ?creation_type_label_original .
         }
-        BIND(IF(!BOUND(?creation_type_label_original), STRAFTER(STR(?creation_type), 'https://resource.swissartresearch.net/role/'), ?creation_type_label_original) as ?creation_type_label)
+        BIND(IF(!BOUND(?creation_type_label_original), STRAFTER(STR(?creation_type), 'https://resource.swissartresearch.net/'), ?creation_type_label_original) as ?creation_type_label)
       } GROUP BY ?subject ?actor"
     template="{{> template}}"
 >
@@ -30,14 +30,14 @@
 </semantic-query>
 
 <semantic-query
-    query="SELECT DISTINCT ?subject ?actor (GROUP_CONCAT(?creation_type_label; SEPARATOR='/') as ?creation_type_labels) WHERE {
+    query="SELECT DISTINCT ?subject ?actor (GROUP_CONCAT(?creation_type_label; SEPARATOR=', ') as ?creation_type_labels) WHERE {
         BIND(<[[#if objectiri]][[objectiri]][[else]][[ urlParam 'objectiri' ]][[/if]]> as $subject)
         ?subject crm:P108i_was_produced_by ?creation.
         ?creation crm:P9_consists_of ?subcreation.
         ?subcreation crm:P14_carried_out_by ?actor;
           crm:P2_has_type ?creation_type.
         ?creation_type rdfs:label ?creation_type_label_original .
-        BIND(IF(!BOUND(?creation_type_label_original), STRAFTER(STR(?creation_type), 'https://resource.swissartresearch.net/role/'), ?creation_type_label_original) as ?creation_type_label)
+        BIND(IF(!BOUND(?creation_type_label_original), STRAFTER(STR(?creation_type), 'https://resource.swissartresearch.net/'), ?creation_type_label_original) as ?creation_type_label)
       } GROUP BY ?subject ?actor"
     template="{{> template}}"
 >
