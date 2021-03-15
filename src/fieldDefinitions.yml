@@ -9,36 +9,6 @@ namespaces:
 
 fields:
       
-    - id: actors_involved_in_creation_of_object
-      label: Persons/Actors involved in creation
-      datatype: xsd:string
-      queries:
-        - select: 'SELECT ?value ?label WHERE {
-            $subject crm:P128_carries/crm:P94i_was_created_by ?creation .
-            ?creation crm:P9_consists_of ?subcreation .
-            ?subcreation crm:P14_carried_out_by ?actor ;
-              crm:P2_has_type ?creation_type .
-            ?actor rdfs:label ?actor_label .
-            ?creation_type rdfs:label ?creation_type_label .
-            BIND(?actor as ?value)
-            BIND(CONCAT(?actor_label, " (", ?creation_type_label, ")") as ?label)
-          }'
-
-    - id: actors_involved_in_production_of_object
-      label: Persons/Actors involved in production
-      datatype: xsd:string
-      queries:
-        - select: 'SELECT ?value ?label WHERE {
-            $subject crm:P108i_was_produced_by ?production .
-            ?production crm:P9_consists_of ?subproduction .
-            ?subproduction crm:P14_carried_out_by ?actor ;
-              crm:P2_has_type ?production_type .
-            ?actor rdfs:label ?actor_label .
-            ?production_type rdfs:label ?production_type_label .
-            BIND(?actor as ?value)
-            BIND(CONCAT(?actor_label, " (", ?production_type_label, ")") as ?label)
-          }'
-
     - id: collection
       label: Collection
       description: The holding collection or institution of the work
@@ -158,6 +128,7 @@ fields:
       label: Creation Roles
       descriptions: The sub-creations for an object
       datatype: xsd:anyURI
+      display: hidden
       domain: crm:E22_Man-Made_Object
       range: crm:E65_Creation
       queries:
@@ -170,6 +141,7 @@ fields:
       label: Visual Item
       description: The E36 Visual Item carried by the E22 Human-Made Object
       datatype: xsd:anyURI
+      display: hidden
       minOccurs: 1
       maxOccurs: 1
       domain: crm:E22_Man-Made_Object

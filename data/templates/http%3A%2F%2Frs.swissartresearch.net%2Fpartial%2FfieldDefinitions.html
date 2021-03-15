@@ -1,23 +1,5 @@
 [
     {
-        "id" : "actors_involved_in_creation_of_object",
-
-            "label": "Persons/Actors involved in creation",
-            "xsdDatatype" : "xsd:string",
-                "selectPattern" : "SELECT ?value ?label WHERE { $subject crm:P128_carries/crm:P94i_was_created_by ?creation . ?creation crm:P9_consists_of ?subcreation . ?subcreation crm:P14_carried_out_by ?actor ; crm:P2_has_type ?creation_type . ?actor rdfs:label ?actor_label . ?creation_type rdfs:label ?creation_type_label . BIND(?actor as ?value) BIND(CONCAT(?actor_label, \" (\", ?creation_type_label, \")\") as ?label) }",
-        "iri" : "http://rs.swissartresearch.net/instances/fields/actors_involved_in_creation_of_object"
-    },
-
-    {
-        "id" : "actors_involved_in_production_of_object",
-
-            "label": "Persons/Actors involved in production",
-            "xsdDatatype" : "xsd:string",
-                "selectPattern" : "SELECT ?value ?label WHERE { $subject crm:P108i_was_produced_by ?production . ?production crm:P9_consists_of ?subproduction . ?subproduction crm:P14_carried_out_by ?actor ; crm:P2_has_type ?production_type . ?actor rdfs:label ?actor_label . ?production_type rdfs:label ?production_type_label . BIND(?actor as ?value) BIND(CONCAT(?actor_label, \" (\", ?production_type_label, \")\") as ?label) }",
-        "iri" : "http://rs.swissartresearch.net/instances/fields/actors_involved_in_production_of_object"
-    },
-
-    {
         "id" : "collection",
 
             "label": "Collection",
@@ -96,6 +78,7 @@
         "id" : "object_subcreations",
 
             "label": "Creation Roles",
+            "display" : "hidden",
             "xsdDatatype" : "xsd:anyURI",
             "domain" : "crm:E22_Man-Made_Object",
             "range" : "crm:E65_Creation",
@@ -108,6 +91,7 @@
 
             "label": "Visual Item",
             "description" : "The E36 Visual Item carried by the E22 Human-Made Object",
+            "display" : "hidden",
             "minOccurs" : "1",
             "maxOccurs" : "1",
             "xsdDatatype" : "xsd:anyURI",

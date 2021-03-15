@@ -2,22 +2,25 @@
 <template id="template">
   <dl>
     {{#each fields as |field|}}
-      {{#if field.values}}
-        <dt>{{field.label.0.value}}</dt>
-        {{#each field.values as |value|}}
-          <dd>
-          {{#ifCond field.xsdDatatype.value "=="  "http://www.w3.org/2001/XMLSchema#anyURI"}}
-            <semantic-link iri="{{value.value.value}}"></semantic-link>
-          {{else}}
-            {{#if value.label}}
-              {{ value.label }}
+      {{#ifCond field.display "==" "hidden"}}
+      {{else}}
+        {{#if field.values}}
+          <dt>{{field.label.0.value}}</dt>
+          {{#each field.values as |value|}}
+            <dd>
+            {{#ifCond field.xsdDatatype.value "=="  "http://www.w3.org/2001/XMLSchema#anyURI"}}
+              <semantic-link iri="{{value.value.value}}"></semantic-link>
             {{else}}
-              {{ value.value.value }}
-            {{/if}}
-          {{/ifCond}}
-          </dd>
-        {{/each}}
-      {{/if}}
+              {{#if value.label}}
+                {{ value.label }}
+              {{else}}
+                {{ value.value.value }}
+              {{/if}}
+            {{/ifCond}}
+            </dd>
+          {{/each}}
+        {{/if}}
+      {{/ifCond}}
     {{/each}}
   </dl>
 </template>

@@ -4,12 +4,52 @@
 <h2><mp-label iri="[[#if objectiri]][[objectiri]][[else]][[ urlParam 'objectiri' ]][[/if]]"></mp-label></h2>
 
 [[> partial:fieldsTable iri=objectiri param="objectiri" ]]
+
+<semantic-query
+    query="SELECT DISTINCT ?subject ?actor ?creation_type WHERE {
+        BIND(<[[#if objectiri]][[objectiri]][[else]][[ urlParam 'objectiri' ]][[/if]]> as $subject)
+        ?subject (crm:P128_carries/crm:P94i_was_created_by) ?creation.
+        ?creation crm:P9_consists_of ?subcreation.
+        ?subcreation crm:P14_carried_out_by ?actor;
+          crm:P2_has_type ?creation_type.
+      }"
+    template="{{> template}}"
+>
+      <template id="template">
+          <dl>
+              <dt>Persons involved in creation</dt>
+              {{#each bindings}}
+                <dd><semantic-link iri="{{ actor.value }}"></semantic-link> (<semantic-link iri="{{ creation_type.value }}"></semantic-link>)</dd>
+              {{/each}}
+          </dl>
+      </template>
+</semantic-query>
+
+<semantic-query
+    query="SELECT DISTINCT ?subject ?actor ?creation_type WHERE {
+        BIND(<[[#if objectiri]][[objectiri]][[else]][[ urlParam 'objectiri' ]][[/if]]> as $subject)
+        ?subject crm:P108i_was_produced_by ?creation.
+        ?creation crm:P9_consists_of ?subcreation.
+        ?subcreation crm:P14_carried_out_by ?actor;
+          crm:P2_has_type ?creation_type.
+      }"
+    template="{{> template}}"
+>
+      <template id="template">
+          <dl>
+              <dt>Persons involved in production</dt>
+              {{#each bindings}}
+                <dd><semantic-link iri="{{ actor.value }}"></semantic-link> (<semantic-link iri="{{ creation_type.value }}"></semantic-link>)</dd>
+              {{/each}}
+          </dl>
+      </template>
+</semantic-query>
+
 <semantic-link
     iri="[[#if objectiri]][[objectiri]][[else]][[ urlParam 'objectiri' ]][[/if]]"
 ><button type="button" class="btn btn-primary btn-xs">View raw</button></semantic-link>
 
 [[#if objectiri]]
-[[objectiri]]
     [[> partial:buttonEditObjectMeta iri=objectiri]]
 [[else]]
     [[> partial:buttonEditObjectMeta iri=(urlParam 'objectiri')]]
