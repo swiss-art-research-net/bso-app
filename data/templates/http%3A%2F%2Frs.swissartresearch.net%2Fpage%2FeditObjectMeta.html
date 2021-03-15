@@ -28,9 +28,8 @@
 >
 
     <semantic-form-text-input for="label"></semantic-form-text-input>
-    <semantic-form-select-input for="object_depicts" template="{{> template}}">
+    <semantic-form-autocomplete-input for="object_depicts" template="{{> template}}">
         <template id="template">
-            {{log label}}
             {{label.value}} ({{typeLabel.value}})
         </template>
     </semantic-form-autocomplete-input>
