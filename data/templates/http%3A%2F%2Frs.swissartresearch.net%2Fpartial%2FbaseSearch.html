@@ -7,6 +7,17 @@ categories='{
       $subject ?__relation__ ?date .
       FILTER(?date >= ?__dateBeginValue__ && ?date <= ?__dateEndValue__)
     }"
+  }],
+  "<http://rs.swissartresearch.net/search/Place>": [{
+    "kind": "place",
+    "distanceQueryPattern": "{
+      $subject ?__relation__ ?place .
+      ?place (crmdig:L54_is_same-as/wdt:P625)|crm:P168_place_is_defined_by ?__value__ .
+    }",
+    "boundingBoxQueryPattern": "{
+      $subject ?__relation__ ?place .
+      ?place (crmdig:L54_is_same-as/wdt:P625)|crm:P168_place_is_defined_by ?__value__ .
+    }"
   }]
 }'
 search-profile='{
@@ -71,6 +82,12 @@ search-profile='{
         "label": "from"
       },
       {
+        "iri": "<http://rs.swissartresearch.net/Thing_depicts_Actor>",
+        "hasDomain": "<http://rs.swissartresearch.net/search/Object>",
+        "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E39_Actor>",
+        "label": "depicts"
+      },
+      {
         "iri": "<http://rs.swissartresearch.net/Thing_depicts_Place>",
         "hasDomain": "<http://rs.swissartresearch.net/search/Object>",
         "hasRange": "<http://rs.swissartresearch.net/search/Place>",
@@ -130,6 +147,15 @@ relations='{
     "queryPattern": "
       {
         ?subject crm:P109_has_former_or_current_curator ?__value__ .
+      }
+    "
+  }],
+  "<http://rs.swissartresearch.net/Thing_depicts_Actor>": [{
+    "kind": "resource",
+    "queryPattern": "
+      {
+        ?subject crm:P128_carries/crm:P138_represents ?__value__ .
+        ?__value__ a crm:E39_Actor .
       }
     "
   }],
