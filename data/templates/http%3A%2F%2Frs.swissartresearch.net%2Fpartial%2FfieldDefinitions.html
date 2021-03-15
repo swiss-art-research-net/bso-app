@@ -75,8 +75,8 @@
             "range" : "crm:E1_CRM_Entity",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P128_carries/crm:P138_represents ?value . }",
                 "insertPattern" : "INSERT { ?work crm:P138_represents $value . } WHERE { $subject crm:P128_carries ?work . }",
-                "autosuggestionPattern" : "PREFIX bds: <http://www.bigdata.com/rdf/search#> SELECT DISTINCT ?value ?label ?type WHERE { VALUES(?type) { (search:Person) (search:Place) (search:Type) } ?value a ?type ; rdfs:label ?label . ?label bds:search ?__token__ . } ORDER BY ?label LIMIT 10",
-                "valueSetPattern" : "SELECT ?value ?label ?type WHERE { VALUES(?type) { (search:Person) (search:Place) (search:Type) } ?value a ?type ; rdfs:label ?label . } ORDER BY ?label LIMIT 100",
+                "autosuggestionPattern" : "PREFIX bds: <http://www.bigdata.com/rdf/search#> SELECT DISTINCT ?value ?label ?type ?typeLabel WHERE { VALUES(?type ?typeLabel) { (search:Person \"Person\") (search:Place \"Place\") (search:Type \"Type\") } ?value a ?type ; rdfs:label ?label . ?label bds:search ?__token__ . } ORDER BY ?label LIMIT 10",
+                "valueSetPattern" : "SELECT ?value ?label ?type ?typeLabel WHERE { VALUES(?type ?typeLabel) { (search:Person \"Person\") (search:Place \"Place\") (search:Type \"Type\") } ?value a ?type ; rdfs:label ?label . } ORDER BY ?label LIMIT 100",
         "iri" : "http://rs.swissartresearch.net/instances/fields/object_depicts"
     },
 

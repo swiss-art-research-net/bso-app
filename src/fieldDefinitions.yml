@@ -134,22 +134,22 @@ fields:
             $subject crm:P128_carries ?work .
           }'
         - autosuggestion: 'PREFIX bds: <http://www.bigdata.com/rdf/search#>
-          SELECT DISTINCT ?value ?label ?type WHERE {
-            VALUES(?type) {
-              (search:Person)
-              (search:Place)
-              (search:Type)
+          SELECT DISTINCT ?value ?label ?type ?typeLabel WHERE {
+            VALUES(?type ?typeLabel) {
+              (search:Person "Person")
+              (search:Place "Place")
+              (search:Type "Type")
             }
             ?value a ?type ;
               rdfs:label ?label .
             ?label bds:search ?__token__ .
           } ORDER BY ?label
           LIMIT 10'
-        - valueSet: 'SELECT ?value ?label ?type WHERE {
-            VALUES(?type) {
-              (search:Person)
-              (search:Place)
-              (search:Type)
+        - valueSet: 'SELECT ?value ?label ?type ?typeLabel WHERE {
+            VALUES(?type ?typeLabel) {
+              (search:Person "Person")
+              (search:Place "Place")
+              (search:Type "Type")
             }
             ?value a ?type ;
               rdfs:label ?label .
