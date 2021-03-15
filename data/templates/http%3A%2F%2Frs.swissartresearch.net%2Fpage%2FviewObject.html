@@ -6,42 +6,46 @@
 [[> partial:fieldsTable iri=objectiri param="objectiri" ]]
 
 <semantic-query
-    query="SELECT DISTINCT ?subject ?actor ?creation_type WHERE {
+    query="SELECT DISTINCT ?subject ?actor (GROUP_CONCAT(?creation_type_label; SEPARATOR='/') as ?creation_type_labels) WHERE {
         BIND(<[[#if objectiri]][[objectiri]][[else]][[ urlParam 'objectiri' ]][[/if]]> as $subject)
         ?subject (crm:P128_carries/crm:P94i_was_created_by) ?creation.
         ?creation crm:P9_consists_of ?subcreation.
         ?subcreation crm:P14_carried_out_by ?actor;
           crm:P2_has_type ?creation_type .
-        ?creation_type rdfs:label ?creation_type_label .
-      }"
+        OPTIONAL {
+            ?creation_type rdfs:label ?creation_type_label .
+        }
+        BIND(IF(!BOUND(?creation_type_label), STRAFTER(STR(?creation_type), 'https://resource.swissartresearch.net/role/'), ?creation_type_label) as ?creation_type_label)
+      } GROUP BY ?subject ?actor"
     template="{{> template}}"
 >
       <template id="template">
           <dl>
               <dt>Persons involved in creation</dt>
               {{#each bindings}}
-                <dd><semantic-link iri="{{ actor.value }}"></semantic-link> (<semantic-link iri="{{ creation_type.value }}"></semantic-link>)</dd>
+                <dd><semantic-link iri="{{ actor.value }}"></semantic-link> ({{ creation_type_labels.value}})</dd>
               {{/each}}
           </dl>
       </template>
 </semantic-query>
 
 <semantic-query
-    query="SELECT DISTINCT ?subject ?actor ?creation_type WHERE {
+    query="SELECT DISTINCT ?subject ?actor (GROUP_CONCAT(?creation_type_label; SEPARATOR='/') as ?creation_type_labels) WHERE {
         BIND(<[[#if objectiri]][[objectiri]][[else]][[ urlParam 'objectiri' ]][[/if]]> as $subject)
         ?subject crm:P108i_was_produced_by ?creation.
         ?creation crm:P9_consists_of ?subcreation.
         ?subcreation crm:P14_carried_out_by ?actor;
           crm:P2_has_type ?creation_type.
         ?creation_type rdfs:label ?creation_type_label .
-      }"
+        BIND(IF(!BOUND(?creation_type_label), STRAFTER(STR(?creation_type), 'https://resource.swissartresearch.net/role/'), ?creation_type_label) as ?creation_type_label)
+      } GROUP BY ?subject ?actor"
     template="{{> template}}"
 >
       <template id="template">
           <dl>
               <dt>Persons involved in production</dt>
               {{#each bindings}}
-                <dd><semantic-link iri="{{ actor.value }}"></semantic-link> (<semantic-link iri="{{ creation_type.value }}"></semantic-link>)</dd>
+                <dd><semantic-link iri="{{ actor.value }}"></semantic-link> ({{ creation_type_labels.value}})</dd>
               {{/each}}
           </dl>
       </template>
