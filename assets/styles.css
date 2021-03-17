@@ -83,6 +83,12 @@ ol.page-breadcrumb {
 .QueryBuilder--searchClause {
   background-color: #fff;
 }
+.bso-component.simple-search {
+  padding: 2rem 0;
+}
+.bso-component.summary {
+  margin-bottom: 2rem;
+}
 .bso-component.object {
   margin: 1rem 0;
 }

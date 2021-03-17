@@ -1,1 +1,72 @@
-[[> page:browseImages]]
+[[> partial:pageHeader]]
+[[> partial:contentHeader]]
+
+<div class="bso-component simple-search">
+    <semantic-simple-search
+        query="
+        SELECT ?resource ?label ?typeLabel WHERE {
+        ?resource a ?type ;
+            rdfs:label ?label .
+        ?type rdfs:label ?typeLabel .
+        VALUES(?type){
+            (search:Person)
+            (search:Object)
+            (search:Place)
+            (search:Type)
+        }
+        ?label bds:search ?__token__ .
+        } LIMIT 10"
+    template='{{>template}}'
+    input-placeholder='Search for something'
+    >
+        <template id="template">
+            <span title="{{resource.value}}">{{label.value}} ({{typeLabel.value}})</span>
+        </template>
+    </semantic-simple-search>
+</div>
+
+<div class="gap">
+    <bs-row>
+        <bs-col md="6">
+            <bs-panel>
+                <h3>Images</h3>
+                [[> resourceSummary type='search:Object' label='images']]
+            </bs-panel>
+        </bs-col>
+        <bs-col md="6">
+            <bs-panel>
+                <h3>Persons</h3>
+                [[> resourceSummary type='search:Person' label='persons']]
+            </bs-panel>
+        </bs-col>
+    </bs-row> 
+</div>
+
+<div class="gap">
+    <bs-row>
+        <bs-col md="6">
+            <bs-panel>
+                <h3>Places</h3>
+                [[> resourceSummary type='search:Place' label='places']]
+            </bs-panel>
+        </bs-col>
+        <bs-col md="6">
+            <bs-panel>
+                <h3>Concepts</h3>
+                [[> resourceSummary type='search:Type' label='concepts']]
+            </bs-panel>
+        </bs-col>
+    </bs-row> 
+</div>
+
+[[#*inline "resourceSummary"]]
+    <semantic-query
+        query="SELECT (COUNT(?subject) as ?num) WHERE {
+            ?subject a [[type]] .
+        }"
+        template="{{#each bindings}}There are currently {{num.value}} [[label]] in the database.{{/each}}"
+    ></semantic-query>
+[[/inline]]
+
+[[> partial:pageFooter]]
+[[> partial:contentFooter]]
