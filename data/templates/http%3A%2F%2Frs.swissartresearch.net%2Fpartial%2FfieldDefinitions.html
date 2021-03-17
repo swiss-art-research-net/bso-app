@@ -83,6 +83,7 @@
             "domain" : "crm:E22_Man-Made_Object",
             "range" : "crm:E65_Creation",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P128_carries/crm:P94i_was_created_by ?creation . ?creation crm:P9_consists_of ?value . }",
+                "insertPattern" : "INSERT { ?creation crm:P9_consists_of ?value . } WHERE { BIND(URI(CONCAT(STR($subject), \"/creation\")) as ?creation) }",
         "iri" : "http://rs.swissartresearch.net/instances/fields/object_subcreations"
     },
 
@@ -131,6 +132,8 @@
             "maxOccurs" : "1",
             "xsdDatatype" : "xsd:anyURI",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P14_carried_out_by ?value . }",
+                "autosuggestionPattern" : "PREFIX bds: <http://www.bigdata.com/rdf/search#> SELECT DISTINCT ?value ?label WHERE { ?value a search:Person ; rdfs:label ?label . ?label bds:search ?__token__ . } ORDER BY ?label LIMIT 10",
+                "valueSetPattern" : "SELECT ?value ?label  WHERE { ?value a search:Person ; rdfs:label ?label . } ORDER BY ?label LIMIT 100",
         "iri" : "http://rs.swissartresearch.net/instances/fields/P14_carried_out_by"
     }
 

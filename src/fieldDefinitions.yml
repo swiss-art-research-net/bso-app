@@ -136,6 +136,11 @@ fields:
             $subject crm:P128_carries/crm:P94i_was_created_by ?creation .
             ?creation crm:P9_consists_of ?value .
           }'
+        - insert: 'INSERT {
+            ?creation crm:P9_consists_of ?value .
+          } WHERE {
+            BIND(URI(CONCAT(STR($subject), "/creation")) as ?creation)
+          }'
 
     - id: object_carries_visual_item
       label: Visual Item
@@ -181,3 +186,15 @@ fields:
         - select: 'SELECT ?value WHERE {
             $subject crm:P14_carried_out_by ?value .
           }'
+        - autosuggestion: 'PREFIX bds: <http://www.bigdata.com/rdf/search#>
+          SELECT DISTINCT ?value ?label WHERE {
+            ?value a search:Person ;
+              rdfs:label ?label .
+            ?label bds:search ?__token__ .
+          } ORDER BY ?label
+          LIMIT 10'
+        - valueSet: 'SELECT ?value ?label  WHERE {
+            ?value a search:Person ;
+              rdfs:label ?label .
+          } ORDER BY ?label
+          LIMIT 100'
