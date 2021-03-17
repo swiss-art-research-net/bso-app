@@ -31,12 +31,18 @@
             <bs-panel>
                 <h3>Images</h3>
                 [[> resourceSummary type='search:Object' label='images']]
+                [[#> imageSummary type='search:Object' ]]
+                [[/ imageSummary]]
             </bs-panel>
         </bs-col>
         <bs-col md="6">
             <bs-panel>
                 <h3>Persons</h3>
                 [[> resourceSummary type='search:Person' label='persons']]
+                [[#> imageSummary type='search:Person' ]]
+                    ?subject crmdig:L54_is_same-as/wdt:P18 ?image .
+                [[/ imageSummary]]
+                </semantic-query>
             </bs-panel>
         </bs-col>
     </bs-row> 
@@ -48,16 +54,42 @@
             <bs-panel>
                 <h3>Places</h3>
                 [[> resourceSummary type='search:Place' label='places']]
+                [[#> imageSummary type='search:Place' ]]
+                    ?subject crmdig:L54_is_same-as/wdt:P18 ?image .
+                [[/ imageSummary]]
             </bs-panel>
         </bs-col>
         <bs-col md="6">
             <bs-panel>
                 <h3>Concepts</h3>
                 [[> resourceSummary type='search:Type' label='concepts']]
+                [[#> imageSummary type='search:Type' ]]
+                    ?subject crmdig:L54_is_same-as/wdt:P18 ?image .
+                [[/ imageSummary]]
             </bs-panel>
         </bs-col>
     </bs-row> 
 </div>
+
+[[#*inline "imageSummary"]]
+    <semantic-query
+    query="SELECT ?subject WHERE {
+        ?subject a [[type]] .
+        [[> @partial-block ]]
+    } LIMIT 50"
+    template="{{> template-image-summary}}"
+    >
+    <template id="template-image-summary">
+        <div>
+            {{#each bindings}}
+                <div class="bso-component mini-thumbnail">
+                    <mp-resource-thumbnail iri={{subject.value}}></mp-resource-thumbnail>
+                </div>
+            {{/each}}
+        </div>
+    </template>
+    </semantic-query>
+[[/inline]]
 
 [[#*inline "resourceSummary"]]
     <semantic-query
