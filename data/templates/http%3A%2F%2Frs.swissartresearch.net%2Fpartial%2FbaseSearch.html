@@ -28,6 +28,7 @@ search-profile='{
         {"iri": "<http://rs.swissartresearch.net/search/Place>", "label": "Place", "thumbnail": "../images/fcs/places.svg"},
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E53_Place>", "label": "Place", "thumbnail": "../images/fcs/places.svg"},
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E52_Time-Span>", "label": "Time", "thumbnail": "../images/fcs/dates.svg"},
+        {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E55_Type>", "label": "Type", "thumbnail": "../images/fcs/concepts.svg"},
         {"iri": "<http://rs.swissartresearch.net/search/Type>", "label": "Type", "thumbnail": "../images/fcs/concepts.svg"},
         {"iri": "<http://rs.swissartresearch.net/search/Concept>", "label": "Concept", "thumbnail": "../images/fcs/concepts.svg"},
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E57_Material>", "label": "Material", "thumbnail": "../images/fcs/things.svg"}
@@ -50,6 +51,12 @@ search-profile='{
         "hasDomain": "<http://rs.swissartresearch.net/search/Object>",
         "hasRange": "<http://rs.swissartresearch.net/search/Person>",
         "label": "by"
+      },
+      {
+        "iri": "<http://rs.swissartresearch.net/Thing_classified_as_Type>",
+        "hasDomain": "<http://rs.swissartresearch.net/search/Object>",
+        "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E55_Type>",
+        "label": "classified as"
       },
       {
         "iri": "<http://rs.swissartresearch.net/Thing_held_by_Actor>",
@@ -124,6 +131,13 @@ relations='{
     "kind": "resource",
     "queryPattern": "{
       ?subject crm:P24i_changed_ownership_through/crm:P23_transferred_title_from ?__value__ .
+    }"
+  }],
+  "<http://rs.swissartresearch.net/Thing_classified_as_Type>": [{
+    "kind": "resource",
+    "queryPattern": "{
+      ?classification crm:P140_assigned_attribute_to $subject ;
+        crm:P141_assigned ?__value__ .
     }"
   }],
   "<http://rs.swissartresearch.net/Thing_part_of_Thing>": [{
