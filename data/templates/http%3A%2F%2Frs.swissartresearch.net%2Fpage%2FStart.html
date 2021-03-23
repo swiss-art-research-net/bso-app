@@ -30,6 +30,7 @@
         <bs-col md="6">
             <bs-panel>
                 <h3>Images</h3>
+                <p><semantic-link iri="page:browseImages">Browse Images</semantic-link></p>
                 [[> resourceSummary type='search:Object' label='images']]
                 [[#> imageSummary type='search:Object' ]]
                 [[/ imageSummary]]
@@ -76,7 +77,7 @@
     query="SELECT ?subject WHERE {
         ?subject a [[type]] .
         [[> @partial-block ]]
-    } LIMIT 50"
+    } LIMIT 20"
     template="{{> template-image-summary}}"
     >
     <template id="template-image-summary">
