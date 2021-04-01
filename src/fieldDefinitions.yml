@@ -15,6 +15,7 @@ fields:
       datatype: xsd:anyURI
       domain: crm:E22_Man-Made_Object
       range: crm:E39_Actor
+      materialise: True
       queries:
         - select: 'SELECT ?value WHERE {
             $subject crm:P109_has_former_or_current_curator ?value .
@@ -26,6 +27,7 @@ fields:
       datatype: xsd:anyURI
       domain: crm:E22_Man-Made_Object
       range: crm:E39_Actor
+      materialise: True
       queries:
         - insert: 'INSERT { 
           ?creation crm:P14_carried_out_by $value .
@@ -63,6 +65,7 @@ fields:
       datatype: xsd:anyURI
       domain: crm:E39_Actor
       range: crm:E22_Man-Made_Object
+      materialise: True
       queries:
         - select: 'SELECT ?value ?label WHERE {
           ?value crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by $subject ;
@@ -92,6 +95,7 @@ fields:
       datatype: xsd:anyURI
       domain: crm:E22_Man-Made_Object
       range: crm:E1_CRM_Entity
+      materialise: True
       queries:
         - select: 'SELECT DISTINCT ?value WHERE {
             $subject crm:P128_carries/crm:P138_represents ?value .
