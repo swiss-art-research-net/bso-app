@@ -22,6 +22,32 @@
                     <div class="description">
                         <mp-description key="object-description-{{iri}}" iri="{{iri}}"></mp-description>
                     </div>
+                    <bs-row>
+                        <bs-col sm="12">
+                            <semantic-query
+                                query="SELECT DISTINCT ?subject ?type ?typeClass WHERE {
+                                    <{{iri}}> crm:P128_carries/crm:P138_represents ?subject .
+                                    ?subject a ?type .
+                                    BIND(STRAFTER(STR(?type), 'search/') as ?typeClass)
+                                    VALUES(?type) {
+                                        (search:Person)
+                                        (search:Place)
+                                        (search:Type)
+                                    }
+                                }"
+                                template="{{> template}}"
+                            >
+                                <template id="template">
+                                    <ul class="bso-component tags">
+                                            {{#each bindings}}
+                                                <li class="bso-tag {{typeClass.value}}"><semantic-link uri="{{subject.value}}"></semantic-link></li>
+                                            {{/each}}
+                                    </ul>
+                                </template>
+                            </semantic-query>
+                            
+                        </bs-col>
+                    </bs-row>
                 </bs-col>
                 {{#if displayMenu}}
                     <bs-col md="2" sm="12">

@@ -85,8 +85,8 @@ ol.page-breadcrumb {
 }
 .bso-component.mini-thumbnail {
   border: 1px solid #fbfbfb;
-  width: 4rem;
-  height: 4rem;
+  width: 6rem;
+  height: 6rem;
   padding: 0.2rem;
   overflow: hidden;
   display: inline-block;
@@ -120,6 +120,30 @@ ol.page-breadcrumb {
 .bso-component.header .image img {
   height: 100px;
   width: auto;
+}
+.bso-component.tags {
+  list-style: none;
+  margin: 0;
+  margin-top: 1rem;
+  padding: 0;
+}
+.bso-component.tags li {
+  background-color: #e2e2f7;
+  border-radius: 0.5rem;
+  display: inline-block;
+  font-size: 0.9rem;
+  padding: 0.1rem 0.3rem;
+  margin-right: 0.5rem;
+}
+.bso-component.tags li.Person {
+  background-color: #a0d1f4;
+}
+.bso-component.tags li.Place {
+  background-color: #e3f7e2;
+}
+.bso-component.tags li a {
+  color: #111;
+  font-weight: 500;
 }
 .bso-component .card-body {
   padding: 0;

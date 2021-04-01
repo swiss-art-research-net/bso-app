@@ -84,7 +84,12 @@
         <div>
             {{#each bindings}}
                 <div class="bso-component mini-thumbnail">
-                    <mp-resource-thumbnail iri={{subject.value}}></mp-resource-thumbnail>
+                    <semantic-link
+                        uri="{{subject.value}}"
+                        urlqueryparam-view="page"
+                    >
+                        <mp-resource-thumbnail iri={{subject.value}}></mp-resource-thumbnail>
+                    </semantic-link>
                 </div>
             {{/each}}
         </div>
