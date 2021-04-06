@@ -1,0 +1,74 @@
+
+[[> partial:pageHeader]]
+[[> partial:contentHeader]]
+
+<h2 class="gap">Workspace</h2>
+
+<h3>Preferred Labels</h3>
+
+<semantic-table
+  options='{
+    "showColumnFilters": "True"
+  }'
+  query='SELECT ?subject ?type (GROUP_CONCAT(?label; SEPARATOR=" / ") as ?labels) (COUNT(?label) as ?num_labels) ?pref_label WHERE {
+    ?subject a ?type ;
+      rdfs:label ?label .
+    OPTIONAL {
+      ?subject skos:prefLabel ?pref_label .
+    }
+    VALUES (?type) {
+      (search:Person)
+      (search:Place)
+      (search:Type)
+    }
+  } GROUP BY ?subject ?type ?pref_label
+  ORDER BY DESC(?num_labels)'
+
+  column-configuration='[
+    {"variableName": "subject", "showFilter": false, "filterType": "multiselect"},
+    {"variableName": "type", "showFilter": true},
+    {"variableName": "labels", "showFilter": false},
+    {"variableName": "num_labels", "showFilter": true},
+    {"displayName": "pref_label", "cellTemplate": "{{> editForm}}"}
+  ]'
+>
+  <template id="editForm">
+    <div style="min-width:20rem">
+      <semantic-form
+        subject='{{subject.value}}/prefLabel'
+        fields='[
+        {
+          "id": "composite_entity_prefLabel",
+          "label": "Preferred Label",
+          "xsdDatatype": "xsd:string",
+          "maxOccurs": "1",
+          "selectPattern": "SELECT ?value WHERE {
+            BIND(URI(STRBEFORE(STR($subject), \"/prefLabel\")) as $subjectToLabel)
+            $subjectToLabel skos:prefLabel ?value .
+          }",
+          "insertPattern": "INSERT {
+            $subjectToLabel skos:prefLabel $value .
+            } WHERE {
+              BIND(URI(STRBEFORE(STR($subject), \"/prefLabel\")) as $subjectToLabel)
+            }",
+          "deletePattern": "DELETE { $subject a $value } WHERE {}",
+          "valueSetPattern": "SELECT ?value WHERE {
+            BIND(<{{subject.value}}> as ?entity)
+            ?entity rdfs:label ?value .
+          }"
+        }]'
+      >
+        <semantic-form-select-input 
+          for="composite_entity_prefLabel"
+          default-values='["Emmett Brown", "Marty McFly"]'>
+        ></semantic-form-select-input>
+        <button name="submit" class="btn btn-primary btn-xs">Save</button>
+        <button name="reset" class="btn btn-secondary btn-xs">Reset</button>
+      </semantic-form>
+    </div>
+  </template>
+</semantic-table>
+
+
+[[> partial:contentFooter]]
+[[> partial:pageFooter]]
