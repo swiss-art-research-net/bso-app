@@ -8,7 +8,7 @@
             "domain" : "crm:E22_Man-Made_Object",
             "range" : "crm:E39_Actor",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P109_has_former_or_current_curator ?value . }",
-        "iri" : "http://platform.swissartresearch.net/instances/fields/collection"
+        "iri" : "https://platform.swissartresearch.net/instances/fields/collection"
     },
 
     {
@@ -21,7 +21,7 @@
             "range" : "crm:E39_Actor",
                 "insertPattern" : "INSERT { ?creation crm:P14_carried_out_by $value . } WHERE { BIND(CONCAT(STR($subject), \"/creation\") as ?creation) }",
                 "selectPattern" : "SELECT ?value ?label WHERE { $subject crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by ?value. OPTIONAL { BIND(URI(CONCAT(STR($subject), \"/meta\")) as ?subject_meta ) ?value crm:P1_is_identified_by ?appellation . ?appellation rdfs:label ?label ; crm:P70i_is_documented_in ?subject_meta . } }",
-        "iri" : "http://platform.swissartresearch.net/instances/fields/creator_of_object"
+        "iri" : "https://platform.swissartresearch.net/instances/fields/creator_of_object"
     },
 
     {
@@ -33,7 +33,7 @@
             "xsdDatatype" : "xsd:string",
                 "insertPattern" : "INSERT { $subject rdfs:label $value . } WHERE {}",
                 "selectPattern" : "SELECT ?value WHERE { $subject rdfs:label ?value . }",
-        "iri" : "http://platform.swissartresearch.net/instances/fields/label"
+        "iri" : "https://platform.swissartresearch.net/instances/fields/label"
     },
 
     {
@@ -45,7 +45,7 @@
             "domain" : "crm:E39_Actor",
             "range" : "crm:E22_Man-Made_Object",
                 "selectPattern" : "SELECT ?value ?label WHERE { ?value crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by $subject ; rdfs:label ?object_label . OPTIONAL { ?value crm:P128_carries/crm:P94i_was_created_by/crm:P9_consists_of ?subcreation . ?subcreation crm:P14_carried_out_by $subject ; crm:P2_has_type/rdfs:label ?role_label . } BIND(IF(BOUND(?role_label), CONCAT(?object_label, \" (\", ?role_label, \")\"), ?object_label) as ?label) } ",
-        "iri" : "http://platform.swissartresearch.net/instances/fields/objects_created"
+        "iri" : "https://platform.swissartresearch.net/instances/fields/objects_created"
     },
 
     {
@@ -56,7 +56,7 @@
             "domain" : "crm:E22_Man-Made_Object",
             "range" : "crm:E52_Time-Span",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P128_carries/crm:P94i_was_created_by/crm:P4_has_time-span ?value }",
-        "iri" : "http://platform.swissartresearch.net/instances/fields/object_creation_date"
+        "iri" : "https://platform.swissartresearch.net/instances/fields/object_creation_date"
     },
 
     {
@@ -71,7 +71,7 @@
                 "insertPattern" : "INSERT { ?work crm:P138_represents $value . } WHERE { $subject crm:P128_carries ?work . }",
                 "autosuggestionPattern" : "PREFIX bds: <http://www.bigdata.com/rdf/search#> SELECT DISTINCT ?value ?label ?type ?typeLabel WHERE { VALUES(?type ?typeLabel) { (search:Person \"Person\") (search:Place \"Place\") (search:Type \"Type\") } ?value a ?type ; rdfs:label ?label . ?label bds:search ?__token__ . } ORDER BY ?label LIMIT 10",
                 "valueSetPattern" : "SELECT ?value ?label ?type ?typeLabel WHERE { VALUES(?type ?typeLabel) { (search:Person \"Person\") (search:Place \"Place\") (search:Type \"Type\") } ?value a ?type ; rdfs:label ?label . } ORDER BY ?label LIMIT 100",
-        "iri" : "http://platform.swissartresearch.net/instances/fields/object_depicts"
+        "iri" : "https://platform.swissartresearch.net/instances/fields/object_depicts"
     },
 
     {
@@ -84,7 +84,7 @@
             "range" : "crm:E65_Creation",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P128_carries/crm:P94i_was_created_by ?creation . ?creation crm:P9_consists_of ?value . }",
                 "insertPattern" : "INSERT { ?creation crm:P9_consists_of ?value . } WHERE { BIND(URI(CONCAT(STR($subject), \"/creation\")) as ?creation) }",
-        "iri" : "http://platform.swissartresearch.net/instances/fields/object_subcreations"
+        "iri" : "https://platform.swissartresearch.net/instances/fields/object_subcreations"
     },
 
     {
@@ -100,7 +100,7 @@
             "range" : "crm:E36_Visual_item",
                 "insertPattern" : "INSERT { $subject crm:P128_carries $value} WHERE {}",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P128_carries ?value . ?value a crm:E36_Visual_Item . }",
-        "iri" : "http://platform.swissartresearch.net/instances/fields/object_carries_visual_item"
+        "iri" : "https://platform.swissartresearch.net/instances/fields/object_carries_visual_item"
     },
 
     {
@@ -111,7 +111,7 @@
             "domain" : "crm:E22_Man-Made_Object",
             "range" : "crm:E52_Time-Span",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P108i_was_produced_by/crm:P4_has_time-span ?value }",
-        "iri" : "http://platform.swissartresearch.net/instances/fields/object_production_date"
+        "iri" : "https://platform.swissartresearch.net/instances/fields/object_production_date"
     },
 
     {
@@ -120,7 +120,7 @@
             "label": "Type",
             "xsdDatatype" : "xsd:anyURI",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P2_has_type ?value . }",
-        "iri" : "http://platform.swissartresearch.net/instances/fields/P2_has_type"
+        "iri" : "https://platform.swissartresearch.net/instances/fields/P2_has_type"
     },
 
     {
@@ -134,7 +134,7 @@
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P14_carried_out_by ?value . }",
                 "autosuggestionPattern" : "PREFIX bds: <http://www.bigdata.com/rdf/search#> SELECT DISTINCT ?value ?label WHERE { ?value a search:Person ; rdfs:label ?label . ?label bds:search ?__token__ . } ORDER BY ?label LIMIT 10",
                 "valueSetPattern" : "SELECT ?value ?label  WHERE { ?value a search:Person ; rdfs:label ?label . } ORDER BY ?label LIMIT 100",
-        "iri" : "http://platform.swissartresearch.net/instances/fields/P14_carried_out_by"
+        "iri" : "https://platform.swissartresearch.net/instances/fields/P14_carried_out_by"
     }
 
 ]

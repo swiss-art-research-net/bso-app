@@ -8,7 +8,7 @@ categories='{
       FILTER(?date >= ?__dateBeginValue__ && ?date <= ?__dateEndValue__)
     }"
   }],
-  "<http://platform.swissartresearch.net/search/Place>": [{
+  "<https://platform.swissartresearch.net/search/Place>": [{
     "kind": "place",
     "distanceQueryPattern": "{
       $subject ?__relation__ ?place .
@@ -22,111 +22,111 @@ categories='{
 }'
 search-profile='{
     "categories": [
-        {"iri": "<http://platform.swissartresearch.net/search/Object>", "label": "Object", "thumbnail": "../images/fcs/things.svg"},
-        {"iri": "<http://platform.swissartresearch.net/search/Person>", "label": "Person", "thumbnail": "../images/fcs/actors.svg"},
+        {"iri": "<https://platform.swissartresearch.net/search/Object>", "label": "Object", "thumbnail": "../images/fcs/things.svg"},
+        {"iri": "<https://platform.swissartresearch.net/search/Person>", "label": "Person", "thumbnail": "../images/fcs/actors.svg"},
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E39_Actor>", "label": "Actor", "thumbnail": "../images/fcs/actors.svg"},
-        {"iri": "<http://platform.swissartresearch.net/search/Place>", "label": "Place", "thumbnail": "../images/fcs/places.svg"},
+        {"iri": "<https://platform.swissartresearch.net/search/Place>", "label": "Place", "thumbnail": "../images/fcs/places.svg"},
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E53_Place>", "label": "Place", "thumbnail": "../images/fcs/places.svg"},
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E52_Time-Span>", "label": "Time", "thumbnail": "../images/fcs/dates.svg"},
-        {"iri": "<http://platform.swissartresearch.net/search/Type>", "label": "Type", "thumbnail": "../images/fcs/concepts.svg"},
-        {"iri": "<http://platform.swissartresearch.net/search/Concept>", "label": "Concept", "thumbnail": "../images/fcs/concepts.svg"},
+        {"iri": "<https://platform.swissartresearch.net/search/Type>", "label": "Type", "thumbnail": "../images/fcs/concepts.svg"},
+        {"iri": "<https://platform.swissartresearch.net/search/Concept>", "label": "Concept", "thumbnail": "../images/fcs/concepts.svg"},
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E57_Material>", "label": "Material", "thumbnail": "../images/fcs/things.svg"}
       ],
     "relations": [
       {
-        "iri": "<http://platform.swissartresearch.net/Thing_acquired_through_Type>",
-        "hasDomain": "<http://platform.swissartresearch.net/search/Object>",
-        "hasRange": "<http://platform.swissartresearch.net/search/Type>",
+        "iri": "<https://platform.swissartresearch.net/Thing_acquired_through_Type>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Object>",
+        "hasRange": "<https://platform.swissartresearch.net/search/Type>",
         "label": "acquired through"
       },
       {
-        "iri": "<http://platform.swissartresearch.net/Thing_acquired_from_Actor>",
-        "hasDomain": "<http://platform.swissartresearch.net/search/Object>",
+        "iri": "<https://platform.swissartresearch.net/Thing_acquired_from_Actor>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Object>",
         "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E39_Actor>",
         "label": "acquired from"
       },
       {
-        "iri": "<http://platform.swissartresearch.net/Thing_by_Actor>",
-        "hasDomain": "<http://platform.swissartresearch.net/search/Object>",
-        "hasRange": "<http://platform.swissartresearch.net/search/Person>",
+        "iri": "<https://platform.swissartresearch.net/Thing_by_Actor>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Object>",
+        "hasRange": "<https://platform.swissartresearch.net/search/Person>",
         "label": "by"
       },
       {
-        "iri": "<http://platform.swissartresearch.net/Thing_held_by_Actor>",
-        "hasDomain": "<http://platform.swissartresearch.net/search/Object>",
+        "iri": "<https://platform.swissartresearch.net/Thing_held_by_Actor>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Object>",
         "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E39_Actor>",
         "label": "held by"
       },
       {
-        "iri": "<http://platform.swissartresearch.net/Thing_of_Type>",
-        "hasDomain": "<http://platform.swissartresearch.net/search/Object>",
-        "hasRange": "<http://platform.swissartresearch.net/search/Type>",
+        "iri": "<https://platform.swissartresearch.net/Thing_of_Type>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Object>",
+        "hasRange": "<https://platform.swissartresearch.net/search/Type>",
         "label": "of type"
       },
       {
-        "iri": "<http://platform.swissartresearch.net/Thing_part_of_Thing>",
-        "hasDomain": "<http://platform.swissartresearch.net/search/Object>",
-        "hasRange": "<http://platform.swissartresearch.net/search/Object>",
+        "iri": "<https://platform.swissartresearch.net/Thing_part_of_Thing>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Object>",
+        "hasRange": "<https://platform.swissartresearch.net/search/Object>",
         "label": "part of"
       },
       {
-        "iri": "<http://platform.swissartresearch.net/Thing_from_Time>",
-        "hasDomain": "<http://platform.swissartresearch.net/search/Object>",
+        "iri": "<https://platform.swissartresearch.net/Thing_from_Time>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Object>",
         "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E52_Time-Span>",
         "label": "from"
       },
       {
-        "iri": "<http://platform.swissartresearch.net/Thing_from_Material>",
-        "hasDomain": "<http://platform.swissartresearch.net/search/Object>",
+        "iri": "<https://platform.swissartresearch.net/Thing_from_Material>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Object>",
         "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E57_Material>",
         "label": "from"
       },
       {
-        "iri": "<http://platform.swissartresearch.net/Thing_depicts_Actor>",
-        "hasDomain": "<http://platform.swissartresearch.net/search/Object>",
+        "iri": "<https://platform.swissartresearch.net/Thing_depicts_Actor>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Object>",
         "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E39_Actor>",
         "label": "depicts"
       },
       {
-        "iri": "<http://platform.swissartresearch.net/Thing_depicts_Place>",
-        "hasDomain": "<http://platform.swissartresearch.net/search/Object>",
-        "hasRange": "<http://platform.swissartresearch.net/search/Place>",
+        "iri": "<https://platform.swissartresearch.net/Thing_depicts_Place>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Object>",
+        "hasRange": "<https://platform.swissartresearch.net/search/Place>",
         "label": "depicts"
       },
       {
-        "iri": "<http://platform.swissartresearch.net/Thing_depicts_Type>",
-        "hasDomain": "<http://platform.swissartresearch.net/search/Object>",
-        "hasRange": "<http://platform.swissartresearch.net/search/Type>",
+        "iri": "<https://platform.swissartresearch.net/Thing_depicts_Type>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Object>",
+        "hasRange": "<https://platform.swissartresearch.net/search/Type>",
         "label": "depicts"
       },
       {
-        "iri": "<http://platform.swissartresearch.net/Actor_carried_out_creations_of_Type>",
-        "hasDomain": "<http://platform.swissartresearch.net/search/Person>",
-        "hasRange": "<http://platform.swissartresearch.net/search/Type>",
+        "iri": "<https://platform.swissartresearch.net/Actor_carried_out_creations_of_Type>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Person>",
+        "hasRange": "<https://platform.swissartresearch.net/search/Type>",
         "label": "acted as"
       },
       {
-        "iri": "<http://platform.swissartresearch.net/Place_same_as_Place>",
-        "hasDomain": "<http://platform.swissartresearch.net/search/Place>",
+        "iri": "<https://platform.swissartresearch.net/Place_same_as_Place>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Place>",
         "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E53_Place>",
         "label": "same as"
       }
     ]
   }'
 relations='{
-  "<http://platform.swissartresearch.net/Thing_acquired_through_Type>": [{
+  "<https://platform.swissartresearch.net/Thing_acquired_through_Type>": [{
     "kind": "resource",
     "queryPattern": "{
       ?subject crm:P24i_changed_ownership_through/crm:P2_has_type ?__value__ .
     }"
   }],
-  "<http://platform.swissartresearch.net/Thing_acquired_from_Actor>": [{
+  "<https://platform.swissartresearch.net/Thing_acquired_from_Actor>": [{
     "kind": "resource",
     "queryPattern": "{
       ?subject crm:P24i_changed_ownership_through/crm:P23_transferred_title_from ?__value__ .
     }"
   }],
-  "<http://platform.swissartresearch.net/Thing_part_of_Thing>": [{
+  "<https://platform.swissartresearch.net/Thing_part_of_Thing>": [{
     "kind": "resource",
     "queryPattern": "
       {
@@ -134,7 +134,7 @@ relations='{
       }
     "
   }],
-  "<http://platform.swissartresearch.net/Thing_by_Actor>": [{
+  "<https://platform.swissartresearch.net/Thing_by_Actor>": [{
     "kind": "resource",
     "queryPattern": "
       {
@@ -142,7 +142,7 @@ relations='{
       }
     "
   }],
-  "<http://platform.swissartresearch.net/Thing_held_by_Actor>": [{
+  "<https://platform.swissartresearch.net/Thing_held_by_Actor>": [{
     "kind": "resource",
     "queryPattern": "
       {
@@ -150,7 +150,7 @@ relations='{
       }
     "
   }],
-  "<http://platform.swissartresearch.net/Thing_depicts_Actor>": [{
+  "<https://platform.swissartresearch.net/Thing_depicts_Actor>": [{
     "kind": "resource",
     "queryPattern": "
       {
@@ -159,7 +159,7 @@ relations='{
       }
     "
   }],
-  "<http://platform.swissartresearch.net/Thing_depicts_Place>": [{
+  "<https://platform.swissartresearch.net/Thing_depicts_Place>": [{
     "kind": "resource",
     "queryPattern": "
       {
@@ -168,7 +168,7 @@ relations='{
       }
     "
   }],
-  "<http://platform.swissartresearch.net/Thing_of_Type>": [{
+  "<https://platform.swissartresearch.net/Thing_of_Type>": [{
     "kind": "resource",
     "queryPattern": "
       {
@@ -176,7 +176,7 @@ relations='{
       }
     "
   }],
-  "<http://platform.swissartresearch.net/Thing_depicts_Type>": [{
+  "<https://platform.swissartresearch.net/Thing_depicts_Type>": [{
     "kind": "resource",
     "queryPattern": "
       {
@@ -185,7 +185,7 @@ relations='{
       }
     "
   }],
-  "<http://platform.swissartresearch.net/Thing_from_Material>": [{
+  "<https://platform.swissartresearch.net/Thing_from_Material>": [{
     "kind": "resource",
     "queryPattern": "
       {
@@ -193,7 +193,7 @@ relations='{
       }
     "
   }],
-  "<http://platform.swissartresearch.net/Thing_from_Time>": [{
+  "<https://platform.swissartresearch.net/Thing_from_Time>": [{
     "kind": "date-range",
     "queryPattern": "
       {
@@ -205,7 +205,7 @@ relations='{
       }
     "
   }],
-  "<http://platform.swissartresearch.net/Actor_carried_out_creations_of_Type>": [{
+  "<https://platform.swissartresearch.net/Actor_carried_out_creations_of_Type>": [{
     "kind": "resource",
     "queryPattern": "
       {
@@ -213,7 +213,7 @@ relations='{
           crm:P2_has_type ?__value__ .
     }"
   }],
-  "<http://platform.swissartresearch.net/Place_same_as_Place>": [{
+  "<https://platform.swissartresearch.net/Place_same_as_Place>": [{
     "kind": "resource",
     "queryPattern": "
       {
@@ -234,7 +234,7 @@ relations='{
   <semantic-search-facet
     open-by-default="true"
     value-relations='{
-      "<http://platform.swissartresearch.net/Thing_from_Time>": {
+      "<https://platform.swissartresearch.net/Thing_from_Time>": {
         "kind": "date-range",
         "valuesQuery":"
           SELECT ?dateBeginValue ?dateEndValue WHERE {
