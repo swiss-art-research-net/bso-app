@@ -38,35 +38,35 @@
         persistence='sparql'
         subject='{{subject.value}}'
         fields='[
-        {
-          "id": "inline_prefLabel",
-          "label": "Preferred Label",
-          "xsdDatatype": "xsd:string",
-          "maxOccurs": "1",
-          "selectPattern": "SELECT ?value WHERE {
-            GRAPH sari:prefLabels {
-              $subject skos:prefLabel ?value .
-            }
-          }",
-          "insertPattern": "INSERT {
-            GRAPH sari:prefLabels {
-              $subject skos:prefLabel $value .
-              }
-            } WHERE {}",
-          "deletePattern": "DELETE { 
+          {
+            "id": "inline_prefLabel",
+            "label": "Preferred Label",
+            "xsdDatatype": "xsd:string",
+            "maxOccurs": "1",
+            "selectPattern": "SELECT ?value WHERE {
               GRAPH sari:prefLabels {
-                $subject skos:prefLabel $value .
-              }
-            } WHERE { 
-              GRAPH sari:prefLabels {
-                $subject skos:prefLabel $value  .
+                $subject skos:prefLabel ?value .
               }
             }",
-          "valueSetPattern": "SELECT ?value WHERE {
-            BIND(<{{subject.value}}> as $subject)
-            $subject rdfs:label ?value .
-          }"
-        }]'
+            "insertPattern": "INSERT {
+                GRAPH sari:prefLabels {
+                  $subject skos:prefLabel $value .
+                }
+              } WHERE {}",
+            "deletePattern": "DELETE { 
+                GRAPH sari:prefLabels {
+                  $subject skos:prefLabel $value .
+                }
+              } WHERE { 
+                GRAPH sari:prefLabels {
+                  $subject skos:prefLabel $value  .
+                }
+              }",
+            "valueSetPattern": "SELECT ?value WHERE {
+              BIND(<{{subject.value}}> as $subject)
+              $subject rdfs:label ?value .
+            }"
+          }]'
       >
         <semantic-form-select-input for="inline_prefLabel"></semantic-form-select-input>
         <button name="submit" class="btn btn-primary btn-xs">Save</button>
@@ -75,7 +75,6 @@
     </div>
   </template>
 </semantic-table>
-
 
 [[> partial:contentFooter]]
 [[> partial:pageFooter]]
