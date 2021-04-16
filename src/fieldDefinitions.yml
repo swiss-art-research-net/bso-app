@@ -1,11 +1,11 @@
 output: ../ldp/assets/fieldDefinitions.trig
 
-prefix: http://platform.swissartresearch.net/instances/fields/
+prefix: https://platform.swissartresearch.net/instances/fields/
 container: http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer
 namespaces:
   crm: http://www.cidoc-crm.org/cidoc-crm/
   rdfs: http://www.w3.org/2000/01/rdf-schema#
-  search: http://platform.swissartresearch.net/search/
+  search: https://platform.swissartresearch.net/search/
 
 fields:
       

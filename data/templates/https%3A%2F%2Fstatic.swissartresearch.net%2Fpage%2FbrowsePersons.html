@@ -2,20 +2,16 @@
 [[> partial:pageHeader]]
 [[> partial:contentHeader]]
 
-<h2 class="gap">Browse all images</h2>
-
-<div>
-  <semantic-link iri="page:search">Go to search</semantic-link>
-</div>
+<h2 class="gap">Browse all persons</h2>
 
 [[#> partial:baseSearch]]
 
 <semantic-search-query-constant
 
-  domain='<http://platform.swissartresearch.net/search/Object>'
+  domain='<https://platform.swissartresarch.net/search/Person>'
   query='
-    SELECT ?subject WHERE {
-      ?subject a search:Object .
+    SELECT DISTINCT ?subject WHERE {
+      ?subject a search:Person .
     }
   '
 ></semantic-search-query-constant>

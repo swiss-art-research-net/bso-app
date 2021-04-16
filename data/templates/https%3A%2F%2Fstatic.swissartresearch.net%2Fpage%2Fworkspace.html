@@ -1,0 +1,95 @@
+
+[[> partial:pageHeader]]
+[[> partial:contentHeader]]
+
+<h2 class="gap">Workspace</h2>
+
+<h3>Preferred Labels</h3>
+
+<semantic-table
+  options='{
+    "showColumnFilters": "True"
+  }'
+  query='SELECT ?subject ?type (GROUP_CONCAT(?label; SEPARATOR=" / ") as ?labels) (COUNT(?label) as ?num_labels) ?pref_label WHERE {
+    ?subject a ?type ;
+      rdfs:label ?label .
+    OPTIONAL {
+      ?subject skos:prefLabel ?pref_label .
+    }
+    VALUES (?type) {
+      (search:Person)
+      (search:Place)
+      (search:Type)
+    }
+  } GROUP BY ?subject ?type ?pref_label
+  ORDER BY DESC(?num_labels)'
+
+  column-configuration='[
+    {"displayName": "Entity", "variableName": "subject", "showFilter": false, "filterType": "multiselect"},
+    {"displayName": "Type", "variableName": "type", "showFilter": true},
+    {"displayName": "Number of Labels", "variableName": "num_labels", "showFilter": true},
+    {"displayName": "Preferred Label", "cellTemplate": "{{> currentLabel}}"},
+    {"displayName": "Edit", "cellTemplate": "{{> editForm}}"}
+  ]'
+>
+  <template id="currentLabel">
+    <mp-event-proxy on-event-source="form-preflabel-{{subject.value}}" proxy-event-type="Component.Refresh" proxy-targets='["form-updated-{{subject.value}}"]' data='{"id": "xy"}'>
+    </mp-event-proxy>
+    
+    <mp-event-target-refresh id="form-updated-{{subject.value}}">
+      <semantic-query query="SELECT ?value WHERE {
+        GRAPH sari:prefLabels {
+          BIND(<{{subject.value}}> as $subject)
+          $subject skos:prefLabel ?value .
+        }
+      }"></semantic-query>
+    </mp-event-target-refresh>
+  </template>
+  <template id="editForm">
+    <div style="min-width:20rem">
+      <semantic-form
+        id='form-preflabel-{{subject.value}}'
+        persistence='sparql'
+        post-action='event'
+        subject='{{subject.value}}'
+        fields='[
+          {
+            "id": "inline_prefLabel",
+            "label": "Preferred Label",
+            "xsdDatatype": "xsd:string",
+            "maxOccurs": "1",
+            "selectPattern": "SELECT ?value WHERE {
+              GRAPH sari:prefLabels {
+                $subject skos:prefLabel ?value .
+              }
+            }",
+            "insertPattern": "INSERT {
+                GRAPH sari:prefLabels {
+                  $subject skos:prefLabel $value .
+                }
+              } WHERE {}",
+            "deletePattern": "DELETE { 
+                GRAPH sari:prefLabels {
+                  $subject skos:prefLabel $value .
+                }
+              } WHERE { 
+                GRAPH sari:prefLabels {
+                  $subject skos:prefLabel $value  .
+                }
+              }",
+            "valueSetPattern": "SELECT ?value WHERE {
+              BIND(<{{subject.value}}> as $subject)
+              $subject rdfs:label ?value .
+            }"
+          }]'
+      >
+        <semantic-form-select-input for="inline_prefLabel"></semantic-form-select-input>
+        <button name="submit" class="btn btn-primary btn-xs">Save</button>
+        <button name="reset" class="btn btn-secondary btn-xs">Reset</button>
+      </semantic-form>
+    </div>
+  </template>
+</semantic-table>
+
+[[> partial:contentFooter]]
+[[> partial:pageFooter]]
