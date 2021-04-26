@@ -88,7 +88,7 @@
 
 [[#*inline "cards"]]
     <semantic-query
-        query="SELECT ?subject WHERE {
+        query="SELECT DISTINCT ?subject WHERE {
             ?subject a [[type]] .
             BIND(SHA512(CONCAT(STR(RAND()), STR(?subject))) AS ?random) .
             [[> @partial-block ]]
@@ -103,30 +103,6 @@
     </semantic-query>
 [[/inline]]
 
-[[#*inline "imageSummary"]]
-    <semantic-query
-    query="SELECT ?subject WHERE {
-        ?subject a [[type]] .
-        [[> @partial-block ]]
-    } LIMIT 20"
-    template="{{> template-image-summary}}"
-    >
-    <template id="template-image-summary">
-        <div>
-            {{#each bindings}}
-                <div class="bso-component mini-thumbnail">
-                    <semantic-link
-                        uri="{{subject.value}}"
-                        urlqueryparam-view="page"
-                    >
-                        <mp-resource-thumbnail iri={{subject.value}}></mp-resource-thumbnail>
-                    </semantic-link>
-                </div>
-            {{/each}}
-        </div>
-    </template>
-    </semantic-query>
-[[/inline]]
 
 [[#*inline "resourceSummary"]]
     <semantic-query
