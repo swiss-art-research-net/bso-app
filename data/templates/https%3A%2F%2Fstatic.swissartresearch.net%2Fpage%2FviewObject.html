@@ -1,98 +1,191 @@
 [[> partial:pageHeader]]
-[[> partial:contentHeader padding=true]]
 
-<h2><mp-label iri="[[#if objectiri]][[objectiri]][[else]][[ urlParam 'objectiri' ]][[/if]]"></mp-label></h2>
+<bs-row>
+    <bs-col md="4" class="bso-component separator image-display">
 
-[[> partial:fieldsTable iri=objectiri param="objectiri" ]]
-
-<semantic-query
-    query="SELECT DISTINCT ?subject ?actor (GROUP_CONCAT(?creation_type_label; SEPARATOR=', ') as ?creation_type_labels) WHERE {
-        BIND(<[[#if objectiri]][[objectiri]][[else]][[ urlParam 'objectiri' ]][[/if]]> as $subject)
-        ?subject (crm:P128_carries/crm:P94i_was_created_by) ?creation.
-        ?creation crm:P9_consists_of ?subcreation.
-        ?subcreation crm:P14_carried_out_by ?actor;
-          crm:P2_has_type ?creation_type .
-        OPTIONAL {
-            ?creation_type rdfs:label ?creation_type_label_original .
-        }
-        BIND(IF(!BOUND(?creation_type_label_original), STRAFTER(STR(?creation_type), 'https://resource.swissartresearch.net/'), ?creation_type_label_original) as ?creation_type_label)
-      } GROUP BY ?subject ?actor"
-    template="{{> template}}"
->
-      <template id="template">
-          <dl>
-              <dt>Persons involved in creation</dt>
-              {{#each bindings}}
-                <dd><semantic-link iri="{{ actor.value }}"></semantic-link> ({{ creation_type_labels.value}})</dd>
-              {{/each}}
-          </dl>
-      </template>
-</semantic-query>
-
-<semantic-query
-    query="SELECT DISTINCT ?subject ?actor (GROUP_CONCAT(?creation_type_label; SEPARATOR=', ') as ?creation_type_labels) WHERE {
-        BIND(<[[#if objectiri]][[objectiri]][[else]][[ urlParam 'objectiri' ]][[/if]]> as $subject)
-        ?subject crm:P108i_was_produced_by ?creation.
-        ?creation crm:P9_consists_of ?subcreation.
-        ?subcreation crm:P14_carried_out_by ?actor;
-          crm:P2_has_type ?creation_type.
-        ?creation_type rdfs:label ?creation_type_label_original .
-        BIND(IF(!BOUND(?creation_type_label_original), STRAFTER(STR(?creation_type), 'https://resource.swissartresearch.net/'), ?creation_type_label_original) as ?creation_type_label)
-      } GROUP BY ?subject ?actor"
-    template="{{> template}}"
->
-      <template id="template">
-          <dl>
-              <dt>Persons involved in production</dt>
-              {{#each bindings}}
-                <dd><semantic-link iri="{{ actor.value }}"></semantic-link> ({{ creation_type_labels.value}})</dd>
-              {{/each}}
-          </dl>
-      </template>
-</semantic-query>
-
-<semantic-link
-    iri="[[#if objectiri]][[objectiri]][[else]][[ urlParam 'objectiri' ]][[/if]]"
-><button type="button" class="btn btn-primary btn-xs">View raw</button></semantic-link>
-
-[[#if objectiri]]
-    [[> partial:buttonEditObjectMeta iri=objectiri]]
-[[else]]
-    [[> partial:buttonEditObjectMeta iri=(urlParam 'objectiri')]]
-[[/if]]
-
-<semantic-table
-    query="SELECT DISTINCT ?image ?IIIFimage WHERE {
-        <[[#if objectiri]][[objectiri]][[else]][[ urlParam 'objectiri' ]][[/if]]> crm:P128_carries ?work .
-        ?work la:digitally_shown_by ?image .
-        OPTIONAL {
-            ?image la:digitally_available_via/la:access_point ?IIIFimage
-        }
-    }"
-    number-of-displayed-rows="100"
-    tuple-template="{{> template }}"
->
-    <template id="template">
-        <bs-panel>
-            {{#if IIIFimage.value }}
-                <semantic-link
-                    uri="[[ resolvePrefix 'page:viewImage']]"
-                    urlqueryparam-imageiri="{{IIIFimage.value}}"
-                    >
-                    {{> thumbnail}}
-                </semantic-link>
-            {{ else }}
+        <semantic-table
+        query="SELECT DISTINCT ?image ?IIIFimage WHERE {
+            <[[#if objectiri]][[objectiri]][[else]][[ urlParam 'objectiri' ]][[/if]]> crm:P128_carries ?work .
+            ?work la:digitally_shown_by ?image .
+            OPTIONAL {
+                ?image la:digitally_available_via/la:access_point ?IIIFimage
+            }
+        }"
+        number-of-displayed-rows="100"
+        tuple-template="{{> template }}"
+        options='{
+            "showFilter" : false
+        }'
+        >
+        <template id="template">
+            <bs-panel>
                 {{> thumbnail}}
-            {{/if}}
-        </bs-panel>
-    </template>
-    <template id="thumbnail">
-        <mp-resource-thumbnail iri="{{ image.value }}">
-            <mp-resource-thumbnail-fallback>
-                <span>Image not found!</span>
-            </mp-resource-thumbnail-fallback>
-        </mp-resource-thumbnail>
-    </template>
-</semantic-table>
-[[> partial:contentFooter padding=true]]
+                {{#if IIIFimage.value }}
+                    <div class="caption">
+                        <semantic-link
+                            uri="[[ resolvePrefix 'page:viewImage']]"
+                            urlqueryparam-imageiri="{{IIIFimage.value}}"
+                            >
+                            View full image
+                        </semantic-link>
+                    </div>
+                {{/if}}
+            </bs-panel>
+        </template>
+        <template id="thumbnail">
+            <mp-resource-thumbnail iri="{{ image.value }}">
+                <mp-resource-thumbnail-fallback>
+                    <span>Image not found!</span>
+                </mp-resource-thumbnail-fallback>
+            </mp-resource-thumbnail>
+        </template>
+        </semantic-table>
+    </bs-col>
+    <bs-col md="8" class="bso-component panel">
+        <h2><mp-label iri="[[#if objectiri]][[objectiri]][[else]][[ urlParam 'objectiri' ]][[/if]]"></mp-label></h2>
+        <!-- Object Depicts -->
+        <semantic-query
+            query="SELECT DISTINCT ?subject ?type ?typeClass WHERE {
+                ?? crm:P128_carries/crm:P138_represents ?subject .
+                ?subject a ?type .
+                BIND(STRAFTER(STR(?type), 'search/') as ?typeClass)
+                VALUES(?type) {
+                    (search:Person)
+                    (search:Place)
+                    (search:Type)
+                }
+            }"
+            template="{{> template}}">
+            <template id="template">
+                <div class="bso-component field-visualisation">
+                    <span class="bso-component label">Depicts</span>
+                    <ul class="bso-component tags">
+                        {{#each bindings}}
+                            <li class="bso-tag {{typeClass.value}}"><semantic-link uri="{{subject.value}}"></semantic-link></li>
+                        {{/each}}
+                    </ul>
+                </div>
+            </template>
+        </semantic-query>
+
+        <!-- Dates -->
+        <semantic-query
+            query="SELECT DISTINCT ?subject ?event ?eventType WHERE {
+                ?? crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by) ?event .
+                ?event crm:P4_has_time-span ?subject .
+                ?event a ?eventType .
+            }"
+            template="{{> template}}">>
+            <template id="template">
+                <div class="bso-component field-visualisation">
+                    <span class="bso-component label">Dates</span>
+                    <table>
+                        {{#each bindings}}
+                        <tr>
+                            <td><semantic-link iri="{{subject.value}}"></semantic-link></td>
+                            <td><mp-label iri="{{eventType.value}}"></mp-label></td>
+                        </tr>
+                        {{/each}}
+                    </table>
+                </div>
+            </template>
+        </semantic-query>
+
+        <!-- Persons -->
+        <semantic-query
+            query="SELECT DISTINCT ?subject ?role WHERE {
+                ?? crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by) ?event .
+                ?event crm:P14_carried_out_by ?subject .
+                OPTIONAL {
+                    ?event crm:P9_consists_of ?subevent .
+                    ?subevent crm:P14_carried_out_by ?subject ;
+                        crm:P2_has_type ?role .
+                }
+            }"
+            template="{{> template}}">>
+            <template id="template">
+                <div class="bso-component field-visualisation">
+                    <span class="bso-component label">Persons</span>
+                    <table>
+                        {{#each bindings}}
+                        <tr>
+                            <td>
+                                <ul class="bso-component tags">
+                                        <li class="bso-tag person"><semantic-link uri="{{subject.value}}"></semantic-link></li>
+                                </ul>
+                            </td>
+                            <td><mp-label iri="{{role.value}}"></mp-label></td>
+                        </tr>
+                        {{/each}}
+                    </table>
+                </div>
+            </template>
+        </semantic-query>
+    </bs-col>
+</bs-row>
+
+<bs-row>
+
+    <bs-col md-offset="4" md="8" class="bso-component separator panel">
+
+        [[> partial:fieldsTable iri=objectiri param="objectiri" ]]
+
+        <semantic-query
+            query="SELECT DISTINCT ?subject ?actor (GROUP_CONCAT(?creation_type_label; SEPARATOR=', ') as ?creation_type_labels) WHERE {
+                BIND(<[[#if objectiri]][[objectiri]][[else]][[ urlParam 'objectiri' ]][[/if]]> as $subject)
+                ?subject (crm:P128_carries/crm:P94i_was_created_by) ?creation.
+                ?creation crm:P9_consists_of ?subcreation.
+                ?subcreation crm:P14_carried_out_by ?actor;
+                crm:P2_has_type ?creation_type .
+                OPTIONAL {
+                    ?creation_type rdfs:label ?creation_type_label_original .
+                }
+                BIND(IF(!BOUND(?creation_type_label_original), STRAFTER(STR(?creation_type), 'https://resource.swissartresearch.net/'), ?creation_type_label_original) as ?creation_type_label)
+            } GROUP BY ?subject ?actor"
+            template="{{> template}}"
+        >
+            <template id="template">
+                <dl>
+                    <dt>Persons involved in creation</dt>
+                    {{#each bindings}}
+                        <dd><semantic-link iri="{{ actor.value }}"></semantic-link> ({{ creation_type_labels.value}})</dd>
+                    {{/each}}
+                </dl>
+            </template>
+        </semantic-query>
+
+        <semantic-query
+            query="SELECT DISTINCT ?subject ?actor (GROUP_CONCAT(?creation_type_label; SEPARATOR=', ') as ?creation_type_labels) WHERE {
+                BIND(<[[#if objectiri]][[objectiri]][[else]][[ urlParam 'objectiri' ]][[/if]]> as $subject)
+                ?subject crm:P108i_was_produced_by ?creation.
+                ?creation crm:P9_consists_of ?subcreation.
+                ?subcreation crm:P14_carried_out_by ?actor;
+                crm:P2_has_type ?creation_type.
+                ?creation_type rdfs:label ?creation_type_label_original .
+                BIND(IF(!BOUND(?creation_type_label_original), STRAFTER(STR(?creation_type), 'https://resource.swissartresearch.net/'), ?creation_type_label_original) as ?creation_type_label)
+            } GROUP BY ?subject ?actor"
+            template="{{> template}}"
+        >
+            <template id="template">
+                <dl>
+                    <dt>Persons involved in production</dt>
+                    {{#each bindings}}
+                        <dd><semantic-link iri="{{ actor.value }}"></semantic-link> ({{ creation_type_labels.value}})</dd>
+                    {{/each}}
+                </dl>
+            </template>
+        </semantic-query>
+
+        <semantic-link
+            iri="[[#if objectiri]][[objectiri]][[else]][[ urlParam 'objectiri' ]][[/if]]"
+        ><button type="button" class="btn btn-primary btn-xs">View raw</button></semantic-link>
+
+        [[#if objectiri]]
+            [[> partial:buttonEditObjectMeta iri=objectiri]]
+        [[else]]
+            [[> partial:buttonEditObjectMeta iri=(urlParam 'objectiri')]]
+        [[/if]]
+    </bs-col>
+</bs-row>
+
 [[> partial:pageFooter]]
