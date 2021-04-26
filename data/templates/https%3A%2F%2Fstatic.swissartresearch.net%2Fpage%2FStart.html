@@ -33,7 +33,7 @@
     <bs-row>
         <bs-col md="2">
             <h3>Images</h3>
-            [[> resourceSummary type='search:Object' label='images']]
+            [[> resourceSummary type='search:Object' label='images' link='page:browseImages']]
         </bs-col>
         <bs-col md="10" class="bso-component card-container">
             [[#> cards type='search:Object' ]]
@@ -55,20 +55,48 @@
     </bs-row>
 </div>
 
+<div class="bso-component separator panel">
+    <bs-row>
+        <bs-col md="2">
+            <h3>Persons</h3>
+            [[> resourceSummary type='search:Person' label='persons' link='page:browsePersons']]
+        </bs-col>
+        <bs-col md="10" class="bso-component card-container">
+            <div class="bso-component card-image-align-top" style="display: inherit;">
+                [[#> cards type='search:Person' ]]
+                [[/ cards]]
+            </div>
+        </bs-col>
+    </bs-row>
+</div>
+
+<div class="bso-component separator panel">
+    <bs-row>
+        <bs-col md="2">
+            <h3>Concepts</h3>
+            [[> resourceSummary type='search:Type' label='concepts']]
+        </bs-col>
+        <bs-col md="10" class="bso-component card-container">
+            [[#> cards type='search:Type' ]]
+            [[/ cards]]
+        </bs-col>
+    </bs-row>
+</div>
+
 [[#*inline "cards"]]
     <semantic-query
-    query="SELECT ?subject WHERE {
-        ?subject a [[type]] .
-        BIND(SHA512(CONCAT(STR(RAND()), STR(?subject))) AS ?random) .
-        [[> @partial-block ]]
-    } ORDER BY ?random LIMIT 10"
-    template="{{> template-image-summary}}"
-    >
-    <template id="template-image-summary">
-        {{#each bindings}}
-            {{> partial:cardObject iri=subject.value}}
-        {{/each}}
-    </template>
+        query="SELECT ?subject WHERE {
+            ?subject a [[type]] .
+            BIND(SHA512(CONCAT(STR(RAND()), STR(?subject))) AS ?random) .
+            [[> @partial-block ]]
+        } ORDER BY ?random LIMIT 10"
+        template="{{> template-image-summary}}"
+        >
+        <template id="template-image-summary">
+            {{#each bindings}}
+                {{> partial:cardObject iri=subject.value}}
+            {{/each}}
+        </template>
     </semantic-query>
 [[/inline]]
 
@@ -104,6 +132,11 @@
         }"
         template="{{#each bindings}}There are currently {{num.value}} [[label]] in the database.{{/each}}"
     ></semantic-query>
+    [[#if link]]
+        <div class="bottom">
+            <semantic-link iri="[[link]]">See All</semantic-link>
+        </div>
+    [[/if]]
 [[/inline]]
 
 [[> partial:pageFooter]]
