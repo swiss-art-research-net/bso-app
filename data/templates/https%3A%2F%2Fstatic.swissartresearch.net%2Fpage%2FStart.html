@@ -6,17 +6,18 @@
         <div class="bso-component simple-search">
             <semantic-simple-search
                 query="
-                SELECT ?resource ?label ?typeLabel WHERE {
-                ?resource a ?type ;
-                    rdfs:label ?label .
-                ?type rdfs:label ?typeLabel .
-                VALUES(?type){
-                    (search:Person)
-                    (search:Object)
-                    (search:Place)
-                    (search:Type)
-                }
-                ?label bds:search ?__token__ .
+                SELECT DISTINCT ?resource ?label ?typeLabel WHERE {
+                    ?resource a ?type ;
+                        rdfs:label ?label ;
+                        rdfs:label|crm:P1_is_identified_by ?searchTerm .
+                    ?type rdfs:label ?typeLabel .
+                    VALUES(?type){
+                        (search:Person)
+                        (search:Object)
+                        (search:Place)
+                        (search:Type)
+                    }
+                    ?searchTerm bds:search ?__token__ .
                 } LIMIT 10"
             template='{{>template}}'
             input-placeholder='Search for something'
