@@ -10,6 +10,9 @@ a {
 h2 {
   padding-top: 2rem;
 }
+h3 {
+  font-weight: bold;
+}
 .btn.btn-primary {
   background-color: #8c133a;
   border-color: #9e1541;
@@ -83,6 +86,35 @@ ol.page-breadcrumb {
 .QueryBuilder--searchClause {
   background-color: #fff;
 }
+.bso-component.card {
+  margin-left: 1rem;
+  min-width: 20rem;
+  width: 18rem;
+  height: 16rem;
+}
+.bso-component.card .card-body {
+  padding: 0.5rem;
+}
+.bso-component.card .card-image {
+  align-items: center;
+  background-color: #cfc2b0;
+  display: flex;
+  overflow: hidden;
+  height: 12rem;
+}
+.bso-component.card .card-image img {
+  width: 100%;
+}
+.bso-component.card-container {
+  display: flex;
+  overflow-x: scroll;
+  padding-bottom: 1rem;
+}
+.bso-component.home-search {
+  background-image: url(https://www.e-manuscripta.ch/i3f/v20/1640931/pct:3,20,95,50/2800,/0/default.jpg);
+  background-position: bottom;
+  background-size: cover;
+}
 .bso-component.mini-thumbnail {
   border: 1px solid #fbfbfb;
   width: 6rem;
@@ -94,8 +126,12 @@ ol.page-breadcrumb {
 .bso-component.mini-thumbnail img {
   width: 150%;
 }
+.bso-component.separator {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0) 100px, rgba(0, 0, 0, 0) 100%);
+  min-height: 100px;
+}
 .bso-component.simple-search {
-  padding: 2rem 0;
+  padding: 4rem 0;
 }
 .bso-component.summary {
   margin-bottom: 2rem;
@@ -120,6 +156,9 @@ ol.page-breadcrumb {
 .bso-component.header .image img {
   height: 100px;
   width: auto;
+}
+.bso-component.panel {
+  padding: 2rem 0 2rem 2rem;
 }
 .bso-component.tags {
   list-style: none;
