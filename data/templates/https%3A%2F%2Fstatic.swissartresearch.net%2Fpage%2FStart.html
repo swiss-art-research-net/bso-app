@@ -1,76 +1,104 @@
 [[> partial:pageHeader]]
 [[> partial:contentHeader]]
 
-<div class="bso-component simple-search">
-    <semantic-simple-search
-        query="
-        SELECT ?resource ?label ?typeLabel WHERE {
-        ?resource a ?type ;
-            rdfs:label ?label .
-        ?type rdfs:label ?typeLabel .
-        VALUES(?type){
-            (search:Person)
-            (search:Object)
-            (search:Place)
-            (search:Type)
-        }
-        ?label bds:search ?__token__ .
-        } LIMIT 10"
-    template='{{>template}}'
-    input-placeholder='Search for something'
-    >
-        <template id="template">
-            <span title="{{resource.value}}">{{label.value}} ({{typeLabel.value}})</span>
+<div class="bso-component home-search">
+    <bs-col md="10" md-offset="1">
+        <div class="bso-component simple-search">
+            <semantic-simple-search
+                query="
+                SELECT ?resource ?label ?typeLabel WHERE {
+                ?resource a ?type ;
+                    rdfs:label ?label .
+                ?type rdfs:label ?typeLabel .
+                VALUES(?type){
+                    (search:Person)
+                    (search:Object)
+                    (search:Place)
+                    (search:Type)
+                }
+                ?label bds:search ?__token__ .
+                } LIMIT 10"
+            template='{{>template}}'
+            input-placeholder='Search for something'
+            >
+                <template id="template">
+                    <span title="{{resource.value}}">{{label.value}} ({{typeLabel.value}})</span>
+                </template>
+            </semantic-simple-search>
+        </div>
+    </bs-col>
+</div>
+
+<div class="bso-component separator panel">
+    <bs-row>
+        <bs-col md="2">
+            <h3>Images</h3>
+            [[> resourceSummary type='search:Object' label='images' link='page:browseImages']]
+        </bs-col>
+        <bs-col md="10" class="bso-component card-container">
+            [[#> cards type='search:Object' ]]
+            [[/ cards]]
+        </bs-col>
+    </bs-row>
+</div>
+
+<div class="bso-component separator panel">
+    <bs-row>
+        <bs-col md="2">
+            <h3>Places</h3>
+            [[> resourceSummary type='search:Place' label='places']]
+        </bs-col>
+        <bs-col md="10" class="bso-component card-container">
+            [[#> cards type='search:Place' ]]
+            [[/ cards]]
+        </bs-col>
+    </bs-row>
+</div>
+
+<div class="bso-component separator panel">
+    <bs-row>
+        <bs-col md="2">
+            <h3>Persons</h3>
+            [[> resourceSummary type='search:Person' label='persons' link='page:browsePersons']]
+        </bs-col>
+        <bs-col md="10" class="bso-component card-container">
+            <div class="bso-component card-image-align-top" style="display: inherit;">
+                [[#> cards type='search:Person' ]]
+                [[/ cards]]
+            </div>
+        </bs-col>
+    </bs-row>
+</div>
+
+<div class="bso-component separator panel">
+    <bs-row>
+        <bs-col md="2">
+            <h3>Concepts</h3>
+            [[> resourceSummary type='search:Type' label='concepts']]
+        </bs-col>
+        <bs-col md="10" class="bso-component card-container">
+            [[#> cards type='search:Type' ]]
+            [[/ cards]]
+        </bs-col>
+    </bs-row>
+</div>
+
+[[#*inline "cards"]]
+    <semantic-query
+        query="SELECT ?subject WHERE {
+            ?subject a [[type]] .
+            BIND(SHA512(CONCAT(STR(RAND()), STR(?subject))) AS ?random) .
+            [[> @partial-block ]]
+        } ORDER BY ?random LIMIT 10"
+        template="{{> template-image-summary}}"
+        >
+        <template id="template-image-summary">
+            {{#each bindings}}
+                {{> partial:cardObject iri=subject.value}}
+            {{/each}}
         </template>
-    </semantic-simple-search>
-</div>
-
-<div class="gap">
-    <bs-row>
-        <bs-col md="6">
-            <bs-panel>
-                <h3>Images</h3>
-                <p><semantic-link iri="page:browseImages">Browse Images</semantic-link></p>
-                [[> resourceSummary type='search:Object' label='images']]
-                [[#> imageSummary type='search:Object' ]]
-                [[/ imageSummary]]
-            </bs-panel>
-        </bs-col>
-        <bs-col md="6">
-            <bs-panel>
-                <h3>Persons</h3>
-                [[> resourceSummary type='search:Person' label='persons']]
-                [[#> imageSummary type='search:Person' ]]
-                    ?subject crmdig:L54_is_same-as/wdt:P18 ?image .
-                [[/ imageSummary]]
-                </semantic-query>
-            </bs-panel>
-        </bs-col>
-    </bs-row> 
-</div>
-
-<div class="gap">
-    <bs-row>
-        <bs-col md="6">
-            <bs-panel>
-                <h3>Places</h3>
-                [[> resourceSummary type='search:Place' label='places']]
-                [[#> imageSummary type='search:Place' ]]
-                    ?subject crmdig:L54_is_same-as/wdt:P18 ?image .
-                [[/ imageSummary]]
-            </bs-panel>
-        </bs-col>
-        <bs-col md="6">
-            <bs-panel>
-                <h3>Concepts</h3>
-                [[> resourceSummary type='search:Type' label='concepts']]
-                [[#> imageSummary type='search:Type' ]]
-                    ?subject crmdig:L54_is_same-as/wdt:P18 ?image .
-                [[/ imageSummary]]
-            </bs-panel>
-        </bs-col>
-    </bs-row> 
-</div>
+    </semantic-query>
+[[/inline]]
 
 [[#*inline "imageSummary"]]
     <semantic-query
@@ -104,6 +132,11 @@
         }"
         template="{{#each bindings}}There are currently {{num.value}} [[label]] in the database.{{/each}}"
     ></semantic-query>
+    [[#if link]]
+        <div class="bottom">
+            <semantic-link iri="[[link]]">See All</semantic-link>
+        </div>
+    [[/if]]
 [[/inline]]
 
 [[> partial:pageFooter]]
