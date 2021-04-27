@@ -1,0 +1,44 @@
+[[> partial:pageHeader]]
+
+[[#*inline "thisIri"]][[#if objectiri]][[objectiri]][[else]][[urlParam "objectiri"]][[/if]][[/inline]]
+
+[[#*inline "thisForQuery"]]
+    <[[> thisIri]]>
+[[/inline]]
+
+<bs-row>
+    <bs-col md="4" class="bso-component separator image-display">
+
+        <semantic-query
+            query="SELECT ?subject WHERE {
+                BIND([[> thisForQuery]] as ?subject)   
+            }"
+            template="{{> template}}"
+        >
+        <template id="template">
+            {{#each bindings}}
+                {{> partial:cardObject}}
+            {{/each}}
+        </template>
+    </bs-col>
+
+    <bs-col md="8" class="bso-component panel">
+
+       <h2>[[i18n "addNewData" bundle="bso"]]</h2>
+
+       <semantic-form
+        new-subject-template='[[> thisIri]]/assertion/{{UUID}}'
+        fields='[[> partial:fieldDefinitions]]'
+        post-action='page:viewObject'
+        urlqueryparam-objectiri='[[urlParam "objectiri"]]'
+       >
+            <semantic-form-recover-notification></semantic-form-recover-notification>
+            
+            <semantic-form-errors></semantic-form-errors>
+            <button name="submit" class="btn btn-primary">[[i18n "save" bundle="bso"]]</button> 
+            <button name="reset" class="btn btn-secondary">[[i18n "reset" bundle="bso"]]</button>
+        </semantic-form>
+    </bs-col>
+</bs-row>
+
+[[> partial:pageFooter]]

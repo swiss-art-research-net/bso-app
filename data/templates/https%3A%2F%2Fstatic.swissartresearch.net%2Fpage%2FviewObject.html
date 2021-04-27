@@ -1,52 +1,27 @@
 [[> partial:pageHeader]]
 
+[[#*inline "thisForQuery"]]
+    [[#if objectiri]]
+        <[[objectiri]]>
+    [[else]]
+        <[[urlParam "objectiri"]]>
+    [[/if]]
+[[/inline]]
+
 <bs-row>
     <bs-col md="4" class="bso-component separator image-display">
-
-        <semantic-table
-        query="SELECT DISTINCT ?image ?IIIFimage WHERE {
-            <[[#if objectiri]][[objectiri]][[else]][[ urlParam 'objectiri' ]][[/if]]> crm:P128_carries ?work .
-            ?work la:digitally_shown_by ?image .
-            OPTIONAL {
-                ?image la:digitally_available_via/la:access_point ?IIIFimage
-            }
-        }"
-        number-of-displayed-rows="100"
-        tuple-template="{{> template }}"
-        options='{
-            "showFilter" : false
-        }'
-        >
-        <template id="template">
-            <bs-panel>
-                {{> thumbnail}}
-                {{#if IIIFimage.value }}
-                    <div class="caption">
-                        <semantic-link
-                            uri="[[ resolvePrefix 'page:viewImage']]"
-                            urlqueryparam-imageiri="{{IIIFimage.value}}"
-                            >
-                            [[i18n "viewFullImage" bundle="bso"]]
-                        </semantic-link>
-                    </div>
-                {{/if}}
-            </bs-panel>
-        </template>
-        <template id="thumbnail">
-            <mp-resource-thumbnail iri="{{ image.value }}">
-                <mp-resource-thumbnail-fallback>
-                    <span>[[i18n "imageNotFound" bundle="bso"]]</span>
-                </mp-resource-thumbnail-fallback>
-            </mp-resource-thumbnail>
-        </template>
-        </semantic-table>
+        [[#if objectiri]]
+            [[> partial:objectViewImageDisplay objectiri=objectiri]]
+        [[else]]
+            [[> partial:objectViewImageDisplay urlparam="objectiri"]]
+        [[/if]]
     </bs-col>
     <bs-col md="8" class="bso-component panel">
         <h2><mp-label iri="[[#if objectiri]][[objectiri]][[else]][[ urlParam 'objectiri' ]][[/if]]"></mp-label></h2>
         <!-- Object Depicts -->
         <semantic-query
             query="SELECT DISTINCT ?subject ?type ?typeClass WHERE {
-                ?? crm:P128_carries/crm:P138_represents ?subject .
+                [[> thisForQuery]] crm:P128_carries/crm:P138_represents ?subject .
                 ?subject a ?type .
                 BIND(STRAFTER(STR(?type), 'search/') as ?typeClass)
                 VALUES(?type) {
@@ -71,7 +46,7 @@
         <!-- Dates -->
         <semantic-query
             query="SELECT DISTINCT ?subject ?event ?eventType WHERE {
-                ?? crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by) ?event .
+                [[> thisForQuery]] crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by) ?event .
                 ?event crm:P4_has_time-span ?subject .
                 ?event a ?eventType .
             }"
@@ -94,7 +69,7 @@
         <!-- Persons -->
         <semantic-query
             query="SELECT DISTINCT ?subject ?role WHERE {
-                ?? crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by) ?event .
+                [[> thisForQuery]] crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by) ?event .
                 ?event crm:P14_carried_out_by ?subject .
                 OPTIONAL {
                     ?event crm:P9_consists_of ?subevent .
@@ -131,7 +106,7 @@
 
         <semantic-link
             iri="page:addDataForObject"
-            urlqueryparam-objectiri="[[#if objectiri]][[objectiri]][[else]][[#if urlParam "objectiri"]][[urlParam "objectiri"]][[else]][[this]][[/if]][[/if]]"
+            urlqueryparam-objectiri="[[#if objectiri]][[objectiri]][[else]][[urlParam "objectiri"]][[/if]]"
         ><button type="button" class="btn btn-primary btn-s">[[i18n "addData" bundle="bso"]]</button></semantic-link>
     </bs-col>
     

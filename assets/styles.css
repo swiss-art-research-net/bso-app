@@ -75,9 +75,6 @@ h3 {
 ol.page-breadcrumb {
   background-color: #fbfbfb;
 }
-.page-holder > div:nth-child(3) {
-  flex: 1;
-}
 .panel-body {
   padding: 5px;
 }

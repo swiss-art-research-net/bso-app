@@ -129,7 +129,7 @@ fields:
           LIMIT 100'
 
     - id: object_subcreations
-      label: Creation Roles
+      label: Creation Steps
       descriptions: The sub-creations for an object
       datatype: xsd:anyURI
       display: hidden
@@ -144,6 +144,23 @@ fields:
             ?creation crm:P9_consists_of ?value .
           } WHERE {
             BIND(URI(CONCAT(STR($subject), "/creation")) as ?creation)
+          }'
+
+    - id: object_subproductions
+      label: Production Steps
+      descriptions: The production steps for an object
+      datatype: xsd:anyURI
+      display: hidden
+      domain: crm:E22_Man-Made_Object
+      range: E12_Production
+      queries:
+        - select: 'SELECT ?value WHERE {
+            $subject crm:P108i_was_produced_by/crm:P9_consists_of ?value .
+          }'
+        - insert: 'INSERT {
+            ?production crm:P9_consists_of ?value .
+          } WHERE {
+            BIND(URI(CONCAT(STR($subject), "/production")) as ?production)
           }'
 
     - id: object_carries_visual_item
