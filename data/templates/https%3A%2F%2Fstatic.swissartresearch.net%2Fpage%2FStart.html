@@ -20,7 +20,7 @@
                     ?searchTerm bds:search ?__token__ .
                 } LIMIT 10"
             template='{{>template}}'
-            input-placeholder='Search for something'
+            input-placeholder='[[i18n "globalSearchInputPrompt" bundle="bso" escapeHTML=false]]'
             >
                 <template id="template">
                     <span title="{{resource.value}}">{{label.value}} ({{typeLabel.value}})</span>
@@ -33,7 +33,7 @@
 <div class="bso-component separator panel">
     <bs-row>
         <bs-col md="2">
-            <h3>Images</h3>
+            <h3>[[i18n "images" bundle="bso"]]</h3>
             [[> resourceSummary type='search:Object' label='images' link='page:browseImages']]
         </bs-col>
         <bs-col md="10" class="bso-component card-container">
@@ -46,7 +46,7 @@
 <div class="bso-component separator panel">
     <bs-row>
         <bs-col md="2">
-            <h3>Places</h3>
+            <h3>[[i18n "places" bundle="bso"]]</h3>
             [[> resourceSummary type='search:Place' label='places']]
         </bs-col>
         <bs-col md="10" class="bso-component card-container">
@@ -60,7 +60,7 @@
 <div class="bso-component separator panel">
     <bs-row>
         <bs-col md="2">
-            <h3>Persons</h3>
+            <h3>[[i18n "persons" bundle="bso"]]</h3>
             [[> resourceSummary type='search:Person' label='persons' link='page:browsePersons']]
         </bs-col>
         <bs-col md="10" class="bso-component card-container">
@@ -76,7 +76,7 @@
 <div class="bso-component separator panel">
     <bs-row>
         <bs-col md="2">
-            <h3>Concepts</h3>
+            <h3>[[i18n "concepts" bundle="bso"]]</h3>
             [[> resourceSummary type='search:Type' label='concepts']]
         </bs-col>
         <bs-col md="10" class="bso-component card-container">
@@ -110,11 +110,12 @@
         query="SELECT (COUNT(?subject) as ?num) WHERE {
             ?subject a [[type]] .
         }"
-        template="{{#each bindings}}There are currently {{num.value}} [[label]] in the database.{{/each}}"
+        template="{{#each bindings}}[[i18n "entitiesSummaryPre" bundle="bso"]] {{num.value}} [[i18n "entitiesSummaryPost" label bundle="bso"]]{{/each}}"
     ></semantic-query>
     [[#if link]]
         <div class="bottom">
-            <semantic-link iri="[[link]]">See All</semantic-link>
+            <semantic-link iri="[[link]]">
+                [[i18n "seeAll" bundle="bso"]]</semantic-link>
         </div>
     [[/if]]
 [[/inline]]
