@@ -26,7 +26,7 @@
                             uri="[[ resolvePrefix 'page:viewImage']]"
                             urlqueryparam-imageiri="{{IIIFimage.value}}"
                             >
-                            View full image
+                            [[i18n "viewFullImage" bundle="bso"]]
                         </semantic-link>
                     </div>
                 {{/if}}
@@ -35,7 +35,7 @@
         <template id="thumbnail">
             <mp-resource-thumbnail iri="{{ image.value }}">
                 <mp-resource-thumbnail-fallback>
-                    <span>Image not found!</span>
+                    <span>[[i18n "imageNotFound" bundle="bso"]]</span>
                 </mp-resource-thumbnail-fallback>
             </mp-resource-thumbnail>
         </template>
@@ -58,7 +58,7 @@
             template="{{> template}}">
             <template id="template">
                 <div class="bso-component field-visualisation">
-                    <span class="bso-component label">Depicts</span>
+                    <span class="bso-component label">[[i18n "depicts" bundle="bso"]]</span>
                     <ul class="bso-component tags">
                         {{#each bindings}}
                             <li class="bso-tag {{typeClass.value}}"><semantic-link uri="{{subject.value}}"></semantic-link></li>
@@ -78,7 +78,7 @@
             template="{{> template}}">>
             <template id="template">
                 <div class="bso-component field-visualisation">
-                    <span class="bso-component label">Dates</span>
+                    <span class="bso-component label">[[i18n "dates" bundle="bso"]]</span>
                     <table>
                         {{#each bindings}}
                         <tr>
@@ -105,7 +105,7 @@
             template="{{> template}}">>
             <template id="template">
                 <div class="bso-component field-visualisation">
-                    <span class="bso-component label">Persons</span>
+                    <span class="bso-component label">[[i18n "persons" bundle="bso"]]</span>
                     <table>
                         {{#each bindings}}
                         <tr>
@@ -122,6 +122,19 @@
             </template>
         </semantic-query>
     </bs-col>
+</bs-row>
+
+<bs-row>
+
+    <bs-col md-offset="4" md="8" class="bso-component separator panel">
+        <h3>[[i18n "customData" bundle="bso"]]</h3>
+
+        <semantic-link
+            iri="page:addDataForObject"
+            urlqueryparam-objectiri="[[#if objectiri]][[objectiri]][[else]][[#if urlParam "objectiri"]][[urlParam "objectiri"]][[else]][[this]][[/if]][[/if]]"
+        ><button type="button" class="btn btn-primary btn-s">[[i18n "addData" bundle="bso"]]</button></semantic-link>
+    </bs-col>
+    
 </bs-row>
 
 <bs-row>
@@ -175,7 +188,7 @@
                 </dl>
             </template>
         </semantic-query>
-
+<!-- 
         <semantic-link
             iri="[[#if objectiri]][[objectiri]][[else]][[ urlParam 'objectiri' ]][[/if]]"
         ><button type="button" class="btn btn-primary btn-xs">View raw</button></semantic-link>
@@ -184,7 +197,7 @@
             [[> partial:buttonEditObjectMeta iri=objectiri]]
         [[else]]
             [[> partial:buttonEditObjectMeta iri=(urlParam 'objectiri')]]
-        [[/if]]
+        [[/if]] -->
     </bs-col>
 </bs-row>
 
