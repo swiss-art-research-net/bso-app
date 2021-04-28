@@ -25,19 +25,59 @@
     <bs-col md="8" class="bso-component panel">
 
        <h2>[[i18n "addNewData" bundle="bso"]]</h2>
-
-       <semantic-form
-        new-subject-template='[[> thisIri]]/assertion/{{UUID}}'
-        fields='[[> partial:fieldDefinitions]]'
-        post-action='page:viewObject'
-        urlqueryparam-objectiri='[[urlParam "objectiri"]]'
-       >
-            <semantic-form-recover-notification></semantic-form-recover-notification>
-            
-            <semantic-form-errors></semantic-form-errors>
-            <button name="submit" class="btn btn-primary">[[i18n "save" bundle="bso"]]</button> 
-            <button name="reset" class="btn btn-secondary">[[i18n "reset" bundle="bso"]]</button>
-        </semantic-form>
+       <p>[[i18n "addDataAbout" bundle="bso"]]</p>
+        <bs-tabs class="bso-component form-selector" default-active-key="none">
+            <bs-tab event-key="production" title="[[i18n "production" bundle="bso"]]">
+                <div class="bso-component separator next-step">
+                    <div class="bso-component form-content">
+                        Production
+                        <semantic-form
+                            new-subject-template="[[>thisIri]]/production/subproduction/{{UUID}}"
+                            fields='[
+                            {
+                                "id": "production_consists_of",
+                                "minOccurs": 1,
+                                "maxOccurs": 1,
+                                "xsdDatatype": "xsd:anyURI",
+                                "insertPattern": "INSERT {
+                                    ?value crm:P9_consists_of $subject .
+                                } WHERE {
+                                }"
+                            },
+                            {
+                                "id": "subproduction_type",
+                                "label": "Type of production",
+                                "minOccurs": 1,
+                                "maxOccurs": 1,
+                                "xsdDatatype": "xsd:anyURI",
+                                "insertPattern": "INSERT {
+                                    $subject a $value .
+                                } WHERE {}",
+                                "valueSetPattern": "SELECT ?value ?label WHERE {
+                                    VALUES (?value ?label) {
+                                        (crm:E12_Production \"Production (engraving, printing, ...)\")
+                                        (crm:E11_Modification \"Modification (colouring, ...)\")
+                                        (crm:E9_Motivation \"Motivation (commissioning, publishing, ...)\")
+                                    }
+                                }"
+                            }]'
+                        >
+                            <semantic-form-hidden-input for="production_consists_of" default-value="[[> thisIri]]/production"></semantic-form-hidden-input>
+                            <semantic-form-select-input for="subproduction_type"></semantic-form-select-input>
+                            <div>Note: once we have the roles we could determine the subproduction type based on the role (e.g. colouring->E11, engraving->E12)</div>
+                            <button name="submit">[[i18n "save" bundle="bso"]]</button>
+                        </semantic-form>
+                    </div>
+                </div>
+            </bs-tab>
+            <bs-tab event-key="creation" title="[[i18n "creation" bundle="bso"]]">
+                <div class="bso-component separator next-step">
+                    <div class="bso-component form-content">
+                        Creation
+                    </div>
+                </div>
+            </bs-tab>
+        </bs-tabs>
     </bs-col>
 </bs-row>
 
