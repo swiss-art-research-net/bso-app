@@ -4,6 +4,7 @@ prefix: https://platform.swissartresearch.net/instances/fields/
 container: http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer
 namespaces:
   crm: http://www.cidoc-crm.org/cidoc-crm/
+  crminf: http://www.ics.forth.gr/isl/CRMinf/
   rdfs: http://www.w3.org/2000/01/rdf-schema#
   search: https://platform.swissartresearch.net/search/
 
@@ -129,7 +130,7 @@ fields:
           LIMIT 100'
 
     - id: object_subcreations
-      label: Creation Roles
+      label: Creation Steps
       descriptions: The sub-creations for an object
       datatype: xsd:anyURI
       display: hidden
@@ -144,6 +145,23 @@ fields:
             ?creation crm:P9_consists_of ?value .
           } WHERE {
             BIND(URI(CONCAT(STR($subject), "/creation")) as ?creation)
+          }'
+
+    - id: object_subproductions
+      label: Production Steps
+      descriptions: The production steps for an object
+      datatype: xsd:anyURI
+      display: hidden
+      domain: crm:E22_Man-Made_Object
+      range: E12_Production
+      queries:
+        - select: 'SELECT ?value WHERE {
+            $subject crm:P108i_was_produced_by/crm:P9_consists_of ?value .
+          }'
+        - insert: 'INSERT {
+            ?production crm:P9_consists_of ?value .
+          } WHERE {
+            BIND(URI(CONCAT(STR($subject), "/production")) as ?production)
           }'
 
     - id: object_carries_visual_item
@@ -172,6 +190,46 @@ fields:
             $subject crm:P108i_was_produced_by/crm:P4_has_time-span ?value
           }'
 
+    - id: I4_Proposition_Set_about_Subject
+      label: I4 Proposition Set about Subject
+      description: Takes a URI or string (which will be attached to the subject to create a URI) and defines it as a I4 Proposition set that is P129 about the subject and P67 refers to the proposition's subject 
+      datatype: xsd:string
+      queries:
+        - insert: 'INSERT {
+          ?valueSubject a crminf:I4_Proposition_Set ;
+            crm:P129_is_about $subject ;
+            crm:P67_refers_to ?propositionSubject .
+        } WHERE {
+          BIND((IF(STR(URI(?value)) = ?value, True,False)) as ?isURI)
+          BIND(IF(?isURI, URI(?value), URI(CONCAT(STR($subject), STR(?value)))) as ?valueSubject)
+          BIND(URI(STRBEFORE(STR($subject), "/proposition")) as ?propositionSubject)
+        }'
+
+    - id: subproduction_type
+      label: Type of production
+      minOccurs: 1
+      maxOccurs: 1
+      datatype: xsd:anyURI
+      queries:
+        - insert: 'INSERT {
+            $subject a $value .
+          } WHERE {}'
+        - select: 'SELECT ?value WHERE {
+            $subject a ?value .
+            VALUES (?value) {
+              (crm:E7_Activity)
+              (crm:E11_Modification)
+              (crm:E12_Production)
+            }
+          }' 
+        - valueSet: 'SELECT ?value ?label WHERE {
+          VALUES (?value ?label) {
+              (crm:E12_Production "Production (engraving, printing, ...)")
+              (crm:E11_Modification "Modification (colouring, ...)")
+              (crm:E7_Activity "Activity (commissioning, publishing, ...)")
+          }
+        }'
+
     - id: P2_has_type
       label: Type
       datatype: xsd:anyURI
@@ -179,26 +237,55 @@ fields:
         - select: 'SELECT ?value WHERE {
             $subject crm:P2_has_type ?value .
           }'
+        - insert: 'INSERT {
+            $subject crm:P2_has_type $value .
+          } WHERE {}'
+        - autosuggestion: 'PREFIX bds: <http://www.bigdata.com/rdf/search#>
+            SELECT DISTINCT ?value ?label WHERE {
+              ?value a search:Type ;
+                rdfs:label ?label .
+              ?label bds:search ?__token__ .
+            } ORDER BY ?label
+            LIMIT 10'
+        - valueSet: 'SELECT ?value ?label  WHERE {
+              ?value a search:Type ;
+                rdfs:label ?label .
+            } ORDER BY ?label
+            LIMIT 100'
+
+    - id: P9_consists_of-reversed
+      label: Consists of (reversed)
+      datatype: xsd:anyURI
+      queries:
+        - insert: 'INSERT {
+            ?value crm:P9_consists_of $subject .
+          } WHERE {}'
+        - select: 'SELECT ?value WHERE {
+            ?value crm:P9_consists_of $subject .
+          }'
 
     - id: P14_carried_out_by
       label: Person
       description: The person or actor carrying out an event
       datatype: xsd:anyURI
-      minOccurs: 1
+      minOccurs: 0
       maxOccurs: 1
       queries:
         - select: 'SELECT ?value WHERE {
-            $subject crm:P14_carried_out_by ?value .
-          }'
+              $subject crm:P14_carried_out_by ?value .
+            }'
+        - insert: 'INSERT {
+              $subject crm:P14_carried_out_by ?value .
+            } WHERE {}'
         - autosuggestion: 'PREFIX bds: <http://www.bigdata.com/rdf/search#>
-          SELECT DISTINCT ?value ?label WHERE {
-            ?value a search:Person ;
-              rdfs:label ?label .
-            ?label bds:search ?__token__ .
-          } ORDER BY ?label
-          LIMIT 10'
+            SELECT DISTINCT ?value ?label WHERE {
+              ?value a search:Person ;
+                rdfs:label ?label .
+              ?label bds:search ?__token__ .
+            } ORDER BY ?label
+            LIMIT 10'
         - valueSet: 'SELECT ?value ?label  WHERE {
-            ?value a search:Person ;
-              rdfs:label ?label .
-          } ORDER BY ?label
-          LIMIT 100'
+              ?value a search:Person ;
+                rdfs:label ?label .
+            } ORDER BY ?label
+            LIMIT 100'

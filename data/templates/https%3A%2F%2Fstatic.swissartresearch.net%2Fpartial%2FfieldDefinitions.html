@@ -77,7 +77,7 @@
     {
         "id" : "object_subcreations",
 
-            "label": "Creation Roles",
+            "label": "Creation Steps",
             "display" : "hidden",
             "xsdDatatype" : "xsd:anyURI",
             "domain" : "crm:E22_Man-Made_Object",
@@ -85,6 +85,19 @@
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P128_carries/crm:P94i_was_created_by ?creation . ?creation crm:P9_consists_of ?value . }",
                 "insertPattern" : "INSERT { ?creation crm:P9_consists_of ?value . } WHERE { BIND(URI(CONCAT(STR($subject), \"/creation\")) as ?creation) }",
         "iri" : "https://platform.swissartresearch.net/instances/fields/object_subcreations"
+    },
+
+    {
+        "id" : "object_subproductions",
+
+            "label": "Production Steps",
+            "display" : "hidden",
+            "xsdDatatype" : "xsd:anyURI",
+            "domain" : "crm:E22_Man-Made_Object",
+            "range" : "E12_Production",
+                "selectPattern" : "SELECT ?value WHERE { $subject crm:P108i_was_produced_by/crm:P9_consists_of ?value . }",
+                "insertPattern" : "INSERT { ?production crm:P9_consists_of ?value . } WHERE { BIND(URI(CONCAT(STR($subject), \"/production\")) as ?production) }",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/object_subproductions"
     },
 
     {
@@ -115,12 +128,48 @@
     },
 
     {
+        "id" : "I4_Proposition_Set_about_Subject",
+
+            "label": "I4 Proposition Set about Subject",
+            "description" : "Takes a URI or string (which will be attached to the subject to create a URI) and defines it as a I4 Proposition set that is P129 about the subject and P67 refers to the proposition&#x27;s subject",
+            "xsdDatatype" : "xsd:string",
+                "insertPattern" : "INSERT { ?valueSubject a crminf:I4_Proposition_Set ; crm:P129_is_about $subject ; crm:P67_refers_to ?propositionSubject . } WHERE { BIND((IF(STR(URI(?value)) = ?value, True,False)) as ?isURI) BIND(IF(?isURI, URI(?value), URI(CONCAT(STR($subject), STR(?value)))) as ?valueSubject) BIND(URI(STRBEFORE(STR($subject), \"/proposition\")) as ?propositionSubject) }",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/I4_Proposition_Set_about_Subject"
+    },
+
+    {
+        "id" : "subproduction_type",
+
+            "label": "Type of production",
+            "minOccurs" : "1",
+            "maxOccurs" : "1",
+            "xsdDatatype" : "xsd:anyURI",
+                "insertPattern" : "INSERT { $subject a $value . } WHERE {}",
+                "selectPattern" : "SELECT ?value WHERE { $subject a ?value . VALUES (?value) { (crm:E7_Activity) (crm:E11_Modification) (crm:E12_Production) } }",
+                "valueSetPattern" : "SELECT ?value ?label WHERE { VALUES (?value ?label) { (crm:E12_Production \"Production (engraving, printing, ...)\") (crm:E11_Modification \"Modification (colouring, ...)\") (crm:E7_Activity \"Activity (commissioning, publishing, ...)\") } }",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/subproduction_type"
+    },
+
+    {
         "id" : "P2_has_type",
 
             "label": "Type",
             "xsdDatatype" : "xsd:anyURI",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P2_has_type ?value . }",
+                "insertPattern" : "INSERT { $subject crm:P2_has_type $value . } WHERE {}",
+                "autosuggestionPattern" : "PREFIX bds: <http://www.bigdata.com/rdf/search#> SELECT DISTINCT ?value ?label WHERE { ?value a search:Type ; rdfs:label ?label . ?label bds:search ?__token__ . } ORDER BY ?label LIMIT 10",
+                "valueSetPattern" : "SELECT ?value ?label  WHERE { ?value a search:Type ; rdfs:label ?label . } ORDER BY ?label LIMIT 100",
         "iri" : "https://platform.swissartresearch.net/instances/fields/P2_has_type"
+    },
+
+    {
+        "id" : "P9_consists_of-reversed",
+
+            "label": "Consists of (reversed)",
+            "xsdDatatype" : "xsd:anyURI",
+                "insertPattern" : "INSERT { ?value crm:P9_consists_of $subject . } WHERE {}",
+                "selectPattern" : "SELECT ?value WHERE { ?value crm:P9_consists_of $subject . }",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/P9_consists_of-reversed"
     },
 
     {
@@ -128,10 +177,10 @@
 
             "label": "Person",
             "description" : "The person or actor carrying out an event",
-            "minOccurs" : "1",
             "maxOccurs" : "1",
             "xsdDatatype" : "xsd:anyURI",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P14_carried_out_by ?value . }",
+                "insertPattern" : "INSERT { $subject crm:P14_carried_out_by ?value . } WHERE {}",
                 "autosuggestionPattern" : "PREFIX bds: <http://www.bigdata.com/rdf/search#> SELECT DISTINCT ?value ?label WHERE { ?value a search:Person ; rdfs:label ?label . ?label bds:search ?__token__ . } ORDER BY ?label LIMIT 10",
                 "valueSetPattern" : "SELECT ?value ?label  WHERE { ?value a search:Person ; rdfs:label ?label . } ORDER BY ?label LIMIT 100",
         "iri" : "https://platform.swissartresearch.net/instances/fields/P14_carried_out_by"

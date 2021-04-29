@@ -1,0 +1,62 @@
+[[> partial:pageHeader]]
+
+[[#*inline "thisIri"]][[#if objectiri]][[objectiri]][[else]][[urlParam "objectiri"]][[/if]][[/inline]]
+
+[[#*inline "thisForQuery"]]
+    <[[> thisIri]]>
+[[/inline]]
+
+<bs-row>
+    <bs-col md="4" class="bso-component separator image-display">
+
+        <semantic-query
+            query="SELECT ?subject WHERE {
+                BIND([[> thisForQuery]] as ?subject)   
+            }"
+            template="{{> template}}"
+        >
+        <template id="template">
+            {{#each bindings}}
+                {{> partial:cardObject}}
+            {{/each}}
+        </template>
+    </bs-col>
+
+    <bs-col md="8" class="bso-component panel">
+
+       <h2>[[i18n "addNewData" bundle="bso"]]</h2>
+       <p>[[i18n "addDataAbout" bundle="bso"]]</p>
+        <bs-tabs class="bso-component form-selector" default-active-key="none">
+            <bs-tab event-key="production" title="[[i18n "production" bundle="bso"]]">
+                <div class="bso-component separator next-step">
+                    <div class="bso-component form-content">
+                        Production
+                        <semantic-form
+                            new-subject-template="[[>thisIri]]/proposition/{{UUID}}"
+                            fields='[[> partial:fieldDefinitions ]]'
+                            post-action='[[> thisIri]]'
+                            urlqueryparam-view='page'
+                        >
+                            <semantic-form-hidden-input for="P9_consists_of-reversed" default-value="[[> thisIri]]/production"></semantic-form-hidden-input>
+                            <semantic-form-hidden-input for="I4_Proposition_Set_about_Subject" default-value="/container/context"></semantic-form-hidden-input>
+                            <semantic-form-select-input for="subproduction_type"></semantic-form-select-input>
+                            <div>Note: once we have the roles we could determine the subproduction type based on the role (e.g. colouring->E11, engraving->E12)</div>
+                            <semantic-form-select-input for="P14_carried_out_by"></semantic-form-select-input>
+                            <semantic-form-select-input for="P2_has_type"></semantic-form-select-input>
+                            <button name="submit" class="btn btn-primary btn-md">[[i18n "save" bundle="bso"]]</button>
+                        </semantic-form>
+                    </div>
+                </div>
+            </bs-tab>
+            <bs-tab event-key="creation" title="[[i18n "creation" bundle="bso"]]">
+                <div class="bso-component separator next-step">
+                    <div class="bso-component form-content">
+                        Creation
+                    </div>
+                </div>
+            </bs-tab>
+        </bs-tabs>
+    </bs-col>
+</bs-row>
+
+[[> partial:pageFooter]]
