@@ -1,4 +1,7 @@
-<div class="content">
-    [[#if padding]]
-        <bs-col md=12 lg=10 lg-offset=1>
-    [[/if]]
+<div class="container-fluid">
+    <bs-row>
+        [[#if padding]]
+            <bs-col md=12 lg=10 lg-offset=1>
+        [[else]]
+            <bs-col sm="12">
+        [[/if]]
