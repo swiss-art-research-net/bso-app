@@ -237,6 +237,21 @@ fields:
         - select: 'SELECT ?value WHERE {
             $subject crm:P2_has_type ?value .
           }'
+        - insert: 'INSERT {
+            $subject crm:P2_has_type $value .
+          } WHERE {}'
+        - autosuggestion: 'PREFIX bds: <http://www.bigdata.com/rdf/search#>
+            SELECT DISTINCT ?value ?label WHERE {
+              ?value a search:Type ;
+                rdfs:label ?label .
+              ?label bds:search ?__token__ .
+            } ORDER BY ?label
+            LIMIT 10'
+        - valueSet: 'SELECT ?value ?label  WHERE {
+              ?value a search:Type ;
+                rdfs:label ?label .
+            } ORDER BY ?label
+            LIMIT 100'
 
     - id: P9_consists_of-reversed
       label: Consists of (reversed)
@@ -253,21 +268,24 @@ fields:
       label: Person
       description: The person or actor carrying out an event
       datatype: xsd:anyURI
-      minOccurs: 1
+      minOccurs: 0
       maxOccurs: 1
       queries:
         - select: 'SELECT ?value WHERE {
-            $subject crm:P14_carried_out_by ?value .
-          }'
+              $subject crm:P14_carried_out_by ?value .
+            }'
+        - insert: 'INSERT {
+              $subject crm:P14_carried_out_by ?value .
+            } WHERE {}'
         - autosuggestion: 'PREFIX bds: <http://www.bigdata.com/rdf/search#>
-          SELECT DISTINCT ?value ?label WHERE {
-            ?value a search:Person ;
-              rdfs:label ?label .
-            ?label bds:search ?__token__ .
-          } ORDER BY ?label
-          LIMIT 10'
+            SELECT DISTINCT ?value ?label WHERE {
+              ?value a search:Person ;
+                rdfs:label ?label .
+              ?label bds:search ?__token__ .
+            } ORDER BY ?label
+            LIMIT 10'
         - valueSet: 'SELECT ?value ?label  WHERE {
-            ?value a search:Person ;
-              rdfs:label ?label .
-          } ORDER BY ?label
-          LIMIT 100'
+              ?value a search:Person ;
+                rdfs:label ?label .
+            } ORDER BY ?label
+            LIMIT 100'

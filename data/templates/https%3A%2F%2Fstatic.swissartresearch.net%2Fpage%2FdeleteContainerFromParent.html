@@ -1,0 +1,59 @@
+
+[[> partial:pageHeader]]
+[[> partial:contentHeader]]
+
+[[#if (hasPermission "api:ldp:*:delete")]]
+    <div class="container-fluid">
+        <bs-row class="bso-component panel">
+            <bs-col sm="12">
+                <h2>[[i18n "delete" bundle="bso"]]</h2>
+                <div class="gap">
+                    [[i18n "confirmDelete" bundle="bso"]] <mp-label iri="[[urlParam "container"]]"></mp-label> [[urlParam "container"]]
+                </div>
+                <div class="bso-component button-set">
+                    <semantic-link
+                        iri="[[urlParam "back"]]"
+                        urlqueryparam-view="page"
+                        type="button"
+                        class="btn-secondary btn"
+                    >[[i18n "cancel" bundle="bso"]]</semantic-link>
+                    <mp-ldp-remove-from-container-action container="[[urlParam "parent"]]" iri="[[urlParam "container"]]">
+                        <button type="button" class="btn btn-primary">[[i18n "delete" bundle="bso"]]</button>
+                    </mp-ldp-remove-from-container-action>
+                </div>
+            </bs-col>
+        </bs-row>
+    </div>
+
+    <div class="deleted">
+        <semantic-query
+          query='SELECT ?type WHERE {
+            <[[urlParam "container"]]> a ?type .
+          }'
+          template="<span>{{#each bindings}}{{/each}}</span>"
+          no-result-template='{{> template}}'
+          >
+          <template id="template">
+            <div>
+                <div class="modal-backdrop in"></div>
+                <div class="modal-dialogmodal-lg modal-dialog overlay-modal in modal" id="deletedModal" style="display:block;">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <p>[[i18n "resourceDeleted" bundle="bso"]]</p>
+                            <semantic-link iri="[[urlParam "back"]]" urlqueryparam-view="page" class="btn btn-primary btn-md">[[i18n "back" bundle="bso"]]</semantic-link>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </template>
+        </semantic-query>
+      </div>
+
+[[else]]
+    <bs-alert variant="warning">
+        [[i18n "noPermissionToAccessPage" bundle="bso"]]
+    </bs-alert>
+[[/if]]
+
+[[> partial:contentFooter]]
+[[> partial:pageFooter]]

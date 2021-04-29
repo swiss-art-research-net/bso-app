@@ -1,12 +1,11 @@
 [[> partial:pageHeader]]
 
+[[#*inline "thisIri"]][[#if objectiri]][[objectiri]][[else]][[urlParam "objectiri"]][[/if]][[/inline]]
+
 [[#*inline "thisForQuery"]]
-    [[#if objectiri]]
-        <[[objectiri]]>
-    [[else]]
-        <[[urlParam "objectiri"]]>
-    [[/if]]
+    <[[> thisIri]]>
 [[/inline]]
+
 
 <bs-row>
     <bs-col md="4" class="bso-component separator image-display">
@@ -17,7 +16,7 @@
         [[/if]]
     </bs-col>
     <bs-col md="8" class="bso-component panel">
-        <h2><mp-label iri="[[#if objectiri]][[objectiri]][[else]][[ urlParam 'objectiri' ]][[/if]]"></mp-label></h2>
+        <h2><mp-label iri="[[> thisIri]]"></mp-label></h2>
         <!-- Object Depicts -->
         <semantic-query
             query="SELECT DISTINCT ?subject ?type ?typeClass WHERE {
@@ -70,11 +69,21 @@
         <semantic-query
             query="SELECT DISTINCT ?subject ?role WHERE {
                 [[> thisForQuery]] crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by) ?event .
-                ?event crm:P14_carried_out_by ?subject .
-                OPTIONAL {
+                {
+                    ?event crm:P14_carried_out_by ?subject .
+                    OPTIONAL {
+                        ?event crm:P9_consists_of ?subevent .
+                        ?subevent crm:P14_carried_out_by ?subject .
+                        OPTIONAL {
+                            ?subevent crm:P2_has_type ?role .
+                        }
+                    }
+                } UNION {
                     ?event crm:P9_consists_of ?subevent .
-                    ?subevent crm:P14_carried_out_by ?subject ;
-                        crm:P2_has_type ?role .
+                    ?subevent crm:P14_carried_out_by ?subject .
+                    OPTIONAL {
+                        ?subevent crm:P2_has_type ?role .
+                    }
                 }
             }"
             template="{{> template}}">>
@@ -103,7 +112,28 @@
 
     <bs-col md-offset="4" md="8" class="bso-component separator panel">
         <h3>[[i18n "customData" bundle="bso"]]</h3>
-
+        <semantic-table
+            query="SELECT ?proposition ?subject ?type ?container ?parentContainer WHERE {
+                ?proposition a crminf:I4_Proposition_Set ;
+                    crm:P67_refers_to [[> thisForQuery]] ;
+                    crm:P129_is_about ?subject .
+                ?subject a ?type .
+                BIND(URI(STRBEFORE(STR(?proposition), '/context')) as ?container)
+                ?parentContainer ldp:contains ?container .
+            }"
+            column-configuration='[{
+                "displayName": "[[i18n "type" bundle="bso"]]",
+                "cellTemplate": "<mp-label iri=\"{{type.value}}\"></mp-label>"
+            },
+            {
+                "displayName": "[[i18n "view" bundle="bso"]]",
+                "cellTemplate": "<semantic-link iri=\"http://www.metaphacts.com/resource/assets/NamedGraph\" urlqueryparam-view=\"graph\" urlqueryparam-graph=\"{{proposition.value}}\">[[i18n "view" bundle="bso"]]</semantic-link>"
+            },
+            {
+                "displayName": "[[i18n "delete" bundle="bso"]]",
+                "cellTemplate": "<semantic-link iri=\"page:deleteContainerFromParent\" urlqueryparam-container=\"{{container.value}}\" urlqueryparam-parent=\"{{parentContainer.value}}\" urlqueryparam-back=\"[[>thisIri]]\">[[i18n "delete" bundle="bso"]]</semantic-link>"
+            }]'
+        ></semantic-table>
         <semantic-link
             iri="page:addDataForObject"
             urlqueryparam-objectiri="[[#if objectiri]][[objectiri]][[else]][[urlParam "objectiri"]][[/if]]"
@@ -120,7 +150,7 @@
 
         <semantic-query
             query="SELECT DISTINCT ?subject ?actor (GROUP_CONCAT(?creation_type_label; SEPARATOR=', ') as ?creation_type_labels) WHERE {
-                BIND(<[[#if objectiri]][[objectiri]][[else]][[ urlParam 'objectiri' ]][[/if]]> as $subject)
+                BIND([[> thisForQuery ]] as $subject)
                 ?subject (crm:P128_carries/crm:P94i_was_created_by) ?creation.
                 ?creation crm:P9_consists_of ?subcreation.
                 ?subcreation crm:P14_carried_out_by ?actor;
@@ -144,7 +174,7 @@
 
         <semantic-query
             query="SELECT DISTINCT ?subject ?actor (GROUP_CONCAT(?creation_type_label; SEPARATOR=', ') as ?creation_type_labels) WHERE {
-                BIND(<[[#if objectiri]][[objectiri]][[else]][[ urlParam 'objectiri' ]][[/if]]> as $subject)
+                BIND([[> thisForQuery ]] as $subject)
                 ?subject crm:P108i_was_produced_by ?creation.
                 ?creation crm:P9_consists_of ?subcreation.
                 ?subcreation crm:P14_carried_out_by ?actor;

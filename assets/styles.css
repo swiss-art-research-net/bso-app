@@ -86,6 +86,9 @@ ol.page-breadcrumb {
 .QueryBuilder--searchClause {
   background-color: #fff;
 }
+.bso-component.button-set .btn {
+  margin-right: 0.5rem;
+}
 .bso-component.card {
   transition: box-shadow 0.5s;
   box-shadow: rgba(0, 0, 0, 0.07) 0px 2px 10px;
@@ -277,6 +280,9 @@ ol.page-breadcrumb {
   font-weight: bold;
   font-size: 1.3em;
   padding-top: 0.8em;
+}
+.modal-backdrop {
+  opacity: 0.8;
 }
 @font-face {
   font-family: 'HK Grotesk';
