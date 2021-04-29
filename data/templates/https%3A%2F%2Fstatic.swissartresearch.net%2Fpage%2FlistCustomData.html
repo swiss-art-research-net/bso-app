@@ -1,0 +1,39 @@
+
+[[> partial:pageHeader]]
+[[> partial:contentHeader]]
+    <div class="container-fluid">
+        <bs-row class="bso-component panel">
+            <bs-col sm="12">
+               <h2>Contributed Data</h2>
+               <semantic-table
+                   query="SELECT ?proposition ?subject ?resource ?type ?container ?parentContainer WHERE {
+                       ?proposition a crminf:I4_Proposition_Set ;
+                           crm:P67_refers_to ?resource ;
+                           crm:P129_is_about ?subject .
+                       ?subject a ?type .
+                       BIND(URI(STRBEFORE(STR(?proposition), '/context')) as ?container)
+                       ?parentContainer ldp:contains ?container .
+                   }"
+                   column-configuration='[{
+                       "variableName": "resource",
+                       "cellTemplate": "<semantic-link iri=\"{{resource.value}}\" urlqueryparam-view=\"page\"></semantic-link>"
+                   },
+                   {
+                       "displayName": "[[i18n "type" bundle="bso"]]",
+                       "cellTemplate": "<mp-label iri=\"{{type.value}}\"></mp-label>"
+                   },
+                   {
+                       "displayName": "[[i18n "view" bundle="bso"]]",
+                       "cellTemplate": "<semantic-link iri=\"http://www.metaphacts.com/resource/assets/NamedGraph\" urlqueryparam-view=\"graph\" urlqueryparam-graph=\"{{proposition.value}}\">[[i18n "view" bundle="bso"]]</semantic-link>"
+                   },
+                   {
+                       "displayName": "[[i18n "delete" bundle="bso"]]",
+                       "cellTemplate": "<semantic-link iri=\"page:deleteContainerFromParent\" urlqueryparam-container=\"{{container.value}}\" urlqueryparam-parent=\"{{parentContainer.value}}\" urlqueryparam-back=\"[[this]]\">[[i18n "delete" bundle="bso"]]</semantic-link>"
+                   }]'
+               ></semantic-table>
+            </bs-col>
+        </bs-row>
+    </div>
+
+[[> partial:contentFooter]]
+[[> partial:pageFooter]]
