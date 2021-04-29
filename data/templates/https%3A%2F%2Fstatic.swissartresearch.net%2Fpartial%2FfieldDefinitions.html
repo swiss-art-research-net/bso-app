@@ -128,12 +128,45 @@
     },
 
     {
+        "id" : "I4_Proposition_Set_about_Subject",
+
+            "label": "I4 Proposition Set about Subject",
+            "description" : "Takes a URI or string (which will be attached to the subject to create a URI) and defines it as a I4 Proposition set that is P129 about the subject and P67 refers to the proposition&#x27;s subject",
+            "xsdDatatype" : "xsd:string",
+                "insertPattern" : "INSERT { ?valueSubject a crminf:I4_Proposition_Set ; crm:P129_is_about $subject ; crm:P67_refers_to ?propositionSubject . } WHERE { BIND((IF(STR(URI(?value)) = ?value, True,False)) as ?isURI) BIND(IF(?isURI, URI(?value), URI(CONCAT(STR($subject), STR(?value)))) as ?valueSubject) BIND(URI(STRBEFORE(STR($subject), \"/proposition\")) as ?propositionSubject) }",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/I4_Proposition_Set_about_Subject"
+    },
+
+    {
+        "id" : "subproduction_type",
+
+            "label": "Type of production",
+            "minOccurs" : "1",
+            "maxOccurs" : "1",
+            "xsdDatatype" : "xsd:anyURI",
+                "insertPattern" : "INSERT { $subject a $value . } WHERE {}",
+                "selectPattern" : "SELECT ?value WHERE { $subject a ?value . VALUES (?value) { (crm:E7_Activity) (crm:E11_Modification) (crm:E12_Production) } }",
+                "valueSetPattern" : "SELECT ?value ?label WHERE { VALUES (?value ?label) { (crm:E12_Production \"Production (engraving, printing, ...)\") (crm:E11_Modification \"Modification (colouring, ...)\") (crm:E7_Activity \"Activity (commissioning, publishing, ...)\") } }",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/subproduction_type"
+    },
+
+    {
         "id" : "P2_has_type",
 
             "label": "Type",
             "xsdDatatype" : "xsd:anyURI",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P2_has_type ?value . }",
         "iri" : "https://platform.swissartresearch.net/instances/fields/P2_has_type"
+    },
+
+    {
+        "id" : "P9_consists_of-reversed",
+
+            "label": "Consists of (reversed)",
+            "xsdDatatype" : "xsd:anyURI",
+                "insertPattern" : "INSERT { ?value crm:P9_consists_of $subject . } WHERE {}",
+                "selectPattern" : "SELECT ?value WHERE { ?value crm:P9_consists_of $subject . }",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/P9_consists_of-reversed"
     },
 
     {

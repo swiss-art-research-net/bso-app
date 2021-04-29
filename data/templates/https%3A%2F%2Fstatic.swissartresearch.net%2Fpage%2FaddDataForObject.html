@@ -32,40 +32,16 @@
                     <div class="bso-component form-content">
                         Production
                         <semantic-form
-                            new-subject-template="[[>thisIri]]/production/subproduction/{{UUID}}"
-                            fields='[
-                            {
-                                "id": "production_consists_of",
-                                "minOccurs": 1,
-                                "maxOccurs": 1,
-                                "xsdDatatype": "xsd:anyURI",
-                                "insertPattern": "INSERT {
-                                    ?value crm:P9_consists_of $subject .
-                                } WHERE {
-                                }"
-                            },
-                            {
-                                "id": "subproduction_type",
-                                "label": "Type of production",
-                                "minOccurs": 1,
-                                "maxOccurs": 1,
-                                "xsdDatatype": "xsd:anyURI",
-                                "insertPattern": "INSERT {
-                                    $subject a $value .
-                                } WHERE {}",
-                                "valueSetPattern": "SELECT ?value ?label WHERE {
-                                    VALUES (?value ?label) {
-                                        (crm:E12_Production \"Production (engraving, printing, ...)\")
-                                        (crm:E11_Modification \"Modification (colouring, ...)\")
-                                        (crm:E9_Motivation \"Motivation (commissioning, publishing, ...)\")
-                                    }
-                                }"
-                            }]'
+                            new-subject-template="[[>thisIri]]/proposition/{{UUID}}"
+                            fields='[[> partial:fieldDefinitions ]]'
+                            post-action='[[> thisIri]]'
+                            urlqueryparam-view='page'
                         >
-                            <semantic-form-hidden-input for="production_consists_of" default-value="[[> thisIri]]/production"></semantic-form-hidden-input>
+                            <semantic-form-text-input for="P9_consists_of-reversed" default-value="[[> thisIri]]/production"></semantic-form-text-input>
+                            <semantic-form-text-input for="I4_Proposition_Set_about_Subject" default-value="/container/context"></semantic-form-text-input>
                             <semantic-form-select-input for="subproduction_type"></semantic-form-select-input>
                             <div>Note: once we have the roles we could determine the subproduction type based on the role (e.g. colouring->E11, engraving->E12)</div>
-                            <button name="submit">[[i18n "save" bundle="bso"]]</button>
+                            <button name="submit" class="btn btn-primary btn-md">[[i18n "save" bundle="bso"]]</button>
                         </semantic-form>
                     </div>
                 </div>
