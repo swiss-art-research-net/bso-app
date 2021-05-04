@@ -1,0 +1,44 @@
+[[> partial:pageHeader]]
+[[> partial:contentHeader]]
+
+[[#*inline "thisIri"]][[#if typeiri]][[typeiri]][[else]][[urlParam "typeiri"]][[/if]][[/inline]]
+
+[[#*inline "thisForQuery"]]
+    <[[> thisIri]]>
+[[/inline]]
+
+
+<bs-row>
+    <bs-col md="4" class="bso-component separator image-display small">
+
+        <bs-panel>
+            <mp-resource-thumbnail iri="[[> thisIri]]">
+                <mp-resource-thumbnail-fallback>
+                    <span></span>
+                </mp-resource-thumbnail-fallback>
+            </mp-resource-thumbnail>
+        </bs-panel>
+        
+    </bs-col>
+    <bs-col md="8" class="bso-component panel">
+        <h2><mp-label iri="[[> thisIri]]"></mp-label></h2>
+        
+        
+       <!-- Depicted -->
+        <div class="bso-component field-visualisation">
+            <span class="bso-component label">[[i18n "depictedBy" bundle="bso"]]</span>
+            <div class="bso-component card-container">
+                <semantic-table
+                query="SELECT DISTINCT ?subject ?type ?typeClass WHERE {
+                    ?subject a search:Object ;
+                        crm:P128_carries/crm:P138_represents [[> thisForQuery]] .
+                }"
+                tuple-template="{{> partial:cardObject}}">
+                </semantic-table>
+            </div>
+        </div>
+    </bs-col>
+</bs-row>
+
+[[> partial:contentFooter]]
+[[> partial:pageFooter]]
