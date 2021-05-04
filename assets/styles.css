@@ -107,6 +107,9 @@ ol.page-breadcrumb {
 .bso-component.card .card-body {
   padding: 0.5rem;
 }
+.bso-component.card .card-body .label {
+  padding: 0;
+}
 .bso-component.card .card-image {
   align-items: center;
   background-color: #cfc2b0;
@@ -118,9 +121,16 @@ ol.page-breadcrumb {
   width: 100%;
 }
 .bso-component.card-container {
-  display: flex;
-  overflow-x: scroll;
   padding-bottom: 1rem;
+  display: flex;
+  flex-flow: row wrap;
+}
+.bso-component.card-container.horizontal-scroll {
+  overflow-x: scroll;
+  flex-flow: unset;
+}
+.bso-component.card-container .card {
+  margin-bottom: 1rem;
 }
 .bso-component.card-image-align-top .card-image {
   align-items: start;
@@ -134,12 +144,13 @@ ol.page-breadcrumb {
 .bso-component.field-visualisation .label {
   display: inline-block;
   margin-right: 1rem;
+  margin-bottom: 1rem;
   min-width: 7rem;
   vertical-align: top;
   padding-top: 1rem;
 }
 .bso-component.field-visualisation table,
-.bso-component.field-visualisation ul {
+.bso-component.field-visualisation ul.tags {
   display: inline-block;
 }
 .bso-component.field-visualisation table td {
@@ -154,10 +165,16 @@ ol.page-breadcrumb {
   background-size: cover;
 }
 .bso-component.image-display {
-  padding: 2rem 0;
+  padding: 2rem;
 }
 .bso-component.image-display .card {
   margin: auto;
+}
+.bso-component.image-display .card img {
+  max-width: 100%;
+}
+.bso-component.image-display .card.small {
+  max-width: 23rem;
 }
 .bso-component.image-display .caption {
   text-align: right;

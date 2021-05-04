@@ -161,6 +161,9 @@ ol.page-breadcrumb {
 
         .card-body {
             padding: 0.5rem;
+            .label {
+                padding: 0;
+            }
         }
         .card-image {
             align-items: center;
@@ -174,9 +177,16 @@ ol.page-breadcrumb {
         }
     }
     &.card-container {
-        display: flex;
-        overflow-x: scroll;
         padding-bottom: 1rem;
+        display: flex;
+        flex-flow: row wrap;
+        &.horizontal-scroll {
+            overflow-x: scroll;
+            flex-flow: unset;
+        }
+        .card {
+            margin-bottom: 1rem;
+        }
     }
 
     &.card-image-align-top {
@@ -196,12 +206,13 @@ ol.page-breadcrumb {
         .label {
             display: inline-block;
             margin-right: 1rem;
+            margin-bottom: 1rem;
             min-width: 7rem;
             vertical-align: top;
             padding-top: 1rem;
         }
 
-        table, ul {
+        table, ul.tags {
             display: inline-block;
         }
 
@@ -220,10 +231,17 @@ ol.page-breadcrumb {
         background-position: bottom;
         background-size: cover;
     }
+
     &.image-display {
-        padding: 2rem 0;
+        padding: 2rem;
         .card {
             margin: auto;
+            img {
+                max-width: 100%;
+            }
+            &.small {
+                max-width: 23rem;
+            }
         }
         .caption {
             text-align: right;
