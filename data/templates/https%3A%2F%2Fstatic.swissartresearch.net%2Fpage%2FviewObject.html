@@ -1,5 +1,4 @@
 [[> partial:pageHeader]]
-[[> partial:contentHeader]]
 
 [[#*inline "thisIri"]][[#if objectiri]][[objectiri]][[else]][[urlParam "objectiri"]][[/if]][[/inline]]
 
@@ -7,210 +6,192 @@
     <[[> thisIri]]>
 [[/inline]]
 
-
-<bs-row>
-    <bs-col md="4" class="bso-component separator image-display">
+<div class="d-flex">
+    <div class="bso-component separator sidebar image-display">
         [[#if objectiri]]
             [[> partial:objectViewImageDisplay objectiri=objectiri]]
         [[else]]
             [[> partial:objectViewImageDisplay urlparam="objectiri"]]
         [[/if]]
-    </bs-col>
-    <bs-col md="8" class="bso-component panel">
-        <h2><mp-label iri="[[> thisIri]]"></mp-label></h2>
-        <!-- Object Depicts -->
-        <semantic-query
-            query="SELECT DISTINCT ?subject ?type ?typeClass WHERE {
-                [[> thisForQuery]] crm:P128_carries/crm:P138_represents ?subject .
-                ?subject a ?type .
-                BIND(STRAFTER(STR(?type), 'search/') as ?typeClass)
-                VALUES(?type) {
-                    (search:Person)
-                    (search:Place)
-                    (search:Type)
-                }
-            }"
-            template="{{> template}}">
-            <template id="template">
-                <div class="bso-component field-visualisation">
-                    <span class="bso-component label">[[i18n "depicts" bundle="bso"]]</span>
-                    <ul class="bso-component tags">
-                        {{#each bindings}}
-                            <li class="bso-tag {{typeClass.value}}"><semantic-link uri="{{subject.value}}"></semantic-link></li>
-                        {{/each}}
-                    </ul>
-                </div>
-            </template>
-        </semantic-query>
+    </div>
+    <div class="bso-component main">
+        <div class="bso-component panel">
+            <h2><mp-label iri="[[> thisIri]]"></mp-label></h2>
+            <!-- Object Depicts -->
+            <semantic-query
+                query="SELECT DISTINCT ?subject ?type ?typeClass WHERE {
+                    [[> thisForQuery]] crm:P128_carries/crm:P138_represents ?subject .
+                    ?subject a ?type .
+                    BIND(STRAFTER(STR(?type), 'search/') as ?typeClass)
+                    VALUES(?type) {
+                        (search:Person)
+                        (search:Place)
+                        (search:Type)
+                    }
+                }"
+                template="{{> template}}">
+                <template id="template">
+                    <div class="bso-component field-visualisation">
+                        <span class="bso-component label">[[i18n "depicts" bundle="bso"]]</span>
+                        <ul class="bso-component tags">
+                            {{#each bindings}}
+                                <li class="bso-tag {{typeClass.value}}"><semantic-link uri="{{subject.value}}"></semantic-link></li>
+                            {{/each}}
+                        </ul>
+                    </div>
+                </template>
+            </semantic-query>
 
-        <!-- Dates -->
-        <semantic-query
-            query="SELECT DISTINCT ?subject ?event ?eventType WHERE {
-                [[> thisForQuery]] crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by) ?event .
-                ?event crm:P4_has_time-span ?subject .
-                ?event a ?eventType .
-            }"
-            template="{{> template}}">>
-            <template id="template">
-                <div class="bso-component field-visualisation">
-                    <span class="bso-component label">[[i18n "dates" bundle="bso"]]</span>
-                    <table>
-                        {{#each bindings}}
-                        <tr>
-                            <td><semantic-link iri="{{subject.value}}"></semantic-link></td>
-                            <td><mp-label iri="{{eventType.value}}"></mp-label></td>
-                        </tr>
-                        {{/each}}
-                    </table>
-                </div>
-            </template>
-        </semantic-query>
-
-        <!-- Persons -->
-        <semantic-query
-            query="SELECT DISTINCT ?subject ?role WHERE {
-                {
+            <!-- Dates -->
+            <semantic-query
+                query="SELECT DISTINCT ?subject ?event ?eventType WHERE {
                     [[> thisForQuery]] crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by) ?event .
-                } UNION 
-                {
-                    [[> thisForQuery]] (crm:P128_carries/crm:P94i_was_created_by) ?event .
-                }
-                {
-                    ?event crm:P14_carried_out_by ?subject .
-                    OPTIONAL {
+                    ?event crm:P4_has_time-span ?subject .
+                    ?event a ?eventType .
+                }"
+                template="{{> template}}">>
+                <template id="template">
+                    <div class="bso-component field-visualisation">
+                        <span class="bso-component label">[[i18n "dates" bundle="bso"]]</span>
+                        <table>
+                            {{#each bindings}}
+                            <tr>
+                                <td><semantic-link iri="{{subject.value}}"></semantic-link></td>
+                                <td><mp-label iri="{{eventType.value}}"></mp-label></td>
+                            </tr>
+                            {{/each}}
+                        </table>
+                    </div>
+                </template>
+            </semantic-query>
+
+            <!-- Persons -->
+            <semantic-query
+                query="SELECT DISTINCT ?subject ?role WHERE {
+                    {
+                        [[> thisForQuery]] crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by) ?event .
+                    } UNION 
+                    {
+                        [[> thisForQuery]] (crm:P128_carries/crm:P94i_was_created_by) ?event .
+                    }
+                    {
+                        ?event crm:P14_carried_out_by ?subject .
+                        OPTIONAL {
+                            ?event crm:P9_consists_of ?subevent .
+                            ?subevent crm:P14_carried_out_by ?subject .
+                            OPTIONAL {
+                                ?subevent crm:P2_has_type ?role .
+                            }
+                        }
+                    } UNION {
                         ?event crm:P9_consists_of ?subevent .
                         ?subevent crm:P14_carried_out_by ?subject .
                         OPTIONAL {
                             ?subevent crm:P2_has_type ?role .
                         }
                     }
-                } UNION {
-                    ?event crm:P9_consists_of ?subevent .
-                    ?subevent crm:P14_carried_out_by ?subject .
+                }"
+                template="{{> template}}">>
+                <template id="template">
+                    <div class="bso-component field-visualisation">
+                        <span class="bso-component label">[[i18n "persons" bundle="bso"]]</span>
+                        <table>
+                            {{#each bindings}}
+                            <tr>
+                                <td>
+                                    <ul class="bso-component tags">
+                                            <li class="bso-tag Person"><semantic-link uri="{{subject.value}}"></semantic-link></li>
+                                    </ul>
+                                </td>
+                                <td><mp-label iri="{{role.value}}"></mp-label></td>
+                            </tr>
+                            {{/each}}
+                        </table>
+                    </div>
+                </template>
+            </semantic-query>
+        </div>
+        <div class="bso-component separator panel">
+            <h3>[[i18n "customData" bundle="bso"]]</h3>
+            <semantic-table
+                query="SELECT ?proposition ?subject ?type ?container ?parentContainer WHERE {
+                    ?proposition a crminf:I4_Proposition_Set ;
+                        crm:P67_refers_to [[> thisForQuery]] ;
+                        crm:P129_is_about ?subject .
+                    ?subject a ?type .
+                    BIND(URI(STRBEFORE(STR(?proposition), '/context')) as ?container)
+                    ?parentContainer ldp:contains ?container .
+                }"
+                column-configuration='[{
+                    "displayName": "[[i18n "type" bundle="bso"]]",
+                    "cellTemplate": "<mp-label iri=\"{{type.value}}\"></mp-label>"
+                },
+                {
+                    "displayName": "[[i18n "view" bundle="bso"]]",
+                    "cellTemplate": "<semantic-link iri=\"http://www.metaphacts.com/resource/assets/NamedGraph\" urlqueryparam-view=\"graph\" urlqueryparam-graph=\"{{proposition.value}}\">[[i18n "view" bundle="bso"]]</semantic-link>"
+                },
+                {
+                    "displayName": "[[i18n "delete" bundle="bso"]]",
+                    "cellTemplate": "<semantic-link iri=\"page:deleteContainerFromParent\" urlqueryparam-container=\"{{container.value}}\" urlqueryparam-parent=\"{{parentContainer.value}}\" urlqueryparam-back=\"[[>thisIri]]\">[[i18n "delete" bundle="bso"]]</semantic-link>"
+                }]'
+            ></semantic-table>
+            <semantic-link
+                iri="page:addDataForObject"
+                urlqueryparam-objectiri="[[#if objectiri]][[objectiri]][[else]][[urlParam "objectiri"]][[/if]]"
+            ><button type="button" class="btn btn-primary btn-s">[[i18n "addData" bundle="bso"]]</button></semantic-link>
+        </div>
+
+        <div class="bso-component separator panel">
+
+            [[> partial:fieldsTable iri=objectiri param="objectiri" ]]
+
+            <semantic-query
+                query="SELECT DISTINCT ?subject ?actor (GROUP_CONCAT(?creation_type_label; SEPARATOR=', ') as ?creation_type_labels) WHERE {
+                    BIND([[> thisForQuery ]] as $subject)
+                    ?subject (crm:P128_carries/crm:P94i_was_created_by) ?creation.
+                    ?creation crm:P9_consists_of ?subcreation.
+                    ?subcreation crm:P14_carried_out_by ?actor;
+                    crm:P2_has_type ?creation_type .
                     OPTIONAL {
-                        ?subevent crm:P2_has_type ?role .
+                        ?creation_type rdfs:label ?creation_type_label_original .
                     }
-                }
-            }"
-            template="{{> template}}">>
-            <template id="template">
-                <div class="bso-component field-visualisation">
-                    <span class="bso-component label">[[i18n "persons" bundle="bso"]]</span>
-                    <table>
+                    BIND(IF(!BOUND(?creation_type_label_original), STRAFTER(STR(?creation_type), 'https://resource.swissartresearch.net/'), ?creation_type_label_original) as ?creation_type_label)
+                } GROUP BY ?subject ?actor"
+                template="{{> template}}"
+            >
+                <template id="template">
+                    <dl>
+                        <dt>Persons involved in creation</dt>
                         {{#each bindings}}
-                        <tr>
-                            <td>
-                                <ul class="bso-component tags">
-                                        <li class="bso-tag Person"><semantic-link uri="{{subject.value}}"></semantic-link></li>
-                                </ul>
-                            </td>
-                            <td><mp-label iri="{{role.value}}"></mp-label></td>
-                        </tr>
+                            <dd><semantic-link iri="{{ actor.value }}"></semantic-link> ({{ creation_type_labels.value}})</dd>
                         {{/each}}
-                    </table>
-                </div>
-            </template>
-        </semantic-query>
-    </bs-col>
-</bs-row>
+                    </dl>
+                </template>
+            </semantic-query>
 
-<bs-row>
-
-    <bs-col md-offset="4" md="8" class="bso-component separator panel">
-        <h3>[[i18n "customData" bundle="bso"]]</h3>
-        <semantic-table
-            query="SELECT ?proposition ?subject ?type ?container ?parentContainer WHERE {
-                ?proposition a crminf:I4_Proposition_Set ;
-                    crm:P67_refers_to [[> thisForQuery]] ;
-                    crm:P129_is_about ?subject .
-                ?subject a ?type .
-                BIND(URI(STRBEFORE(STR(?proposition), '/context')) as ?container)
-                ?parentContainer ldp:contains ?container .
-            }"
-            column-configuration='[{
-                "displayName": "[[i18n "type" bundle="bso"]]",
-                "cellTemplate": "<mp-label iri=\"{{type.value}}\"></mp-label>"
-            },
-            {
-                "displayName": "[[i18n "view" bundle="bso"]]",
-                "cellTemplate": "<semantic-link iri=\"http://www.metaphacts.com/resource/assets/NamedGraph\" urlqueryparam-view=\"graph\" urlqueryparam-graph=\"{{proposition.value}}\">[[i18n "view" bundle="bso"]]</semantic-link>"
-            },
-            {
-                "displayName": "[[i18n "delete" bundle="bso"]]",
-                "cellTemplate": "<semantic-link iri=\"page:deleteContainerFromParent\" urlqueryparam-container=\"{{container.value}}\" urlqueryparam-parent=\"{{parentContainer.value}}\" urlqueryparam-back=\"[[>thisIri]]\">[[i18n "delete" bundle="bso"]]</semantic-link>"
-            }]'
-        ></semantic-table>
-        <semantic-link
-            iri="page:addDataForObject"
-            urlqueryparam-objectiri="[[#if objectiri]][[objectiri]][[else]][[urlParam "objectiri"]][[/if]]"
-        ><button type="button" class="btn btn-primary btn-s">[[i18n "addData" bundle="bso"]]</button></semantic-link>
-    </bs-col>
-    
-</bs-row>
-
-<bs-row>
-
-    <bs-col md-offset="4" md="8" class="bso-component separator panel">
-
-        [[> partial:fieldsTable iri=objectiri param="objectiri" ]]
-
-        <semantic-query
-            query="SELECT DISTINCT ?subject ?actor (GROUP_CONCAT(?creation_type_label; SEPARATOR=', ') as ?creation_type_labels) WHERE {
-                BIND([[> thisForQuery ]] as $subject)
-                ?subject (crm:P128_carries/crm:P94i_was_created_by) ?creation.
-                ?creation crm:P9_consists_of ?subcreation.
-                ?subcreation crm:P14_carried_out_by ?actor;
-                crm:P2_has_type ?creation_type .
-                OPTIONAL {
+            <semantic-query
+                query="SELECT DISTINCT ?subject ?actor (GROUP_CONCAT(?creation_type_label; SEPARATOR=', ') as ?creation_type_labels) WHERE {
+                    BIND([[> thisForQuery ]] as $subject)
+                    ?subject crm:P108i_was_produced_by ?creation.
+                    ?creation crm:P9_consists_of ?subcreation.
+                    ?subcreation crm:P14_carried_out_by ?actor;
+                    crm:P2_has_type ?creation_type.
                     ?creation_type rdfs:label ?creation_type_label_original .
-                }
-                BIND(IF(!BOUND(?creation_type_label_original), STRAFTER(STR(?creation_type), 'https://resource.swissartresearch.net/'), ?creation_type_label_original) as ?creation_type_label)
-            } GROUP BY ?subject ?actor"
-            template="{{> template}}"
-        >
-            <template id="template">
-                <dl>
-                    <dt>Persons involved in creation</dt>
-                    {{#each bindings}}
-                        <dd><semantic-link iri="{{ actor.value }}"></semantic-link> ({{ creation_type_labels.value}})</dd>
-                    {{/each}}
-                </dl>
-            </template>
-        </semantic-query>
+                    BIND(IF(!BOUND(?creation_type_label_original), STRAFTER(STR(?creation_type), 'https://resource.swissartresearch.net/'), ?creation_type_label_original) as ?creation_type_label)
+                } GROUP BY ?subject ?actor"
+                template="{{> template}}"
+            >
+                <template id="template">
+                    <dl>
+                        <dt>Persons involved in production</dt>
+                        {{#each bindings}}
+                            <dd><semantic-link iri="{{ actor.value }}"></semantic-link> ({{ creation_type_labels.value}})</dd>
+                        {{/each}}
+                    </dl>
+                </template>
+            </semantic-query>
+        </div>
+    </div>
+</div>
 
-        <semantic-query
-            query="SELECT DISTINCT ?subject ?actor (GROUP_CONCAT(?creation_type_label; SEPARATOR=', ') as ?creation_type_labels) WHERE {
-                BIND([[> thisForQuery ]] as $subject)
-                ?subject crm:P108i_was_produced_by ?creation.
-                ?creation crm:P9_consists_of ?subcreation.
-                ?subcreation crm:P14_carried_out_by ?actor;
-                crm:P2_has_type ?creation_type.
-                ?creation_type rdfs:label ?creation_type_label_original .
-                BIND(IF(!BOUND(?creation_type_label_original), STRAFTER(STR(?creation_type), 'https://resource.swissartresearch.net/'), ?creation_type_label_original) as ?creation_type_label)
-            } GROUP BY ?subject ?actor"
-            template="{{> template}}"
-        >
-            <template id="template">
-                <dl>
-                    <dt>Persons involved in production</dt>
-                    {{#each bindings}}
-                        <dd><semantic-link iri="{{ actor.value }}"></semantic-link> ({{ creation_type_labels.value}})</dd>
-                    {{/each}}
-                </dl>
-            </template>
-        </semantic-query>
-<!-- 
-        <semantic-link
-            iri="[[#if objectiri]][[objectiri]][[else]][[ urlParam 'objectiri' ]][[/if]]"
-        ><button type="button" class="btn btn-primary btn-xs">View raw</button></semantic-link>
-
-        [[#if objectiri]]
-            [[> partial:buttonEditObjectMeta iri=objectiri]]
-        [[else]]
-            [[> partial:buttonEditObjectMeta iri=(urlParam 'objectiri')]]
-        [[/if]] -->
-    </bs-col>
-</bs-row>
-
-[[> partial:contentFooter]]
 [[> partial:pageFooter]]

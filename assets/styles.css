@@ -38,9 +38,6 @@ h3 {
 .gap {
   margin-bottom: 2rem;
 }
-.imageList a {
-  font-size: 1.3em;
-}
 .navbar {
   background-color: #fff;
   color: #111;
@@ -182,6 +179,9 @@ ol.page-breadcrumb {
 }
 .bso-component.label {
   font-weight: bold;
+}
+.bso-component.main {
+  flex: 2;
 }
 .bso-component.mini-thumbnail {
   border: 1px solid #fbfbfb;
