@@ -19,6 +19,9 @@
 
 @padding-panel: 5px;
 
+@bs-breakpoint-sm: 576px;
+@bs-breakpoint-md: 768px;
+
 html, body {
     font-family: 'HK Grotesk', 'Helvetica Neue', Helvetica, sans-serif;
     background-color: @col-bg;
@@ -222,9 +225,6 @@ ol.page-breadcrumb {
             img {
                 max-width: 100%;
             }
-            &.small {
-                max-width: 23rem;
-            }
         }
         .caption {
             text-align: right;
@@ -304,6 +304,10 @@ ol.page-breadcrumb {
             
             border-top: 20px solid @col-white;
         }
+    }
+
+    &.sidebar {
+        max-width: @bs-breakpoint-sm;
     }
 
     &.simple-search {
