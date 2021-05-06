@@ -38,9 +38,6 @@ h3 {
 .gap {
   margin-bottom: 2rem;
 }
-.imageList a {
-  font-size: 1.3em;
-}
 .navbar {
   background-color: #fff;
   color: #111;
@@ -173,15 +170,15 @@ ol.page-breadcrumb {
 .bso-component.image-display .card img {
   max-width: 100%;
 }
-.bso-component.image-display .card.small {
-  max-width: 23rem;
-}
 .bso-component.image-display .caption {
   text-align: right;
   padding: 0.5rem;
 }
 .bso-component.label {
   font-weight: bold;
+}
+.bso-component.main {
+  flex: 2;
 }
 .bso-component.mini-thumbnail {
   border: 1px solid #fbfbfb;
@@ -242,6 +239,9 @@ ol.page-breadcrumb {
   border-left: 40px solid transparent;
   border-right: 40px solid transparent;
   border-top: 20px solid #fff;
+}
+.bso-component.sidebar {
+  max-width: 576px;
 }
 .bso-component.simple-search {
   padding: 4rem 0;
