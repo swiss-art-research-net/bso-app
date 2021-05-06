@@ -130,50 +130,29 @@
             </semantic-query>
 
             <!-- Objects created -->
-            <semantic-if 
-                query='ASK { ?event crm:P14_carried_out_by [[> thisForQuery]] }'
-                then='{{> template}}'
-            >
-                <template id="template">
-                    <div class="bso-component field-visualisation">
-                        <span class="bso-component label">[[i18n "works" bundle="bso"]]</span>
-                        <div class="bso-component card-container">
-                            <semantic-table
-                            query="SELECT DISTINCT ?subject ?type ?typeClass WHERE {
-                                ?subject a search:Object .
-                                {
-                                    ?subject crm:P108i_was_produced_by/crm:P9_consists_of?/crm:P14_carried_out_by [[> thisForQuery]] .
-                                } UNION {
-                                    ?subject crm:P128_carries/crm:P94i_was_created_by/crm:P9_consists_of?/crm:P14_carried_out_by [[> thisForQuery]] .
-                                }
-                            }"
-                            tuple-template="{{> partial:cardObject}}">
-                            </semantic-table>
-                        </div>
-                    </div>
-                </template>
-            </semantic-if>
+            [[#> objectsTable condition='?object a search:Object; (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P9_consists_of?/crm:P14_carried_out_by $subject' label='works']]
+
+                {
+                    ?subject crm:P108i_was_produced_by/crm:P9_consists_of?/crm:P14_carried_out_by [[> thisForQuery]] .
+                } UNION {
+                    ?subject crm:P128_carries/crm:P94i_was_created_by/crm:P9_consists_of?/crm:P14_carried_out_by [[> thisForQuery]] .
+                }
+                
+            [[/ objectsTable]]
 
             <!-- Depicted -->
-            <semantic-if 
-                query='ASK { ?thing crm:P138_represents [[> thisForQuery]] }'
-                then='{{> template}}'
-            >
-                <template id="template">
-                    <div class="bso-component field-visualisation">
-                        <span class="bso-component label">[[i18n "depictedBy" bundle="bso"]]</span>
-                        <div class="bso-component card-container">
-                            <semantic-table
-                            query="SELECT DISTINCT ?subject ?type ?typeClass WHERE {
-                                ?subject a search:Object ;
-                                    crm:P128_carries/crm:P138_represents [[> thisForQuery]] .
-                            }"
-                            tuple-template="{{> partial:cardObject}}">
-                            </semantic-table>
-                        </div>
-                    </div>
-                </template>
-            </semantic-if>
+            [[#> objectsTable condition='?thing crm:P138_represents $subject' label='depictedBy' ]]
+
+                ?subject crm:P128_carries/crm:P138_represents [[> thisForQuery]] .
+            
+            [[/ objectsTable]]
+
+            <!-- Objects owned -->
+            [[#> objectsTable condition='?object a search:Object; crm:P109_has_former_or_current_curator $subject' label='worksHeld']]
+                
+                ?subject crm:P109_has_former_or_current_curator [[> thisForQuery]] .
+                
+            [[/ objectsTable]]
         </div>
         <div class="bso-component separator panel">
             <h3>[[i18n "customData" bundle="bso"]]</h3>
@@ -257,5 +236,28 @@
         </div>
     </div>
 </div>
+
+[[#*inline "objectsTable"]]
+<semantic-if 
+query='ASK { BIND([[> thisForQuery]] as $subject) . [[condition]] }'
+then='{{> template}}'
+>
+<template id="template">
+    <div class="bso-component field-visualisation">
+        <span class="bso-component label">[[i18n label bundle="bso"]]</span>
+        <div class="bso-component card-container">
+            <semantic-table
+            query="SELECT DISTINCT ?subject ?type ?typeClass WHERE {
+                ?subject a search:Object .
+                [[> @partial-block]]
+            }"
+            tuple-template="{{> partial:cardObject}}">
+            </semantic-table>
+        </div>
+    </div>
+</template>
+</semantic-if>
+
+[[/inline]]
 
 [[> partial:pageFooter]]
