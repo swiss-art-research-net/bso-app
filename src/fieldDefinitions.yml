@@ -66,6 +66,7 @@ fields:
       datatype: xsd:anyURI
       domain: crm:E39_Actor
       range: crm:E22_Man-Made_Object
+      display: hidden
       materialise: True
       queries:
         - select: 'SELECT ?value ?label WHERE {
