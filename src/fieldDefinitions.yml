@@ -206,6 +206,17 @@ fields:
           BIND(URI(STRBEFORE(STR($subject), "/proposition")) as ?propositionSubject)
         }'
 
+    - id: L54_is_same-as
+      label: Same as
+      datatype: xsd:anyURI
+      queries: 
+        - insert: 'INSERT {
+            $subject crmdig:L54_is_same-as ?value .
+          } WHERE {}'
+        - select: 'SELECT ?value WHERE {
+            $subject crmdig:L54_is_same-as ?value .
+            }'
+
     - id: subproduction_type
       label: Type of production
       minOccurs: 1

@@ -60,6 +60,24 @@
                 </template>
             </semantic-query>
 
+            <!-- Same as / External Links -->
+            <semantic-query
+                query="SELECT DISTINCT ?subject WHERE {
+                    [[> thisForQuery]] crmdig:L54_is_same-as ?subject .
+                }"
+                template="{{> template}}">
+                <template id="template">
+                    <div class="bso-component field-visualisation">
+                        <span class="bso-component label">[[i18n "externalLinks" bundle="bso"]]</span>
+                        <ul class="bso-component tags">
+                            {{#each bindings}}
+                                <li class="bso-tag"><a href="{{subject.value}}" target="_blank"><mp-label iri="{{subject.value}}"></mp-label></a></li>
+                            {{/each}}
+                        </ul>
+                    </div>
+                </template>
+            </semantic-query>
+
             <!-- Dates -->
             <semantic-query
                 query="SELECT DISTINCT ?subject ?event ?eventType WHERE {
