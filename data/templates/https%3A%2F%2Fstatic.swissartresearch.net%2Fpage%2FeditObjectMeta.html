@@ -5,7 +5,7 @@
         <bs-col class="image" sm="2">
             <mp-resource-thumbnail iri="[[urlParam "objectiri"]]">
                 <mp-resource-thumbnail-fallback>
-                    <span>Image not found!</span>
+                    <span>[[i18n "imageNotFound" bundle="bso"]]</span>
                 </mp-resource-thumbnail-fallback>
             </mp-resource-thumbnail>
         </bs-col>
@@ -46,8 +46,8 @@
         <semantic-form-select-input for="P2_has_type"></semantic-form-select-input>
     </semantic-form-composite-input>
 
-    <button name="submit" class="btn btn-primary">Save</button>
-    <button name="reset" class="btn btn-secondary">Reset</button>
+    <button name="submit" class="btn btn-primary">[[i18n "save" bundle="bso"]]</button>
+    <button name="reset" class="btn btn-secondary">[[i18n "reset" bundle="bso"]]</button>
 
 </semantic-form>
 

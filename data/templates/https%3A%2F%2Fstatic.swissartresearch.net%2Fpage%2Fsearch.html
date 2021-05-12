@@ -1,10 +1,10 @@
 [[> partial:pageHeader]]
 [[> partial:contentHeader]]
 
-<h2 class="gap">Search</h2>
+<h2 class="gap">[[i18n "search" bundle="bso"]]</h2>
 
 <div>
-  <semantic-link iri="page:browseImages">Go to browse</semantic-link>
+  <semantic-link iri="page:browseImages">[[i18n "browseImages" bundle="bso"]]</semantic-link>
 </div>
 
 [[#> partial:baseSearch]]
@@ -31,7 +31,7 @@
         LIMIT 30
       ",
       "suggestionTupleTemplate": "<span title=\"{{label.value}}\">{{label.value}}</span>",
-      "noSuggestionsTemplate": "<div class=\"suggestion-no-matches\">no matches found</div>"
+      "noSuggestionsTemplate": "<div class=\"suggestion-no-matches\">[[i18n "noMatchesFound" bundle="bso"]]</div>"
     }'
   ></semantic-search-query-builder>
 [[/ partial:baseSearch]]
