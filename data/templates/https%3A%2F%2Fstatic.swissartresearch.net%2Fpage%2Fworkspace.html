@@ -79,7 +79,7 @@
               }",
             "valueSetPattern": "SELECT ?value WHERE {
               BIND(<{{subject.value}}> as $subject)
-              $subject rdfs:label ?value .
+              $subject rdfs:label|(crmdig:L54_is_same-as/gndo:preferredName) ?value .
             }"
           }]'
       >
