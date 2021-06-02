@@ -101,6 +101,29 @@
                 </template>
             </semantic-query>
 
+            <!-- Contained in -->
+            <semantic-query
+                query="SELECT DISTINCT ?subject ?type ?typeClass WHERE {
+                    [[> thisForQuery]] crm:P46i_forms_part_of ?subject .
+                    ?subject a ?type .
+                    BIND(STRAFTER(STR(?type), 'search/') as ?typeClass)
+                    VALUES(?type) {
+                        (search:Object)
+                    }
+                }"
+                template="{{> template}}">
+                <template id="template">
+                    <div class="bso-component field-visualisation">
+                        <span class="bso-component label">[[i18n "containedIn" bundle="bso"]]</span>
+                        <ul class="bso-component tags">
+                            {{#each bindings}}
+                                <li class="bso-tag {{typeClass.value}}"><semantic-link uri="{{subject.value}}" urlqueryparam-view="page"></semantic-link></li>
+                            {{/each}}
+                        </ul>
+                    </div>
+                </template>
+            </semantic-query>
+
             <!-- Persons involved in creation-->
             <semantic-query
                 query="SELECT DISTINCT ?subject ?role WHERE {
@@ -155,6 +178,13 @@
                 } UNION {
                     ?subject crm:P128_carries/crm:P94i_was_created_by/crm:P9_consists_of?/crm:P14_carried_out_by [[> thisForQuery]] .
                 }
+                
+            [[/ objectsTable]]
+
+            <!-- Objects forming part of -->
+            [[#> objectsTable condition='?object a search:Object; crm:P46i_forms_part_of $subject' label='contains']]
+
+                ?subject crm:P46i_forms_part_of [[> thisForQuery]]
                 
             [[/ objectsTable]]
 
