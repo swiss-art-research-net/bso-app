@@ -7,6 +7,14 @@
     <[[> thisIri]]>
 [[/inline]]
 
+[[#if (urlParam "subjectiri")]]
+<style>
+    nav.bso-component.form-selector.nav.nav-tabs {
+        display:none;
+    }
+</style>
+[[/if]]
+
 <bs-row>
     <bs-col md="4" class="bso-component separator image-display">
 
@@ -25,8 +33,12 @@
 
     <bs-col md="8" class="bso-component panel">
 
-       <h2>[[i18n "addNewData" bundle="bso"]]</h2>
-       <p>[[i18n "addDataAbout" bundle="bso"]]</p>
+       <h2>[[#if (urlParam "subjectiri")]][[i18n "editData" bundle="bso"]][[else]][[i18n "addNewData" bundle="bso"]][[/if]]</h2>
+
+        [[#if (urlParam "subjectiri")]]
+        [[else]]
+            <p>[[i18n "addDataAbout" bundle="bso"]]</p>
+        [[/if]]
         <bs-tabs class="bso-component form-selector" default-active-key="[[urlParam "form"]]">
             <bs-tab event-key="object_subproduction" title="[[i18n "production" bundle="bso"]]">
                 <div class="bso-component separator next-step">
@@ -40,7 +52,7 @@
                             urlqueryparam-view='page'
                         >
                             <semantic-form-hidden-input for="I4_Proposition_Set_about_Subject" replace-value="/container/context"></semantic-form-hidden-input>
-                            <semantic-form-hidden-input for="container_form_id" replace-value="[[ resolvePrefix "page:addDataForObject"]]#object_subproduction"></semantic-form-hidden-input>
+                            <semantic-form-hidden-input for="container_form_id" replace-value="[[ resolvePrefix "page:addEditDataForObject"]]#object_subproduction"></semantic-form-hidden-input>
 
                             <semantic-form-hidden-input for="P9_consists_of-reversed" replace-value="[[> thisIri]]/production"></semantic-form-hidden-input>
                             <semantic-form-select-input for="subproduction_type"></semantic-form-select-input>
@@ -52,7 +64,7 @@
                     </div>
                 </div>
             </bs-tab>
-            <bs-tab event-key="object_work_depicts" title="[[i18n "depicts" bundle="bso"]]">
+            <bs-tab event-key="object_work_depicts" title="[[i18n "depicts" bundle="bso"]]" >
                 <div class="bso-component separator next-step">
                     <div class="bso-component form-content">
                         [[i18n "depicts" bundle="bso"]]
@@ -64,7 +76,7 @@
                             urlqueryparam-view='page'
                         >
                             <semantic-form-hidden-input for="I4_Proposition_Set_about_Subject" replace-value="/container/context"></semantic-form-hidden-input>
-                            <semantic-form-hidden-input for="container_form_id" replace-value="[[ resolvePrefix "page:addDataForObject"]]#object_work_depicts"></semantic-form-hidden-input>
+                            <semantic-form-hidden-input for="container_form_id" replace-value="[[ resolvePrefix "page:addEditDataForObject"]]#object_work_depicts"></semantic-form-hidden-input>
 
                             <semantic-form-hidden-input for="type" replace-value="[[resolvePrefix "crm:E13_Attribute_Assignment"]]"></semantic-form-hidden-input>
                             <semantic-form-hidden-input for="P140_assigned_attribute_to" replace-value="[[>thisIri]]/work"></semantic-form-hidden-input>
