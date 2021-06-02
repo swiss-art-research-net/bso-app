@@ -134,8 +134,12 @@ fields:
               (search:Type "Type")
             }
             ?value a ?type ;
-              rdfs:label ?label .
-            ?label bds:search ?__token__ .
+              rdfs:label ?search_label .
+            OPTIONAL {
+              ?value skos:prefLabel ?prefLabel
+            }
+            BIND(IF(BOUND(?prefLabel), ?prefLabel, ?search_label) as ?label)
+            ?search_label bds:search ?__token__ .
           } ORDER BY ?label
           LIMIT 10'
         - valueSet: 'SELECT ?value ?label ?type ?typeLabel WHERE {
@@ -174,8 +178,12 @@ fields:
               (search:Type "Type")
             }
             ?value a ?type ;
-              rdfs:label ?label .
-            ?label bds:search ?__token__ .
+              rdfs:label ?search_label .
+            OPTIONAL {
+              ?value skos:prefLabel ?prefLabel
+            }
+            BIND(IF(BOUND(?prefLabel), ?prefLabel, ?search_label) as ?label)
+            ?search_label bds:search ?__token__ .
           } ORDER BY ?label
           LIMIT 10'
         - valueSet: 'SELECT ?value ?label ?type ?typeLabel WHERE {
