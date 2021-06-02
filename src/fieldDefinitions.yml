@@ -130,6 +130,45 @@ fields:
           } ORDER BY ?label
           LIMIT 100'
 
+    - id: object_depicts_as_P141_to_work
+      label: Depicts
+      description: The entity that is depicted by the object
+      datatype: xsd:anyURI
+      domain: crm:E13_Attribute_Assignment
+      range: crm:E1_CRM_Entity
+      queries:
+        - select: 'SELECT DISTINCT ?value WHERE {
+            $subject crm:P141_assigned ?value .
+          }'
+        - insert: 'INSERT {
+            $subject crm:P141_assigned $value .
+            ?work crm:P138_represents $value .
+          } WHERE {
+            BIND(URI(CONCAT(STRBEFORE(STR($subject), "/proposition"), "/work")) as ?work)
+          }'
+        - autosuggestion: 'PREFIX bds: <http://www.bigdata.com/rdf/search#>
+          SELECT DISTINCT ?value ?label ?type ?typeLabel WHERE {
+            VALUES(?type ?typeLabel) {
+              (search:Person "Person")
+              (search:Place "Place")
+              (search:Type "Type")
+            }
+            ?value a ?type ;
+              rdfs:label ?label .
+            ?label bds:search ?__token__ .
+          } ORDER BY ?label
+          LIMIT 10'
+        - valueSet: 'SELECT ?value ?label ?type ?typeLabel WHERE {
+            VALUES(?type ?typeLabel) {
+              (search:Person "Person")
+              (search:Place "Place")
+              (search:Type "Type")
+            }
+            ?value a ?type ;
+              rdfs:label ?label .
+          } ORDER BY ?label
+          LIMIT 100'
+
     - id: object_subcreations
       label: Creation Steps
       descriptions: The sub-creations for an object
@@ -242,6 +281,17 @@ fields:
           }
         }'
 
+    - id: type
+      label: The RDF Data Type
+      datatype: xsd:anyURI
+      queries:
+        - insert: 'INSERT {
+            $subject a $value .
+          } WHERE { }'
+        - select: 'SELECT ?value WHERE {
+            $subject a ?value .
+          }' 
+
     - id: P2_has_type
       label: Type
       datatype: xsd:anyURI
@@ -301,3 +351,17 @@ fields:
                 rdfs:label ?label .
             } ORDER BY ?label
             LIMIT 100'
+    
+    - id: P140_assigned_attribute_to
+      label: Assigned attribute to
+      description: The entity to which an attribute was assigned
+      datatype: xsd:anyURI
+      minOccurs: 0
+      maxOccurs: 1
+      queries:
+        - select: 'SELECT ?value WHERE {
+            $subject crm:P140_assigned_attribute_to ?value .
+          }'
+        - insert: 'INSERT {
+            $subject crm:P140_assigned_attribute_to ?value .
+          } WHERE {}'

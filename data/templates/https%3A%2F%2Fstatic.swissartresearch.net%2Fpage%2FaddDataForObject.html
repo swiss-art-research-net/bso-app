@@ -7,6 +7,7 @@
     <[[> thisIri]]>
 [[/inline]]
 
+[[#*inline "newUUID"]][[singleValueFromSelect "SELECT ?value WHERE { BIND(STRAFTER(STR(UUID()),'uuid:') as ?value)}"]][[/inline]]
 <bs-row>
     <bs-col md="4" class="bso-component separator image-display">
 
@@ -38,8 +39,9 @@
                             post-action='[[> thisIri]]'
                             urlqueryparam-view='page'
                         >
-                            <semantic-form-hidden-input for="P9_consists_of-reversed" default-value="[[> thisIri]]/production"></semantic-form-hidden-input>
                             <semantic-form-hidden-input for="I4_Proposition_Set_about_Subject" default-value="/container/context"></semantic-form-hidden-input>
+
+                            <semantic-form-hidden-input for="P9_consists_of-reversed" default-value="[[> thisIri]]/production"></semantic-form-hidden-input>
                             <semantic-form-select-input for="subproduction_type"></semantic-form-select-input>
                             <div>Note: once we have the roles we could determine the subproduction type based on the role (e.g. colouring->E11, engraving->E12)</div>
                             <semantic-form-autocomplete-input for="P14_carried_out_by"></semantic-form-autocomplete-input>
@@ -49,10 +51,24 @@
                     </div>
                 </div>
             </bs-tab>
-            <bs-tab event-key="creation" title="[[i18n "creation" bundle="bso"]]">
+            <bs-tab event-key="depicts" title="[[i18n "depicts" bundle="bso"]]">
                 <div class="bso-component separator next-step">
                     <div class="bso-component form-content">
-                        [[i18n "creation" bundle="bso"]]
+                        [[i18n "depicts" bundle="bso"]]
+                        <semantic-form
+                            new-subject-template="[[>thisIri]]/proposition/[[>newUUID]]"
+                            fields='[[> partial:fieldDefinitions ]]'
+                            post-action='[[> thisIri]]'
+                            urlqueryparam-view='page'
+                        >
+                            <semantic-form-hidden-input for="I4_Proposition_Set_about_Subject" default-value="/container/context"></semantic-form-hidden-input>
+
+                            <semantic-form-hidden-input for="type" default-value="[[resolvePrefix "crm:E13_Attribute_Assignment"]]"></semantic-form-hidden-input>
+                            <semantic-form-hidden-input for="P140_assigned_attribute_to" default-value="[[>thisIri]]/work"></semantic-form-hidden-input>
+                            <semantic-form-autocomplete-input for="object_depicts_as_P141_to_work"></semantic-form-autocomplete-input>
+
+                            <button name="submit" class="btn btn-primary btn-md">[[i18n "save" bundle="bso"]]</button>
+                        </semantic-form>
                     </div>
                 </div>
             </bs-tab>

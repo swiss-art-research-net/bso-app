@@ -76,6 +76,21 @@
     },
 
     {
+        "id" : "object_depicts_as_P141_to_work",
+
+            "label": "Depicts",
+            "description" : "The entity that is depicted by the object",
+            "xsdDatatype" : "xsd:anyURI",
+            "domain" : "crm:E13_Attribute_Assignment",
+            "range" : "crm:E1_CRM_Entity",
+                "selectPattern" : "SELECT DISTINCT ?value WHERE { $subject crm:P141_assigned ?value . }",
+                "insertPattern" : "INSERT { $subject crm:P141_assigned $value . ?work crm:P138_represents $value . } WHERE { BIND(URI(CONCAT(STRBEFORE(STR($subject), \"/proposition\"), \"/work\")) as ?work) }",
+                "autosuggestionPattern" : "PREFIX bds: <http://www.bigdata.com/rdf/search#> SELECT DISTINCT ?value ?label ?type ?typeLabel WHERE { VALUES(?type ?typeLabel) { (search:Person \"Person\") (search:Place \"Place\") (search:Type \"Type\") } ?value a ?type ; rdfs:label ?label . ?label bds:search ?__token__ . } ORDER BY ?label LIMIT 10",
+                "valueSetPattern" : "SELECT ?value ?label ?type ?typeLabel WHERE { VALUES(?type ?typeLabel) { (search:Person \"Person\") (search:Place \"Place\") (search:Type \"Type\") } ?value a ?type ; rdfs:label ?label . } ORDER BY ?label LIMIT 100",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/object_depicts_as_P141_to_work"
+    },
+
+    {
         "id" : "object_subcreations",
 
             "label": "Creation Steps",
@@ -162,6 +177,16 @@
     },
 
     {
+        "id" : "type",
+
+            "label": "The RDF Data Type",
+            "xsdDatatype" : "xsd:anyURI",
+                "insertPattern" : "INSERT { $subject a $value . } WHERE { }",
+                "selectPattern" : "SELECT ?value WHERE { $subject a ?value . }",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/type"
+    },
+
+    {
         "id" : "P2_has_type",
 
             "label": "Type",
@@ -195,6 +220,18 @@
                 "autosuggestionPattern" : "PREFIX bds: <http://www.bigdata.com/rdf/search#> SELECT DISTINCT ?value ?label WHERE { ?value a search:Person ; rdfs:label ?label . ?label bds:search ?__token__ . } ORDER BY ?label LIMIT 10",
                 "valueSetPattern" : "SELECT ?value ?label  WHERE { ?value a search:Person ; rdfs:label ?label . } ORDER BY ?label LIMIT 100",
         "iri" : "https://platform.swissartresearch.net/instances/fields/P14_carried_out_by"
+    },
+
+    {
+        "id" : "P140_assigned_attribute_to",
+
+            "label": "Assigned attribute to",
+            "description" : "The entity to which an attribute was assigned",
+            "maxOccurs" : "1",
+            "xsdDatatype" : "xsd:anyURI",
+                "selectPattern" : "SELECT ?value WHERE { $subject crm:P140_assigned_attribute_to ?value . }",
+                "insertPattern" : "INSERT { $subject crm:P140_assigned_attribute_to ?value . } WHERE {}",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/P140_assigned_attribute_to"
     }
 
 ]
