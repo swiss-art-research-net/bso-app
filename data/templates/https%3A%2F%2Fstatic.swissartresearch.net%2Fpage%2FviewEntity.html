@@ -173,6 +173,7 @@
             [[/ objectsTable]]
         </div>
 
+        [[#if (hasPermission "api:ldp:*")]]
         <semantic-if query="ASK { [[> thisForQuery]] a search:Object .}" then="{{> template}}">
             <template id="template">
                 <div class="bso-component separator panel">
@@ -246,13 +247,13 @@
                         </template>
                     </semantic-table>
                     <semantic-link
-                        iri="page:addDataForObject"
+                        iri="page:addEditDataForObject"
                     urlqueryparam-objectiri="[[> thisIri]]"
                     ><button type="button" class="btn btn-primary btn-s">[[i18n "addData" bundle="bso"]]</button></semantic-link>
                 </div>
             </template>
         </semantic-if>
-
+        [[/if]]
 
         <div class="bso-component separator panel">
 
