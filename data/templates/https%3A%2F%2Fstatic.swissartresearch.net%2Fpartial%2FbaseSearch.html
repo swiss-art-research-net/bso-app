@@ -23,7 +23,6 @@ categories='{
 search-profile='{
     "categories": [
         {"iri": "<https://platform.swissartresearch.net/search/Object>", "label": "Object", "thumbnail": "../images/fcs/things.svg"},
-        {"iri": "<https://platform.swissartresearch.net/search/Person>", "label": "Person", "thumbnail": "../images/fcs/actors.svg"},
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E39_Actor>", "label": "Actor", "thumbnail": "../images/fcs/actors.svg"},
         {"iri": "<https://platform.swissartresearch.net/search/Place>", "label": "Place", "thumbnail": "../images/fcs/places.svg"},
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E53_Place>", "label": "Place", "thumbnail": "../images/fcs/places.svg"},
@@ -48,7 +47,7 @@ search-profile='{
       {
         "iri": "<https://platform.swissartresearch.net/Thing_by_Actor>",
         "hasDomain": "<https://platform.swissartresearch.net/search/Object>",
-        "hasRange": "<https://platform.swissartresearch.net/search/Person>",
+        "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E39_Actor>",
         "label": "[[i18n "by" bundle="bso"]]"
       },
       {
@@ -101,7 +100,7 @@ search-profile='{
       },
       {
         "iri": "<https://platform.swissartresearch.net/Actor_carried_out_creations_of_Type>",
-        "hasDomain": "<https://platform.swissartresearch.net/search/Person>",
+        "hasDomain": "<http://www.cidoc-crm.org/cidoc-crm/E39_Actor>",
         "hasRange": "<https://platform.swissartresearch.net/search/Type>",
         "label": "[[i18n "actedAs" bundle="bso"]]"
       },
@@ -260,7 +259,11 @@ relations='{
         <semantic-table 
           id="panel-result"
           prefetch-labels="false"
-          query="SELECT DISTINCT ?subject WHERE {} ORDER BY ?subject" 
+          query="SELECT DISTINCT ?subject ?label WHERE {
+            OPTIONAL {
+              ?subject skos:prefLabel ?label .
+            }
+          } ORDER BY ?label ?subject" 
           tuple-template='{{> gridTemplate}}'
           options='{"showFilter": false}'
         >
