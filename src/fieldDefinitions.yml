@@ -6,9 +6,28 @@ namespaces:
   crm: http://www.cidoc-crm.org/cidoc-crm/
   crminf: http://www.ics.forth.gr/isl/CRMinf/
   rdfs: http://www.w3.org/2000/01/rdf-schema#
+  prov: http://www.w3.org/ns/prov#
   search: https://platform.swissartresearch.net/search/
 
 fields:
+
+    - id: container_form_id
+      label: Form for creating the data in the container
+      description: The identifier of the form that created the data in the container
+      datatype: xsd:anyURI
+      minOccurs: 1
+      maxOccurs: 1
+      queries:
+        - insert: 'INSERT {
+            ?container prov:used $value .
+          } WHERE {
+            BIND(URI(CONCAT(STR($subject), "/container")) as ?container)
+          }'
+        - select: 'SELECT ?value WHERE {
+            BIND(URI(CONCAT(STR($subject), "/container")) as ?container)
+            ?container prov:used ?value .
+          }'
+
       
     - id: collection
       label: Collection
@@ -45,7 +64,7 @@ fields:
               crm:P70i_is_documented_in ?subject_meta . 
           }
         }'
- 
+
     - id: label
       label: Label
       description: A human-readable label for the entity
@@ -136,6 +155,7 @@ fields:
       datatype: xsd:anyURI
       domain: crm:E13_Attribute_Assignment
       range: crm:E1_CRM_Entity
+      minOccurs: 1
       queries:
         - select: 'SELECT DISTINCT ?value WHERE {
             $subject crm:P141_assigned ?value .
@@ -284,6 +304,7 @@ fields:
     - id: type
       label: The RDF Data Type
       datatype: xsd:anyURI
+      display: hidden
       queries:
         - insert: 'INSERT {
             $subject a $value .

@@ -18,3 +18,4 @@ search=https://platform.swissartresearch.net/search/
 sari=https://platform.swissartresearch.net/
 bds=http://www.bigdata.com/rdf/search#
 ldp=http://www.w3.org/ns/ldp#
+prov=http://www.w3.org/ns/prov#

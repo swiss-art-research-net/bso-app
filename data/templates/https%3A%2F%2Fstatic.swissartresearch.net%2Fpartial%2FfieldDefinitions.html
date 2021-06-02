@@ -1,5 +1,18 @@
 [
     {
+        "id" : "container_form_id",
+
+            "label": "Form for creating the data in the container",
+            "description" : "The identifier of the form that created the data in the container",
+            "minOccurs" : "1",
+            "maxOccurs" : "1",
+            "xsdDatatype" : "xsd:anyURI",
+                "insertPattern" : "INSERT { ?container prov:used $value . } WHERE { BIND(URI(CONCAT(STR($subject), \"/container\")) as ?container) }",
+                "selectPattern" : "SELECT ?value WHERE { BIND(URI(CONCAT(STR($subject), \"/container\")) as ?container) ?container prov:used ?value . }",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/container_form_id"
+    },
+
+    {
         "id" : "collection",
 
             "label": "Collection",
@@ -80,6 +93,7 @@
 
             "label": "Depicts",
             "description" : "The entity that is depicted by the object",
+            "minOccurs" : "1",
             "xsdDatatype" : "xsd:anyURI",
             "domain" : "crm:E13_Attribute_Assignment",
             "range" : "crm:E1_CRM_Entity",
@@ -180,6 +194,7 @@
         "id" : "type",
 
             "label": "The RDF Data Type",
+            "display" : "hidden",
             "xsdDatatype" : "xsd:anyURI",
                 "insertPattern" : "INSERT { $subject a $value . } WHERE { }",
                 "selectPattern" : "SELECT ?value WHERE { $subject a ?value . }",

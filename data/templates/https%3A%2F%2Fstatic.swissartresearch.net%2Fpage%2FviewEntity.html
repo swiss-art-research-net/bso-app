@@ -178,25 +178,46 @@
                 <div class="bso-component separator panel">
                     <h3>[[i18n "customData" bundle="bso"]]</h3>
                     <semantic-table
-                        query="SELECT ?proposition ?subject ?type ?container ?parentContainer WHERE {
+                        query="SELECT ?proposition ?subject ?type ?container ?parentContainer ?page ?form WHERE {
                             ?proposition a crminf:I4_Proposition_Set ;
                                 crm:P67_refers_to [[> thisForQuery]] ;
                                 crm:P129_is_about ?subject .
                             ?subject a ?type .
                             BIND(URI(STRBEFORE(STR(?proposition), '/context')) as ?container)
                             ?parentContainer ldp:contains ?container .
+                            ?container prov:used ?page_and_form .
+                            BIND(STRBEFORE(STR(?page_and_form), '#') as ?page)
+                            BIND(STRAFTER(STR(?page_and_form), '#') as ?form)
                         }"
                         column-configuration='[{
                             "displayName": "[[i18n "type" bundle="bso"]]",
                             "cellTemplate": "<mp-label iri=\"{{type.value}}\"></mp-label>"
                         },
                         {
-                            "displayName": "[[i18n "view" bundle="bso"]]",
-                            "cellTemplate": "<semantic-link iri=\"http://www.metaphacts.com/resource/assets/NamedGraph\" urlqueryparam-view=\"graph\" urlqueryparam-graph=\"{{proposition.value}}\">[[i18n "view" bundle="bso"]]</semantic-link>"
-                        },
-                        {
-                            "displayName": "[[i18n "delete" bundle="bso"]]",
-                            "cellTemplate": "<semantic-link iri=\"page:deleteContainerFromParent\" urlqueryparam-container=\"{{container.value}}\" urlqueryparam-parent=\"{{parentContainer.value}}\" urlqueryparam-back=\"[[>thisIri]]\">[[i18n "delete" bundle="bso"]]</semantic-link>"
+                            "displayName": "[[i18n "actions" bundle="bso"]]",
+                            "cellTemplate": "<div class=\"bso-component button-set\">
+                                <button class=\"btn btn-secondary btn-xs\">
+                                    <semantic-link iri=\"http://www.metaphacts.com/resource/assets/NamedGraph\" 
+                                        urlqueryparam-view=\"graph\" 
+                                        urlqueryparam-graph=\"{{proposition.value}}\">
+                                        [[i18n "view" bundle="bso"]]
+                                    </semantic-link>
+                                </button>
+                                <button class=\"btn btn-secondary btn-xs\">
+                                    <semantic-link iri=\"{{ page.value }}\"
+                                        urlqueryparam-subjectiri=\"{{subject.value}}\"
+                                        urlqueryparam-objectiri=\"[[>thisIri]]\"
+                                        urlqueryparam-form=\"{{ form.value }}\"
+                                    >[[i18n "edit" bundle="bso"]]</semantic-link>
+                                </button>
+                                <button class=\"btn btn-secondary btn-xs\">
+                                    <semantic-link iri=\"page:deleteContainerFromParent\" 
+                                        urlqueryparam-container=\"{{container.value}}\" 
+                                        urlqueryparam-parent=\"{{parentContainer.value}}\" 
+                                        urlqueryparam-back=\"[[>thisIri]]\">[[i18n "delete" bundle="bso"]]
+                                    </semantic-link>
+                                </button>
+                            </div>"
                         }]'
                     ></semantic-table>
                     <semantic-link
