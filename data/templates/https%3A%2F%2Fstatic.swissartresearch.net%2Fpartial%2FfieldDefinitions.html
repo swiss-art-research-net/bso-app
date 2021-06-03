@@ -202,6 +202,16 @@
     },
 
     {
+        "id" : "P1_is_identified_by",
+
+            "label": "Identifier",
+            "xsdDatatype" : "xsd:string",
+                "selectPattern" : "SELECT ?value WHERE { $subject crm:P1_is_identified_by ?value . }",
+                "insertPattern" : "INSERT { $subject crm:P1_is_identified_by ?value . } WHERE {}",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/P1_is_identified_by"
+    },
+
+    {
         "id" : "P2_has_type",
 
             "label": "Type",

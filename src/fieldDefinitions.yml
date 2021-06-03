@@ -321,6 +321,17 @@ fields:
             $subject a ?value .
           }' 
 
+    - id: P1_is_identified_by
+      label: Identifier
+      datatype: xsd:string
+      queries:
+        - select: 'SELECT ?value WHERE {
+            $subject crm:P1_is_identified_by ?value .
+          }'
+        - insert: 'INSERT {
+            $subject crm:P1_is_identified_by ?value .
+          } WHERE {}'
+
     - id: P2_has_type
       label: Type
       datatype: xsd:anyURI
