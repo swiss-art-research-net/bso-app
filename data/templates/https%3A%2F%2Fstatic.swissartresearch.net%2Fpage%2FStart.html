@@ -104,7 +104,8 @@
     <semantic-query
         query="SELECT DISTINCT ?subject WHERE {
             ?subject a [[type]] .
-            BIND(SHA512(CONCAT(STR(RAND()), STR(?subject))) AS ?random) .
+            BIND(DAY(NOW()) as ?day)
+            BIND(SHA512(CONCAT(STR(?day), STR(?subject))) AS ?random)
             [[> @partial-block ]]
         } ORDER BY ?random LIMIT 10"
         template="{{> template-image-summary}}"
