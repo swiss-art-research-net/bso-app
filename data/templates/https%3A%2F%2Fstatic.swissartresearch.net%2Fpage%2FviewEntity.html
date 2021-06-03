@@ -201,6 +201,13 @@
                 ?subject crm:P109_has_former_or_current_curator [[> thisForQuery]] .
                 
             [[/ objectsTable]]
+
+            <!-- Objects of type -->
+            [[#> objectsTable condition='?thing crm:P2_has_type $subject' label='hasType' ]]
+
+                ?subject crm:P2_has_type [[> thisForQuery]] .
+            
+            [[/ objectsTable]]
         </div>
 
         [[#if (hasPermission "api:ldp:*")]]
