@@ -75,6 +75,20 @@
 <div class="bso-component separator panel">
     <bs-row>
         <bs-col md="2">
+            <h3>[[i18n "dossiers" bundle="bso"]]</h3>
+            [[> resourceSummary type='search:Object' condition='crm:P2_has_type <https://resource.swissartresearch.net/type/level/dossier>' label='dossiers']]
+        </bs-col>
+        <bs-col md="10" class="bso-component card-container horizontal-scroll">
+            [[#> cards type='search:Object' ]]
+                ?subject crm:P2_has_type <https://resource.swissartresearch.net/type/level/dossier> .
+            [[/ cards]]
+        </bs-col>
+    </bs-row>
+</div>
+
+<div class="bso-component separator panel">
+    <bs-row>
+        <bs-col md="2">
             <h3>[[i18n "concepts" bundle="bso"]]</h3>
             [[> resourceSummary type='search:Type' label='concepts']]
         </bs-col>
@@ -86,20 +100,6 @@
     </bs-row>
 </div>
 
-
-<div class="bso-component separator panel">
-    <bs-row>
-        <bs-col md="2">
-            <h3>[[i18n "archives" bundle="bso"]]</h3>
-        </bs-col>
-        <bs-col md="10" class="bso-component card-container horizontal-scroll">
-            [[#> cards type='search:Object' ]]
-                ?child crm:P46i_forms_part_of ?subject .
-                FILTER NOT EXISTS { ?subject crm:P46i_forms_part_of ?parent }
-            [[/ cards]]
-        </bs-col>
-    </bs-row>
-</div>
 [[#*inline "cards"]]
     <semantic-query
         query="SELECT DISTINCT ?subject WHERE {
@@ -122,6 +122,9 @@
     <semantic-query
         query="SELECT (COUNT(?subject) as ?num) WHERE {
             ?subject a [[type]] .
+            [[#if condition]]
+                ?subject [[condition]] .
+            [[/if]]
         }"
         template="{{#each bindings}}[[i18n "entitiesSummaryPre" bundle="bso"]] {{num.value}} [[i18n "entitiesSummaryPost" label bundle="bso"]]{{/each}}"
     ></semantic-query>
