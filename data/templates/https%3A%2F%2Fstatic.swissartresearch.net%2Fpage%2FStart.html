@@ -94,7 +94,7 @@
         </bs-col>
         <bs-col md="10" class="bso-component card-container horizontal-scroll">
             [[#> cards type='search:Object' ]]
-                ?child crm:P46i_forms_part_of ?subject .
+                ?child crm:P46i_forms_part_of/crm:P46i_forms_part_of ?subject .
                 FILTER NOT EXISTS { ?subject crm:P46i_forms_part_of ?parent }
             [[/ cards]]
         </bs-col>
