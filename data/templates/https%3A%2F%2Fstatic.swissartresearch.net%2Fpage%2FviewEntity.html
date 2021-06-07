@@ -126,12 +126,15 @@
 
             <!-- Persons involved in creation-->
             <semantic-query
-                query="SELECT DISTINCT ?subject ?role WHERE {
+                query="SELECT DISTINCT ?subject ?role ?global_role ?appellation_label WHERE {
+                    BIND(<[[>thisIri]]/meta> as ?meta)
                     {
-                        [[> thisForQuery]] crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by) ?event .
+                        [[> thisForQuery]] crm:P108i_was_produced_by ?event .
+                        BIND(crm:E12_Production as ?global_role)
                     } UNION 
                     {
                         [[> thisForQuery]] (crm:P128_carries/crm:P94i_was_created_by) ?event .
+                        BIND(crm:E65_Creation as ?global_role)
                     }
                     {
                         ?event crm:P14_carried_out_by ?subject .
@@ -142,11 +145,21 @@
                                 ?subevent crm:P2_has_type ?role .
                             }
                         }
+                        OPTIONAL {
+                            ?subject crm:P1_is_identified_by ?appellation .
+                            ?appellation crm:P70i_is_documented_in ?meta .
+                            ?appellation rdfs:label ?appellation_label .
+                        }
                     } UNION {
                         ?event crm:P9_consists_of ?subevent .
                         ?subevent crm:P14_carried_out_by ?subject .
                         OPTIONAL {
                             ?subevent crm:P2_has_type ?role .
+                        }
+                        OPTIONAL {
+                            ?subject crm:P1_is_identified_by ?appellation .
+                            ?appellation crm:P70i_is_documented_in ?meta .
+                            ?appellation rdfs:label ?appellation_label .
                         }
                     }
                 }"
@@ -162,7 +175,7 @@
                                             <li class="bso-tag Person"><semantic-link uri="{{subject.value}}"></semantic-link></li>
                                     </ul>
                                 </td>
-                                <td><mp-label iri="{{role.value}}"></mp-label></td>
+                                <td><a title="{{appellation_label.value}}"><mp-label iri="{{#if role.value}}{{role.value}}{{else}}{{global_role.value}}{{/if}}"></mp-label></a></td>
                             </tr>
                             {{/each}}
                         </table>
