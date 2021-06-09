@@ -126,7 +126,7 @@
 
             <!-- Persons involved in creation-->
             <semantic-query
-                query="SELECT DISTINCT ?subject ?role ?global_role ?appellation_label WHERE {
+                query="SELECT DISTINCT ?subject ?role ?global_role WHERE {
                     BIND(<[[>thisIri]]/meta> as ?meta)
                     {
                         [[> thisForQuery]] crm:P108i_was_produced_by ?event .
@@ -175,7 +175,7 @@
                                             <li class="bso-tag Person"><semantic-link uri="{{subject.value}}"></semantic-link></li>
                                     </ul>
                                 </td>
-                                <td><a title="{{appellation_label.value}}"><mp-label iri="{{#if role.value}}{{role.value}}{{else}}{{global_role.value}}{{/if}}"></mp-label></a></td>
+                                <td>{{#if role.value}}<mp-label iri="{{role.value}}"></mp-label>{{/if}} (<mp-label iri="{{global_role.value}}"></mp-label>) </td>
                             </tr>
                             {{/each}}
                         </table>
