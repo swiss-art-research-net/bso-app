@@ -8,6 +8,24 @@
 
 <div class="d-flex flex-md-row flex-column">
     <div class="bso-component separator sidebar image-display">
+
+        <!-- map -->
+        <semantic-if
+            query='ASK { [[> thisForQuery ]] crmdig:L54_is_same-as/wdt:P625 ?coordinates }'
+            then='{{> mapTemplate}}'
+        >
+            <template id="mapTemplate">
+                <div style="height:300px;">
+                    <semantic-map
+                        query='
+                            SELECT ?wkt WHERE {
+                                [[> thisForQuery ]] crmdig:L54_is_same-as/wdt:P625 ?wkt
+                        }'></semantic-map>
+                </div>
+            </template>
+        </semantic-if>
+
+        <!-- image  -->
         <semantic-if 
             query='ASK { [[> thisForQuery ]] a search:Object}'
             then='{{> objectTemplate }}'
