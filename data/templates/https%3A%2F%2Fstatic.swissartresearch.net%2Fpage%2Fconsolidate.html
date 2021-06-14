@@ -1,0 +1,23 @@
+[[> partial:pageHeader]]
+
+<bs-col md="10" md-offset="1">
+    <h2>Consolidate Entities</h2>
+<semantic-search>
+    <semantic-search-query-keyword
+        query='
+            SELECT ?subject WHERE {
+                ?subject a search:Place ;
+                rdfs:label ?label .
+                ?label bds:search ?__token__ .
+        }'
+    ></semantic-search-query-keyword>
+  
+    <semantic-search-result-holder>
+      <semantic-search-result>
+        <semantic-table id='table' query='SELECT DISTINCT ?subject WHERE { } ORDER BY DESC(?score)'></semantic-table>
+      </semantic-search-result>
+    </semantic-search-result-holder>
+  </semantic-search>
+
+</bs-col>
+[[> partial:pageFooter]]
