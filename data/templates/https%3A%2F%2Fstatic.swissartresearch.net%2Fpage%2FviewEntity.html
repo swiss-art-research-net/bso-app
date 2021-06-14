@@ -20,7 +20,13 @@
                         query='
                             SELECT ?wkt WHERE {
                                 [[> thisForQuery ]] crmdig:L54_is_same-as/wdt:P625 ?wkt
-                        }'></semantic-map>
+                        }'
+                        tuple-template='{{> tupleTemplate}}'
+                        >
+                            <template id="tupleTemplate">
+                                <mp-label iri="[[> thisIri]]"></mp-label>
+                            </template>
+                        </semantic-map>
                 </div>
             </template>
         </semantic-if>
