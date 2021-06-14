@@ -8,13 +8,20 @@
             SELECT ?subject WHERE {
                 ?subject a search:Place ;
                 rdfs:label ?label .
-                ?label bds:search ?__token__ .
+                ?label bds:search ?__token__ ; 
+                 bds:minRelevance "0.7"^^xsd:double .
         }'
     ></semantic-search-query-keyword>
   
     <semantic-search-result-holder>
       <semantic-search-result>
-        <semantic-table id='table' query='SELECT DISTINCT ?subject WHERE { } ORDER BY DESC(?score)'></semantic-table>
+        <semantic-table id='table' 
+          query='SELECT DISTINCT ?subject WHERE { 
+        }'
+        options='{
+          "enableGrouping": true
+        }'  
+      ></semantic-table>
       </semantic-search-result>
     </semantic-search-result-holder>
   </semantic-search>
