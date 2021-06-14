@@ -5,10 +5,10 @@
         <div class="bso-component simple-search">
             <semantic-simple-search
                 query="
-                SELECT DISTINCT ?resource ?label ?typeLabel WHERE {
+                SELECT DISTINCT ?resource ?typeLabel WHERE {
                     ?resource a ?type ;
                         rdfs:label ?label ;
-                        rdfs:label|crm:P1_is_identified_by ?searchTerm .
+                        rdfs:label|crm:P1_is_identified_by|crm:P1_is_identified_by/rdfs:label ?searchTerm .
                     ?type rdfs:label ?typeLabel .
                     VALUES(?type){
                         (search:Person)
@@ -22,7 +22,7 @@
             input-placeholder='[[i18n "globalSearchInputPrompt" bundle="bso" escapeHTML=false]]'
             >
                 <template id="template">
-                    <span title="{{resource.value}}">{{label.value}} ({{typeLabel.value}})</span>
+                    <span title="{{resource.value}}"><mp-label iri="{{resource.value}}"></mp-label> ({{typeLabel.value}})</span>
                 </template>
             </semantic-simple-search>
         </div>
