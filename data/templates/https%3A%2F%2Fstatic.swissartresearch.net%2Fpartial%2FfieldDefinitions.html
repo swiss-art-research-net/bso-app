@@ -105,6 +105,22 @@
     },
 
     {
+        "id" : "object_depicts_as_P141_to_proposition_subject",
+
+            "label": "Depicts",
+            "description" : "The entity that is depicted by the proposition_subject",
+            "minOccurs" : "1",
+            "xsdDatatype" : "xsd:anyURI",
+            "domain" : "crm:E13_Attribute_Assignment",
+            "range" : "crm:E1_CRM_Entity",
+                "selectPattern" : "SELECT DISTINCT ?value WHERE { $subject crm:P141_assigned ?value . }",
+                "insertPattern" : "INSERT { $subject crm:P141_assigned $value . ?proposition_subject crm:P138_represents $value . } WHERE { BIND(URI(STRBEFORE(STR($subject), \"/proposition\")) as ?proposition_subject) }",
+                "autosuggestionPattern" : "PREFIX bds: <http://www.bigdata.com/rdf/search#> SELECT DISTINCT ?value ?label ?type ?typeLabel WHERE { VALUES(?type ?typeLabel) { (search:Person \"Person\") (search:Place \"Place\") (search:Type \"Type\") } ?value a ?type ; rdfs:label ?search_label . OPTIONAL { ?value skos:prefLabel ?prefLabel } BIND(IF(BOUND(?prefLabel), ?prefLabel, ?search_label) as ?label) ?search_label bds:search ?__token__ . } ORDER BY ?label LIMIT 10",
+                "valueSetPattern" : "SELECT ?value ?label ?type ?typeLabel WHERE { VALUES(?type ?typeLabel) { (search:Person \"Person\") (search:Place \"Place\") (search:Type \"Type\") } ?value a ?type ; rdfs:label ?label . } ORDER BY ?label LIMIT 100",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/object_depicts_as_P141_to_proposition_subject"
+    },
+
+    {
         "id" : "object_subcreations",
 
             "label": "Creation Steps",
@@ -155,6 +171,14 @@
             "range" : "crm:E52_Time-Span",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P108i_was_produced_by/crm:P4_has_time-span ?value }",
         "iri" : "https://platform.swissartresearch.net/instances/fields/object_production_date"
+    },
+
+    {
+        "id" : "region_for_proposition_subject",
+
+            "label": "Regions",
+                "selectPattern" : "SELECT ?value WHERE { BIND(URI(STRBEFORE(STR($subject), \"/proposition\")) as ?propositionSubject) ?propositionSubject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?iiif_image . ?value crmdig:L49_is_primary_area_of ?iiif_image . }",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/region_for_proposition_subject"
     },
 
     {
