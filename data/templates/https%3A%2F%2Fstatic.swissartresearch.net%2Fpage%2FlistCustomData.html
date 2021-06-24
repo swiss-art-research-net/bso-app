@@ -31,6 +31,22 @@
                        "cellTemplate": "<semantic-link iri=\"page:deleteContainerFromParent\" urlqueryparam-container=\"{{container.value}}\" urlqueryparam-parent=\"{{parentContainer.value}}\" urlqueryparam-back=\"[[this]]\">[[i18n "delete" bundle="bso"]]</semantic-link>"
                    }]'
                ></semantic-table>
+
+               <h2>Regions</h2>
+               <semantic-table
+                   query="SELECT ?subject WHERE {
+                       ?subject a crmdig:D35_Area ;
+                        crmdig:L49_is_primary_area_of ?image .
+                   }"
+                   column-configuration='[{
+                        "variableName": "subject",
+                        "cellTemplate": "<mp-resource-thumbnail iri=\"{{subject.value}}\"></mp-resource-thumbnail>"
+                    },
+                    {
+                       "variableName": "subject",
+                       "cellTemplate": "<semantic-link iri=\"{{subject.value}}\" urlqueryparam-view=\"page\"></semantic-link>"
+                   }]'
+               ></semantic-table>
             </bs-col>
         </bs-row>
     </div>
