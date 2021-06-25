@@ -208,7 +208,7 @@ ol.page-breadcrumb {
   margin-right: 0;
 }
 .bso-component.panel .form-selector,
-.bso-component.panel .tab-content {
+.bso-component.panel .form-selector + .tab-content {
   margin-left: -2rem;
 }
 .bso-component.panel .form-selector {

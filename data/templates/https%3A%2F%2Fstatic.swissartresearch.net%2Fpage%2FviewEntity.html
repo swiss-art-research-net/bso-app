@@ -367,15 +367,43 @@
         <template id="template">
             <div class="bso-component field-visualisation">
                 <span class="bso-component label">[[i18n label bundle="bso"]]</span>
-                <div class="bso-component card-container">
-                    <semantic-table
-                    query="SELECT DISTINCT ?subject WHERE {
-                        [[> @partial-block]]
-                    }"
-                    tuple-template="{{> partial:cardObject}}">
-                    </semantic-table>
-                </div>
-            </div>
+
+                <bs-tabs default-active-key="grid">
+                    <bs-tab event-key="grid" title="[[i18n "grid" bundle="bso"]]">
+                        <div class="bso-component card-container">
+                            <semantic-table
+                            query="SELECT DISTINCT ?subject WHERE {
+                                [[> @partial-block]]
+                            }"
+                            tuple-template="{{> partial:cardObject}}">
+                            </semantic-table>
+                        </div>
+                    </bs-tab>
+                    <bs-tab event-key="map" title="[[i18n "map" bundle="bso"]]">
+                        <div style="height:40rem;width:100%">
+                            <semantic-map
+                                query="SELECT DISTINCT ?subject ?wkt WHERE {
+                                    [[> @partial-block]] 
+                                    {
+                                        ?subject crmdig:L54_is_same-as/wdt:P625 ?wkt .
+                                    } UNION {
+                                        ?subject crm:P128_carries?/crm:P138_represents/crmdig:L54_is_same-as/wdt:P625 ?wkt .
+                                    } UNION {
+                                        ?subject ^crm:P138_represents/crm:P138_represents/crmdig:L54_is_same-as/wdt:P625 ?wkt .
+                                    } UNION {
+                                        ?subject crm:P108i_was_produced_by/crm:P7_took_place_at/crmdig:L54_is_same-as/wdt:P625 ?wkt .
+                                    } UNION {
+                                        ?subject crm:P128_carries?/crm:P94i_was_created_by/crm:P7_took_place_at/crmdig:L54_is_same-as/wdt:P625 ?wkt .
+                                    }
+                                }"
+                                
+                                tuple-template='{{> template }}'
+                            >
+                                <template id='template'>{{> partial:cardObject}}</template>
+                            </semantic-map>
+                        </div>
+                    </bs-tab>
+                </bs-tabs>
         </template>
     </semantic-if>
 
