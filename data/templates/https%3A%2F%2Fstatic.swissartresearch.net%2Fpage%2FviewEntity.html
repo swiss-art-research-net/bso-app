@@ -225,6 +225,13 @@
                 
             [[/ objectsTable]]
 
+            <!-- Regions -->
+            [[#> objectsTable condition='$subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of ?region .' label='regions' ]]
+
+                [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of  $subject.
+            
+            [[/ objectsTable]]
+
             <!-- Things Depicted -->
             [[#> objectsTable condition='?thing crm:P138_represents $subject' label='depictedBy' ]]
 
@@ -257,13 +264,6 @@
 
                 ?subject a search:Object ;
                     crm:P2_has_type [[> thisForQuery]] .
-            
-            [[/ objectsTable]]
-
-            <!-- Regions -->
-            [[#> objectsTable condition='$subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of ?region .' label='regions' ]]
-
-                [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of  $subject.
             
             [[/ objectsTable]]
 
