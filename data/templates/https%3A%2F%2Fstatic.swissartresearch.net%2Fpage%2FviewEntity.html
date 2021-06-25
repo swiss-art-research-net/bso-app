@@ -237,6 +237,14 @@
             
             [[/ objectsTable]]
 
+            <!-- Places depicted -->
+            [[#> objectsTable condition='$subject crm:P128_carries/crm:P138_represents ?place . ?place a search:Place' label='depictedPlaces']]
+                
+                [[> thisForQuery]] crm:P128_carries/crm:P138_represents $subject .
+                $subject a search:Place .
+                
+            [[/ objectsTable]]
+
             <!-- Objects owned -->
             [[#> objectsTable condition='?object a search:Object; crm:P109_has_former_or_current_curator $subject' label='worksHeld']]
                 
@@ -385,11 +393,13 @@
                                 query="SELECT DISTINCT ?subject ?wkt WHERE {
                                     [[> @partial-block]] 
                                     {
-                                        ?subject crmdig:L54_is_same-as/wdt:P625 ?wkt .
+                                        ?subject a search:Place ;
+                                            crmdig:L54_is_same-as/wdt:P625 ?wkt .
                                     } UNION {
                                         ?subject crm:P128_carries?/crm:P138_represents/crmdig:L54_is_same-as/wdt:P625 ?wkt .
                                     } UNION {
-                                        ?subject ^crm:P138_represents/crm:P138_represents/crmdig:L54_is_same-as/wdt:P625 ?wkt .
+                                        ?subject a search:Type ;
+                                            ^crm:P138_represents/crm:P138_represents/crmdig:L54_is_same-as/wdt:P625 ?wkt .
                                     } UNION {
                                         ?subject crm:P108i_was_produced_by/crm:P7_took_place_at/crmdig:L54_is_same-as/wdt:P625 ?wkt .
                                     } UNION {
