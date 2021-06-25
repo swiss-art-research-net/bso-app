@@ -156,6 +156,23 @@ ol.page-breadcrumb {
 .bso-component.field-visualisation table tr {
   border-bottom: none;
 }
+.bso-component.field-visualisation nav.nav.nav-tabs {
+  border: none;
+  font-size: 0.8em;
+  margin: -1rem 0 0 0;
+}
+.bso-component.field-visualisation nav.nav.nav-tabs a[data-rb-event-key="view"] {
+  pointer-events: none;
+  color: #aaa;
+}
+.bso-component.field-visualisation nav.nav.nav-tabs a {
+  border: none;
+  font-weight: normal;
+  padding: 0 0.5rem 0 0;
+}
+.bso-component.field-visualisation nav.nav.nav-tabs a.active {
+  font-weight: bold;
+}
 .bso-component.home-search {
   background-image: url(https://www.e-manuscripta.ch/i3f/v20/1640931/pct:3,20,95,50/2800,/0/default.jpg);
   background-position: bottom;

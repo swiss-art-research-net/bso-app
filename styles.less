@@ -9,6 +9,7 @@
 
 @col-white:#fff;
 @col-black:#111;
+@col-grey: #aaa;
 @col-lightgrey:#fbfbfb;
 @col-lightblue:#e2e2f7;
 
@@ -208,6 +209,24 @@ ol.page-breadcrumb {
             }
             tr {
                 border-bottom: none;
+            }
+        }
+
+        nav.nav.nav-tabs {
+            border: none;
+            font-size: 0.8em;
+            margin: -1rem 0 0 0;
+            a[data-rb-event-key="view"] {
+                pointer-events: none;
+                color: @col-grey;
+            }
+            a {
+                border: none;
+                font-weight: normal;
+                padding: 0 0.5rem 0 0;
+                &.active {
+                    font-weight: bold;
+                }
             }
         }
     }
