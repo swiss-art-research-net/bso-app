@@ -2,8 +2,8 @@
 <div class="bso-component object">
     <semantic-link
         key="object-link-{{iri}}"
-        iri="page:viewEntity"
-        urlqueryparam-entityiri="{{iri}}">
+        iri="{{iri}}"
+        urlqueryparam-view="page">
         <bs-panel>
             <bs-row>
                 <bs-col class="image" md="3" sm="6">
@@ -49,11 +49,6 @@
                         </bs-col>
                     </bs-row>
                 </bs-col>
-                {{#if displayMenu}}
-                    <bs-col md="2" sm="12">
-                        [[> partial:buttonEditObjectMeta]]
-                    </bs-col>
-                {{/if}}
             </bs-row>
         </bs-panel>
     </semantic-link>
