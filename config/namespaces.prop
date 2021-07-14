@@ -19,3 +19,7 @@ sari=https://platform.swissartresearch.net/
 bds=http://www.bigdata.com/rdf/search#
 ldp=http://www.w3.org/ns/ldp#
 prov=http://www.w3.org/ns/prov#
+artwork=https://resource.swissartresearch.net/artwork/
+place=https://resource.swissartresearch.net/place/
+actor=https://resource.swissartresearch.net/actor/
+type=https://resource.swissartresearch.net/type/
