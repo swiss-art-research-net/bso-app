@@ -318,6 +318,9 @@ ol.page-breadcrumb {
 .modal-backdrop {
   opacity: 0.8;
 }
+.modal-xl {
+  width: 80vw;
+}
 @font-face {
   font-family: 'HK Grotesk';
   font-style: normal;
@@ -347,4 +350,7 @@ ol.page-breadcrumb {
   font-style: normal;
   font-weight: normal;
   src: url("/assets/fonts/HKGrotesk-Regular.woff2") format("woff2"), url("/assets/fonts/HKGrotesk-Regular.woff") format("woff");
+}
+.mirador-btn.mirador-icon-metadata-view {
+  display: none;
 }

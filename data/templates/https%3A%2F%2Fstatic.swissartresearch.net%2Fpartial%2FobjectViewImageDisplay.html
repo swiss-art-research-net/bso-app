@@ -16,12 +16,25 @@
             {{> thumbnail}}
             {{#if IIIFimage.value }}
                 <div class="caption">
-                    <semantic-link
-                        uri="[[ resolvePrefix 'page:viewImage']]"
-                        urlqueryparam-imageiri="{{IIIFimage.value}}"
-                        >
-                        [[i18n "viewFullImage" bundle="bso"]]
-                    </semantic-link>
+                    
+                    <!-- <mp-event-target-refresh id="some-element">
+                    <semantic-query query="SELECT * {BIND(NOW() as ?update)}"></semantic-query>
+                    </mp-event-target-refresh>
+                     -->
+                    <mp-event-trigger type="Component.Refresh" targets='["some-element"]'> 
+                        <mp-overlay-dialog title="Image Viewer" type="modal" bs-size="xl">
+                            <mp-overlay-dialog-trigger><a>[[i18n "viewFullImage" bundle="bso"]]</a></mp-overlay-dialog-trigger>
+                            <mp-overlay-dialog-content
+                            id="image-modal">
+                                <mp-page-loader 
+                                    iri="[[ resolvePrefix 'page:viewImage']]"
+                                    urlqueryparam-imageiri="{{IIIFimage.value}}"
+                                    urlqueryparam-overlay="true"
+                                ></mp-page-loader>
+                        </mp-overlay-dialog-content>
+                        </mp-overlay-dialog>
+                    </mp-event-trigger>
+
                 </div>
             {{/if}}
         </bs-panel>

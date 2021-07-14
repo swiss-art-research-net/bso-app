@@ -1,6 +1,8 @@
-[[> partial:pageHeader]]
-[[> partial:contentHeader]]
-
+[[#if (urlParam "overlay")]]
+[[else]]
+    [[> partial:pageHeader]]
+    [[> partial:contentHeader]]
+[[/if]]
 <div style="height: 700px">
     <semantic-query
         query="SELECT ?image ?server WHERE {
@@ -22,5 +24,8 @@
     </semantic-query>
 </div>
 
-[[> partial:contentFooter]]
-[[> partial:pageFooter]]
+[[#if (urlParam "overlay")]]
+[[else]]
+    [[> partial:contentFooter]]
+    [[> partial:pageFooter]]
+[[/if]]

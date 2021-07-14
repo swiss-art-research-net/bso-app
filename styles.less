@@ -396,7 +396,9 @@ ol.page-breadcrumb {
 .modal-backdrop {
     opacity: .8;
 }
-
+.modal-xl {
+    width: 80vw;
+}
 // Fonts
 
 @font-face {
@@ -433,3 +435,9 @@ ol.page-breadcrumb {
     src: url("/assets/fonts/HKGrotesk-Regular.woff2") format("woff2"), url("/assets/fonts/HKGrotesk-Regular.woff") format("woff");
   }
   
+ // Overrides
+
+ .mirador-btn.mirador-icon-metadata-view {
+     // Hide mirador info button because information it contains is hardcoded
+     display: none;
+ }
