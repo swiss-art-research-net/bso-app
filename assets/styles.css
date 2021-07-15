@@ -366,6 +366,7 @@ ol.page-breadcrumb {
   font-weight: normal;
   src: url("/assets/fonts/HKGrotesk-Regular.woff2") format("woff2"), url("/assets/fonts/HKGrotesk-Regular.woff") format("woff");
 }
-.mirador-btn.mirador-icon-metadata-view {
+.mirador-btn.mirador-icon-metadata-view,
+.mirador-btn.mirador-icon-window-menu {
   display: none;
 }
