@@ -41,7 +41,21 @@ h2 {
 h3 {
     font-weight: bold;
 }
-
+#custom-modal-close-button {
+    text-align: right;
+    padding-bottom: 0.5rem;
+    button {
+        background-color: transparent;
+        border: 0;
+        cursor: pointer;
+        > span {
+            font-size: 1.5rem;
+            font-weight: 700;
+            line-height: 1;
+            color: #888;
+        }
+    }
+}
 .btn {
     &.btn-primary {
         background-color: @col-button-primary;

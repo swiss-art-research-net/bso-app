@@ -6,6 +6,8 @@
     <[[> thisIri]]>
 [[/inline]]
 
+<mp-event-proxy on-event-type="Dialog.HideAll" proxy-event-type="Component.Refresh" proxy-targets='["regions-table", "entity-image"]'></mp-event-proxy>
+
 <div class="d-flex flex-md-row flex-column">
     <div class="bso-component separator sidebar image-display">
 
@@ -32,28 +34,30 @@
         </semantic-if>
 
         <!-- image  -->
-        <semantic-if 
-            query='ASK { [[> thisForQuery ]] a search:Object}'
-            then='{{> objectTemplate }}'
-            else='{{> template}}'
-        >
-            <template id="objectTemplate">
-                [[#if entityiri]]
-                    [[> partial:objectViewImageDisplay objectiri=entityiri]]
-                [[else]]
-                    [[> partial:objectViewImageDisplay urlparam="entityiri"]]
-                [[/if]]
-            </template>
-            <template id="template">
-                <bs-panel>
-                    <mp-resource-thumbnail iri="[[> thisIri]]">
-                        <mp-resource-thumbnail-fallback>
-                            <span></span>
-                        </mp-resource-thumbnail-fallback>
-                    </mp-resource-thumbnail>
-                </bs-panel>
-            </template>
-        </semantic-if>
+        <mp-event-target-refresh id="entity-image">
+            <semantic-if 
+                query='ASK { [[> thisForQuery ]] a search:Object}'
+                then='{{> objectTemplate }}'
+                else='{{> template}}'
+            >
+                <template id="objectTemplate">
+                    [[#if entityiri]]
+                        [[> partial:objectViewImageDisplay objectiri=entityiri]]
+                    [[else]]
+                        [[> partial:objectViewImageDisplay urlparam="entityiri"]]
+                    [[/if]]
+                </template>
+                <template id="template">
+                    <bs-panel>
+                        <mp-resource-thumbnail iri="[[> thisIri]]">
+                            <mp-resource-thumbnail-fallback>
+                                <span></span>
+                            </mp-resource-thumbnail-fallback>
+                        </mp-resource-thumbnail>
+                    </bs-panel>
+                </template>
+            </semantic-if>
+        </mp-event-target-refresh>
     </div>
     <div class="bso-component main">
         <div class="bso-component panel">
@@ -238,12 +242,14 @@
             [[/ objectsTable]]
 
             <!-- Regions -->
-            [[#> objectsTable condition='$subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of ?region . FILTER NOT EXISTS {?region crm:P2_has_type type:imageRegion}' label='regions' ]]
+            <mp-event-target-refresh id="regions-table">
+                [[#> objectsTable condition='$subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of ?region . FILTER NOT EXISTS {?region crm:P2_has_type type:imageRegion}' label='regions' ]]
 
-                [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of  $subject.
-                FILTER NOT EXISTS {?subject crm:P2_has_type type:imageRegion}
-   
-            [[/ objectsTable]]
+                    [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of  $subject.
+                    FILTER NOT EXISTS {?subject crm:P2_has_type type:imageRegion}
+
+                [[/ objectsTable]]
+            </mp-event-target-refresh>
 
             <!-- Things Depicted -->
             [[#> objectsTable condition='?thing crm:P138_represents $subject' label='depictedBy' ]]

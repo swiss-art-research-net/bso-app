@@ -1,9 +1,28 @@
 [[#if (urlParam "overlay")]]
+    <style>
+        .overlay-modal__header.modal-header {
+            display: none;
+        }
+    </style>
 [[else]]
     [[> partial:pageHeader]]
     [[> partial:contentHeader]]
 [[/if]]
+
+
 <div style="height: 700px">
+
+    [[#if (urlParam "overlay")]]
+        <div id="custom-modal-close-button">
+            <mp-event-trigger type="Dialog.HideAll">
+                <button>
+                    <span aria-hidden="true">×</span>
+                    <span class="sr-only">Close</span>
+                </button>
+            </mp-event-trigger>
+        </div>
+    [[/if]]
+
     <semantic-query
         query="SELECT ?image ?server WHERE {
             BIND( <[[ urlParam 'imageiri']]> as ?image )
