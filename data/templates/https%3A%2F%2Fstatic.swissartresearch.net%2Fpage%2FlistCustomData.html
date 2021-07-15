@@ -37,6 +37,7 @@
                    query="SELECT ?subject WHERE {
                        ?subject a crmdig:D35_Area ;
                         crmdig:L49_is_primary_area_of ?image .
+                        FILTER NOT EXISTS { ?subject crm:P2_has_type type:imageRegion }
                    }"
                    column-configuration='[{
                         "variableName": "subject",
