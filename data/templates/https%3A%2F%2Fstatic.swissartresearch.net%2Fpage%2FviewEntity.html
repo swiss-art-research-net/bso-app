@@ -402,7 +402,12 @@
                                 query="SELECT DISTINCT ?subject WHERE {
                                     [[> @partial-block]]
                                 }"
-                                tuple-template="{{> partial:cardObject}}">
+                                tuple-template="{{> partial:cardObject}}"
+                                options='{
+                                  "showFilter": true,
+                                  "pageSizeSelection": "[5,10,20,50,100]"
+                                }'
+                >
                                 </semantic-table>
                             </div>
                         </bs-tab>
