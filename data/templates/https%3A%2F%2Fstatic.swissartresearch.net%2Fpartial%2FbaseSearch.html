@@ -282,7 +282,11 @@ relations='{
             <div class="bso-component card-container">
               <semantic-table
                 id="grid-result"
-                query="SELECT DISTINCT ?subject WHERE {}"
+                query="SELECT DISTINCT ?subject WHERE {
+                  OPTIONAL {
+                    ?subject skos:prefLabel ?label .
+                  }
+                } ORDER BY ?label ?subject"
                 tuple-template="{{> partial:cardObject}}"
                 options='{
                   "showFilter": false,
