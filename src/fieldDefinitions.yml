@@ -65,6 +65,21 @@ fields:
           }
         }'
 
+    - id: date_from
+      label: Earliest date
+      description: The beginning of a time frame
+      queries:
+        - select: 'SELECT ?value WHERE {
+          $subject crm:P82a_begin_of_the_begin ?value
+          }'
+
+    - id: date_to
+      label: Latest date
+      description: The end of a time frame
+      queries:
+        - select: 'SELECT ?value WHERE {
+          $subject crm:P82b_end_of_the_end ?value
+          }'
     - id: label
       label: Label
       description: A human-readable label for the entity

@@ -38,6 +38,24 @@
     },
 
     {
+        "id" : "date_from",
+
+            "label": "Earliest date",
+            "description" : "The beginning of a time frame",
+                "selectPattern" : "SELECT ?value WHERE { $subject crm:P82a_begin_of_the_begin ?value }",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/date_from"
+    },
+
+    {
+        "id" : "date_to",
+
+            "label": "Latest date",
+            "description" : "The end of a time frame",
+                "selectPattern" : "SELECT ?value WHERE { $subject crm:P82b_end_of_the_end ?value }",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/date_to"
+    },
+
+    {
         "id" : "label",
 
             "label": "Label",
