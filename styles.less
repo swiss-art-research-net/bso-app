@@ -70,13 +70,21 @@ h3 {
 }
 
 .facet {
-    background-color: @col-panels;
+    background-color: none;
     margin-bottom: 1rem;
+    border: none;
     .facet-relations {
         width: auto;
     }
     .facet__category-selector-holder {
         display: none;
+    }
+    .facet__relation__body {
+        background-color: darken(@col-panels, 1%);
+        .facet__relation__values {
+            margin: 0 0;
+            padding: .5rem .5rem 0 .5rem;
+        }
     }
 }
 
@@ -203,7 +211,9 @@ ol.page-breadcrumb {
 
     &.field-visualisation {
 
-        margin-bottom: 1rem;
+        @margin-unit: .5rem;
+
+        margin-bottom: @margin-unit;
 
         a {
             color: @col-black;
@@ -211,20 +221,23 @@ ol.page-breadcrumb {
 
         .label {
             display: inline-block;
-            margin-right: 1rem;
-            margin-bottom: 1rem;
+            margin-right: @margin-unit;
+            margin-bottom: @margin-unit;
             min-width: 7rem;
             vertical-align: top;
-            padding-top: 1rem;
+            padding-top: @margin-unit;
         }
 
         table, ul.tags {
             display: inline-block;
+            margin-top: @margin-unit;
+            position: relative;
+            top: calc(@margin-unit/-4);
         }
 
         table {
             td {
-                padding: 0.5rem 1rem 0.5rem 0 !important;
+                padding: calc(@margin-unit/2) @margin-unit calc(@margin-unit/2) 0 !important;
             }
             tr {
                 border-bottom: none;
@@ -234,7 +247,7 @@ ol.page-breadcrumb {
         nav.nav.nav-tabs {
             border: none;
             font-size: 0.8em;
-            margin: -1rem 0 0 0;
+            margin: -@margin-unit 0 0 0;
             a[data-rb-event-key="view"] {
                 pointer-events: none;
                 color: @col-grey;
@@ -458,5 +471,9 @@ ol.page-breadcrumb {
 
  .mirador-btn.mirador-icon-metadata-view, .mirador-btn.mirador-icon-window-menu {
      // Hide mirador buttons because information it contains is hardcoded
+     display: none;
+ }
+ 
+ .show-facet-button.show-facet-button__hide {
      display: none;
  }

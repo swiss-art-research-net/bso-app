@@ -4,13 +4,17 @@
 
 <h2 class="gap">[[i18n "browsePersons" bundle="bso"]]</h2>
 
+<div>
+  <semantic-link iri="page:search">[[i18n "goToSearch" bundle="bso"]]</semantic-link>
+</div>
+
 [[#> partial:baseSearch]]
 
 <semantic-search-query-constant
 
   domain='<https://platform.swissartresarch.net/search/Person>'
   query='
-    SELECT DISTINCT ?subject WHERE {
+    SELECT ?subject WHERE {
       ?subject a search:Person .
     }
   '

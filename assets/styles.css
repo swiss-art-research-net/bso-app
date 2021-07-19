@@ -41,14 +41,22 @@ h3 {
   color: #fff;
 }
 .facet {
-  background-color: #fff;
+  background-color: none;
   margin-bottom: 1rem;
+  border: none;
 }
 .facet .facet-relations {
   width: auto;
 }
 .facet .facet__category-selector-holder {
   display: none;
+}
+.facet .facet__relation__body {
+  background-color: #fcfcfc;
+}
+.facet .facet__relation__body .facet__relation__values {
+  margin: 0 0;
+  padding: 0.5rem 0.5rem 0 0.5rem;
 }
 .gap {
   margin-bottom: 2rem;
@@ -152,25 +160,28 @@ ol.page-breadcrumb {
   margin: 1rem 0;
 }
 .bso-component.field-visualisation {
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 .bso-component.field-visualisation a {
   color: #111;
 }
 .bso-component.field-visualisation .label {
   display: inline-block;
-  margin-right: 1rem;
-  margin-bottom: 1rem;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
   min-width: 7rem;
   vertical-align: top;
-  padding-top: 1rem;
+  padding-top: 0.5rem;
 }
 .bso-component.field-visualisation table,
 .bso-component.field-visualisation ul.tags {
   display: inline-block;
+  margin-top: 0.5rem;
+  position: relative;
+  top: calc(0.5rem/-4);
 }
 .bso-component.field-visualisation table td {
-  padding: 0.5rem 1rem 0.5rem 0 !important;
+  padding: calc(0.5rem/2) 0.5rem calc(0.5rem/2) 0 !important;
 }
 .bso-component.field-visualisation table tr {
   border-bottom: none;
@@ -178,7 +189,7 @@ ol.page-breadcrumb {
 .bso-component.field-visualisation nav.nav.nav-tabs {
   border: none;
   font-size: 0.8em;
-  margin: -1rem 0 0 0;
+  margin: -0.5rem 0 0 0;
 }
 .bso-component.field-visualisation nav.nav.nav-tabs a[data-rb-event-key="view"] {
   pointer-events: none;
@@ -372,5 +383,8 @@ ol.page-breadcrumb {
 }
 .mirador-btn.mirador-icon-metadata-view,
 .mirador-btn.mirador-icon-window-menu {
+  display: none;
+}
+.show-facet-button.show-facet-button__hide {
   display: none;
 }
