@@ -147,6 +147,10 @@ ol.page-breadcrumb {
 .bso-component.card-image-align-top .card-image {
   align-items: start;
 }
+.bso-component.description {
+  font-size: 1.2rem;
+  margin: 1rem 0;
+}
 .bso-component.field-visualisation {
   margin-bottom: 1rem;
 }

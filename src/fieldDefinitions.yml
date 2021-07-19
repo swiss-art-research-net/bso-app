@@ -241,6 +241,15 @@ fields:
           } ORDER BY ?label
           LIMIT 100'
 
+    - id: object_description
+      label: Description
+      queries:
+      - select: 'SELECT ?value WHERE {
+          $subject crm:P129i_is_subject_of ?value .
+          ?value crm:P2_has_type aat:300435416 .
+        }'
+        
+
     - id: object_subcreations
       label: Creation Steps
       descriptions: The sub-creations for an object

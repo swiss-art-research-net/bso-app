@@ -61,6 +61,21 @@
         <div class="bso-component panel">
             <h2><mp-label iri="[[> thisIri]]"></mp-label></h2>
 
+            <!-- Description -->
+            <semantic-query
+                query="SELECT ?label WHERE {
+                    [[> thisForQuery]] crm:P129i_is_subject_of ?value .
+                    ?value crm:P2_has_type aat:300435416 ;
+                        rdfs:label ?label .
+                }"
+                template="{{>template}}">
+                <template id="template">
+                    {{#each bindings}}
+                        <p class="bso-component description">{{label.value}}</p>
+                    {{/each}}
+                </template>
+            </semantic-query>
+
             <!-- Depicts -->
             <semantic-query
                 query="SELECT DISTINCT ?subject ?type ?typeClass WHERE {
