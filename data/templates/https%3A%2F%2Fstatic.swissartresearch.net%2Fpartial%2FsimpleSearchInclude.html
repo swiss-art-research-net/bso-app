@@ -35,7 +35,7 @@ SERVICE Repository:lookup {
                                 query='SELECT DISTINCT ?subject ?description ?score ?type WHERE {
                                         } GROUP BY ?subject ?type ?description ?score ORDER BY DESC(?score) LIMIT [[#if searchLimit]][[searchLimit]][[else]]10[[/if]]'
 
-                                number-of-displayed-rows='10'
+                                number-of-displayed-rows='12'
                                 tuple-template="{{> partial:cardObject}}"
                                 options='{"showTableHeading": false, "showFilter":false}'
                                 no-result-template='<div style="text-align: center;">No results. Please refine your keyword.</div>'>
