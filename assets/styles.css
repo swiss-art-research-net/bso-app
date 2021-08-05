@@ -61,9 +61,17 @@ h3 {
 .gap {
   margin-bottom: 2rem;
 }
+.knowledgeGraphBar h1 {
+  font-size: 1rem;
+  font-weight: bold;
+}
+.knowledgeGraphBar .knowledgeGraphBar__summary {
+  padding-left: 1rem;
+}
 .navbar {
   background-color: #fff;
   color: #111;
+  border-bottom: 2px solid #fbfbfb;
 }
 .navbar a.navbar-brand,
 .navbar a.navbar-brand:hover {
