@@ -140,6 +140,15 @@ ol.page-breadcrumb {
 .bso-component.card .card-image img {
   width: 100%;
 }
+.bso-component.card .card-image .icon {
+  opacity: 0.5;
+  text-align: center;
+}
+.bso-component.card .card-image .icon img {
+  width: 45%;
+  position: relative;
+  top: 1rem;
+}
 .bso-component.card-container {
   padding-bottom: 1rem;
   display: flex;
