@@ -18,6 +18,6 @@
     	Don't modify or overwrite this page in your domain specific instance of the platform.
       If you need to adjust the placeholder, limit or query-pattern, just re-use the include as below.
     --]]
-    [[> partial:simpleSearchInclude searchPlaceholder="Search for something&hellip;" searchPattern="?subject a ?type ; rdfs:label|crm:P1_is_identified_by|crm:P1_is_identified_by/rdfs:label ?searchTerm . ?type rdfs:label ?typeLabel . VALUES(?type){(search:Person) (search:Object) (search:Place) (search:Type)} ?searchTerm bds:search ?__token__ ."]]
+    [[> partial:simpleSearchInclude searchLimit="100" searchPlaceholder="Search for something&hellip;" searchPattern="?subject a ?type ; rdfs:label|crm:P1_is_identified_by|crm:P1_is_identified_by/rdfs:label ?searchTerm . ?type rdfs:label ?typeLabel . VALUES(?type){(search:Person) (search:Object) (search:Place) (search:Type)} ?searchTerm bds:search ?__token__ ."]]
   </div>
 </div>
