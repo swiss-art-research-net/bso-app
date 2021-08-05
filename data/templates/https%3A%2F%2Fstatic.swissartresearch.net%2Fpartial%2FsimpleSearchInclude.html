@@ -1,0 +1,50 @@
+[[!--
+To include this page within you application, you can optionally pass in the following parameters:
+
+searchPattern="?subject rdfs:label|skos:prefLabel ?label . ?label bds:search ?__token__ ;"
+    searchPlaceholder="Type to search for X"
+searchLimit="100"
+---]]
+
+<semantic-search limit=[[#if searchLimit]][[searchLimit]][[else]]10[[/if]]>
+    <semantic-search-query-keyword
+      [[#if searchPlaceholder]]placeholder='[[searchPlaceholder]]'[[/if]]
+      domain='<http://www.w3.org/2000/01/rdf-schema#Resource>'
+      query='
+  #backwards compatibility
+  [[#if searchPattern]]
+    SELECT ?subject WHERE {
+       [[searchPattern]]
+    } ORDER BY DESC(?score) ?length
+  [[else]]
+PREFIX lookup: <http://www.metaphacts.com/ontologies/platform/repository/lookup#>
+SELECT ?subject ?description WHERE {
+SERVICE Repository:lookup {
+   ?subject lookup:token ?__token__ .
+   ?subject lookup:description ?description .
+   ?subject lookup:score ?score .
+   ?subject lookup:limit [[#if searchLimit]][[searchLimit]][[else]]10[[/if]] .
+}
+}
+  [[/if]]'
+    ></semantic-search-query-keyword>
+        <semantic-search-result-holder>
+            <semantic-search-result>
+                <div class="bso-component card-container">
+                        <semantic-table id='grid-result'
+                                query='SELECT DISTINCT ?subject ?description ?score ?type WHERE {
+                                        } GROUP BY ?subject ?type ?description ?score ORDER BY DESC(?score) LIMIT [[#if searchLimit]][[searchLimit]][[else]]10[[/if]]'
+
+                                number-of-displayed-rows='10'
+                                tuple-template="{{> partial:cardObject}}"
+                                options='{"showTableHeading": false, "showFilter":false}'
+                                no-result-template='<div style="text-align: center;">No results. Please refine your keyword.</div>'>
+
+                        <template id="subjectCellTemplate">
+                            {{> partial:cardObject iri=subject.value }}
+                        </template>
+                    </semantic-table>
+                </div>
+            </semantic-search-result>
+        </semantic-search-result-holder>
+</semantic-search>

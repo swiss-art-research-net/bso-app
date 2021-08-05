@@ -2,29 +2,8 @@
 
 <div class="bso-component home-search">
     <bs-col md="10" md-offset="1">
-        <div class="bso-component simple-search">
-            <semantic-simple-search
-                query="
-                SELECT DISTINCT ?resource ?typeLabel WHERE {
-                    ?resource a ?type ;
-                        rdfs:label ?label ;
-                        rdfs:label|crm:P1_is_identified_by|crm:P1_is_identified_by/rdfs:label ?searchTerm .
-                    ?type rdfs:label ?typeLabel .
-                    VALUES(?type){
-                        (search:Person)
-                        (search:Object)
-                        (search:Place)
-                        (search:Type)
-                    }
-                    ?searchTerm bds:search ?__token__ .
-                } LIMIT 10"
-            template='{{>template}}'
-            input-placeholder='[[i18n "globalSearchInputPrompt" bundle="bso" escapeHTML=false]]'
-            >
-                <template id="template">
-                    <span title="{{resource.value}}"><mp-label iri="{{resource.value}}"></mp-label> ({{typeLabel.value}})</span>
-                </template>
-            </semantic-simple-search>
+        <div class="bso-component simple-search">            
+            [[> partial:simpleSearchInclude searchPlaceholder="Search for something&hellip;" searchPattern="?subject a ?type ; rdfs:label|crm:P1_is_identified_by|crm:P1_is_identified_by/rdfs:label ?searchTerm . ?type rdfs:label ?typeLabel . VALUES(?type){(search:Person) (search:Object) (search:Place) (search:Type)} ?searchTerm bds:search ?__token__ ."]]
         </div>
     </bs-col>
 </div>

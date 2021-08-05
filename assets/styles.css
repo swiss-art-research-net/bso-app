@@ -208,6 +208,10 @@ ol.page-breadcrumb {
   background-position: bottom;
   background-size: cover;
 }
+.bso-component.home-search .bso-component.card {
+  box-shadow: rgba(0, 0, 0, 0.5) 0px 2px 20px;
+  border-color: rgba(255, 255, 255, 0.2);
+}
 .bso-component.image-display {
   padding: 2rem;
 }
@@ -339,6 +343,9 @@ ol.page-breadcrumb {
   display: block;
   overflow: hidden;
   max-height: 3em;
+}
+.bso-component .card-body .type {
+  font-weight: normal;
 }
 .bso-component .title {
   font-weight: bold;
