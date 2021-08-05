@@ -23,7 +23,7 @@ SERVICE Repository:lookup {
    ?subject lookup:token ?__token__ .
    ?subject lookup:description ?description .
    ?subject lookup:score ?score .
-   ?subject lookup:limit [[#if searchLimit]][[searchLimit]][[else]]12[[/if]] .
+   ?subject lookup:limit [[#if searchLimit]][[searchLimit]][[else]]10[[/if]] .
 }
 }
   [[/if]]'
@@ -35,7 +35,7 @@ SERVICE Repository:lookup {
                                 query='SELECT DISTINCT ?subject ?description ?score ?type WHERE {
                                         } GROUP BY ?subject ?type ?description ?score ORDER BY DESC(?score) LIMIT [[#if searchLimit]][[searchLimit]][[else]]10[[/if]]'
 
-                                number-of-displayed-rows='12'
+                                number-of-displayed-rows='10'
                                 tuple-template="{{> partial:cardObject}}"
                                 options='{"showTableHeading": false, "showFilter":false}'
                                 no-result-template='<div style="text-align: center;">No results. Please refine your keyword.</div>'>
