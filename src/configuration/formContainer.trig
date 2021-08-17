@@ -1,0 +1,16 @@
+@prefix Platform: <http://www.metaphacts.com/ontologies/platform#> .
+@prefix User: <http://www.metaphacts.com/resource/user/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix ldp: <http://www.w3.org/ns/ldp#> .
+
+<http://www.metaphacts.com/ontologies/platform#formContainer/context> {
+  _:node1ebiroqkcx20 <http://www.w3.org/ns/ldp#contains> Platform:formContainer .
+  Platform:formContainer prov:wasAttributedTo User:admin;
+        a prov:Entity, ldp:Container, ldp:Resource;
+        prov:generatedAtTime "2020-08-17T14:22:21.426Z"^^xsd:dateTime;
+        rdfs:label "Form Container".
+}
+
+{
+  _:node1ebiroqkcx20 a ldp:Container, ldp:Resource .
+}
