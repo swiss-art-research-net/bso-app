@@ -6,7 +6,7 @@
     <[[> thisIri]]>
 [[/inline]]
 
-<mp-event-proxy on-event-type="Dialog.HideAll" proxy-event-type="Component.Refresh" proxy-targets='["regions-table"]'></mp-event-proxy>
+<mp-event-proxy on-event-type="Dialog.HideAll" proxy-event-type="Component.Refresh" proxy-targets='["regions-table", "set-image-button"]'></mp-event-proxy>
 
 <div class="d-flex flex-md-row flex-column">
     <div class="bso-component separator sidebar image-display">
@@ -396,6 +396,40 @@
                         iri="page:addEditDataForObject"
                         urlqueryparam-objectiri="[[> thisIri]]"
                     ><button type="button" class="btn btn-primary btn-s">[[i18n "addData" bundle="bso"]]</button></semantic-link>
+
+
+                    <mp-event-target-refresh id="set-image-button">
+                        <semantic-if
+                            query="ASK {
+                                [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of $subject .
+                                $subject rso:displayLabel 'image' .
+                                GRAPH <https://platform.swissartresearch.net/imageRegions> {
+                                    FILTER NOT EXISTS {$subject crm:P2_has_type type:imageRegion}
+                                }
+                            }"
+                            then="{{> notthere}}"
+                        >
+                            <template id="notthere">
+                                <div>
+                                    <semantic-update
+                                        variable-params='["region"]'
+                                        post-action='reload'
+                                        query="INSERT {
+                                            GRAPH <https://platform.swissartresearch.net/imageRegions> {
+                                                ?region crm:P2_has_type type:imageRegion .
+                                            }
+                                        } WHERE {
+                                            [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of ?region .
+                                            ?region rso:displayLabel 'image' .
+                                        }"
+                                    >
+                                        <a class="btn btn-primary">Set image region</a>
+                                    </semantic-update>
+                                </div>
+                            </template>
+                            
+                        </semantic-if>
+                    </mp-event-target-refresh>
                 </div>
             </template>
         </semantic-if>
