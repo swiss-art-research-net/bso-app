@@ -9,6 +9,14 @@
     [[> partial:contentHeader]]
 [[/if]]
 
+[[#if (hasPermission "api:ldp:*")]]
+[[else]]
+    <style>
+        .mirador-osd-context-controls.hud-container, .qtip-content {
+            display: none;
+        }
+    </style>
+[[/if]]
 
 <div style="height: 700px">
 
