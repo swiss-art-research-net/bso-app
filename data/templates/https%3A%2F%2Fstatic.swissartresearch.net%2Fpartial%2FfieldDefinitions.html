@@ -68,6 +68,17 @@
     },
 
     {
+        "id" : "notes",
+
+            "label": "Notes",
+            "description" : "Notes about the entity",
+            "xsdDatatype" : "xsd:string",
+                "insertPattern" : "INSERT { $subject crm:P3_has_note $value . } WHERE {}",
+                "selectPattern" : "SELECT ?value WHERE { $subject crm:P3_has_note ?value . }",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/notes"
+    },
+
+    {
         "id" : "objects_created",
 
             "label": "Created",

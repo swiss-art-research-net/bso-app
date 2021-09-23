@@ -80,6 +80,7 @@ fields:
         - select: 'SELECT ?value WHERE {
           $subject crm:P82b_end_of_the_end ?value
           }'
+
     - id: label
       label: Label
       description: A human-readable label for the entity
@@ -92,6 +93,19 @@ fields:
           } WHERE {}'
         - select: 'SELECT ?value WHERE {
             $subject rdfs:label ?value .
+          }'
+          
+    - id: notes
+      label: Notes
+      description: Notes about the entity
+      datatype: xsd:string
+      minOccurs: 0
+      queries:
+        - insert: 'INSERT { 
+            $subject crm:P3_has_note $value .
+          } WHERE {}'
+        - select: 'SELECT ?value WHERE {
+            $subject crm:P3_has_note ?value .
           }'
     
     - id: objects_created
