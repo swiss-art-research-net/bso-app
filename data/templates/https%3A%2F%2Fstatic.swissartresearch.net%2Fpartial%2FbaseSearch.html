@@ -29,6 +29,7 @@ search-profile='{
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E53_Place>", "label": "Place", "thumbnail": "../images/fcs/places.svg"},
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E52_Time-Span>", "label": "Time", "thumbnail": "../images/fcs/dates.svg"},
         {"iri": "<https://platform.swissartresearch.net/search/Type>", "label": "Type", "thumbnail": "../images/fcs/concepts.svg"},
+        {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E55_Type>", "label": "Classification", "thumbnail": "../images/fcs/concepts.svg"},
         {"iri": "<https://platform.swissartresearch.net/search/Concept>", "label": "Concept", "thumbnail": "../images/fcs/concepts.svg"},
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E57_Material>", "label": "Material", "thumbnail": "../images/fcs/things.svg"}
       ],
@@ -98,6 +99,12 @@ search-profile='{
         "hasDomain": "<https://platform.swissartresearch.net/search/Object>",
         "hasRange": "<https://platform.swissartresearch.net/search/Type>",
         "label": "[[i18n "depicts" bundle="bso"]]"
+      },
+      {
+        "iri": "<https://platform.swissartresearch.net/Thing_was_classified_as_Type>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Object>",
+        "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E55_Type>",
+        "label": "[[i18n "classifiedAs" bundle="bso"]]"
       },
       {
         "iri": "<https://platform.swissartresearch.net/Actor_carried_out_creations_of_Type>",
@@ -208,6 +215,16 @@ relations='{
           crm:P82b_end_of_the_end ?end .
         FILTER(STRDT(STR(?begin), xsd:date) <= ?__dateEndValue__) .
         FILTER(STRDT(STR(?end), xsd:date) >= ?__dateBeginValue__) .
+      }
+    "
+  }],
+  "<https://platform.swissartresearch.net/Thing_was_classified_as_Type>": [{
+    "kind": "resource",
+    "queryPattern": "
+      {
+
+        ?classification crm:P140_assigned_attribute_to ?subject ;
+          crm:P141_assigned ?__value__ .
       }
     "
   }],
