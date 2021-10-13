@@ -58,7 +58,16 @@
         </semantic-if>
 
         <!-- smapshot -->
-        <smapshot-embed iri="[[> thisIri]]"></smapshot-embed>
+        <mp-overlay-dialog title="Smapshot View" type="modal" bs-size="xl">
+            <mp-overlay-dialog-trigger><a>[[i18n "viewInSmapshot" bundle="bso"]]</a></mp-overlay-dialog-trigger>
+            <mp-overlay-dialog-content id="smapshot-modal">
+                <mp-page-loader 
+                    iri="[[ resolvePrefix 'page:viewSmapshot']]"
+                    urlqueryparam-iri="[[> thisIri]]"
+                    urlqueryparam-overlay="true"
+                ></mp-page-loader>
+        </mp-overlay-dialog-content>
+        </mp-overlay-dialog>
     </div>
     <div class="bso-component main">
         <div class="bso-component panel">
