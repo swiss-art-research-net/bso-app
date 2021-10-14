@@ -274,77 +274,8 @@ relations='{
             template='<div>{{#if hasLimit}} <bs-alert bs-style="warning"> Showing {{numberOfResults}} of {{totalNumberOfResults}} matches. <strong>Please, refine your search.</strong> </bs-alert> {{else}} <p>Found <em>{{numberOfResults}}</em> results</p>{{/if}}</div>'>
           </mp-sparql-result-counts>
           
-          <mp-event-trigger type="Component.Refresh" targets='["object-map"]'>
-            <bs-tabs>
-              
-            <bs-tab event-key="grid" title="[[i18n "grid" bundle="bso"]]">
-              <div class="bso-component card-container">
-                <semantic-table
-                  id="grid-result"
-                  query="SELECT DISTINCT ?subject WHERE {
-                    OPTIONAL {
-                      ?subject skos:prefLabel ?label .
-                    }
-                  } ORDER BY ?label ?subject"
-                  tuple-template="{{> partial:cardObject}}"
-                  options='{
-                    "showFilter": false,
-                    "pageSizeSelection": "[5,10,20,50,100]"
-                  }'>
-                </semantic-table>
-              </div>
-            </bs-tab>
-
-              <bs-tab event-key="list" title="[[i18n "list" bundle="bso"]]">
-                <div class="panelView">
-                  <semantic-table 
-                    id="panel-result"
-                    prefetch-labels="false"
-                    query="SELECT DISTINCT ?subject ?label WHERE {
-                      OPTIONAL {
-                        ?subject skos:prefLabel ?label .
-                      }
-                    } ORDER BY ?label ?subject" 
-                    tuple-template='{{> gridTemplate}}'
-                    options='{
-                      "showFilter": false,
-                      "pageSizeSelection": "[5,10,20,50,100]"
-                    }'
-                  >
-                    <template id="gridTemplate">
-                      {{> partial:panelObject iri=subject.value displayMenu="true"}}
-                    </template>
-                  </semantic-table>
-                </div>
-              </bs-tab>
-              
-              <bs-tab event-key="map" title="[[i18n "map" bundle="bso"]]">
-                <div style="height:40rem;width:100%">
-                    <mp-event-target-refresh id="object-map">
-                        <semantic-map
-                            id="map-result"
-                            query="SELECT DISTINCT ?subject ?wkt WHERE {
-                                {
-                                    ?subject a search:Place ;
-                                        crmdig:L54_is_same-as/wdt:P625 ?wkt .
-                                } UNION {
-                                    ?subject crm:P128_carries?/crm:P138_represents/crmdig:L54_is_same-as/wdt:P625 ?wkt .
-                                } UNION {
-                                    ?subject a search:Type ;
-                                        ^crm:P138_represents/crm:P138_represents/crmdig:L54_is_same-as/wdt:P625 ?wkt .
-                                } 
-                            }"
-                            
-                            tuple-template='{{> template }}'
-                            no-result-template='<bs-alert variant="info">[[i18n "noResultsWithCoordinates" bundle="bso"]]</bs-alert>'
-                        >
-                            <template id='template'>{{> partial:cardObject}}</template>
-                        </semantic-map>
-                    </mp-event-target-refresh>
-                </div>
-              </bs-tab>
-            </bs-tabs>
-            </mp-event-trigger>
+          [[> partial:searchResultsVisualisation ]]
+          
         </semantic-search-result>
     </semantic-search-result-holder>
     </bs-col>

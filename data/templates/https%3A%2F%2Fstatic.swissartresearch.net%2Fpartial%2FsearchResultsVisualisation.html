@@ -1,0 +1,89 @@
+[[#*inline "cardView"]]
+
+  <div class="bso-component card-container">
+    <semantic-table
+      id="grid-result"
+      query="SELECT DISTINCT ?subject WHERE {
+        OPTIONAL {
+          ?subject skos:prefLabel ?label .
+        }
+      } ORDER BY ?label ?subject
+      [[#if searchLimit]]LIMIT [[searchLimit]][[/if]]"
+      tuple-template="{{> partial:cardObject}}"
+      number-of-displayed-rows="12"
+      no-result-template='<bs-panel class="info">[[i18n "noMatchesFound" bundle="bso"]]</bs-panel>'
+      options='{
+        "showFilter": false,
+        "pageSizeSelection": "[5,10,20,50,100]"
+      }'>
+    </semantic-table>
+  </div>
+
+[[/inline]]
+
+<div class="bso-component">
+  <mp-event-trigger type="Component.Refresh" targets='["object-map"]'>
+    [[#if hideTabs]]
+      [[> cardView]]
+    [[else]]
+      <bs-tabs>
+        
+      <bs-tab event-key="grid" title="[[i18n "grid" bundle="bso"]]">
+        [[> cardView]]
+      </bs-tab>
+
+        <bs-tab event-key="list" title="[[i18n "list" bundle="bso"]]">
+          <div class="panelView">
+            <semantic-table 
+              id="panel-result"
+              prefetch-labels="false"
+              query="SELECT DISTINCT ?subject ?label WHERE {
+                OPTIONAL {
+                  ?subject skos:prefLabel ?label .
+                }
+              } ORDER BY ?label ?subject
+              [[#if searchLimit]]LIMIT [[searchLimit]][[/if]]" 
+              tuple-template='{{> gridTemplate}}'
+              no-result-template='<bs-panel class="info">[[i18n "noMatchesFound" bundle="bso"]]</bs-panel>'
+              options='{
+                "showFilter": false,
+                "pageSizeSelection": "[5,10,20,50,100]"
+              }'
+            >
+              <template id="gridTemplate">
+                {{> partial:panelObject iri=subject.value displayMenu="true"}}
+              </template>
+            </semantic-table>
+          </div>
+        </bs-tab>
+        
+        <bs-tab event-key="map" title="[[i18n "map" bundle="bso"]]">
+          <div style="height:40rem;width:100%">
+              <mp-event-target-refresh id="object-map">
+                  <semantic-map
+                      id="map-result"
+                      query="SELECT DISTINCT ?subject ?wkt WHERE {
+                          {
+                              ?subject a search:Place ;
+                                  crmdig:L54_is_same-as/wdt:P625 ?wkt .
+                          } UNION {
+                              ?subject crm:P128_carries?/crm:P138_represents/crmdig:L54_is_same-as/wdt:P625 ?wkt .
+                          } UNION {
+                              ?subject a search:Type ;
+                                  ^crm:P138_represents/crm:P138_represents/crmdig:L54_is_same-as/wdt:P625 ?wkt .
+                          } 
+                      }
+                      [[#if searchLimit]]LIMIT [[searchLimit]][[/if]]"
+                      
+                      tuple-template='{{> template }}'
+                      no-result-template='<bs-alert variant="info">[[i18n "noResultsWithCoordinates" bundle="bso"]]</bs-alert>'
+                  >
+                      <template id='template'>{{> partial:cardObject}}</template>
+                  </semantic-map>
+              </mp-event-target-refresh>
+          </div>
+        </bs-tab>
+      </bs-tabs>
+      [[/if]]
+    </mp-event-trigger>
+  </div>
