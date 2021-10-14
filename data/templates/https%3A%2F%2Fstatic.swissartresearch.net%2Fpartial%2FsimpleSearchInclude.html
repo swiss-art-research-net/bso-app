@@ -30,21 +30,9 @@ SERVICE Repository:lookup {
     ></semantic-search-query-keyword>
         <semantic-search-result-holder>
             <semantic-search-result>
-                <div class="bso-component card-container">
-                        <semantic-table id='grid-result'
-                                query='SELECT DISTINCT ?subject ?description ?score ?type WHERE {
-                                        } GROUP BY ?subject ?type ?description ?score ORDER BY DESC(?score) LIMIT [[#if searchLimit]][[searchLimit]][[else]]10[[/if]]'
-
-                                number-of-displayed-rows='12'
-                                tuple-template="{{> partial:cardObject}}"
-                                options='{"showTableHeading": false, "showFilter":false}'
-                                no-result-template='<bs-panel class="info">[[i18n "noMatchesFound" bundle="bso"]]</bs-panel>'>
-
-                        <template id="subjectCellTemplate">
-                            {{> partial:cardObject iri=subject.value }}
-                        </template>
-                    </semantic-table>
-                </div>
+            
+                [[> partial:searchResultsVisualisation searchLimit=searchLimit showTabs=showTabs]]
+            
             </semantic-search-result>
         </semantic-search-result-holder>
 </semantic-search>
