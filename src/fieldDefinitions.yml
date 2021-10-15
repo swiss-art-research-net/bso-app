@@ -68,6 +68,7 @@ fields:
     - id: date_from
       label: Earliest date
       description: The beginning of a time frame
+      datatype: xsd:dateTime
       queries:
         - select: 'SELECT ?value WHERE {
           $subject crm:P82a_begin_of_the_begin ?value
@@ -76,6 +77,7 @@ fields:
     - id: date_to
       label: Latest date
       description: The end of a time frame
+      datatype: xsd:dateTime
       queries:
         - select: 'SELECT ?value WHERE {
           $subject crm:P82b_end_of_the_end ?value
@@ -132,6 +134,7 @@ fields:
     - id: object_creation_date
       label: Creation date
       description: The date an object has been created
+      datatype: xsd:anyURI
       domain: crm:E22_Man-Made_Object
       range: crm:E52_Time-Span
       queries:
@@ -272,6 +275,7 @@ fields:
 
     - id: object_description
       label: Description
+      datatype: xsd:anyURI
       queries:
       - select: 'SELECT ?value WHERE {
           $subject crm:P129i_is_subject_of ?value .
@@ -332,6 +336,7 @@ fields:
 
     - id: object_production_date
       label: Production date
+      datatype: xsd:anyURI
       description: The date an object has been produced
       domain: crm:E22_Man-Made_Object
       range: crm:E52_Time-Span
@@ -342,6 +347,7 @@ fields:
       
     - id: region_for_proposition_subject
       label: Regions
+      datatype: xsd:anyURI
       queries:
         - select: 'SELECT ?value WHERE {
             BIND(URI(STRBEFORE(STR($subject), "/proposition")) as ?propositionSubject)
