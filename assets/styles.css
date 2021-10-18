@@ -14,6 +14,9 @@ h2 {
 h3 {
   font-weight: bold;
 }
+iframe {
+  border: none;
+}
 #custom-modal-close-button {
   text-align: right;
   padding-bottom: 0.5rem;
@@ -310,6 +313,9 @@ ol.page-breadcrumb {
 }
 .bso-component.sidebar {
   max-width: 576px;
+}
+.bso-component.sidebar .card {
+  margin-bottom: 1rem;
 }
 .bso-component.simple-search {
   padding: 4rem 0;

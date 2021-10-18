@@ -56,6 +56,38 @@
                 </bs-panel>
             </template>
         </semantic-if>
+
+        <!-- smapshot -->
+        <semantic-if
+            query='ASK { 
+                ?classification crm:P140_assigned_attribute_to [[> thisForQuery ]] ;
+                    crm:P141_assigned <https://resource.swissartresearch.net/type/classification/landscape> .
+            }'
+            then='{{> smapshotTemplate}}'
+        >
+            <template id="smapshotTemplate">
+                <bs-panel>
+                    <smapshot-embed 
+                        iri="[[> thisIri]]"
+                        width="300"
+                        height="200"
+                    ></smapshot-embed>
+                    <div class="caption">
+                        <mp-overlay-dialog title="Smapshot View" type="modal" bs-size="xl">
+                            <mp-overlay-dialog-trigger><a>[[i18n "viewInSmapshot" bundle="bso"]]</a></mp-overlay-dialog-trigger>
+                            <mp-overlay-dialog-content id="smapshot-modal">
+                                <mp-page-loader 
+                                    iri="[[ resolvePrefix 'page:viewSmapshot']]"
+                                    urlqueryparam-iri="[[> thisIri]]"
+                                    urlqueryparam-overlay="true"
+                                ></mp-page-loader>
+                        </mp-overlay-dialog-content>
+                        </mp-overlay-dialog>
+                    </div>
+                </bs-panel>
+            </template>
+        </semantic-if>
+
     </div>
     <div class="bso-component main">
         <div class="bso-component panel">

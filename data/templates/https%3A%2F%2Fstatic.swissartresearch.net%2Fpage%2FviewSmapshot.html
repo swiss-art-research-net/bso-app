@@ -1,0 +1,46 @@
+[[#if (urlParam "overlay")]]
+    <style>
+        .overlay-modal__header.modal-header {
+            display: none;
+        }
+    </style>
+[[else]]
+    [[> partial:pageHeader]]
+    [[> partial:contentHeader]]
+[[/if]]
+
+[[#if (hasPermission "api:ldp:*")]]
+[[else]]
+    <style>
+        .mirador-osd-context-controls.hud-container, .qtip-content {
+            display: none;
+        }
+    </style>
+[[/if]]
+
+<div style="height: 700px">
+
+    [[#if (urlParam "overlay")]]
+        <div id="custom-modal-close-button">
+            <mp-event-trigger type="Dialog.HideAll">
+                <button>
+                    <span aria-hidden="true">×</span>
+                    <span class="sr-only">Close</span>
+                </button>
+            </mp-event-trigger>
+        </div>
+    [[/if]]
+
+    <smapshot-embed 
+        iri="[[urlParam 'iri']]"
+        width="95%"
+        height="95%"
+    ></smapshot-embed>
+
+</div>
+
+[[#if (urlParam "overlay")]]
+[[else]]
+    [[> partial:contentFooter]]
+    [[> partial:pageFooter]]
+[[/if]]
