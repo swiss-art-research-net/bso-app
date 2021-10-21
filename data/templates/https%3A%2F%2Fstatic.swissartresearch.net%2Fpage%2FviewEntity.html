@@ -329,9 +329,9 @@
             [[/ objectsTable]]
 
             <!-- Objects owned -->
-            [[#> objectsTable condition='?object a search:Object; crm:P109_has_former_or_current_curator $subject' label='worksHeld']]
+            [[#> objectsTable condition='?object a search:Object; crm:P109_has_current_or_former_curator $subject' label='worksHeld']]
                 
-                ?subject crm:P109_has_former_or_current_curator [[> thisForQuery]] .
+                ?subject crm:P109_has_current_or_former_curator [[> thisForQuery]] .
                 
             [[/ objectsTable]]
 

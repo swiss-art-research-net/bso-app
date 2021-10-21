@@ -38,7 +38,7 @@ fields:
       materialise: True
       queries:
         - select: 'SELECT ?value WHERE {
-            $subject crm:P109_has_former_or_current_curator ?value .
+            $subject crm:P109_has_current_or_former_curator ?value .
           }'
             
     - id: creator_of_object
