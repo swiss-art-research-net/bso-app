@@ -23,3 +23,4 @@ artwork=https://resource.swissartresearch.net/artwork/
 place=https://resource.swissartresearch.net/place/
 actor=https://resource.swissartresearch.net/actor/
 type=https://resource.swissartresearch.net/type/
+schema=http://schema.org/

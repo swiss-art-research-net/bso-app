@@ -11,11 +11,15 @@
             {{#ifCond field.xsdDatatype.value "=="  "http://www.w3.org/2001/XMLSchema#anyURI"}}
               <semantic-link iri="{{value.value.value}}"></semantic-link>
             {{else}}
-              {{#if value.label}}
-                {{ value.label }}
+              {{#ifCond field.xsdDatatype.value "==" "schema:URL"}}
+                <a href="{{value.value.value}}" target="_blank">{{value.label}}</a>
               {{else}}
-                {{ value.value.value }}
-              {{/if}}
+                {{#if value.label}}
+                  {{ value.label }}
+                {{else}}
+                  {{ value.value.value }}
+                {{/if}}
+              {{/ifCond}}
             {{/ifCond}}
             </dd>
           {{/each}}

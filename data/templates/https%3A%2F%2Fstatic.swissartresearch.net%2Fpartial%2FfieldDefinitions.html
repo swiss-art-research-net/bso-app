@@ -42,6 +42,7 @@
 
             "label": "Earliest date",
             "description" : "The beginning of a time frame",
+            "xsdDatatype" : "xsd:dateTime",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P82a_begin_of_the_begin ?value }",
         "iri" : "https://platform.swissartresearch.net/instances/fields/date_from"
     },
@@ -51,6 +52,7 @@
 
             "label": "Latest date",
             "description" : "The end of a time frame",
+            "xsdDatatype" : "xsd:dateTime",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P82b_end_of_the_end ?value }",
         "iri" : "https://platform.swissartresearch.net/instances/fields/date_to"
     },
@@ -96,6 +98,7 @@
 
             "label": "Creation date",
             "description" : "The date an object has been created",
+            "xsdDatatype" : "xsd:anyURI",
             "domain" : "crm:E22_Man-Made_Object",
             "range" : "crm:E52_Time-Span",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P128_carries/crm:P94i_was_created_by/crm:P4_has_time-span ?value }",
@@ -153,6 +156,7 @@
         "id" : "object_description",
 
             "label": "Description",
+            "xsdDatatype" : "xsd:anyURI",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P129i_is_subject_of ?value . ?value crm:P2_has_type aat:300435416 . }",
         "iri" : "https://platform.swissartresearch.net/instances/fields/object_description"
     },
@@ -204,6 +208,7 @@
 
             "label": "Production date",
             "description" : "The date an object has been produced",
+            "xsdDatatype" : "xsd:anyURI",
             "domain" : "crm:E22_Man-Made_Object",
             "range" : "crm:E52_Time-Span",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P108i_was_produced_by/crm:P4_has_time-span ?value }",
@@ -214,6 +219,7 @@
         "id" : "region_for_proposition_subject",
 
             "label": "Regions",
+            "xsdDatatype" : "xsd:anyURI",
                 "selectPattern" : "SELECT ?value WHERE { BIND(URI(STRBEFORE(STR($subject), \"/proposition\")) as ?propositionSubject) ?propositionSubject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?iiif_image . ?value crmdig:L49_is_primary_area_of ?iiif_image . }",
         "iri" : "https://platform.swissartresearch.net/instances/fields/region_for_proposition_subject"
     },
@@ -318,6 +324,17 @@
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P140_assigned_attribute_to ?value . }",
                 "insertPattern" : "INSERT { $subject crm:P140_assigned_attribute_to ?value . } WHERE {}",
         "iri" : "https://platform.swissartresearch.net/instances/fields/P140_assigned_attribute_to"
+    },
+
+    {
+        "id" : "see_also",
+
+            "label": "See also",
+            "description" : "Links to this entity in other databases",
+            "xsdDatatype" : "schema:URL",
+                "selectPattern" : "SELECT ?value ?label WHERE { BIND(<https://d-nb.info/gnd/10171799-4> as ?nb) BIND(<https://d-nb.info/gnd/1012546-2> as ?zbz) { $subject a search:Object ; crm:P109_has_current_or_former_curator ?zbz ; crmdig:L1i_was_digitized_by/crmdig:L11_had_output/crm:P1_is_identified_by ?value .
+} UNION { $subject a search:Object ; crm:P109_has_current_or_former_curator ?nb . BIND(STRAFTER(STR($subject), \"nb-\") as ?nbId) BIND(URI(CONCAT(\"https://www.helveticarchives.ch/detail.aspx?ID=\", ?nbId)) as ?value) BIND(\"HelveticArchives\" as ?label) } }",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/see_also"
     }
 
 ]

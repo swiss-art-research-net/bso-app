@@ -135,8 +135,23 @@
 
             <!-- Same as / External Links -->
             <semantic-query
-                query="SELECT DISTINCT ?subject WHERE {
-                    [[> thisForQuery]] crmdig:L54_is_same-as ?subject .
+                query="SELECT DISTINCT ?subject ?label WHERE {
+
+                    BIND(<https://d-nb.info/gnd/10171799-4> as ?nb)
+                    BIND(<https://d-nb.info/gnd/1012546-2> as ?zbz)
+                    {
+                        [[> thisForQuery]] crmdig:L54_is_same-as ?subject .
+                    } UNION {
+                        [[> thisForQuery]] a search:Object ;
+                        crm:P109_has_current_or_former_curator ?zbz ;
+                        crmdig:L1i_was_digitized_by/crmdig:L11_had_output/crm:P1_is_identified_by ?subject .
+                    } UNION {
+                        [[> thisForQuery]] a search:Object ;
+                            crm:P109_has_current_or_former_curator ?nb .
+                        BIND(STRAFTER('[[> thisIri]]', 'nb-') as ?nbId)
+                        BIND(URI(CONCAT('https://www.helveticarchives.ch/detail.aspx?ID=', ?nbId)) as ?subject)
+                        BIND('HelveticArchives' as ?label)
+                    }
                 }"
                 template="{{> template}}">
                 <template id="template">
@@ -144,7 +159,7 @@
                         <span class="bso-component label">[[i18n "externalLinks" bundle="bso"]]</span>
                         <ul class="bso-component tags">
                             {{#each bindings}}
-                                <li class="bso-tag"><a href="{{subject.value}}" target="_blank"><mp-label iri="{{subject.value}}"></mp-label></a></li>
+                                <li class="bso-tag"><a href="{{subject.value}}" target="_blank">{{#if label.value}}{{label.value}}{{else}}<mp-label iri="{{subject.value}}"></mp-label>{{/if}}</a></li>
                             {{/each}}
                         </ul>
                     </div>
