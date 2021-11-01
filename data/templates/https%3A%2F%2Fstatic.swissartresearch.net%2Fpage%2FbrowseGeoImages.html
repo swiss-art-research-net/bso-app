@@ -1,0 +1,29 @@
+
+[[> partial:pageHeader]]
+[[> partial:contentHeader]]
+
+<h2 class="gap">[[i18n "browseImages" bundle="bso"]]</h2>
+
+<div>
+  <semantic-link iri="page:search">[[i18n "goToSearch" bundle="bso"]]</semantic-link>
+</div>
+
+[[#> partial:baseSearch]]
+
+<semantic-search-query-constant
+
+  domain='<https://platform.swissartresearch.net/search/Object>'
+  query='
+    SELECT ?subject WHERE {
+      ?subject a search:Object ;
+        crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
+      ?simulation crm:P32_used_general_technique <https://smapshot.heig-vd.ch/> ;
+          crm:P16_used_specific_object ?image .
+    }
+  '
+></semantic-search-query-constant>
+
+[[/ partial:baseSearch]]
+
+[[> partial:contentFooter]]
+[[> partial:pageFooter]]
