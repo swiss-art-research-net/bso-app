@@ -33,7 +33,7 @@ fields:
       label: Collection
       description: The holding collection or institution of the work
       datatype: xsd:anyURI
-      domain: crm:E22_Man-Made_Object
+      domain: crm:E22_Human-Made_Object
       range: crm:E39_Actor
       materialise: True
       queries:
@@ -45,7 +45,7 @@ fields:
       label: Creator
       description: The creator of the artwork 
       datatype: xsd:anyURI
-      domain: crm:E22_Man-Made_Object
+      domain: crm:E22_Human-Made_Object
       range: crm:E39_Actor
       materialise: True
       queries:
@@ -115,7 +115,7 @@ fields:
       description: Objects that were created by an actor
       datatype: xsd:anyURI
       domain: crm:E39_Actor
-      range: crm:E22_Man-Made_Object
+      range: crm:E22_Human-Made_Object
       display: hidden
       materialise: True
       queries:
@@ -135,7 +135,7 @@ fields:
       label: Creation date
       description: The date an object has been created
       datatype: xsd:anyURI
-      domain: crm:E22_Man-Made_Object
+      domain: crm:E22_Human-Made_Object
       range: crm:E52_Time-Span
       queries:
         - select: 'SELECT ?value WHERE {
@@ -146,7 +146,7 @@ fields:
       label: Depicts
       description: The entity that is depicted by the object
       datatype: xsd:anyURI
-      domain: crm:E22_Man-Made_Object
+      domain: crm:E22_Human-Made_Object
       range: crm:E1_CRM_Entity
       materialise: True
       queries:
@@ -288,7 +288,7 @@ fields:
       descriptions: The sub-creations for an object
       datatype: xsd:anyURI
       display: hidden
-      domain: crm:E22_Man-Made_Object
+      domain: crm:E22_Human-Made_Object
       range: crm:E65_Creation
       queries:
         - select: 'SELECT ?value WHERE {
@@ -306,7 +306,7 @@ fields:
       descriptions: The production steps for an object
       datatype: xsd:anyURI
       display: hidden
-      domain: crm:E22_Man-Made_Object
+      domain: crm:E22_Human-Made_Object
       range: E12_Production
       queries:
         - select: 'SELECT ?value WHERE {
@@ -325,7 +325,7 @@ fields:
       display: hidden
       minOccurs: 1
       maxOccurs: 1
-      domain: crm:E22_Man-Made_Object
+      domain: crm:E22_Human-Made_Object
       range: crm:E36_Visual_item
       queries:
         - insert: 'INSERT { $subject crm:P128_carries $value} WHERE {}'
@@ -338,7 +338,7 @@ fields:
       label: Production date
       datatype: xsd:anyURI
       description: The date an object has been produced
-      domain: crm:E22_Man-Made_Object
+      domain: crm:E22_Human-Made_Object
       range: crm:E52_Time-Span
       queries:
         - select: 'SELECT ?value WHERE {
