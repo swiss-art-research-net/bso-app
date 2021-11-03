@@ -282,6 +282,7 @@
                 query="SELECT ?part ?part_note ?part_type_label WHERE {
                     [[> thisForQuery ]] crm:P46_is_composed_of ?part .
                     ?part crm:P2_has_type/rdfs:label ?part_type_label .
+                    FILTER(LANG(?part_type_label) = 'en')
                     OPTIONAL {
                         ?part crm:P3_has_note ?part_note .
                     }
@@ -297,11 +298,17 @@
                                 <td><em>{{part_type_label.value}}</em></span>{{#if part_note.value}} ({{part_note.value}}){{/if}}</td>
                                 <td>
                                     <semantic-query
-                                        query="SELECT * WHERE {
+                                        query="SELECT ?dimension_label ?dimension_type_label ?dimension_unit ?dimension_value WHERE {
                                             <{{part.value}}> crm:P43_has_dimension ?dimension .     
-                                            ?dimension crm:P2_has_type/rdfs:label ?dimension_type_label ;
-                                                crm:P90_has_value ?dimension_value ;
-                                                crm:P91_has_unit/rdfs:label ?dimension_unit .
+                                            {
+                                                ?dimension crm:P2_has_type/rdfs:label ?dimension_type_label ;
+                                                    crm:P90_has_value ?dimension_value ;
+                                                    crm:P91_has_unit/rdfs:label ?dimension_unit .
+                                                    FILTER(LANG(?dimension_type_label) = 'en')
+                                            } UNION {
+                                                ?dimension rdfs:label ?dimension_label .
+                                                FILTER NOT EXISTS {?dimension crm:P90_has_value ?dimension_value }
+                                            }
               
                                         } ORDER BY DESC(?dimension_unit)"
                                         template="{{> dimensionTemplate}}"
@@ -309,7 +316,12 @@
                                         <template id="dimensionTemplate">
                                             <div>
                                                 {{#each bindings}}
-                                                    {{dimension_type_label.value}}: {{dimension_value.value}} {{dimension_unit.value}}
+                                                    {{#if dimension_type_label.value}}
+                                                        {{dimension_type_label.value}}: {{dimension_value.value}} {{dimension_unit.value}}
+                                                    {{/if}}
+                                                    {{#if dimension_label}}
+                                                        {{dimension_label.value}}
+                                                    {{/if}}
                                                 {{/each}}
                                             </div>
                                         </template>
