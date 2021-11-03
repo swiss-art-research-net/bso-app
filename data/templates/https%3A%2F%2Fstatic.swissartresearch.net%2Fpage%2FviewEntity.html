@@ -276,6 +276,53 @@
                 </template>
             </semantic-query>
 
+            <!-- Dimensions -->
+            <!-- Dimensions of parts -->
+            <semantic-query
+                query="SELECT ?part ?part_note ?part_type_label WHERE {
+                    [[> thisForQuery ]] crm:P46_is_composed_of ?part .
+                    ?part crm:P2_has_type/rdfs:label ?part_type_label .
+                    OPTIONAL {
+                        ?part crm:P3_has_note ?part_note .
+                    }
+                } ORDER BY ?part_type_label"
+                template="{{> partTemplate}}"
+            >
+                <template id="partTemplate">
+                    <div class="bso-component field-visualisation">
+                        <span class="bso-component label">[[i18n "dimensions" bundle="bso"]]</span>
+                        <table>
+                            {{#each bindings}}
+                            <tr>
+                                <td><em>{{part_type_label.value}}</em></span>{{#if part_note.value}} ({{part_note.value}}){{/if}}</td>
+                                <td>
+                                    <semantic-query
+                                        query="SELECT * WHERE {
+                                            <{{part.value}}> crm:P43_has_dimension ?dimension .     
+                                            ?dimension crm:P2_has_type/rdfs:label ?dimension_type_label ;
+                                                crm:P90_has_value ?dimension_value ;
+                                                crm:P91_has_unit/rdfs:label ?dimension_unit .
+              
+                                        } ORDER BY DESC(?dimension_unit)"
+                                        template="{{> dimensionTemplate}}"
+                                    >
+                                        <template id="dimensionTemplate">
+                                            <div>
+                                                {{#each bindings}}
+                                                    {{dimension_type_label.value}}: {{dimension_value.value}} {{dimension_unit.value}}
+                                                {{/each}}
+                                            </div>
+                                        </template>
+                                    </semantic-query>
+                                </td>
+                            </tr>
+                            {{/each}}
+                        </table>
+                    </div>
+
+                </template>
+            </semantic-query>
+
             <!-- Objects created -->
             [[#> objectsTable condition='?object a search:Object; (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P9_consists_of?/crm:P14_carried_out_by $subject' label='works']]
 
