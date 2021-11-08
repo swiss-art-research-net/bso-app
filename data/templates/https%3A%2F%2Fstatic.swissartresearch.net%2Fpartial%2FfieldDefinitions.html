@@ -343,8 +343,7 @@
             "label": "See also",
             "description" : "Links to this entity in other databases",
             "xsdDatatype" : "schema:URL",
-                "selectPattern" : "SELECT ?value ?label WHERE { BIND(<https://d-nb.info/gnd/10171799-4> as ?nb) BIND(<https://d-nb.info/gnd/1012546-2> as ?zbz) { $subject a search:Object ; crm:P109_has_current_or_former_curator ?zbz ; crmdig:L1i_was_digitized_by/crmdig:L11_had_output/crm:P1_is_identified_by ?value .
-} UNION { $subject a search:Object ; crm:P109_has_current_or_former_curator ?nb . BIND(STRAFTER(STR($subject), \"nb-\") as ?nbId) BIND(URI(CONCAT(\"https://www.helveticarchives.ch/detail.aspx?ID=\", ?nbId)) as ?value) BIND(\"HelveticArchives\" as ?label) } }",
+                "selectPattern" : "SELECT ?value ?label WHERE { BIND(<https://d-nb.info/gnd/10171799-4> as ?nb) BIND(<https://d-nb.info/gnd/1012546-2> as ?zbz) { $subject a search:Object ; crm:P109_has_current_or_former_curator ?zbz ; crmdig:L1i_was_digitized_by/crmdig:L11_had_output/crm:P1_is_identified_by ?value . } UNION { $subject a search:Object ; crm:P109_has_current_or_former_curator ?nb . BIND(STRAFTER(STR($subject), \"nb-\") as ?nbId) BIND(URI(CONCAT(\"https://www.helveticarchives.ch/detail.aspx?ID=\", ?nbId)) as ?value) BIND(\"HelveticArchives\" as ?label) } }",
         "iri" : "https://platform.swissartresearch.net/instances/fields/see_also"
     }
 

@@ -3,8 +3,11 @@ output: ../ldp/assets/fieldDefinitions.trig
 prefix: https://platform.swissartresearch.net/instances/fields/
 container: http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer
 namespaces:
+  aat: http://vocab.getty.edu/aat/
   crm: http://www.cidoc-crm.org/cidoc-crm/
+  crmdig: http://www.ics.forth.gr/isl/CRMdig/
   crminf: http://www.ics.forth.gr/isl/CRMinf/
+  la: http://www.linkedart.org/schema/
   rdfs: http://www.w3.org/2000/01/rdf-schema#
   prov: http://www.w3.org/ns/prov#
   search: https://platform.swissartresearch.net/search/
@@ -543,7 +546,6 @@ fields:
               $subject a search:Object ;
                 crm:P109_has_current_or_former_curator ?zbz ;
                 crmdig:L1i_was_digitized_by/crmdig:L11_had_output/crm:P1_is_identified_by ?value .
-
             } UNION {
               $subject a search:Object ;
                 crm:P109_has_current_or_former_curator ?nb .

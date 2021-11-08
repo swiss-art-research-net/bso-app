@@ -279,14 +279,16 @@
             <!-- Dimensions -->
             <!-- Dimensions of parts -->
             <semantic-query
-                query="SELECT ?part ?part_note ?part_type_label WHERE {
+                query="SELECT ?part ?part_note (SAMPLE(?part_type_labels) as ?part_type_label) WHERE {
                     [[> thisForQuery ]] crm:P46_is_composed_of ?part .
-                    ?part crm:P2_has_type/rdfs:label ?part_type_label .
-                    FILTER(LANG(?part_type_label) = 'en')
+                    ?part crm:P2_has_type/rdfs:label ?part_type_labels .
+                    FILTER(LANG(?part_type_labels) = 'en')
                     OPTIONAL {
                         ?part crm:P3_has_note ?part_note .
                     }
-                } ORDER BY ?part_type_label"
+                } 
+                GROUP BY ?part ?part_note
+                ORDER BY ?part_type_label"
                 template="{{> partTemplate}}"
             >
                 <template id="partTemplate">
