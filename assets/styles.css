@@ -193,7 +193,7 @@ ol.page-breadcrumb {
   vertical-align: top;
   padding-top: 0.5rem;
 }
-.bso-component.field-visualisation div,
+.bso-component.field-visualisation div.values,
 .bso-component.field-visualisation table,
 .bso-component.field-visualisation ul.tags {
   display: inline-block;
@@ -202,7 +202,7 @@ ol.page-breadcrumb {
   top: calc(0.5rem/-4);
   max-width: 50rem;
 }
-.bso-component.field-visualisation div li,
+.bso-component.field-visualisation div.values li,
 .bso-component.field-visualisation table li,
 .bso-component.field-visualisation ul.tags li {
   margin-bottom: 0.1rem;

@@ -360,7 +360,7 @@
                                 </ul>
                             {{/if}}
                             {{#if acquisition_note.value}}
-                                <div>{{acquisition_note.value}}</div>
+                                <div class="bso-component values">{{acquisition_note.value}}</div>
                             {{/if}}
                         {{/each}}
                     </div>
@@ -381,7 +381,7 @@
                     <div class="bso-component field-visualisation">
                         <span class="bso-component label">[[i18n "inscription" bundle="bso"]]</span>
                         {{#each bindings}}
-                        <div>
+                        <div class="bso-component values">
                             <mp-text-truncate lines="2" expand="{{> expand}}" collapse="{{> collapse}}">
                                 <template id="expand"> <a>&hellip;[[i18n "readMore" bundle="bso"]]</a></template>
                                 <template id="collapse"><span><br/><a>[[i18n "showLess" bundle="bso"]]</a></span></template>
