@@ -254,11 +254,15 @@ ol.page-breadcrumb {
             padding-top: @margin-unit;
         }
 
-        table, ul.tags {
+        div, table, ul.tags {
             display: inline-block;
             margin-top: @margin-unit;
             position: relative;
             top: calc(@margin-unit/-4);
+            max-width: 50rem;
+            li {
+                margin-bottom: 0.1rem;
+            }
         }
 
         table {

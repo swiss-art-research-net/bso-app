@@ -188,6 +188,17 @@
     },
 
     {
+        "id" : "object_caption",
+
+            "label": "Caption/Inscription",
+            "description" : "An inscription on the object, typically a captin",
+            "xsdDatatype" : "xsd:string",
+            "domain" : "crm:E22_Human-Made_Object",
+                "selectPattern" : "SELECT ?value WHERE { $subject crm:P128_carries ?inscription . ?inscription a crm:E34_Inscription ; rdfs:label ?value . }",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/object_caption"
+    },
+
+    {
         "id" : "object_carries_visual_item",
 
             "label": "Visual Item",
@@ -201,6 +212,18 @@
                 "insertPattern" : "INSERT { $subject crm:P128_carries $value} WHERE {}",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P128_carries ?value . ?value a crm:E36_Visual_Item . }",
         "iri" : "https://platform.swissartresearch.net/instances/fields/object_carries_visual_item"
+    },
+
+    {
+        "id" : "object_material",
+
+            "label": "Material",
+            "description" : "The material of the object",
+            "xsdDatatype" : "xsd:anyURI",
+            "domain" : "crm:E22_Human-Made_Object",
+            "range" : "crm:E57_Material",
+                "selectPattern" : "SELECT ?value WHERE { $subject crm:P45_consists_of ?value . }",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/object_material"
     },
 
     {
@@ -224,6 +247,18 @@
             "range" : "crm:E52_Time-Span",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P108i_was_produced_by/crm:P4_has_time-span ?value }",
         "iri" : "https://platform.swissartresearch.net/instances/fields/object_production_date"
+    },
+
+    {
+        "id" : "object_production_technique",
+
+            "label": "Technique",
+            "description" : "The production technique of the artwork",
+            "xsdDatatype" : "xsd:anyURI",
+            "domain" : "crm:E22_Human-Made_Object",
+            "range" : "crm:E55_Type",
+                "selectPattern" : "SELECT ?value WHERE { $subject crm:P108i_was_produced_by/crm:P32_used_general_technique ?value . }",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/object_production_technique"
     },
 
     {

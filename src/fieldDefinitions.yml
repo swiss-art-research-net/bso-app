@@ -321,6 +321,19 @@ fields:
             BIND(URI(CONCAT(STR($subject), "/production")) as ?production)
           }'
 
+    - id: object_caption
+      label: Caption/Inscription
+      description: An inscription on the object, typically a captin
+      datatype: xsd:string
+      domain: crm:E22_Human-Made_Object
+      queries:
+        - select: 'SELECT ?value WHERE {
+          $subject crm:P128_carries ?inscription .
+          ?inscription a crm:E34_Inscription ;
+            rdfs:label ?value .
+          }'
+
+
     - id: object_carries_visual_item
       label: Visual Item
       description: The E36 Visual Item carried by the E22 Human-Made Object
@@ -336,6 +349,17 @@ fields:
             $subject crm:P128_carries ?value .
             ?value a crm:E36_Visual_Item .
           }'
+
+    - id: object_material
+      label: Material
+      datatype: xsd:anyURI
+      description: The material of the object
+      domain: crm:E22_Human-Made_Object
+      range: crm:E57_Material
+      queries:
+        - select: 'SELECT ?value WHERE {
+            $subject crm:P45_consists_of ?value .
+        }'
 
     - id: object_part_dimensions
       label: Dimension (Parts)
@@ -376,6 +400,17 @@ fields:
             $subject crm:P108i_was_produced_by/crm:P4_has_time-span ?value
           }'
       
+    - id: object_production_technique
+      label: Technique
+      datatype: xsd:anyURI
+      description: The production technique of the artwork
+      domain: crm:E22_Human-Made_Object
+      range: crm:E55_Type
+      queries:
+        - select: 'SELECT ?value WHERE {
+            $subject crm:P108i_was_produced_by/crm:P32_used_general_technique ?value .
+          }'
+
     - id: region_for_proposition_subject
       label: Regions
       datatype: xsd:anyURI
