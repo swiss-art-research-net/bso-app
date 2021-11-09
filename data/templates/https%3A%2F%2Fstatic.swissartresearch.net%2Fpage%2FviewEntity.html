@@ -223,8 +223,6 @@
                     {
                         [[> thisForQuery]] (crm:P128_carries/crm:P94i_was_created_by) ?event .
                         BIND(crm:E65_Creation as ?global_role)
-                    } UNION {
-                        [[> thisForQuery]] crm:P24i_changed_ownership_through ?event .
                     }
                     {
                         ?event crm:P14_carried_out_by ?subject .
@@ -251,9 +249,6 @@
                             ?appellation crm:P70i_is_documented_in ?meta .
                             ?appellation rdfs:label ?appellation_label .
                         }
-                    } UNION {
-                        ?event a ?global_role ;
-                            crm:P23_transferred_title_from ?subject .
                     }
                 }"
                 template="{{> template}}">>
