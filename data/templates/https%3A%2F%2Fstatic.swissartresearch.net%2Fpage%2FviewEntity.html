@@ -484,7 +484,7 @@
             [[/ objectsTable]]
         </div>
 
-        [[#if (hasPermission "forms:ldp:*")]]
+        [[#if (hasPermission "api:ldp:*")]]
         <semantic-if query="ASK { [[> thisForQuery]] a ?type . VALUES (?type) {(search:Object) (crmdig:D35_Area)} .}" then="{{> template}}">
             <template id="template">
                 <div class="bso-component separator panel">
