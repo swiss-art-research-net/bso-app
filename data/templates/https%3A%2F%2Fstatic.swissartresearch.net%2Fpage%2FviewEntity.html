@@ -163,6 +163,12 @@
                         BIND(STRAFTER('[[> thisIri]]', 'nb-') as ?nbId)
                         BIND(URI(CONCAT('https://www.helveticarchives.ch/detail.aspx?ID=', ?nbId)) as ?subject)
                         BIND('HelveticArchives' as ?label)
+                    } UNION {
+                        [[> thisForQuery]] a search:Object .                            
+                        BIND(URI(REPLACE('[[>thisIri]]','artwork','manifest')) as ?subject) .
+                        BIND('IIIF Manifest' as ?label)
+                        # Temporary filter as IIIF Manifests for SFF data are not yet available
+                        FILTER(! REGEX('[[> thisIri ]]', 'SFF', 'i'))
                     }
                 }"
                 template="{{> template}}">
