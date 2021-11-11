@@ -388,6 +388,12 @@ ol.page-breadcrumb {
 .modal-xl {
   width: 80vw;
 }
+.semantic-form .autocomplete-text-field .Select-value dl {
+  margin-top: 14px;
+}
+.semantic-form .autocomplete-text-field .Select-value dl dd {
+  display: none;
+}
 @font-face {
   font-family: 'HK Grotesk';
   font-style: normal;

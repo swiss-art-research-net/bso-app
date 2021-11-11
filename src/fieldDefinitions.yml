@@ -206,7 +206,7 @@ fields:
             BIND(URI(CONCAT(STRBEFORE(STR($subject), "/proposition"), "/work")) as ?work)
           }'
         - autosuggestion: 'PREFIX bds: <http://www.bigdata.com/rdf/search#>
-          SELECT DISTINCT ?value ?label ?type ?typeLabel WHERE {
+          SELECT DISTINCT ?value ?label ?type ?typeLabel ?score WHERE {
             VALUES(?type ?typeLabel) {
               (search:Person "Person")
               (search:Place "Place")
@@ -218,9 +218,11 @@ fields:
               ?value skos:prefLabel ?prefLabel
             }
             BIND(IF(BOUND(?prefLabel), ?prefLabel, ?search_label) as ?label)
-            ?search_label bds:search ?__token__ .
-          } ORDER BY ?label
-          LIMIT 10'
+            ?search_label bds:search ?__token__ ;
+              bds:matchAllTerms "true" ;
+              bds:relevance ?score .
+          } ORDER BY DESC(?score) ?label
+          LIMIT 100'
         - valueSet: 'SELECT ?value ?label ?type ?typeLabel WHERE {
             VALUES(?type ?typeLabel) {
               (search:Person "Person")
@@ -250,7 +252,7 @@ fields:
             BIND(URI(STRBEFORE(STR($subject), "/proposition")) as ?proposition_subject)
           }'
         - autosuggestion: 'PREFIX bds: <http://www.bigdata.com/rdf/search#>
-          SELECT DISTINCT ?value ?label ?type ?typeLabel WHERE {
+          SELECT DISTINCT ?value ?label ?type ?typeLabel ?score WHERE {
             VALUES(?type ?typeLabel) {
               (search:Person "Person")
               (search:Place "Place")
@@ -262,9 +264,11 @@ fields:
               ?value skos:prefLabel ?prefLabel
             }
             BIND(IF(BOUND(?prefLabel), ?prefLabel, ?search_label) as ?label)
-            ?search_label bds:search ?__token__ .
-          } ORDER BY ?label
-          LIMIT 10'
+            ?search_label bds:search ?__token__ ;
+              bds:matchAllTerms "true" ;
+              bds:relevance ?score .
+          } ORDER BY DESC(?score) ?label
+          LIMIT 100'
         - valueSet: 'SELECT ?value ?label ?type ?typeLabel WHERE {
             VALUES(?type ?typeLabel) {
               (search:Person "Person")

@@ -86,7 +86,30 @@
 
                                     <semantic-form-hidden-input for="type" replace-value="[[resolvePrefix "crm:E13_Attribute_Assignment"]]"></semantic-form-hidden-input>
                                     <semantic-form-hidden-input for="P140_assigned_attribute_to" replace-value="[[>thisIri]]/work"></semantic-form-hidden-input>
-                                    <semantic-form-autocomplete-input for="object_depicts_as_P141_to_work"></semantic-form-autocomplete-input>
+                                    <semantic-form-autocomplete-input for="object_depicts_as_P141_to_work"
+                                        template="{{>template}}"
+                                    >
+                                        <template id="template">
+                                            <dl>
+                                                <dt><mp-label iri="{{value.value}}"></mp-label></dt>
+                                                <dd>
+                                                    <semantic-query 
+                                                        query="SELECT ?typeLabel WHERE { 
+                                                            BIND(<{{value.value}}> as ?subject)
+                                                            ?subject a ?type .
+                                                            VALUES (?type ?typeLabel) {
+                                                                (search:Person 'Person')
+                                                                (search:Place 'Place')
+                                                                (search:Type 'Type')
+                                                            }
+                                                        }"
+                                                        template="<dd>{{#each bindings}}{{typeLabel.value}}{{/each}}</dd>">
+                                                    </semantic-query>
+                                                    <mp-description iri="{{value.value}}"></mp-description>
+                                                </dd>
+                                            </dl>
+                                        </template>
+                                    </semantic-form-autocomplete-input>
 
                                     <button name="submit" class="btn btn-primary btn-md">[[i18n "save" bundle="bso"]]</button>
                                 </semantic-form>
