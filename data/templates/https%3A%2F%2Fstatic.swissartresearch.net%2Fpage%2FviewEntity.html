@@ -95,15 +95,27 @@
 
             <!-- Description -->
             <semantic-query
-                query="SELECT ?label WHERE {
-                    [[> thisForQuery]] crm:P129i_is_subject_of ?value .
-                    ?value crm:P2_has_type aat:300435416 ;
-                        rdfs:label ?label .
+                query="SELECT ?label ?source ?sourceLabel WHERE {
+                    {
+                        [[> thisForQuery]] crm:P129i_is_subject_of ?value .
+                        ?value crm:P2_has_type aat:300435416 ;
+                            rdfs:label ?label .
+                    } UNION {
+                        [[> thisForQuery]] a search:Person ;
+                            crmdig:L54_is_same-as ?source .
+                        ?source gndo:biographicalOrHistoricalInformation ?label .
+                        BIND('GND' as ?sourceLabel)
+                    }
                 }"
                 template="{{>template}}">
                 <template id="template">
                     {{#each bindings}}
-                        <p class="bso-component description">{{label.value}}</p>
+                        <p class="bso-component description">
+                            {{label.value}}
+                            {{#if source.value}}
+                                <small>([[i18n "source" bundle="bso"]]: <a href="{{source.value}}">{{sourceLabel.value}})</a></small>
+                            {{/if}}
+                        </p>
                     {{/each}}
                 </template>
             </semantic-query>
