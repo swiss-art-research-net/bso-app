@@ -132,7 +132,6 @@
                 "selectPattern" : "SELECT DISTINCT ?value WHERE { $subject crm:P141_assigned ?value . }",
                 "insertPattern" : "INSERT { $subject crm:P141_assigned $value . ?work crm:P138_represents $value . } WHERE { BIND(URI(CONCAT(STRBEFORE(STR($subject), \"/proposition\"), \"/work\")) as ?work) }",
                 "autosuggestionPattern" : "PREFIX bds: <http://www.bigdata.com/rdf/search#> SELECT DISTINCT ?value ?label ?type ?typeLabel ?score WHERE { VALUES(?type ?typeLabel) { (search:Person \"Person\") (search:Place \"Place\") (search:Type \"Type\") } ?value a ?type ; rdfs:label ?search_label . OPTIONAL { ?value skos:prefLabel ?prefLabel } BIND(IF(BOUND(?prefLabel), ?prefLabel, ?search_label) as ?label) ?search_label bds:search ?__token__ ; bds:matchAllTerms \"true\" ; bds:relevance ?score . } ORDER BY DESC(?score) ?label LIMIT 100",
-                "valueSetPattern" : "SELECT ?value ?label ?type ?typeLabel WHERE { VALUES(?type ?typeLabel) { (search:Person \"Person\") (search:Place \"Place\") (search:Type \"Type\") } ?value a ?type ; rdfs:label ?label . } ORDER BY ?label LIMIT 100",
         "iri" : "https://platform.swissartresearch.net/instances/fields/object_depicts_as_P141_to_work"
     },
 

@@ -223,16 +223,6 @@ fields:
               bds:relevance ?score .
           } ORDER BY DESC(?score) ?label
           LIMIT 100'
-        - valueSet: 'SELECT ?value ?label ?type ?typeLabel WHERE {
-            VALUES(?type ?typeLabel) {
-              (search:Person "Person")
-              (search:Place "Place")
-              (search:Type "Type")
-            }
-            ?value a ?type ;
-              rdfs:label ?label .
-          } ORDER BY ?label
-          LIMIT 100'
 
     - id: object_depicts_as_P141_to_proposition_subject
       label: Depicts
