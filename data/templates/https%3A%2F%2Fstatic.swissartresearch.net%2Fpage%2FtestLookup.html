@@ -1,0 +1,31 @@
+[[> partial:pageHeader]]
+[[> partial:contentHeader]]
+
+<bs-row>
+    <bs-col md="12" class="bso-component panel">
+
+       <h2>Lookup Test</h2>
+        <semantic-form
+            fields='[[> partial:fieldDefinitions ]]'
+            urlqueryparam-view='page'
+        >
+            <semantic-form-autocomplete-input
+                for="object_depicts_as_P141_to_work"
+                value-binding-name="subject"
+                lookup-query='{
+                    "type": "lookup",
+                    "limit": 20,
+                    "lookupServiceName": "federated-lookup"
+                }'
+                template='{{> autocompletionTemplate}}'>
+                <template id='autocompletionTemplate'>
+                    [[> partial:lookupCandidateTemplate]]
+                </template>
+            </semantic-form-autocomplete-input
+        </semantic-form>
+                           
+    </bs-col>
+</bs-row>
+
+[[> partial:contentFooter]]
+[[> partial:pageFooter]]

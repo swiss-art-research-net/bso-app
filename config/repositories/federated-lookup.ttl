@@ -21,5 +21,13 @@
     ];
   lookup:configuration [
       lookup:type "metaphacts:federatedLookup";
-      lookup:serviceMember "remote-lookup-gnd", "default-lookup"
+      lookup:serviceMember [
+          lookup:name "default-lookup";
+          lookup:scoreOffset 1.0E1;
+          lookup:scoreFactor 1.0E0
+        ], [
+          lookup:name "remote-lookup-gnd"
+        ], [
+          lookup:name "remote-lookup-wikidata"
+        ]
     ] .

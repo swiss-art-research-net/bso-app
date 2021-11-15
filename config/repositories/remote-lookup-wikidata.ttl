@@ -11,8 +11,8 @@
 @prefix sparqlr: <http://www.openrdf.org/config/repository/sparql#> .
 
 [] a rep:Repository;
-  rep:repositoryID "remote-lookup-gnd";
-  rdfs:label "GND Remote Lookup";
+  rep:repositoryID "remote-lookup-wikidata";
+  rdfs:label "Wikidata Remote Lookup";
   rep:repositoryImpl [
       rep:repositoryType "openrdf:SailRepository";
       sr:sailImpl [
@@ -21,7 +21,7 @@
     ];
   lookup:configuration [
       lookup:type "metaphacts:remoteLookup";
-      lookup:remoteServiceUrl "https://rds.swissartresearch.net/rest/reconciliation/entityfacts-lookup";
+      lookup:remoteServiceUrl "https://rds.swissartresearch.net/rest/reconciliation/wikidata-lookup";
       lookup:remoteQueryMethod "postDataForm";
       lookup:remoteInformationServiceEnabled true
     ] .

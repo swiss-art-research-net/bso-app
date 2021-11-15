@@ -124,12 +124,14 @@
             <semantic-query
                 query="SELECT DISTINCT ?subject ?type ?typeClass WHERE {
                     [[> thisForQuery]] crm:P128_carries?/crm:P138_represents ?subject .
-                    ?subject a ?type .
-                    BIND(STRAFTER(STR(?type), 'search/') as ?typeClass)
-                    VALUES(?type) {
-                        (search:Person)
-                        (search:Place)
-                        (search:Type)
+                    OPTIONAL {
+                        ?subject a ?type .
+                        BIND(STRAFTER(STR(?type), 'search/') as ?typeClass)
+                        VALUES(?type) {
+                            (search:Person)
+                            (search:Place)
+                            (search:Type)
+                        }
                     }
                 } ORDER BY ?type ?subject"
                 template="{{> template}}">
