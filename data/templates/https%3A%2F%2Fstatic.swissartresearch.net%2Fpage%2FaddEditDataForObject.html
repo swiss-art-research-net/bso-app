@@ -130,7 +130,19 @@
     
                                         <semantic-form-hidden-input for="type" replace-value="[[resolvePrefix "crm:E13_Attribute_Assignment"]]"></semantic-form-hidden-input>
                                         <semantic-form-hidden-input for="P140_assigned_attribute_to" replace-value="[[>thisIri]]"></semantic-form-hidden-input>
-                                        <semantic-form-autocomplete-input for="object_depicts_as_P141_to_proposition_subject"></semantic-form-autocomplete-input>
+                                        <semantic-form-autocomplete-input
+                                            for="object_depicts_as_P141_to_proposition_subject"
+                                            value-binding-name="subject"
+                                            lookup-query='{
+                                                "type": "lookup",
+                                                "limit": 20,
+                                                "lookupServiceName": "federated-lookup"
+                                            }'
+                                            template='{{> autocompletionTemplate}}'>
+                                            <template id='autocompletionTemplate'>
+                                                [[> partial:lookupCandidateTemplate]]
+                                            </template>
+                                        </semantic-form-autocomplete-input>
     
                                         <button name="submit" class="btn btn-primary btn-md">[[i18n "save" bundle="bso"]]</button>
                                     </semantic-form>
