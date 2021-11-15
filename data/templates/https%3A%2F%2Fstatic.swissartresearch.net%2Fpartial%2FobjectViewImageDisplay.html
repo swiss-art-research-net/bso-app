@@ -16,11 +16,6 @@
             {{> thumbnail}}
             {{#if IIIFimage.value }}
                 <div class="caption">
-                    
-                    <!-- <mp-event-target-refresh id="some-element">
-                    <semantic-query query="SELECT * {BIND(NOW() as ?update)}"></semantic-query>
-                    </mp-event-target-refresh>
-                     -->
                     <mp-event-trigger type="Component.Refresh" targets='["some-element"]'> 
                         <mp-overlay-dialog title="Image Viewer" type="modal" bs-size="xl">
                             <mp-overlay-dialog-trigger><a>[[i18n "openInViewer" bundle="bso"]]</a></mp-overlay-dialog-trigger>
