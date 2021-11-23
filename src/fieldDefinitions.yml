@@ -268,7 +268,27 @@ fields:
           $subject crm:P129i_is_subject_of ?value .
           ?value crm:P2_has_type aat:300435416 .
         }'
-        
+
+    - id: object_production_actors_and_roles
+      label: Production
+      description: The actors involved in the production of an object
+      datatype: xsd:anyURI
+      domain: crm:E22_Human-Made_Object
+      display: true
+      queries:
+        - select: 'SELECT (?actor as ?value) ?label WHERE {
+          $subject crm:P108i_was_produced_by/crm:P14_carried_out_by ?actor .
+          BIND(URI(CONCAT(STR($subject), "/meta")) as ?subject_meta )
+          ?actor crm:P1_is_identified_by ?appellation .
+          ?appellation rdfs:label ?actor_label ;
+            crm:P70i_is_documented_in ?subject_meta . 
+          OPTIONAL {
+            $subject crm:P108i_was_produced_by/crm:P9_consists_of ?subProduction .
+            ?subProduction crm:P14_carried_out_by ?actor ;
+              crm:P2_has_type/rdfs:label ?production_type_label .
+          }
+          BIND(CONCAT(?actor_label, IF(BOUND(?production_type_label), CONCAT(" (", ?production_type_label, ")"), "")) as ?label)
+        }'        
 
     - id: object_subcreations
       label: Creation Steps
