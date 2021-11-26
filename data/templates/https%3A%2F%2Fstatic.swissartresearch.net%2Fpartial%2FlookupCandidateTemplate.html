@@ -1,0 +1,50 @@
+<div>
+    <style>
+      .Select-option .dataset-bubble {
+        margin: 5px;
+        border-radius: 100%;
+        height: 25px;
+        width: 25px;
+        overflow: hidden;
+        border: 1px solid lightgray;
+        background: lightgray;
+        outline: none!important;
+        padding: 0;
+      }
+      .Select-option .dataset-bubble img {
+        max-height: 100%;
+        min-width: 100%;
+      }
+      .Select-option dd {
+        margin-left: 35px;
+      }
+      .Select-option dd.small {
+        margin-left: 35px;
+        font-size: 0.8em;
+      }
+    </style>
+
+    {{#if datasetId}}
+      <dl>
+        <dt>[[> bubbleLink iri="{{subject.value}}" datasetVariableId="datasetId.value" datasetName="{{datasetLabel.value}}"]]  {{label.value}}</dt>
+        <dd>{{description.value}}</dd>
+        <dd class="small">[[i18n "type" bundle="bso"]]: <b>{{#if typeLabel}}{{typeLabel.value}}{{else}}{{type.value}}{{/if}}</b>{{#if datasetId}} | [[i18n "dataset" bundle="bso"]]: <b>{{#if datasetLabel}}{{datasetLabel.value}}{{else}}{{datasetId.value}}{{/if}}</b>{{/if}}<br></dd>
+      </dl>
+    {{else}}
+      <div>
+        {{label.value}}
+      </div>
+    {{/if}}
+  </div>
+  
+  [[!-- Parameters: [[iri]] - string name of iri [[datasetVariableId]] - string dataset iri [[datasetName]] - dataset Label --]]
+  [[#*inline "bubbleLink"]]
+    <semantic-link iri="[[iri]]">
+      <button class="dataset-bubble" title="Link to the same resource in [[datasetName]]({{[[datasetVariableId]]}}).">
+        <mp-resource-thumbnail
+          iri="{{[[datasetVariableId]]}}" no-image-uri="/assets/no_auth/unknown-logo.png">
+        </mp-resource-thumbnail>
+      </button>
+    </semantic-link>
+  [[/inline]]
+  

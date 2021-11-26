@@ -20,6 +20,10 @@ iframe {
 #custom-modal-close-button {
   text-align: right;
   padding-bottom: 0.5rem;
+  position: absolute;
+  z-index: 1;
+  right: 2px;
+  top: 2px;
 }
 #custom-modal-close-button button {
   background-color: transparent;
@@ -384,6 +388,10 @@ ol.page-breadcrumb {
 }
 .modal-backdrop {
   opacity: 0.8;
+}
+.modal-body {
+  padding: 0.5rem;
+  padding-top: 2rem;
 }
 .modal-xl {
   width: 80vw;

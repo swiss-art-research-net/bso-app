@@ -124,12 +124,14 @@
             <semantic-query
                 query="SELECT DISTINCT ?subject ?type ?typeClass WHERE {
                     [[> thisForQuery]] crm:P128_carries?/crm:P138_represents ?subject .
-                    ?subject a ?type .
-                    BIND(STRAFTER(STR(?type), 'search/') as ?typeClass)
-                    VALUES(?type) {
-                        (search:Person)
-                        (search:Place)
-                        (search:Type)
+                    OPTIONAL {
+                        ?subject a ?type .
+                        BIND(STRAFTER(STR(?type), 'search/') as ?typeClass)
+                        VALUES(?type) {
+                            (search:Person)
+                            (search:Place)
+                            (search:Type)
+                        }
                     }
                 } ORDER BY ?type ?subject"
                 template="{{> template}}">
@@ -393,15 +395,16 @@
                 <template id="template">
                     <div class="bso-component field-visualisation">
                         <span class="bso-component label">[[i18n "inscription" bundle="bso"]]</span>
-                        {{#each bindings}}
                         <div class="bso-component values">
-                            <mp-text-truncate lines="2" expand="{{> expand}}" collapse="{{> collapse}}">
-                                <template id="expand"> <a>&hellip;[[i18n "readMore" bundle="bso"]]</a></template>
-                                <template id="collapse"><span><br/><a>[[i18n "showLess" bundle="bso"]]</a></span></template>
-                                {{{value_formatted.value}}}
-                              </mp-text-truncate>    
+                            {{#each bindings}}
+                                <mp-text-truncate lines="3" expand="{{> expand}}" collapse="{{> collapse}}">
+                                    <template id="expand"> <a>&hellip;[[i18n "readMore" bundle="bso"]]</a></template>
+                                    <template id="collapse"><span><br/><a>[[i18n "showLess" bundle="bso"]]</a></span></template>
+                                    {{{value_formatted.value}}}
+                                </mp-text-truncate>    
+                            
+                            {{/each}}
                         </div>
-                        {{/each}}
                     </div>
                 </template>
             </semantic-query>

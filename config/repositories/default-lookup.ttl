@@ -1,0 +1,64 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix sparql: <http://www.openrdf.org/config/repository/sparql#> .
+@prefix lookup: <http://www.metaphacts.com/ontologies/platform/repository/lookup#> .
+@prefix rep: <http://www.openrdf.org/config/repository#> .
+@prefix sail: <http://www.openrdf.org/config/sail#> .
+@prefix sr: <http://www.openrdf.org/config/repository/sail#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
+@prefix ecrm: <http://erlangen-crm.org/current/> .
+@prefix mph: <http://www.metaphacts.com/ontologies/platform/repository#> .
+@prefix ephedra: <http://www.metaphacts.com/ontologies/platform/ephedra#> .
+@prefix fedsail: <http://www.openrdf.org/config/sail/federation#> .
+
+[] a rep:Repository;
+  rep:repositoryID "default-lookup";
+  rdfs:label "Default HTTP SPARQL Repository";
+  rep:repositoryImpl [
+      rep:repositoryType "openrdf:SailRepository";
+      sr:sailImpl [
+          sail:sailType "openrdf:MemoryStore"
+        ]
+    ];
+  lookup:configuration [
+      lookup:type "metaphacts:sparqlLookup";
+      lookup:targetRepository "default";
+      lookup:datasetQuery """
+        SELECT DISTINCT ?candidate ?dataset ?datasetLabel WHERE {
+          GRAPH ?dataset {
+            ?candidate ?p ?o .
+          }
+          OPTIONAL { ?dataset rdfs:label ?datasetLabel . }
+        }
+      """;
+      lookup:searchBlockTemplate """
+        ?candidate (
+          crm:P1_is_identified_by / rdfs:label |
+          rdfs:label
+        ) ?key .
+    
+      	?candidate a ?type .
+
+        VALUES (?type) {
+          (search:Person)
+          (search:Place)
+          (search:Type)
+        }
+        
+        SERVICE <http://www.bigdata.com/rdf/search#search> {
+            ?key <http://www.bigdata.com/rdf/search#search> ?__token__ ;
+            <http://www.bigdata.com/rdf/search#relevance> ?score_private ;
+            <http://www.bigdata.com/rdf/search#minRelevance> \"0.1\" ;
+            <http://www.bigdata.com/rdf/search#matchAllTerms> \"true\"  .
+        }
+      """;
+      lookup:typeBlockTemplate """
+          ?candidate a ?targetType .
+          VALUES (?targetType) {
+            (search:Person)
+            (search:Place)
+            (search:Type)
+          }
+        }
+    """
+    ] .
