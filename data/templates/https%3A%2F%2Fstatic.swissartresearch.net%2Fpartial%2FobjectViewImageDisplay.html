@@ -35,10 +35,14 @@
         </bs-panel>
     </template>
     <template id="thumbnail">
-        <mp-resource-thumbnail iri="{{ image.value }}">
-            <mp-resource-thumbnail-fallback>
-                <span>[[i18n "imageNotFound" bundle="bso"]]</span>
-            </mp-resource-thumbnail-fallback>
-        </mp-resource-thumbnail>
+        {{#if IIIFimage.value}}
+            <img src="{{IIIFimage.value}}/full/300,/0/default.jpg" />
+        {{else}}
+            <mp-resource-thumbnail iri="{{ image.value }}">
+                <mp-resource-thumbnail-fallback>
+                    <span>[[i18n "imageNotFound" bundle="bso"]]</span>
+                </mp-resource-thumbnail-fallback>
+            </mp-resource-thumbnail>
+        {{/if}}
     </template>
 </semantic-table>
