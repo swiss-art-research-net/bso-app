@@ -211,9 +211,11 @@
 
             <!-- Contained in -->
             <semantic-query
-                query="SELECT DISTINCT ?subject ?type ?typeClass WHERE {
-                    [[> thisForQuery]] crm:P46i_forms_part_of ?subject .
-                    ?subject a ?type .
+                query="SELECT DISTINCT ?parent ?type ?typeClass WHERE {
+                    BIND([[> thisForQuery]] as ?leaf)
+                    ?leaf crm:P46i_forms_part_of+ ?parent .
+                    ?node ^crm:P46i_forms_part_of ?parent .
+                    ?parent a ?type .
                     BIND(STRAFTER(STR(?type), 'search/') as ?typeClass)
                     VALUES(?type) {
                         (search:Object)
@@ -225,7 +227,7 @@
                         <span class="bso-component label">[[i18n "containedIn" bundle="bso"]]</span>
                         <ul class="bso-component tags">
                             {{#each bindings}}
-                                <li class="bso-tag {{typeClass.value}}"><semantic-link uri="{{subject.value}}" urlqueryparam-view="page"></semantic-link></li>
+                                <li class="bso-tag {{typeClass.value}}"><semantic-link uri="{{parent.value}}" urlqueryparam-view="page"></semantic-link></li>
                             {{/each}}
                         </ul>
                     </div>
