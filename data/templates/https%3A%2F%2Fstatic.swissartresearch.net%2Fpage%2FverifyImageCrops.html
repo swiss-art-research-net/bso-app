@@ -1,0 +1,45 @@
+[[> partial:pageHeader]]
+
+<h2>ZBZ</h2>
+[[> examples collection="zbz" limit="10"]]
+
+<h2>NB</h2>
+[[> examples collection="nb" limit="10"]]
+
+<h2>SFF</h2>
+[[> examples collection="sff" limit="10"]]
+
+[[#*inline "examples"]]
+  <semantic-query
+      query="SELECT ?subject ?id ?iiif_image WHERE {
+
+      BIND(<https://d-nb.info/gnd/1012546-2> as ?zbz)
+      BIND(<https://d-nb.info/gnd/10171799-4> as ?nb)
+      BIND(<https://d-nb.info/gnd/1196831858> as ?sff)
+
+      ?subject a search:Object ;
+        crm:P109_has_current_or_former_curator ?[[collection]] ;
+        crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
+        ?region crmdig:L49_is_primary_area_of ?image ;
+          crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-segmentation> ;
+          rso:boundingBox ?boundingBox ;
+          crm:P2_has_type <https://resource.swissartresearch.net/type/imageRegion> .
+      BIND(STRAFTER(?boundingBox, 'xywh=') as ?bbox)
+      BIND(CONCAT(STR(?image),'/',?bbox,'/300,/0/default.jpg') as ?iiif_image)
+      BIND(STRAFTER(STR(?subject), 'https://resource.swissartresearch.net/artwork/') as ?id)
+    }
+    LIMIT [[limit]]"
+    template="{{>template}}"
+  >
+    <template id="template">
+      {{#each bindings}}
+          <div style="display:inline-block">
+              <semantic-link iri="{{subject.value}}"><img src="{{iiif_image.value}}"></semantic-link>
+              <p>{{id.value}}</p>
+          </div>
+      {{/each}}
+    </template>
+  </semantic-query>
+[[/inline]]
+
+[[> partial:pageFooter]]
