@@ -25,7 +25,7 @@
 
 [[#*inline "examples"]]
   <semantic-query
-      query="SELECT ?subject ?id ?iiif_image WHERE {
+      query="SELECT ?subject ?id ?image ?iiif_image WHERE {
 
       BIND(<https://d-nb.info/gnd/1012546-2> as ?zbz)
       BIND(<https://d-nb.info/gnd/10171799-4> as ?nb)
@@ -48,7 +48,7 @@
     <template id="template">
       {{#each bindings}}
           <div style="display:inline-block">
-              <semantic-link iri="{{subject.value}}"><img src="{{iiif_image.value}}"></semantic-link>
+            <semantic-link iri="[[ resolvePrefix 'page:viewImage']]" urlqueryparam-imageiri="{{image.value}}"><img src="{{iiif_image.value}}"></semantic-link>
               <p>{{id.value}}</p>
           </div>
       {{/each}}
@@ -87,7 +87,7 @@
     <template id="template">
       {{#each bindings}}
           <div style="display:inline-block">
-              <semantic-link iri="{{subject.value}}"><img src="{{iiif_image.value}}"></semantic-link>
+              <semantic-link iri="[[ resolvePrefix 'page:viewImage']]" urlqueryparam-imageiri="{{image.value}}"><img src="{{iiif_image.value}}"></semantic-link>
               <p>{{id.value}}</p>
           </div>
       {{/each}}
