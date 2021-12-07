@@ -3,11 +3,14 @@
   <div class="bso-component card-container">
     <semantic-table
       id="grid-result"
-      query="SELECT DISTINCT ?subject WHERE {
+      query="SELECT DISTINCT ?subject ?date WHERE {
         OPTIONAL {
           ?subject skos:prefLabel ?label .
         }
-      } ORDER BY ?label ?subject
+        OPTIONAL {
+          ?subject (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P4_has_time-span ?date .
+        }
+      } ORDER BY DESC(?date) ?label ?subject
       [[#if searchLimit]]LIMIT [[searchLimit]][[/if]]"
       tuple-template="{{> partial:cardObject}}"
       number-of-displayed-rows="12"
@@ -37,11 +40,11 @@
             <semantic-table 
               id="panel-result"
               prefetch-labels="false"
-              query="SELECT DISTINCT ?subject ?label WHERE {
+              query="SELECT DISTINCT ?subject ?date WHERE {
                 OPTIONAL {
-                  ?subject skos:prefLabel ?label .
+                  ?subject (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P4_has_time-span ?date .
                 }
-              } ORDER BY ?label ?subject
+              } ORDER BY DESC(?date) ?subject
               [[#if searchLimit]]LIMIT [[searchLimit]][[/if]]" 
               tuple-template='{{> gridTemplate}}'
               no-result-template='<bs-panel class="info">[[i18n "noMatchesFound" bundle="bso"]]</bs-panel>'
