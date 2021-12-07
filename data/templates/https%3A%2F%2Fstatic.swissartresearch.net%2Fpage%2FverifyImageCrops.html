@@ -1,6 +1,6 @@
 [[> partial:pageHeader]]
 
-<bs-tabs>
+<bs-tabs default-active-key="2">
   <bs-tab event-key="1" title="Selection">
     <h2>ZBZ</h2>
     [[> examples collection="zbz" limit="10"]]
@@ -12,11 +12,11 @@
     [[> examples collection="sff" limit="10"]]
   </bs-tab>
   <bs-tab event-key="2" title="Colour bar candidates">
-    <h2>ZBZ</h2>
+    <!-- <h2>ZBZ</h2>
     [[> colourbarCandidates collection="zbz" limit="10"]]
 
     <h2>NB</h2>
-    [[> colourbarCandidates collection="nb" limit="10"]]
+    [[> colourbarCandidates collection="nb" limit="10"]] -->
 
     <h2>SFF</h2>
     [[> colourbarCandidates collection="sff" limit="10"]]
@@ -25,7 +25,7 @@
 
 [[#*inline "examples"]]
   <semantic-query
-      query="SELECT ?subject ?id ?iiif_image WHERE {
+      query="SELECT ?subject ?id ?image ?iiif_image WHERE {
 
       BIND(<https://d-nb.info/gnd/1012546-2> as ?zbz)
       BIND(<https://d-nb.info/gnd/10171799-4> as ?nb)
@@ -41,14 +41,16 @@
       BIND(STRAFTER(?boundingBox, 'xywh=') as ?bbox)
       BIND(CONCAT(STR(?image),'/',?bbox,'/300,/0/default.jpg') as ?iiif_image)
       BIND(STRAFTER(STR(?subject), 'https://resource.swissartresearch.net/artwork/') as ?id)
+      BIND(SHA512(CONCAT(STR(NOW()), STR(?subject))) AS ?random)
     }
+    ORDER BY ?random
     LIMIT [[limit]]"
     template="{{>template}}"
   >
     <template id="template">
       {{#each bindings}}
           <div style="display:inline-block">
-              <semantic-link iri="{{subject.value}}"><img src="{{iiif_image.value}}"></semantic-link>
+            <semantic-link iri="[[ resolvePrefix 'page:viewImage']]" urlqueryparam-imageiri="{{image.value}}"><img src="{{iiif_image.value}}"></semantic-link>
               <p>{{id.value}}</p>
           </div>
       {{/each}}
@@ -58,7 +60,7 @@
 
 [[#*inline "colourbarCandidates"]]
   <semantic-query
-      query="SELECT ?subject ?id ?iiif_image WHERE {
+      query="SELECT ?subject ?id ?image ?server ?iiif_image WHERE {
 
       BIND(<https://d-nb.info/gnd/1012546-2> as ?zbz)
       BIND(<https://d-nb.info/gnd/10171799-4> as ?nb)
@@ -79,6 +81,7 @@
       BIND(xsd:float(STRBEFORE(?wh, ',')) as ?width)
       BIND(xsd:float(STRAFTER(?wh, ',')) as ?height)
       BIND(?width/?height as ?ratio)
+      BIND (REPLACE(STR(?image), '([^/]+$)', '') AS ?server)
       FILTER(?ratio < 0.31)
     }
     LIMIT [[limit]]"
@@ -86,10 +89,13 @@
   >
     <template id="template">
       {{#each bindings}}
-          <div style="display:inline-block">
-              <semantic-link iri="{{subject.value}}"><img src="{{iiif_image.value}}"></semantic-link>
-              <p>{{id.value}}</p>
-          </div>
+        <div style="height:700px;">
+          <rs-iiif-mirador 
+              image-or-region="{{ image.value }}"
+              image-id-pattern="BIND (REPLACE(STR(?imageIRI), '^(.*[/])', '') AS ?imageID)" 
+              iiif-server-url="{{ server.value }}">
+          </rs-iiif-mirador>
+        </div>
       {{/each}}
     </template>
   </semantic-query>
