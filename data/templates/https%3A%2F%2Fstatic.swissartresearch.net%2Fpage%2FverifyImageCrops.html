@@ -41,7 +41,9 @@
       BIND(STRAFTER(?boundingBox, 'xywh=') as ?bbox)
       BIND(CONCAT(STR(?image),'/',?bbox,'/300,/0/default.jpg') as ?iiif_image)
       BIND(STRAFTER(STR(?subject), 'https://resource.swissartresearch.net/artwork/') as ?id)
+      BIND(SHA512(CONCAT(STR(NOW()), STR(?subject))) AS ?random)
     }
+    ORDER BY ?random
     LIMIT [[limit]]"
     template="{{>template}}"
   >
