@@ -8,7 +8,7 @@
           ?subject skos:prefLabel ?label .
         }
         OPTIONAL {
-          ?subject (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P4_has_time-span ?date .
+          ?subject dcterms:date ?date .
         }
       } ORDER BY DESC(?date) ?label ?subject
       [[#if searchLimit]]LIMIT [[searchLimit]][[/if]]"
@@ -42,7 +42,7 @@
               prefetch-labels="false"
               query="SELECT DISTINCT ?subject ?date WHERE {
                 OPTIONAL {
-                  ?subject (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P4_has_time-span ?date .
+                  ?subject dcterms:date ?date .
                 }
               } ORDER BY DESC(?date) ?subject
               [[#if searchLimit]]LIMIT [[searchLimit]][[/if]]" 
