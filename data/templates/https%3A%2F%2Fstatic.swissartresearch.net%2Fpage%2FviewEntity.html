@@ -294,6 +294,42 @@
             </semantic-query>
 
             <!-- Dimensions -->
+            <!-- Dimensions of whole -->
+            <semantic-query
+                query="SELECT ?dimension_label ?dimension_type_label ?dimension_unit ?dimension_value WHERE {
+                    [[>thisForQuery]] crm:P43_has_dimension ?dimension .     
+                    {
+                        ?dimension crm:P2_has_type/rdfs:label ?dimension_type_label ;
+                            crm:P90_has_value ?dimension_value ;
+                            crm:P91_has_unit/rdfs:label ?dimension_unit .
+                            FILTER(LANG(?dimension_type_label) = 'en')
+                    } UNION {
+                        ?dimension rdfs:label ?dimension_label .
+                        FILTER NOT EXISTS {?dimension crm:P90_has_value ?dimension_value }
+                    }
+
+                } ORDER BY DESC(?dimension_unit)"
+                template="{{> dimensionTemplate}}"
+            >
+                <template id="dimensionTemplate">
+                    <div class="bso-component field-visualisation">
+                        <span class="bso-component label">[[i18n "dimensions" bundle="bso"]]</span>
+
+                        <table>
+                            {{#each bindings}}
+                                <tr>
+                                    {{#if dimension_type_label.value}}
+                                        <td>{{dimension_type_label.value}}: {{dimension_value.value}} {{dimension_unit.value}}</td>
+                                    {{/if}}
+                                    {{#if dimension_label}}
+                                        <td>{{dimension_label.value}}</td>
+                                    {{/if}}
+                                </tr>
+                            {{/each}}
+                        </table>
+                </template>
+            </semantic-query>
+    
             <!-- Dimensions of parts -->
             <semantic-query
                 query="SELECT ?part ?part_note (SAMPLE(?part_type_labels) as ?part_type_label) WHERE {
