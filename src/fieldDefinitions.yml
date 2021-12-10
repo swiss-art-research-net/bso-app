@@ -378,13 +378,17 @@ fields:
               }
               {
                 SELECT ?part ?part_type_label (GROUP_CONCAT(?dimension_string;SEPARATOR=", ") as ?dimension_string_complete) WHERE {
-                  ?part crm:P43_has_dimension ?dimension ;
-                        crm:P2_has_type/rdfs:label ?part_type_label .
+                  GRAPH ?g {
+                    ?part crm:P43_has_dimension ?dimension ;
+                          crm:P2_has_type/rdfs:label ?part_type_label .
+                  }
                   {
                     SELECT ?dimension ?dimension_string WHERE {
-                      ?dimension crm:P2_has_type/rdfs:label ?dimension_type_label ;
-                              crm:P90_has_value ?dimension_value ;
-                              crm:P91_has_unit/rdfs:label ?dimension_unit .
+                      GRAPH ?g {
+                        ?dimension crm:P2_has_type/rdfs:label ?dimension_type_label ;
+                                crm:P90_has_value ?dimension_value ;
+                                crm:P91_has_unit/rdfs:label ?dimension_unit .
+                      }
                       BIND(CONCAT(?dimension_type_label, ": ", ?dimension_value, " ", ?dimension_unit) as ?dimension_string)
                     } ORDER BY ?dimension_type_label
                   }
