@@ -1,0 +1,35 @@
+
+[[#*inline "thisIri"]][[#if entityiri]][[entityiri]][[else]][[urlParam "entityiri"]][[/if]][[/inline]]
+
+[[#*inline "thisForQuery"]]
+    <[[> thisIri]]>
+[[/inline]]
+
+<div class="page--fullheight">
+    <ontodia
+        query="CONSTRUCT {
+            ?s ?p ?o .
+        } WHERE {
+            BIND([[> thisForQuery]] as ?s)
+            {
+                ?s ?p ?o .
+            } UNION {
+                ?o ?p ?s .
+            }
+            FILTER(STRSTARTS(STR(?p), 'https://platform.swissartresearch.net/instances/fields/'))
+        }"
+    >
+        
+    <ontodia-data-providers>
+        <ontodia-sparql-provider provider-settings='{
+            "linkTypesOfQuery":
+            "SELECT DISTINCT ?link WHERE {
+              ${linkConfigurations}
+              FILTER(STRSTARTS(STR(?link), \"https://platform.swissartresearch.net/instances/fields/\"))
+            }"
+        }'>
+        </ontodia-sparql-provider>
+    </ontodia-data-providers>
+    </ontodia>
+</div>
+

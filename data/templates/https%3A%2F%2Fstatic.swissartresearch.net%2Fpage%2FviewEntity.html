@@ -297,11 +297,12 @@
             <!-- Dimensions of parts -->
             <semantic-query
                 query="SELECT ?part ?part_note (SAMPLE(?part_type_labels) as ?part_type_label) WHERE {
-                    [[> thisForQuery ]] crm:P46_is_composed_of ?part .
-                    ?part crm:P2_has_type/rdfs:label ?part_type_labels .
-                    FILTER(LANG(?part_type_labels) = 'en')
-                    OPTIONAL {
-                        ?part crm:P3_has_note ?part_note .
+                    GRAPH ?g {
+                        [[> thisForQuery ]] crm:P46_is_composed_of ?part .
+                        ?part crm:P2_has_type/rdfs:label ?part_type_labels .
+                        OPTIONAL {
+                            ?part crm:P3_has_note ?part_note .
+                        }
                     }
                 } 
                 GROUP BY ?part ?part_note
@@ -320,13 +321,16 @@
                                         query="SELECT ?dimension_label ?dimension_type_label ?dimension_unit ?dimension_value WHERE {
                                             <{{part.value}}> crm:P43_has_dimension ?dimension .     
                                             {
-                                                ?dimension crm:P2_has_type/rdfs:label ?dimension_type_label ;
-                                                    crm:P90_has_value ?dimension_value ;
-                                                    crm:P91_has_unit/rdfs:label ?dimension_unit .
-                                                    FILTER(LANG(?dimension_type_label) = 'en')
+                                                GRAPH ?g {
+                                                    ?dimension crm:P2_has_type/rdfs:label ?dimension_type_label ;
+                                                        crm:P90_has_value ?dimension_value ;
+                                                        crm:P91_has_unit/rdfs:label ?dimension_unit .
+                                                }
                                             } UNION {
-                                                ?dimension rdfs:label ?dimension_label .
-                                                FILTER NOT EXISTS {?dimension crm:P90_has_value ?dimension_value }
+                                                GRAPH ?g {
+                                                    ?dimension rdfs:label ?dimension_label .
+                                                    FILTER NOT EXISTS {?dimension crm:P90_has_value ?dimension_value }
+                                                }
                                             }
               
                                         } ORDER BY DESC(?dimension_unit)"
