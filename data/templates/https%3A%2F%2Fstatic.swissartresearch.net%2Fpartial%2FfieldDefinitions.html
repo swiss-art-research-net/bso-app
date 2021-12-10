@@ -241,6 +241,7 @@
 
             "label": "Dimension (Parts)",
             "description" : "The dimension of the parts of the object",
+            "display" : "hidden",
             "xsdDatatype" : "xsd:string",
             "domain" : "crm:E22_Human-Made_Object",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P46_is_composed_of ?part . OPTIONAL { ?part crm:P3_has_note ?part_note . } { SELECT ?part ?part_type_label (GROUP_CONCAT(?dimension_string;SEPARATOR=\", \") as ?dimension_string_complete) WHERE { GRAPH ?g { ?part crm:P43_has_dimension ?dimension ; crm:P2_has_type/rdfs:label ?part_type_label . } { SELECT ?dimension ?dimension_string WHERE { GRAPH ?g { ?dimension crm:P2_has_type/rdfs:label ?dimension_type_label ; crm:P90_has_value ?dimension_value ; crm:P91_has_unit/rdfs:label ?dimension_unit . } BIND(CONCAT(?dimension_type_label, \": \", ?dimension_value, \" \", ?dimension_unit) as ?dimension_string) } ORDER BY ?dimension_type_label } } GROUP BY ?part ?part_type_label } BIND(CONCAT(?part_type_label, IF(BOUND(?part_note),CONCAT(\" (\", ?part_note, \")\"),\"\"), \": \", ?dimension_string_complete) as ?value) }",

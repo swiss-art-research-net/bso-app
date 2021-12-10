@@ -368,6 +368,7 @@ fields:
     - id: object_part_dimensions
       label: Dimension (Parts)
       datatype: xsd:string
+      display: hidden
       description: The dimension of the parts of the object
       domain: crm:E22_Human-Made_Object
       queries:
