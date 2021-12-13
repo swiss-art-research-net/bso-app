@@ -7,6 +7,7 @@ namespaces:
   crm: http://www.cidoc-crm.org/cidoc-crm/
   crmdig: http://www.ics.forth.gr/isl/CRMdig/
   crminf: http://www.ics.forth.gr/isl/CRMinf/
+  frbroo: http://iflastandards.info/ns/fr/frbr/frbroo/
   la: http://www.linkedart.org/schema/
   rdfs: http://www.w3.org/2000/01/rdf-schema#
   prov: http://www.w3.org/ns/prov#
@@ -375,6 +376,18 @@ fields:
         - select: 'SELECT ?value WHERE {
             $subject crm:P108i_was_produced_by/crm:P4_has_time-span ?value
           }'
+
+        
+    - id: object_publication_note
+      label: Publication Information
+      datatype: xsd:string
+      domain: crm:E22_Human-Made_Object
+      queries:
+        - select: 'SELECT ?value WHERE {
+          $subject crm:P108i_was_produced_by/crm:P9_consists_of ?publication_event .
+          ?publication_event a frbroo:F30_Publication_Event ;
+            crm:P3_has_note ?value .
+        }'
       
     - id: object_production_technique
       label: Technique
