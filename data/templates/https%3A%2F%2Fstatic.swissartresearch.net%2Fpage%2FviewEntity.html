@@ -219,7 +219,9 @@
                 query="SELECT DISTINCT ?parent ?type ?typeClass WHERE {
                     BIND([[> thisForQuery]] as ?leaf)
                     ?leaf crm:P46i_forms_part_of+ ?parent .
-                    ?node ^crm:P46i_forms_part_of ?parent .
+                    OPTIONAL {
+                        ?node ^crm:P46i_forms_part_of ?parent .
+                    }
                     ?parent a ?type .
                     BIND(STRAFTER(STR(?type), 'search/') as ?typeClass)
                     VALUES(?type) {
