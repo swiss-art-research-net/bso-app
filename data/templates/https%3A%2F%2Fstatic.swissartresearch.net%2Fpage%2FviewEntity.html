@@ -393,6 +393,25 @@
 
                 </template>
             </semantic-query>
+            
+            <!-- Technique -->
+            <semantic-query 
+            query="SELECT ?technique WHERE {
+                [[> thisForQuery]] crm:P108i_was_produced_by/crm:P32_used_general_technique ?technique .
+            }"
+            template="{{> template}}"
+        >
+            <template id="template">
+                <div class="bso-component field-visualisation">
+                    <span class="bso-component label">[[i18n "technique" bundle="bso"]]</span>
+                    <ul class="bso-component tags">
+                        {{#each bindings}}
+                            <li class="bso-tag type"><semantic-link uri="{{technique.value}}" urlqueryparam-view="page"></semantic-link></li>   
+                        {{/each}}     
+                    </ul>
+                </div>
+            </template>
+        </semantic-query>
 
             <!-- Provenience -->
             <semantic-query 
@@ -531,6 +550,13 @@
                 ?subject a search:Object ;
                     crm:P2_has_type [[> thisForQuery]] .
             
+            [[/ objectsTable]]
+
+            <!-- Objects created using this technique -->
+            [[#> objectsTable condition='?object a search:Object; crm:P108i_was_produced_by/crm:P32_used_general_technique $subject' label='producedUsingTechnique']]
+
+                ?subject crm:P108i_was_produced_by/crm:P32_used_general_technique [[> thisForQuery]]
+                
             [[/ objectsTable]]
 
             <!-- Found on -->
