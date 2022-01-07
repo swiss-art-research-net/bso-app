@@ -370,6 +370,9 @@ ol.page-breadcrumb {
   color: #111;
   font-weight: 500;
 }
+.bso-component summary h3 {
+  display: inline-block;
+}
 .bso-component .card-body {
   padding: 0;
 }
