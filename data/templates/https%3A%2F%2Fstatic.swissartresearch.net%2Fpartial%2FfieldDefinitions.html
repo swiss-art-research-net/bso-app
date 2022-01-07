@@ -249,6 +249,16 @@
     },
 
     {
+        "id" : "object_publication_note",
+
+            "label": "Publication Information",
+            "xsdDatatype" : "xsd:string",
+            "domain" : "crm:E22_Human-Made_Object",
+                "selectPattern" : "SELECT ?value WHERE { $subject crm:P108i_was_produced_by/crm:P9_consists_of ?publication_event . ?publication_event a frbroo:F30_Publication_Event ; crm:P3_has_note ?value . }",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/object_publication_note"
+    },
+
+    {
         "id" : "object_production_technique",
 
             "label": "Technique",

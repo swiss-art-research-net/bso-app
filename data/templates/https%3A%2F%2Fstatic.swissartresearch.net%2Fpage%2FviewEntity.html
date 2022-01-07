@@ -105,6 +105,11 @@
                             crmdig:L54_is_same-as ?source .
                         ?source gndo:biographicalOrHistoricalInformation ?label .
                         BIND('GND' as ?sourceLabel)
+                    } UNION {
+                        [[> thisForQuery]] a search:Object ;
+                            crm:P108i_was_produced_by/crm:P9_consists_of ?publication_event .
+                            ?publication_event a frbroo:F30_Publication_Event ;
+                            crm:P3_has_note ?label .
                     }
                 }"
                 template="{{>template}}">
@@ -214,7 +219,9 @@
                 query="SELECT DISTINCT ?parent ?type ?typeClass WHERE {
                     BIND([[> thisForQuery]] as ?leaf)
                     ?leaf crm:P46i_forms_part_of+ ?parent .
-                    ?node ^crm:P46i_forms_part_of ?parent .
+                    OPTIONAL {
+                        ?node ^crm:P46i_forms_part_of ?parent .
+                    }
                     ?parent a ?type .
                     BIND(STRAFTER(STR(?type), 'search/') as ?typeClass)
                     VALUES(?type) {
