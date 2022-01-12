@@ -691,7 +691,7 @@
         </semantic-if>
         [[/if]]
 
-        <semantic-if query="ASK { ?classification crm:P140_assigned_attribute_to [[> thisForQuery]] ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> . }" then="{{> template}}">
+        <semantic-if query="ASK { ?classification crm:P140_assigned_attribute_to/^crm:P1_is_identified_by/^crm:P128_carries [[> thisForQuery]] ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> . }" then="{{> template}}">
             <template id="template">
                 <div class="bso-component separator panel">
 
@@ -700,11 +700,11 @@
                             <h3>[[i18n "similarEntities" bundle="bso"]]</h3>
                         </summary>
 
-                        [[#> objectsTable condition='?classification crm:P140_assigned_attribute_to $subject ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> .' label='byTitle' ]]
+                        [[#> objectsTable condition='?classification crm:P140_assigned_attribute_to/^crm:P1_is_identified_by/^crm:P128_carries $subject ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> .' label='byTitle' ]]
 
-                            ?classification crm:P140_assigned_attribute_to [[> thisForQuery]] ;
+                            ?classification crm:P140_assigned_attribute_to/^crm:P1_is_identified_by/^crm:P128_carries [[> thisForQuery]] ;
                                 crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> ;
-                                crm:P141_assigned $subject ;
+                                crm:P141_assigned/^crm:P1_is_identified_by/^crm:P128_carries $subject ;
                                 rdf:value ?score .
                         
                         [[/ objectsTable]]
