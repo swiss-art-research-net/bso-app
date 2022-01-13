@@ -17,15 +17,27 @@
                 GROUP BY ?image ?subject
             }
             FILTER(?num_classification > 4)
-        } ORDER BY DESC(?num_classification) ?subject"   c
+        } ORDER BY DESC(?num_classification) ?subject"
         column-configuration='[
-        {"displayName": " ", "cellTemplate": "<mp-resource-thumbnail iri=\"{{subject.value}}\"><mp-resource-thumbnail>"},
-        {"displayName": "Entity", "variableName": "subject"},
-        {"displayName": "Image", "variableName": "image"},
-        {"displayName": "Number of Classifications", "variableName": "num_classification"}
-        
+          {"displayName": " ", "cellTemplate": "{{> editCell}}"},
+          {"displayName": "Entity", "variableName": "subject"},
+          {"displayName": "Image", "variableName": "image"},
+          {"displayName": "Number of Classifications", "variableName": "num_classification"}  
       ]'
-    ></semantic-table>
+    >
+        <template id="editCell">
+          <mp-overlay-dialog title="Image Viewer" type="modal" bs-size="xl">
+              <mp-overlay-dialog-trigger><a><mp-resource-thumbnail iri="{{subject.value}}"></mp-resource-thumbnail></a></mp-overlay-dialog-trigger>
+              <mp-overlay-dialog-content
+              id="image-modal">
+                  <mp-page-loader 
+                      iri="[[ resolvePrefix 'page:viewImage']]"
+                      urlqueryparam-imageiri="{{image.value}}"
+                      urlqueryparam-overlay="true"
+                  ></mp-page-loader>
+          </mp-overlay-dialog-content>
+          </mp-overlay-dialog>
+        </template>
   </bs-tab>
   <bs-tab event-key="preferredLabels" title="[[i18n "preferredLabels" bundle="bso"]]">
 
