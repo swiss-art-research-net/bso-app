@@ -17,7 +17,14 @@
                 GROUP BY ?image ?subject
             }
             FILTER(?num_classification > 4)
-        } ORDER BY DESC(?num_classification) ?subject"
+        } ORDER BY DESC(?num_classification) ?subject"   c
+        column-configuration='[
+        {"displayName": " ", "cellTemplate": "<mp-resource-thumbnail iri=\"{{subject.value}}\"><mp-resource-thumbnail>"},
+        {"displayName": "Entity", "variableName": "subject"},
+        {"displayName": "Image", "variableName": "image"},
+        {"displayName": "Number of Classifications", "variableName": "num_classification"}
+        
+      ]'
     ></semantic-table>
   </bs-tab>
   <bs-tab event-key="preferredLabels" title="[[i18n "preferredLabels" bundle="bso"]]">
