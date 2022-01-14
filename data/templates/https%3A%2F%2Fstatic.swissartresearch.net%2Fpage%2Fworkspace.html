@@ -25,6 +25,9 @@
                 } 
                 GROUP BY ?image ?subject
             }
+            ?region crmdig:L49_is_primary_area_of ?image ;
+              crm:P2_has_type <https://resource.swissartresearch.net/type/imageRegion> ;
+              crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-segmentation> .
             FILTER(?num_classification > 4)
         } ORDER BY DESC(?num_classification) ?subject"
         column-configuration='[
