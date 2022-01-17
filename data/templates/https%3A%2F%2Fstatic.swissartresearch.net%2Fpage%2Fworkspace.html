@@ -25,13 +25,17 @@
                 } 
                 GROUP BY ?image ?subject
             }
+            ?region crmdig:L49_is_primary_area_of ?image ;
+              crm:P2_has_type <https://resource.swissartresearch.net/type/imageRegion> ;
+              crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-segmentation> .
             FILTER(?num_classification > 4)
         } ORDER BY DESC(?num_classification) ?subject"
+        number-of-displayed-rows='50'
         column-configuration='[
           {"displayName": " ", "cellTemplate": "{{> editCell}}"},
           {"displayName": "Entity", "variableName": "subject"},
           {"displayName": "Image", "variableName": "image"},
-          {"displayName": "Number of Classifications", "variableName": "num_classification"}  
+          {"displayName": "Number of Classifications", "variableName": "num_classification", "showFilter": true, "filterType": "number"}  
       ]'
     >
         <template id="editCell">
