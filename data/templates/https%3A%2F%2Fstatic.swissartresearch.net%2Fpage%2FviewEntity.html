@@ -161,6 +161,9 @@
                     {
                         [[> thisForQuery]] crmdig:L54_is_same-as ?subject .
                     } UNION {
+                        [[> thisForQuery]] crm:P70i_is_documented_in ?subject .
+                        ?attribute_assignment a crm:E13_Attribute_Assignment ; crm:P141_assigned ?subject .
+                    } UNION {
                         [[> thisForQuery]] a search:Object ;
                         crm:P109_has_current_or_former_curator ?zbz ;
                         crmdig:L1i_was_digitized_by/crmdig:L11_had_output/crm:P1_is_identified_by ?subject .

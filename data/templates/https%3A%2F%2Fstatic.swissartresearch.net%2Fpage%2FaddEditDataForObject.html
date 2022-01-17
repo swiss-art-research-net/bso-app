@@ -106,6 +106,33 @@
                             </div>
                         </div>
                     </bs-tab>
+                    <bs-tab event-key="object_sameas" title="[[i18n "externalLinks" bundle="bso"]]">
+                        <div class="bso-component separator next-step">
+                            <div class="bso-component form-content">
+                                [[i18n "externalLinks" bundle="bso"]]
+                                <semantic-form
+                                    subject="[[urlParam "subjectiri"]]"
+                                    new-subject-template="[[>thisIri]]/proposition/{{UUID}}"
+                                    fields='[[> partial:fieldDefinitions ]]'
+                                    post-action='[[> thisIri]]'
+                                    urlqueryparam-view='page'
+                                >
+                                    <semantic-form-hidden-input for="I4_Proposition_Set_about_Subject" replace-value="/container/context"></semantic-form-hidden-input>
+                                    <semantic-form-hidden-input for="container_form_id" replace-value="[[ resolvePrefix "page:addEditDataForObject"]]#object_sameas"></semantic-form-hidden-input>
+
+                                    <semantic-form-hidden-input for="type" replace-value="[[resolvePrefix "crm:E13_Attribute_Assignment"]]"></semantic-form-hidden-input>
+                                    <semantic-form-hidden-input for="P140_assigned_attribute_to" replace-value="[[>thisIri]]"></semantic-form-hidden-input>
+                                    
+                                    <p>[[i18n "externalLinksFormInfo" bundle="bso"]]</p>
+                                    <semantic-form-text-input for="L54_is_same-as_as_P141_to_proposition_subject"></semantic-form-text-input>
+                                    
+                                    <semantic-form-text-input for="P70i_is_documented_in_as_P141_to_proposition_subject"></semantic-form-text-input>
+                                    
+                                    <button name="submit" class="btn btn-primary btn-md">[[i18n "save" bundle="bso"]]</button>
+                                </semantic-form>
+                            </div>
+                        </div>
+                    </bs-tab>
                 </template>
             </semantic-if>
             <semantic-if

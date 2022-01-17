@@ -400,6 +400,25 @@ fields:
             $subject crm:P108i_was_produced_by/crm:P32_used_general_technique ?value .
           }'
 
+    - id: P70i_is_documented_in_as_P141_to_proposition_subject
+      label: Is documented in
+      description: The entity that documents the proposition_subject
+      datatype: xsd:anyURI
+      domain: crm:E13_Attribute_Assignment
+      range: crm:E1_CRM_Entity
+      minOccurs: 0
+      queries:
+        - select: 'SELECT DISTINCT ?value WHERE {
+            $subject crm:P141_assigned ?value .
+          }'
+        - insert: 'INSERT {
+            $subject crm:P141_assigned $value .
+            ?proposition_subject crm:P70i_is_documented_in $value .
+            $value a crm:E31_Document .
+          } WHERE {
+            BIND(URI(STRBEFORE(STR($subject), "/proposition")) as ?proposition_subject)
+          }'
+
     - id: region_for_proposition_subject
       label: Regions
       datatype: xsd:anyURI
@@ -435,6 +454,25 @@ fields:
         - select: 'SELECT ?value WHERE {
             $subject crmdig:L54_is_same-as ?value .
             }'
+
+      
+    - id: L54_is_same-as_as_P141_to_proposition_subject
+      label: Same as
+      description: The entity that is the same as the proposition_subject
+      datatype: xsd:anyURI
+      domain: crm:E13_Attribute_Assignment
+      range: crm:E1_CRM_Entity
+      minOccurs: 0
+      queries:
+        - select: 'SELECT DISTINCT ?value WHERE {
+            $subject crm:P141_assigned ?value .
+          }'
+        - insert: 'INSERT {
+            $subject crm:P141_assigned $value .
+            ?proposition_subject crmdig:L54_is_same-as $value .
+          } WHERE {
+            BIND(URI(STRBEFORE(STR($subject), "/proposition")) as ?proposition_subject)
+          }'
 
     - id: subproduction_type
       label: Type of production
