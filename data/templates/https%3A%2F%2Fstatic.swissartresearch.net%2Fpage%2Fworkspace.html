@@ -2,6 +2,15 @@
 [[> partial:pageHeader]]
 [[> partial:contentHeader]]
 
+<style>
+  .resource-thumbnail {
+    max-height: 80px;
+  }
+  button {
+    border: none;
+  }
+</style>
+
 <h2 class="gap">[[i18n "workspace" bundle="bso"]]</h2>
 
 <bs-tabs>
@@ -40,10 +49,10 @@
     >
         <template id="editCell">
             <mp-overlay-dialog title="Image Viewer" type="modal" bs-size="xl">
-                <mp-overlay-dialog-trigger><a>
+                <mp-overlay-dialog-trigger><button>
                   <mp-event-target-refresh id="edit-cell">
                     <mp-resource-thumbnail iri="{{subject.value}}"></mp-resource-thumbnail>
-                  </mp-event-target-refresh></a></mp-overlay-dialog-trigger>
+                  </mp-event-target-refresh></button></mp-overlay-dialog-trigger>
                 <mp-overlay-dialog-content
                 id="image-modal">
                     <mp-page-loader 
