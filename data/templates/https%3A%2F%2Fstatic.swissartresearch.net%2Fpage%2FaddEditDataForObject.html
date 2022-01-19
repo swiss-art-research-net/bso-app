@@ -64,7 +64,31 @@
                                     <semantic-form-select-input for="subproduction_type"></semantic-form-select-input>
                                     <div>Note: once we have the roles we could determine the subproduction type based on the role (e.g. colouring->E11, engraving->E12)</div>
                                     <semantic-form-autocomplete-input for="P14_carried_out_by"></semantic-form-autocomplete-input>
-                                    <semantic-form-autocomplete-input for="P2_has_type"></semantic-form-autocomplete-input>
+                                    <semantic-form-select-input for="P2_has_type_for_production"></semantic-form-select-input>
+                                    <button name="submit" class="btn btn-primary btn-md">[[i18n "save" bundle="bso"]]</button>
+                                </semantic-form>
+                            </div>
+                        </div>
+                    </bs-tab>
+                    <bs-tab event-key="object_subcreation" title="[[i18n "creation" bundle="bso"]]">
+                        <div class="bso-component separator next-step">
+                            <div class="bso-component form-content">
+                                [[i18n "creation" bundle="bso"]]
+                                <semantic-form
+                                    subject="[[urlParam "subjectiri"]]"
+                                    new-subject-template="[[>thisIri]]/proposition/{{UUID}}"
+                                    fields='[[> partial:fieldDefinitions ]]'
+                                    post-action='[[> thisIri]]'
+                                    urlqueryparam-view='page'
+                                >
+                                    <semantic-form-hidden-input for="I4_Proposition_Set_about_Subject" replace-value="/container/context"></semantic-form-hidden-input>
+                                    <semantic-form-hidden-input for="container_form_id" replace-value="[[ resolvePrefix "page:addEditDataForObject"]]#object_subcreation"></semantic-form-hidden-input>
+
+                                    <semantic-form-hidden-input for="P9_consists_of-reversed" replace-value="[[> thisIri]]/creation"></semantic-form-hidden-input>
+                                    <semantic-form-hidden-input for="type" replace-value="[[resolvePrefix "crm:E65_Creation"]]"></semantic-form-hidden-input>
+                                    
+                                    <semantic-form-autocomplete-input for="P14_carried_out_by"></semantic-form-autocomplete-input>
+                                    <semantic-form-select-input for="P2_has_type_for_creation"></semantic-form-select-input>
                                     <button name="submit" class="btn btn-primary btn-md">[[i18n "save" bundle="bso"]]</button>
                                 </semantic-form>
                             </div>

@@ -557,6 +557,48 @@ fields:
             } ORDER BY ?label
             LIMIT 100'
 
+    - id: P2_has_type_for_creation
+      label: Type
+      datatype: xsd:anyURI
+      queries:
+        - select: 'SELECT ?value WHERE {
+            $subject crm:P2_has_type ?value .
+          }'
+        - insert: 'INSERT {
+            $subject crm:P2_has_type $value .
+          } WHERE {}'
+        - valueSet: 'SELECT DISTINCT ?value  WHERE {
+              {
+                ?creation a crm:E65_Creation ;
+                  crm:P2_has_type ?value .
+                ?value a crm:E55_Type ;
+                  rdfs:label ?label .
+                } UNION {
+                  VALUES (?value) {
+                    (type:author)  
+                  }
+                }
+            } ORDER BY ?label
+            LIMIT 100'
+
+    - id: P2_has_type_for_production
+      label: Type
+      datatype: xsd:anyURI
+      queries:
+        - select: 'SELECT ?value WHERE {
+            $subject crm:P2_has_type ?value .
+          }'
+        - insert: 'INSERT {
+            $subject crm:P2_has_type $value .
+          } WHERE {}'
+        - valueSet: 'SELECT DISTINCT ?value  WHERE {
+              ?creation a crm:E12_Production ;
+                crm:P2_has_type ?value .
+              ?value a crm:E55_Type ;
+                rdfs:label ?label .
+            } ORDER BY ?label
+            LIMIT 100'
+
     - id: P9_consists_of-reversed
       label: Consists of (reversed)
       datatype: xsd:anyURI
