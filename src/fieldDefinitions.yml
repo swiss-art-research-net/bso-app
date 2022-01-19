@@ -428,6 +428,18 @@ fields:
             ?propositionSubject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?iiif_image .
             ?value crmdig:L49_is_primary_area_of ?iiif_image .
           }' 
+          
+    - id: remarks
+      label: Remarks
+      description: Remarks about the entity
+      datatype: xsd:string
+      minOccurs: 0
+      queries:
+        - select: 'SELECT ?value WHERE {
+            $subject crm:P129i_is_subject_of ?remark .
+            ?remark crm:P2_has_type aat:300435415 ;
+              rdfs:label ?value .
+          }'
 
     - id: I4_Proposition_Set_about_Subject
       label: I4 Proposition Set about Subject

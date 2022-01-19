@@ -293,6 +293,16 @@
     },
 
     {
+        "id" : "remarks",
+
+            "label": "Remarks",
+            "description" : "Remarks about the entity",
+            "xsdDatatype" : "xsd:string",
+                "selectPattern" : "SELECT ?value WHERE { $subject crm:P129i_is_subject_of ?remark . ?remark crm:P2_has_type aat:300435415 ; rdfs:label ?value . }",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/remarks"
+    },
+
+    {
         "id" : "I4_Proposition_Set_about_Subject",
 
             "label": "I4 Proposition Set about Subject",

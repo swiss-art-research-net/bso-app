@@ -28,7 +28,7 @@
           <mp-create-set-action></mp-create-set-action>
 
         </mp-selection-action-choice>
-        <semantic-table query="SELECT ?subject ?image ?num_classification WHERE {
+        <semantic-table query="SELECT ?subject ?image ?ratio ?num_classification WHERE {
             {
                 SELECT DISTINCT ?image ?subject (COUNT(?classification) as ?num_classification) WHERE {
                     ?subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
@@ -38,9 +38,16 @@
                 GROUP BY ?image ?subject
             }
             ?region crmdig:L49_is_primary_area_of ?image ;
+              rso:boundingBox ?boundingBox ;
               crm:P2_has_type <https://resource.swissartresearch.net/type/imageRegion> ;
               crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-segmentation> .
-            FILTER(?num_classification > 4)
+            FILTER(?num_classification > 4)  
+            BIND(REPLACE(?boundingBox, 'xywh=\\d*,\\d*,', '') as ?wh)
+            BIND(xsd:float(STRBEFORE(?wh, ',')) as ?width)
+            BIND(xsd:float(STRAFTER(?wh, ',')) as ?height)
+            BIND(?width/?height as ?ratio)
+
+            
         } ORDER BY DESC(?num_classification) ?subject" column-configuration='[
           {
             "variableName": "subject",
@@ -50,13 +57,14 @@
           {"displayName": " ", "cellTemplate": "{{> editCell}}"},
           {"displayName": "Entity", "variableName": "subject"},
           {"displayName": "Image", "variableName": "image"},
+          {"displayName": "Region ratio", "variableName": "ratio", "showFilter": true, "filterType": "number"},
           {"displayName": "Number of Classifications", "variableName": "num_classification", "showFilter": true, "filterType": "number"}  
         ]' options='{
           "showFilter":false
         }' number-of-displayed-rows=20>
           <template id='subjectTemplate'>
             <div>
-              <mp-selection-toggle selection='demo' tag='{{image.value}}'></mp-selection-toggle>
+              <mp-selection-toggle selection='demo' tag='{{subject.value}}'></mp-selection-toggle>
             </div>
           </template>
           <template id="editCell">
