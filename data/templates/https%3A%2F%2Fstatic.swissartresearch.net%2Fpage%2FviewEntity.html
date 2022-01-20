@@ -549,6 +549,12 @@
                 
                 [[> thisForQuery]] crm:P128_carries/crm:P138_represents $subject .
                 $subject a search:Place .
+
+                FILTER NOT EXISTS {
+                    GRAPH <https://resource.swissartresearch.net/graph/smapshot> {
+                        ?subject a crm:E53_Place .
+                    }
+                }
                 
             [[/ objectsTable]]
 
