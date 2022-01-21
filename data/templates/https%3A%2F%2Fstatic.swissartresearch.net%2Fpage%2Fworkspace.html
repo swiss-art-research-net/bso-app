@@ -28,7 +28,7 @@
           <mp-create-set-action></mp-create-set-action>
 
         </mp-selection-action-choice>
-        <semantic-table query="SELECT ?subject ?image ?ratio ?num_classification WHERE {
+        <semantic-table query="SELECT ?subject ?image ?crop ?ratio ?num_classification WHERE {
             {
                 SELECT DISTINCT ?image ?subject (COUNT(?classification) as ?num_classification) WHERE {
                     ?subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
@@ -42,6 +42,7 @@
               crm:P2_has_type <https://resource.swissartresearch.net/type/imageRegion> ;
               crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-segmentation> .
             FILTER(?num_classification > 4)  
+            BIND(REPLACE(?boundingBox, 'xywh=', '') AS ?crop)
             BIND(REPLACE(?boundingBox, 'xywh=\\d*,\\d*,', '') as ?wh)
             BIND(xsd:float(STRBEFORE(?wh, ',')) as ?width)
             BIND(xsd:float(STRAFTER(?wh, ',')) as ?height)
@@ -72,7 +73,7 @@
             <mp-overlay-dialog title="Image Viewer" type="modal" bs-size="xl">
               <mp-overlay-dialog-trigger><button>
                   <mp-event-target-refresh id="edit-cell">
-                    <mp-resource-thumbnail iri="{{subject.value}}"></mp-resource-thumbnail>
+                    <img src="{{image.value}}/{{crop.value}}/300,/0/default.jpg">
                   </mp-event-target-refresh>
                 </button></mp-overlay-dialog-trigger>
               <mp-overlay-dialog-content id="image-modal">
