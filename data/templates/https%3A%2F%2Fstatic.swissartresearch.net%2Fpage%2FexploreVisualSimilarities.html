@@ -19,7 +19,8 @@
                             ?subject crm:P109_has_current_or_former_curator ?subject_holder .
                             ?object crm:P109_has_current_or_former_curator ?object_holder .
                                 FILTER(?subject_holder != ?object_holder)
-                        } LIMIT 100"
+                        } ORDER BY ?subject ?object
+                        LIMIT 1000"
                     number-of-displayed-rows='5'
                     column-configuration='[{
                         "variableName": "subject",
