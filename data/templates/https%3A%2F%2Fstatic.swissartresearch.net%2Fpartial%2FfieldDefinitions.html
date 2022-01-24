@@ -13,6 +13,17 @@
     },
 
     {
+        "id" : "creation_date",
+
+            "label": "Creation date",
+            "description" : "The date an entity has been created",
+            "xsdDatatype" : "xsd:anyURI",
+            "range" : "crm:E52_Time-Span",
+                "selectPattern" : "SELECT ?value WHERE { $subject crm:P94i_was_created_by/crm:P4_has_time-span ?value }",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/creation_date"
+    },
+
+    {
         "id" : "collection",
 
             "label": "Collection",
@@ -22,6 +33,17 @@
             "range" : "crm:E39_Actor",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P109_has_current_or_former_curator ?value . }",
         "iri" : "https://platform.swissartresearch.net/instances/fields/collection"
+    },
+
+    {
+        "id" : "creator",
+
+            "label": "Creator",
+            "description" : "The creator of the entity",
+            "xsdDatatype" : "xsd:anyURI",
+            "range" : "crm:E39_Actor",
+                "selectPattern" : "SELECT ?value ?label WHERE { $subject crm:P94i_was_created_by/crm:P14_carried_out_by ?value. }",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/creator"
     },
 
     {

@@ -32,6 +32,15 @@ fields:
             ?container prov:used ?value .
           }'
 
+    - id: creation_date
+      label: Creation date
+      description: The date an entity has been created
+      datatype: xsd:anyURI
+      range: crm:E52_Time-Span
+      queries:
+        - select: 'SELECT ?value WHERE {
+            $subject crm:P94i_was_created_by/crm:P4_has_time-span ?value
+          }'
       
     - id: collection
       label: Collection
@@ -45,6 +54,16 @@ fields:
             $subject crm:P109_has_current_or_former_curator ?value .
           }'
             
+    - id: creator
+      label: Creator
+      description: The creator of the entity 
+      datatype: xsd:anyURI
+      range: crm:E39_Actor
+      queries:
+        - select: 'SELECT ?value ?label WHERE {
+          $subject crm:P94i_was_created_by/crm:P14_carried_out_by ?value.
+        }'
+
     - id: creator_of_object
       label: Creator
       description: The creator of the artwork 

@@ -592,6 +592,13 @@
                 $subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of  [[> thisForQuery]] .
             
             [[/ objectsTable]]
+
+            <!-- Is About -->
+            [[#> objectsTable condition='$subject crm:P129_is_about ?target  .' label='isAbout' ]]
+
+                [[> thisForQuery]] crm:P129_is_about $subject .
+            
+            [[/ objectsTable]]
         </div>
 
         [[#if (hasPermission "api:ldp:*")]]
