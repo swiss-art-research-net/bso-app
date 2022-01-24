@@ -257,7 +257,7 @@
 
             <!-- Persons involved in creation-->
             <semantic-query
-                query="SELECT DISTINCT ?subject ?role ?global_role WHERE {
+                query="SELECT DISTINCT ?subject (GROUP_CONCAT(DISTINCT ?role; SEPARATOR=' ') as ?roles) (GROUP_CONCAT(DISTINCT ?global_role; SEPARATOR=' ') as ?global_roles) WHERE {
                     BIND(<[[>thisIri]]/meta> as ?meta)
                     {
                         [[> thisForQuery]] crm:P108i_was_produced_by ?event .
@@ -293,7 +293,7 @@
                             ?appellation rdfs:label ?appellation_label .
                         }
                     }
-                }"
+                } GROUP BY ?subject"
                 template="{{> template}}">>
                 <template id="template">
                     <div class="bso-component field-visualisation">
@@ -306,7 +306,7 @@
                                             <li class="bso-tag Person"><semantic-link uri="{{subject.value}}"></semantic-link></li>
                                     </ul>
                                 </td>
-                                <td>{{#if role.value}}<mp-label iri="{{role.value}}"></mp-label>{{/if}} (<mp-label iri="{{global_role.value}}"></mp-label>) </td>
+                                <td>{{#if roles.value}}{{#each (split roles.value ' ')}}<mp-label iri="{{this}}"></mp-label>{{/each}}{{/if}} ({{#each (split global_roles.value ' ')}}<mp-label iri="{{this}}"></mp-label>{{/each}})</td>
                             </tr>
                             {{/each}}
                         </table>
