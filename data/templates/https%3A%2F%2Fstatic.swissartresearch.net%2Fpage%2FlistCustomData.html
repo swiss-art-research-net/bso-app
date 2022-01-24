@@ -34,18 +34,28 @@
 
                <h2>Regions</h2>
                <semantic-table
-                   query="SELECT ?subject WHERE {
-                       ?subject a crmdig:D35_Area ;
-                        crmdig:L49_is_primary_area_of ?image .
-                        FILTER NOT EXISTS { ?subject crm:P2_has_type type:imageRegion }
+                   query="SELECT ?subject ?graphName WHERE {
+                       GRAPH ?g {
+                        ?subject a crmdig:D35_Area ;
+                            crmdig:L49_is_primary_area_of ?image .
+                       }
+                       FILTER NOT EXISTS { ?subject crm:P2_has_type type:imageRegion }
+                       BIND(REPLACE(STR(?g), (REPLACE(STR(?g), '\\w*$', '')), '')   AS ?graphName)
                    }"
                    column-configuration='[{
                         "variableName": "subject",
+                        "displayName": "Region",
                         "cellTemplate": "<mp-resource-thumbnail iri=\"{{subject.value}}\"></mp-resource-thumbnail>"
                     },
                     {
                        "variableName": "subject",
+                       "displayName": "Subject",
                        "cellTemplate": "<semantic-link iri=\"{{subject.value}}\" urlqueryparam-view=\"page\"></semantic-link>"
+                   },
+                   {
+                       "variableName": "graphName",
+                       "displayName": "Graph",
+                       "showFilter": true
                    }]'
                ></semantic-table>
             </bs-col>
