@@ -20,34 +20,51 @@
       </bs-nav-item>
       <bs-nav>
         <bs-nav-dropdown title='Menu' id='assets-bg-nested-dropdown' data-align-right='true'>
+          
           <mp-resource-link-container propagate-link="true" iri='https://static.swissartresearch.net/page/browseImages'>
             <bs-menu-item>Browse Images</bs-menu-item>
           </mp-resource-link-container>
+          
           <mp-resource-link-container propagate-link="true" iri='https://static.swissartresearch.net/page/browsePersons'>
             <bs-menu-item>Browse Persons</bs-menu-item>
           </mp-resource-link-container>
+          
           <mp-resource-link-container propagate-link="true" iri='https://static.swissartresearch.net/page/map'>
             <bs-menu-item>Map</bs-menu-item>
           </mp-resource-link-container>
           <bs-dropdown-divider></bs-dropdown-divider>
-          <mp-resource-link-container propagate-link="true" iri='https://static.swissartresearch.net/page/workspace'>
-            <bs-menu-item>Workspace</bs-menu-item>
-          </mp-resource-link-container>
+
+          <mp-has-permission permission='forms:ldp:*'>
+            <mp-resource-link-container propagate-link="true" iri='https://static.swissartresearch.net/page/workspace'>
+              <bs-menu-item>Workspace</bs-menu-item>
+            </mp-resource-link-container>
+          </mp-has-permission>
+
           <mp-resource-link-container propagate-link="true" iri='https://static.swissartresearch.net/page/listCustomData'>
             <bs-menu-item>Custom Data</bs-menu-item>
           </mp-resource-link-container>
-          <bs-dropdown-divider></bs-dropdown-divider>
-          <mp-resource-link-container propagate-link="true" iri='http://www.metaphacts.com/resource/assets/NamedGraphs'>
-            <bs-menu-item>Named Graphs</bs-menu-item>
-          </mp-resource-link-container>
-          <mp-resource-link-container propagate-link="true" iri='http://www.metaphacts.com/resource/assets/Diagrams'>
-            <bs-menu-item>Diagrams</bs-menu-item>
-          </mp-resource-link-container>
-          <bs-dropdown-divider></bs-dropdown-divider>
-          <mp-resource-link-container propagate-link="true" iri='http://help.metaphacts.com/resource/Start'>
-            <bs-menu-item>Help</bs-menu-item>
-          </mp-resource-link-container>
+
+          <mp-has-permission permission='pages:view:Admin:DataImportExport'>
+            <bs-dropdown-divider></bs-dropdown-divider>
+            <mp-resource-link-container propagate-link="true" iri='http://www.metaphacts.com/resource/assets/NamedGraphs'>
+              <bs-menu-item>Named Graphs</bs-menu-item>
+            </mp-resource-link-container>
+          </mp-has-permission>
+          
+          <mp-has-permission permission='forms:ldp:*'>
+            <mp-resource-link-container propagate-link="true" iri='http://www.metaphacts.com/resource/assets/Diagrams'>
+              <bs-menu-item>Diagrams</bs-menu-item>
+            </mp-resource-link-container>
+          </mp-has-permission>
+
+          <mp-has-permission  permission='pages:view:Admin:*'>
+            <mp-resource-link-container propagate-link="true" iri='http://help.metaphacts.com/resource/Start'>
+              <bs-menu-item>Help</bs-menu-item>
+            </mp-resource-link-container>
+          </mp-has-permission>
+
         </bs-nav-dropdown>
+
         <mp-has-permission permission='pages:view:Admin:DataImportExport'>
           <bs-nav title='Data Import & Export'>
             <bs-nav-item>
