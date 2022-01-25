@@ -4,61 +4,83 @@
 <bs-row>
     <bs-col md="12" class="bso-component panel">
 
-       <h2>Visual Similarity Examples</h2>
+       <h2>Visual Similarity</h2>
 
-
-       <semantic-table
-            query="SELECT ?subject ?num_classification WHERE {
-                {
-                    SELECT DISTINCT ?subject (COUNT(?classification) as ?num_classification) WHERE {
-                        ?subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
-                        ?classification crm:P140_assigned_attribute_to ?image ;
-                            crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> .
-                    } 
-                    GROUP BY ?subject
-                }
-                FILTER(?num_classification > 4)
-            } LIMIT 5"
-            options='{
-                "showFilter": false
-            }'
-            tuple-template="{{> template}}"
-        >
-            <template id="template">
-                <div>
-                    <h3><semantic-link iri="{{subject.value}}"></semantic-link></h3>
-                    {{> partial:cardObject}}
-                    <semantic-table
-                        query="SELECT ?subject WHERE {
-                            <{{subject.value}}> crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
-                                ?classification crm:P140_assigned_attribute_to ?image ;
-                                crm:P141_assigned/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries ?subject ;
+        <bs-tabs>
+            <bs-tab event-key="cross-collection" title="Cross Collection">
+                <semantic-table
+                    query="
+                        SELECT ?subject ?subject_holder ?object ?object_holder WHERE {
+                            ?object crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?obj_image .
+                            ?subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?subj_image .
+                            ?classification crm:P140_assigned_attribute_to ?subj_image ;
+                                crm:P141_assigned ?obj_image ;
                                 crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> .
-                        }"
+                            ?subject crm:P109_has_current_or_former_curator ?subject_holder .
+                            ?object crm:P109_has_current_or_former_curator ?object_holder .
+                                FILTER(?subject_holder != ?object_holder)
+                        } ORDER BY ?subject ?object
+                        LIMIT 1000"
+                    number-of-displayed-rows='5'
+                    column-configuration='[{
+                        "variableName": "subject",
+                        "displayName": "Object A",
+                        "cellTemplate": "{{> partial:cardObject}}"
+                    },
+                    {
+                        "variableName": "subject_holder",
+                        "displayName": "Collection A",
+                        "showFilter": true
+                    },
+                    {
+                        "variableName": "object",
+                        "displayName": "Object B",
+                        "cellTemplate": "{{> partial:cardObject subject=object}}"
+                    },
+                    {
+                        "variableName": "object_holder",
+                        "displayName": "Collection B",
+                        "showFilter": true
+                    }]'
+                    ></semantic-table>
+            </bs-tab>
+            <bs-tab event-key="examples" title="Examples">
+                <semantic-table
+                        query="SELECT ?subject ?num_classification WHERE {
+                            {
+                                SELECT DISTINCT ?subject (COUNT(?classification) as ?num_classification) WHERE {
+                                    ?subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
+                                    ?classification crm:P140_assigned_attribute_to ?image ;
+                                        crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> .
+                                } 
+                                GROUP BY ?subject
+                            }
+                            FILTER(?num_classification > 4)
+                        } LIMIT 5"
                         options='{
                             "showFilter": false
                         }'
-                        tuple-template="{{> partial:cardObject}}"
-                </div>
-            </template>
-       </semantic-table>
-
-       <!-- <div class="bso-component card-container">
-        <semantic-table
-        query="SELECT DISTINCT ?subject WHERE {
-            ?subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
-            ?classification crm:P140_assigned_attribute_to ?image ;
-                crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> .
-        } LIMIT 10"
-        tuple-template="{{> partial:cardObject}}"
-        options='{
-            "showFilter": true,
-            "pageSizeSelection": "[5,10,20,50]"
-        }'
->
-        </semantic-table>
-    </div>
-                            -->
+                        tuple-template="{{> template}}"
+                    >
+                        <template id="template">
+                            <div>
+                                {{> partial:cardObject}}
+                                <semantic-table
+                                    query="SELECT ?subject WHERE {
+                                        <{{subject.value}}> crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
+                                            ?classification crm:P140_assigned_attribute_to ?image ;
+                                            crm:P141_assigned/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries ?subject ;
+                                            crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> .
+                                    }"
+                                    options='{
+                                        "showFilter": false
+                                    }'
+                                    tuple-template="{{> partial:cardObject}}"
+                            </div>
+                        </template>
+                </semantic-table>
+            </bs-tab>
+        </bs-tabs>
     </bs-col>
 </bs-row>
 
