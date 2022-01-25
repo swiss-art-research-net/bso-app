@@ -2,7 +2,7 @@
     {
         "id" : "container_form_id",
 
-            "label": "Form for creating the data in the container",
+            "label": "[[i18n "field_form_for_creating_the_data_in_the_container" bundle="bso"]]",
             "description" : "The identifier of the form that created the data in the container",
             "minOccurs" : "1",
             "maxOccurs" : "1",
@@ -15,7 +15,7 @@
     {
         "id" : "creation_date",
 
-            "label": "Creation date",
+            "label": "[[i18n "field_creation_date" bundle="bso"]]",
             "description" : "The date an entity has been created",
             "xsdDatatype" : "xsd:anyURI",
             "range" : "crm:E52_Time-Span",
@@ -26,7 +26,7 @@
     {
         "id" : "collection",
 
-            "label": "Collection",
+            "label": "[[i18n "field_collection" bundle="bso"]]",
             "description" : "The holding collection or institution of the work",
             "xsdDatatype" : "xsd:anyURI",
             "domain" : "crm:E22_Human-Made_Object",
@@ -38,7 +38,7 @@
     {
         "id" : "creator",
 
-            "label": "Creator",
+            "label": "[[i18n "field_creator" bundle="bso"]]",
             "description" : "The creator of the entity",
             "xsdDatatype" : "xsd:anyURI",
             "range" : "crm:E39_Actor",
@@ -49,7 +49,7 @@
     {
         "id" : "creator_of_object",
 
-            "label": "Creator",
+            "label": "[[i18n "field_creator" bundle="bso"]]",
             "description" : "The creator of the artwork",
             "xsdDatatype" : "xsd:anyURI",
             "domain" : "crm:E22_Human-Made_Object",
@@ -62,7 +62,7 @@
     {
         "id" : "date_from",
 
-            "label": "Earliest date",
+            "label": "[[i18n "field_earliest_date" bundle="bso"]]",
             "description" : "The beginning of a time frame",
             "xsdDatatype" : "xsd:dateTime",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P82a_begin_of_the_begin ?value }",
@@ -72,7 +72,7 @@
     {
         "id" : "date_to",
 
-            "label": "Latest date",
+            "label": "[[i18n "field_latest_date" bundle="bso"]]",
             "description" : "The end of a time frame",
             "xsdDatatype" : "xsd:dateTime",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P82b_end_of_the_end ?value }",
@@ -82,7 +82,7 @@
     {
         "id" : "label",
 
-            "label": "Label",
+            "label": "[[i18n "field_label" bundle="bso"]]",
             "description" : "A human-readable label for the entity",
             "maxOccurs" : "1",
             "xsdDatatype" : "xsd:string",
@@ -94,7 +94,7 @@
     {
         "id" : "notes",
 
-            "label": "Notes",
+            "label": "[[i18n "field_notes" bundle="bso"]]",
             "description" : "Notes about the entity",
             "xsdDatatype" : "xsd:string",
                 "insertPattern" : "INSERT { $subject crm:P3_has_note $value . } WHERE {}",
@@ -105,7 +105,7 @@
     {
         "id" : "objects_created",
 
-            "label": "Created",
+            "label": "[[i18n "field_created" bundle="bso"]]",
             "description" : "Objects that were created by an actor",
             "display" : "hidden",
             "xsdDatatype" : "xsd:anyURI",
@@ -118,7 +118,7 @@
     {
         "id" : "object_creation_date",
 
-            "label": "Creation date",
+            "label": "[[i18n "field_creation_date" bundle="bso"]]",
             "description" : "The date an object has been created",
             "xsdDatatype" : "xsd:anyURI",
             "domain" : "crm:E22_Human-Made_Object",
@@ -130,7 +130,7 @@
     {
         "id" : "object_depicts",
 
-            "label": "Depicts",
+            "label": "[[i18n "field_depicts" bundle="bso"]]",
             "description" : "The entity that is depicted by the object",
             "xsdDatatype" : "xsd:anyURI",
             "domain" : "crm:E22_Human-Made_Object",
@@ -145,7 +145,7 @@
     {
         "id" : "object_depicts_as_P141_to_work",
 
-            "label": "Depicts",
+            "label": "[[i18n "field_depicts" bundle="bso"]]",
             "description" : "The entity that is depicted by the object",
             "minOccurs" : "1",
             "xsdDatatype" : "xsd:anyURI",
@@ -160,7 +160,7 @@
     {
         "id" : "object_depicts_as_P141_to_proposition_subject",
 
-            "label": "Depicts",
+            "label": "[[i18n "field_depicts" bundle="bso"]]",
             "description" : "The entity that is depicted by the proposition_subject",
             "minOccurs" : "1",
             "xsdDatatype" : "xsd:anyURI",
@@ -175,7 +175,7 @@
     {
         "id" : "object_description",
 
-            "label": "Description",
+            "label": "[[i18n "field_description" bundle="bso"]]",
             "xsdDatatype" : "xsd:anyURI",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P129i_is_subject_of ?value . ?value crm:P2_has_type aat:300435416 . }",
         "iri" : "https://platform.swissartresearch.net/instances/fields/object_description"
@@ -184,7 +184,7 @@
     {
         "id" : "object_production_actors_and_roles",
 
-            "label": "Production",
+            "label": "[[i18n "field_production" bundle="bso"]]",
             "description" : "The actors involved in the production of an object",
             "display" : "true",
             "xsdDatatype" : "xsd:anyURI",
@@ -196,7 +196,7 @@
     {
         "id" : "object_subcreations",
 
-            "label": "Creation Steps",
+            "label": "[[i18n "field_creation_steps" bundle="bso"]]",
             "display" : "hidden",
             "xsdDatatype" : "xsd:anyURI",
             "domain" : "crm:E22_Human-Made_Object",
@@ -209,7 +209,7 @@
     {
         "id" : "object_subproductions",
 
-            "label": "Production Steps",
+            "label": "[[i18n "field_production_steps" bundle="bso"]]",
             "display" : "hidden",
             "xsdDatatype" : "xsd:anyURI",
             "domain" : "crm:E22_Human-Made_Object",
@@ -222,7 +222,7 @@
     {
         "id" : "object_caption",
 
-            "label": "Caption/Inscription",
+            "label": "[[i18n "field_caption_inscription" bundle="bso"]]",
             "description" : "An inscription on the object, typically a captin",
             "xsdDatatype" : "xsd:string",
             "domain" : "crm:E22_Human-Made_Object",
@@ -233,7 +233,7 @@
     {
         "id" : "object_carries_visual_item",
 
-            "label": "Visual Item",
+            "label": "[[i18n "field_visual_item" bundle="bso"]]",
             "description" : "The E36 Visual Item carried by the E22 Human-Made Object",
             "display" : "hidden",
             "minOccurs" : "1",
@@ -249,7 +249,7 @@
     {
         "id" : "object_material",
 
-            "label": "Material",
+            "label": "[[i18n "field_material" bundle="bso"]]",
             "description" : "The material of the object",
             "xsdDatatype" : "xsd:anyURI",
             "domain" : "crm:E22_Human-Made_Object",
@@ -261,7 +261,7 @@
     {
         "id" : "object_production_date",
 
-            "label": "Production date",
+            "label": "[[i18n "field_production_date" bundle="bso"]]",
             "description" : "The date an object has been produced",
             "xsdDatatype" : "xsd:anyURI",
             "domain" : "crm:E22_Human-Made_Object",
@@ -273,7 +273,7 @@
     {
         "id" : "object_publication_note",
 
-            "label": "Publication Information",
+            "label": "[[i18n "field_publication_information" bundle="bso"]]",
             "xsdDatatype" : "xsd:string",
             "domain" : "crm:E22_Human-Made_Object",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P108i_was_produced_by/crm:P9_consists_of ?publication_event . ?publication_event a frbroo:F30_Publication_Event ; crm:P3_has_note ?value . }",
@@ -283,7 +283,7 @@
     {
         "id" : "object_production_technique",
 
-            "label": "Technique",
+            "label": "[[i18n "field_technique" bundle="bso"]]",
             "description" : "The production technique of the artwork",
             "xsdDatatype" : "xsd:anyURI",
             "domain" : "crm:E22_Human-Made_Object",
@@ -295,7 +295,7 @@
     {
         "id" : "P70i_is_documented_in_as_P141_to_proposition_subject",
 
-            "label": "Is documented in",
+            "label": "[[i18n "field_is_documented_in" bundle="bso"]]",
             "description" : "The entity that documents the proposition_subject",
             "xsdDatatype" : "xsd:anyURI",
             "domain" : "crm:E13_Attribute_Assignment",
@@ -308,7 +308,7 @@
     {
         "id" : "region_for_proposition_subject",
 
-            "label": "Regions",
+            "label": "[[i18n "field_regions" bundle="bso"]]",
             "xsdDatatype" : "xsd:anyURI",
                 "selectPattern" : "SELECT ?value WHERE { BIND(URI(STRBEFORE(STR($subject), \"/proposition\")) as ?propositionSubject) ?propositionSubject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?iiif_image . ?value crmdig:L49_is_primary_area_of ?iiif_image . }",
         "iri" : "https://platform.swissartresearch.net/instances/fields/region_for_proposition_subject"
@@ -317,7 +317,7 @@
     {
         "id" : "remarks",
 
-            "label": "Remarks",
+            "label": "[[i18n "field_remarks" bundle="bso"]]",
             "description" : "Remarks about the entity",
             "xsdDatatype" : "xsd:string",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P129i_is_subject_of ?remark . ?remark crm:P2_has_type aat:300435415 ; rdfs:label ?value . }",
@@ -327,7 +327,7 @@
     {
         "id" : "I4_Proposition_Set_about_Subject",
 
-            "label": "I4 Proposition Set about Subject",
+            "label": "[[i18n "field_i4_proposition_set_about_subject" bundle="bso"]]",
             "description" : "Takes a URI or string (which will be attached to the subject to create a URI) and defines it as a I4 Proposition set that is P129 about the subject and P67 refers to the proposition&#x27;s subject",
             "xsdDatatype" : "xsd:string",
                 "insertPattern" : "INSERT { ?valueSubject a crminf:I4_Proposition_Set ; crm:P129_is_about $subject ; crm:P67_refers_to ?propositionSubject . } WHERE { BIND((IF(STR(URI(?value)) = ?value, True,False)) as ?isURI) BIND(IF(?isURI, URI(?value), URI(CONCAT(STR($subject), STR(?value)))) as ?valueSubject) BIND(URI(STRBEFORE(STR($subject), \"/proposition\")) as ?propositionSubject) }",
@@ -337,7 +337,7 @@
     {
         "id" : "L54_is_same-as",
 
-            "label": "Same as",
+            "label": "[[i18n "field_same_as" bundle="bso"]]",
             "xsdDatatype" : "xsd:anyURI",
                 "insertPattern" : "INSERT { $subject crmdig:L54_is_same-as ?value . } WHERE {}",
                 "selectPattern" : "SELECT ?value WHERE { $subject crmdig:L54_is_same-as ?value . }",
@@ -347,7 +347,7 @@
     {
         "id" : "L54_is_same-as_as_P141_to_proposition_subject",
 
-            "label": "Same as",
+            "label": "[[i18n "field_same_as" bundle="bso"]]",
             "description" : "The entity that is the same as the proposition_subject",
             "xsdDatatype" : "xsd:anyURI",
             "domain" : "crm:E13_Attribute_Assignment",
@@ -360,7 +360,7 @@
     {
         "id" : "subproduction_type",
 
-            "label": "Type of production",
+            "label": "[[i18n "field_type_of_production" bundle="bso"]]",
             "minOccurs" : "1",
             "maxOccurs" : "1",
             "xsdDatatype" : "xsd:anyURI",
@@ -373,7 +373,7 @@
     {
         "id" : "type",
 
-            "label": "The RDF Data Type",
+            "label": "[[i18n "field_the_rdf_data_type" bundle="bso"]]",
             "display" : "hidden",
             "xsdDatatype" : "xsd:anyURI",
                 "insertPattern" : "INSERT { $subject a $value . } WHERE { }",
@@ -384,7 +384,7 @@
     {
         "id" : "P1_is_identified_by",
 
-            "label": "Identifier",
+            "label": "[[i18n "field_identifier" bundle="bso"]]",
             "xsdDatatype" : "xsd:string",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P1_is_identified_by ?value . }",
                 "insertPattern" : "INSERT { $subject crm:P1_is_identified_by ?value . } WHERE {}",
@@ -394,7 +394,7 @@
     {
         "id" : "P2_has_type",
 
-            "label": "Type",
+            "label": "[[i18n "field_type" bundle="bso"]]",
             "xsdDatatype" : "xsd:anyURI",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P2_has_type ?value . }",
                 "insertPattern" : "INSERT { $subject crm:P2_has_type $value . } WHERE {}",
@@ -406,7 +406,7 @@
     {
         "id" : "P2_has_type_for_creation",
 
-            "label": "Type",
+            "label": "[[i18n "field_type" bundle="bso"]]",
             "xsdDatatype" : "xsd:anyURI",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P2_has_type ?value . }",
                 "insertPattern" : "INSERT { $subject crm:P2_has_type $value . } WHERE {}",
@@ -417,7 +417,7 @@
     {
         "id" : "P2_has_type_for_production",
 
-            "label": "Type",
+            "label": "[[i18n "field_type" bundle="bso"]]",
             "xsdDatatype" : "xsd:anyURI",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P2_has_type ?value . }",
                 "insertPattern" : "INSERT { $subject crm:P2_has_type $value . } WHERE {}",
@@ -428,7 +428,7 @@
     {
         "id" : "P9_consists_of-reversed",
 
-            "label": "Consists of (reversed)",
+            "label": "[[i18n "field_consists_of__reversed_" bundle="bso"]]",
             "xsdDatatype" : "xsd:anyURI",
                 "insertPattern" : "INSERT { ?value crm:P9_consists_of $subject . } WHERE {}",
                 "selectPattern" : "SELECT ?value WHERE { ?value crm:P9_consists_of $subject . }",
@@ -438,7 +438,7 @@
     {
         "id" : "P14_carried_out_by",
 
-            "label": "Person",
+            "label": "[[i18n "field_person" bundle="bso"]]",
             "description" : "The person or actor carrying out an event",
             "maxOccurs" : "1",
             "xsdDatatype" : "xsd:anyURI",
@@ -452,7 +452,7 @@
     {
         "id" : "P140_assigned_attribute_to",
 
-            "label": "Assigned attribute to",
+            "label": "[[i18n "field_assigned_attribute_to" bundle="bso"]]",
             "description" : "The entity to which an attribute was assigned",
             "maxOccurs" : "1",
             "xsdDatatype" : "xsd:anyURI",
@@ -464,7 +464,7 @@
     {
         "id" : "see_also",
 
-            "label": "See also",
+            "label": "[[i18n "field_see_also" bundle="bso"]]",
             "description" : "Links to this entity in other databases",
             "xsdDatatype" : "schema:URL",
                 "selectPattern" : "SELECT ?value ?label WHERE { BIND(<https://d-nb.info/gnd/10171799-4> as ?nb) BIND(<https://d-nb.info/gnd/1012546-2> as ?zbz) { $subject a search:Object ; crm:P109_has_current_or_former_curator ?zbz ; crmdig:L1i_was_digitized_by/crmdig:L11_had_output/crm:P1_is_identified_by ?value . } UNION { $subject a search:Object ; crm:P109_has_current_or_former_curator ?nb . BIND(STRAFTER(STR($subject), \"nb-\") as ?nbId) BIND(URI(CONCAT(\"https://www.helveticarchives.ch/detail.aspx?ID=\", ?nbId)) as ?value) BIND(\"HelveticArchives\" as ?label) } }",
