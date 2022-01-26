@@ -10,17 +10,10 @@
 @prefix fedsail: <http://www.openrdf.org/config/sail/federation#> .
 @prefix sparqlr: <http://www.openrdf.org/config/repository/sparql#> .
 
-[] a rep:Repository;
-  rep:repositoryID "smapshot";
-  rdfs:label "Remote Lookup (OpenRefine / W3C Reconciliation API)";
+[] a rep:Repository ;
+  rep:repositoryID "smapshot" ;
+  rdfs:label "Smapshot HTTP SPARQL Repository" ;
   rep:repositoryImpl [
-      rep:repositoryType "openrdf:SailRepository";
-      sr:sailImpl [
-          sail:sailType "openrdf:MemoryStore"
-        ]
-    ];
-  lookup:configuration [
-      lookup:type "metaphacts:remoteLookup";
-      lookup:remoteServiceUrl "http://smapshot:8080/";
-      lookup:remoteQueryMethod "postDataForm"
-    ] .
+    rep:repositoryType "metaphactory:SPARQLRepository" ;
+    sparqlr:query-endpoint <http://smapshotapi:5000/sparql>
+  ] .

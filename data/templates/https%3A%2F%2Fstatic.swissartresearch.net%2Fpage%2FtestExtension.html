@@ -6,14 +6,18 @@
 
 <semantic-context repository="smapshot">
    
-  <semantic-update query='INSERT {
-    GRAPH <urn:exampleGraph> {
-      ?? :exampleValue "some value" .
-    }
-  } WHERE {
-  }'>
-    <button class='btn btn-primary'>Add value</button>
-  </semantic-update>
+  <semantic-update query='PREFIX smapshot: <https://smapshot.heig-vd.ch/vocab>
+    INSERT {
+      ?image smapshot:iiif_data [
+          smapshot:image_service3_url <https://www.e-rara.ch/zuz/i3f/v20/12581613> ;
+          smapshot:regionByPx "[35,28,2196,1445]"
+      ]
+    } WHERE {
+      ?image smapshot:id "210758"
+    }' 
+    variable-params='["image"]'>
+  <button class='btn btn-primary'>Update Image</button>
+</semantic-update>
 
 </semantic-context>
 
