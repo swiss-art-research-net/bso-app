@@ -530,10 +530,9 @@
 
             <!-- Regions -->
             <mp-event-target-refresh id="regions-table">
-                [[#> objectsTable condition='$subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of ?region . FILTER NOT EXISTS {?region crm:P2_has_type type:imageRegion}' label='regions' ]]
+                [[#> objectsTable condition='$subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of ?region .' label='regions' ]]
 
-                    [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of  $subject.
-                    FILTER NOT EXISTS {?subject crm:P2_has_type type:imageRegion}
+                    [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of $subject.
 
                 [[/ objectsTable]]
             </mp-event-target-refresh>

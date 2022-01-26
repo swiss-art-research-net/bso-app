@@ -1,0 +1,21 @@
+
+[[> partial:pageHeader]]
+[[> partial:contentHeader]]
+
+<h1>Test Extensions</h1>
+
+<semantic-context repository="smapshot">
+   
+  <semantic-update query='INSERT {
+    GRAPH <urn:exampleGraph> {
+      ?? :exampleValue "some value" .
+    }
+  } WHERE {
+  }'>
+    <button class='btn btn-primary'>Add value</button>
+  </semantic-update>
+
+</semantic-context>
+
+[[> partial:contentFooter]]
+[[> partial:pageFooter]]
