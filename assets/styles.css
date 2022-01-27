@@ -260,8 +260,13 @@ ol.page-breadcrumb {
   margin-bottom: 1rem;
 }
 .bso-component.image-region-display .image-region-display-container .image-region-display-background {
-  position: absolute;
   opacity: 0.5;
+}
+.bso-component.image-region-display .image-region-display-container .image-region-display-foreground {
+  position: absolute;
+}
+.bso-component.image-region-display .image-region-display-container .image-region-display-foreground img {
+  outline: 5px solid red;
 }
 .bso-component.label {
   font-weight: bold;

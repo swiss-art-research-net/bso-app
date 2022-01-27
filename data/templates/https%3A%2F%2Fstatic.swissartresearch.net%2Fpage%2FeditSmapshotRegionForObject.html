@@ -87,7 +87,7 @@
                                         rso:displayLabel ?label .
                                         
                                     # Padding of region as percentage
-                                    BIND(0.02 AS ?paddingRelative)
+                                    BIND(0.03 AS ?paddingRelative)
 
                                     # Target size of region in pixels
                                     BIND(400 as ?targetWidth)
@@ -133,12 +133,12 @@
                                         <td>
                                             <div class="bso-component image-region-display">
                                                 <div class="bso-component image-region-display-container">
-                                                    <div class="image-region-display-background">
-                                                        <img src="{{image.value}}/{{paddedX.value}},{{paddedY.value}},{{paddedWidth.value}},{{paddedHeight.value}}/pct:{{sizePercentage.value}}/0/default.jpg" />
-                                                    </div>
                                                     <div class="image-region-display-foreground"
                                                         style="padding:{{offsetAbsoluteY.value}}px {{offsetAbsoluteX.value}}px;" >
                                                         <img src="{{image.value}}/{{x.value}},{{y.value}},{{width.value}},{{height.value}}/pct:{{sizePercentage.value}}/0/default.jpg" />
+                                                    </div>
+                                                    <div class="image-region-display-background">
+                                                        <img src="{{image.value}}/{{paddedX.value}},{{paddedY.value}},{{paddedWidth.value}},{{paddedHeight.value}}/pct:{{sizePercentage.value}}/0/default.jpg" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -147,8 +147,8 @@
                                         <td>
                                             <semantic-link
                                                 iri="page:selectSmapshotRegionForObject"
-                                                urlparam-objectiri="[[> thisIri ]]"
-                                                urlparam-regioniri="{{subject.value}}"
+                                                urlqueryparam-objectiri="[[> thisIri ]]"
+                                                urlqueryparam-regioniri="{{subject.value}}"
                                             >
                                                 <button class="btn btn-primary btn-primary">[[i18n "select" bundle="bso"]]</button>
                                             </semantic-link>
