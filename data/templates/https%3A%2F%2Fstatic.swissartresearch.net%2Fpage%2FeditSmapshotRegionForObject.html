@@ -46,7 +46,9 @@
                                 <template id="template">
                                     {{#each bindings}}
                                     <mp-overlay-dialog title="Image Viewer" type="modal" bs-size="xl">
-                                        <mp-overlay-dialog-trigger><button class="btn btn-primary btn-primary">[[i18n "addNewRegion" bundle="bso"]]</button></mp-overlay-dialog-trigger>
+                                        <mp-overlay-dialog-trigger>
+                                            <button class="btn btn-primary btn-primary">[[i18n "editRegions" bundle="bso"]]</button>
+                                        </mp-overlay-dialog-trigger>
                                         <mp-overlay-dialog-content
                                             id="image-modal">
                                                 <mp-page-loader 
@@ -142,6 +144,15 @@
                                             </div>
                                         </td>
                                         <td>{{label.value}}</td>
+                                        <td>
+                                            <semantic-link
+                                                iri="page:selectSmapshotRegionForObject"
+                                                urlparam-objectiri="[[> thisIri ]]"
+                                                urlparam-regioniri="{{subject.value}}"
+                                            >
+                                                <button class="btn btn-primary btn-primary">[[i18n "select" bundle="bso"]]</button>
+                                            </semantic-link>
+                                        </td>
                                     </tr>
                                 {{/each}}
                             </template>
