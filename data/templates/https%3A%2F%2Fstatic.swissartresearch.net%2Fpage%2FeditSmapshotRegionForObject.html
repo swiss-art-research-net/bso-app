@@ -1,0 +1,129 @@
+[[> partial:pageHeader]]
+
+[[#*inline "thisIri"]][[#if objectiri]][[objectiri]][[else]][[urlParam "objectiri"]][[/if]][[/inline]]
+
+[[#*inline "thisForQuery"]]
+    <[[> thisIri]]>
+[[/inline]]
+
+<mp-event-proxy on-event-type="Dialog.HideAll" proxy-event-type="Component.Refresh" proxy-targets='["regions-table"]'></mp-event-proxy>
+
+<div class="d-flex flex-md-row flex-column">
+    <div class="bso-component separator sidebar image-display">
+
+        [[#if objectiri]]
+            [[> partial:objectViewImageDisplay objectiri=objectiri]]
+        [[else]]
+            [[> partial:objectViewImageDisplay urlparam="objectiri"]]
+        [[/if]]
+
+    </div>
+    <div class="bso-component main">
+        <div class="bso-component panel">
+            <h2><mp-label iri="[[> thisIri]]"></mp-label></h2>
+
+            <p>[[i18n "promptSelectSmapshotRegion" bundle="bso"]]</p>
+
+            <p><button class="btn btn-secondary btn-xs"><semantic-link iri="[[> thisIri]]">[[i18n "back" bundle="bso"]]</semantic-link></button></p>
+
+            <mp-event-target-refresh id="regions-table">
+                <div class="bso-component field-visualisation">
+                    <span class="bso-component label">[[i18n "regions" bundle="bso"]]</span>
+                
+                    <table>
+                        <mp-event-trigger type="Component.Refresh" targets='["object-map"]'>
+                            <semantic-query
+                                query='SELECT DISTINCT 
+                                        ?subject
+                                        ?image
+                                        ?boundingBox
+                                        ?width
+                                        ?height
+                                        ?x
+                                        ?y
+                                        ?paddedWidth
+                                        ?paddedHeight
+                                        ?paddedX
+                                        ?paddedY
+                                        ?offsetX
+                                        ?offsetY
+                                        ?offsetAbsolute
+                                        ?imageWidth
+                                        ?paddingAbsolute
+                                        ?sizePercentage
+                                    WHERE {
+                                    [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
+                                    ?subject crmdig:L49_is_primary_area_of ?image ;
+                                        rso:boundingBox ?bbox .
+                                        
+                                    ?subject rso:displayLabel "imagex" .
+
+                                    ?original_image la:digitally_available_via/la:access_point ?image ;
+                                        crm:P43_has_dimension ?dimension_width ;
+                                        crm:P43_has_dimension ?dimension_height .
+                                    
+                                    ?dimension_width crm:P2_has_type aat:300055647 ;
+                                        crm:P90_has_value ?image_width .
+                                    ?dimension_height crm:P2_has_type aat:300055644 ;
+                                        crm:P90_has_value ?image_height .
+                                    
+                                    BIND(STRAFTER(STR(?bbox), "xywh=") AS ?boundingBox)
+                                    BIND(REPLACE(?boundingBox, "\\d*,\\d*,", "") AS ?wh)
+                                    BIND(REPLACE(?boundingBox, "(,\\d*){2}$", "") AS ?xy)
+                                    BIND(xsd:integer(STRBEFORE(?wh, ",")) AS ?width)
+                                    BIND(xsd:integer(STRAFTER(?wh, ",")) AS ?height)
+                                    BIND(xsd:integer(STRBEFORE(?xy, ",")) AS ?x)
+                                    BIND(xsd:integer(STRAFTER(?xy, ",")) AS ?y)
+                                    
+                                    BIND(0.02 AS ?paddingRelative)
+                                    BIND(20 AS ?sizePercentage)
+                                    BIND(xsd:integer(xsd:float(?paddingRelative) * xsd:float(?image_width)) as ?paddingAbsolute)
+                                    
+                                    BIND(xsd:integer(?width + ?paddingAbsolute * 2) AS ?paddedWidth)
+                                    BIND(xsd:integer(?height + ?paddingAbsolute * 2) AS ?paddedHeight)
+                                    BIND(xsd:integer(?x - ?paddingAbsolute) AS ?paddedXraw)
+                                    BIND(xsd:integer(?y - ?paddingAbsolute) AS ?paddedYraw)
+                                    BIND(IF(?paddedXraw < 0 , 0 , ?paddedXraw) AS ?paddedX)
+                                    BIND(IF(?paddedYraw < 0 , 0 , ?paddedYraw) AS ?paddedY)
+                                    BIND(?x - ?paddedX AS ?offsetX)
+                                    BIND(?y - ?paddedY AS ?offsetY)
+
+                                    BIND(?offsetX * ?sizePercentage / 100 as ?offsetAbsolute) 
+                                    # need above in percentage
+                                }'
+                                template="{{> template}}"
+                                options='{
+                                    "showFilter": false,
+                                    "pageSizeSelection": "[5,10,20,50]"
+                                }'
+                            >
+                                <template id="template">
+                                    {{#each bindings}}
+                                        <tr>
+                                            <td></td>
+                                            <td>
+                                                <div class="bso-component image-region-display">
+                                                    <div class="bso-component image-region-display-container">
+                                                        <div class="image-region-display-background">
+                                                            <img src="{{image.value}}/{{paddedX.value}},{{paddedY.value}},{{paddedWidth.value}},{{paddedHeight.value}}/pct:{{sizePercentage.value}}/0/default.jpg" />
+                                                        </div>
+                                                        <div class="image-region-display-foreground"
+                                                            style="padding:{{offsetAbsolute.value}}px;" >
+                                                            <img src="{{image.value}}/{{x.value}},{{y.value}},{{width.value}},{{height.value}}/pct:{{sizePercentage.value}}/0/default.jpg" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {{/each}}
+                                </template>
+                            </semantic-table>        
+                        </mp-event-trigger>
+                    </table>
+
+            </mp-event-target-refresh>
+
+        </div>
+</div>
+
+[[> partial:pageFooter]]
