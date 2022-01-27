@@ -259,9 +259,6 @@ ol.page-breadcrumb {
 .bso-component.image-region-display .image-region-display-container {
   max-width: 400px;
 }
-.bso-component.image-region-display .image-region-display-container img {
-  max-width: 100%;
-}
 .bso-component.image-region-display .image-region-display-container .image-region-display-background {
   position: absolute;
   opacity: 0.5;

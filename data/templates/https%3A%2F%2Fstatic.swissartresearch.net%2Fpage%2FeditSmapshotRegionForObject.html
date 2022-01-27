@@ -47,8 +47,8 @@
                                         ?paddedY
                                         ?offsetX
                                         ?offsetY
-                                        ?offsetAbsolute
-                                        ?imageWidth
+                                        ?offsetAbsoluteX
+                                        ?offsetAbsoluteY
                                         ?paddingAbsolute
                                         ?sizePercentage
                                     WHERE {
@@ -56,8 +56,6 @@
                                     ?subject crmdig:L49_is_primary_area_of ?image ;
                                         rso:boundingBox ?bbox .
                                         
-                                    ?subject rso:displayLabel "imagex" .
-
                                     ?original_image la:digitally_available_via/la:access_point ?image ;
                                         crm:P43_has_dimension ?dimension_width ;
                                         crm:P43_has_dimension ?dimension_height .
@@ -76,7 +74,7 @@
                                     BIND(xsd:integer(STRAFTER(?xy, ",")) AS ?y)
                                     
                                     BIND(0.02 AS ?paddingRelative)
-                                    BIND(20 AS ?sizePercentage)
+                                
                                     BIND(xsd:integer(xsd:float(?paddingRelative) * xsd:float(?image_width)) as ?paddingAbsolute)
                                     
                                     BIND(xsd:integer(?width + ?paddingAbsolute * 2) AS ?paddedWidth)
@@ -88,8 +86,10 @@
                                     BIND(?x - ?paddedX AS ?offsetX)
                                     BIND(?y - ?paddedY AS ?offsetY)
 
-                                    BIND(?offsetX * ?sizePercentage / 100 as ?offsetAbsolute) 
-                                    # need above in percentage
+                                    BIND(400 as ?targetWidth)
+                                    BIND(?targetWidth * 100 / ?paddedWidth  AS ?sizePercentage)
+                                    BIND(?offsetX * ?sizePercentage / 100 as ?offsetAbsoluteX) 
+                                    BIND(?offsetY * ?sizePercentage / 100 as ?offsetAbsoluteY) 
                                 }'
                                 template="{{> template}}"
                                 options='{
@@ -108,7 +108,7 @@
                                                             <img src="{{image.value}}/{{paddedX.value}},{{paddedY.value}},{{paddedWidth.value}},{{paddedHeight.value}}/pct:{{sizePercentage.value}}/0/default.jpg" />
                                                         </div>
                                                         <div class="image-region-display-foreground"
-                                                            style="padding:{{offsetAbsolute.value}}px;" >
+                                                            style="padding:{{offsetAbsoluteY.value}}px {{offsetAbsoluteX.value}}px;" >
                                                             <img src="{{image.value}}/{{x.value}},{{y.value}},{{width.value}},{{height.value}}/pct:{{sizePercentage.value}}/0/default.jpg" />
                                                         </div>
                                                     </div>
