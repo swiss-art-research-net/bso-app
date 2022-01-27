@@ -26,44 +26,75 @@
 
             <p><button class="btn btn-secondary btn-xs"><semantic-link iri="[[> thisIri]]">[[i18n "back" bundle="bso"]]</semantic-link></button></p>
 
-            <mp-event-target-refresh id="regions-table">
-                <div class="bso-component field-visualisation">
-                    <span class="bso-component label">[[i18n "regions" bundle="bso"]]</span>
-                
-                    <table>
-                        <mp-event-trigger type="Component.Refresh" targets='["object-map"]'>
+            <span class="bso-component label">[[i18n "regions" bundle="bso"]]</span>
+
+            <mp-event-target-refresh id="regions-table">                
+                <table>
+                    <tr>
+                        <td>
                             <semantic-query
-                                query='SELECT DISTINCT 
-                                        ?subject
-                                        ?image
-                                        ?boundingBox
-                                        ?width
-                                        ?height
-                                        ?x
-                                        ?y
-                                        ?paddedWidth
-                                        ?paddedHeight
-                                        ?paddedX
-                                        ?paddedY
-                                        ?offsetX
-                                        ?offsetY
-                                        ?offsetAbsoluteX
-                                        ?offsetAbsoluteY
-                                        ?paddingAbsolute
-                                        ?sizePercentage
-                                    WHERE {
+                                query="SELECT DISTINCT ?image ?IIIFimage WHERE {
+                                    [[> thisForQuery]] crm:P128_carries ?work .
+                                    ?work la:digitally_shown_by ?image .
+                                    ?image la:digitally_available_via/la:access_point ?IIIFimage
+                                } LIMIT 1"
+                                template="{{> template }}"
+                                options='{
+                                    "showFilter" : false
+                                }'
+                            >
+                                <template id="template">
+                                    {{#each bindings}}
+                                    <mp-overlay-dialog title="Image Viewer" type="modal" bs-size="xl">
+                                        <mp-overlay-dialog-trigger><button class="btn btn-primary btn-primary">[[i18n "addNewRegion" bundle="bso"]]</button></mp-overlay-dialog-trigger>
+                                        <mp-overlay-dialog-content
+                                            id="image-modal">
+                                                <mp-page-loader 
+                                                    iri="[[ resolvePrefix 'page:viewImage']]"
+                                                    urlqueryparam-imageiri="{{IIIFimage.value}}"
+                                                    urlqueryparam-overlay="true"
+                                                ></mp-page-loader>
+                                        </mp-overlay-dialog-content>
+                                    </mp-overlay-dialog>
+                                    {{/each}}
+                                </template>
+                            </semantic-query>
+                        </td>
+                    </tr>
+                    <mp-event-trigger type="Component.Refresh" targets='["object-map"]'>
+                        <semantic-query
+                            query='SELECT DISTINCT 
+                                    ?subject
+                                    ?label
+                                    ?image
+                                    ?width
+                                    ?height
+                                    ?x
+                                    ?y
+                                    ?paddedWidth
+                                    ?paddedHeight
+                                    ?paddedX
+                                    ?paddedY
+                                    ?offsetAbsoluteX
+                                    ?offsetAbsoluteY
+                                    ?sizePercentage
+                                WHERE {
                                     [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
                                     ?subject crmdig:L49_is_primary_area_of ?image ;
-                                        rso:boundingBox ?bbox .
+                                        rso:boundingBox ?bbox ;
+                                        rso:displayLabel ?label .
                                         
+                                    # Padding of region as percentage
+                                    BIND(0.02 AS ?paddingRelative)
+
+                                    # Target size of region in pixels
+                                    BIND(400 as ?targetWidth)
+                                    
                                     ?original_image la:digitally_available_via/la:access_point ?image ;
-                                        crm:P43_has_dimension ?dimension_width ;
-                                        crm:P43_has_dimension ?dimension_height .
+                                        crm:P43_has_dimension ?dimension_width .
                                     
                                     ?dimension_width crm:P2_has_type aat:300055647 ;
                                         crm:P90_has_value ?image_width .
-                                    ?dimension_height crm:P2_has_type aat:300055644 ;
-                                        crm:P90_has_value ?image_height .
                                     
                                     BIND(STRAFTER(STR(?bbox), "xywh=") AS ?boundingBox)
                                     BIND(REPLACE(?boundingBox, "\\d*,\\d*,", "") AS ?wh)
@@ -73,8 +104,6 @@
                                     BIND(xsd:integer(STRBEFORE(?xy, ",")) AS ?x)
                                     BIND(xsd:integer(STRAFTER(?xy, ",")) AS ?y)
                                     
-                                    BIND(0.02 AS ?paddingRelative)
-                                
                                     BIND(xsd:integer(xsd:float(?paddingRelative) * xsd:float(?image_width)) as ?paddingAbsolute)
                                     
                                     BIND(xsd:integer(?width + ?paddingAbsolute * 2) AS ?paddedWidth)
@@ -86,44 +115,44 @@
                                     BIND(?x - ?paddedX AS ?offsetX)
                                     BIND(?y - ?paddedY AS ?offsetY)
 
-                                    BIND(400 as ?targetWidth)
                                     BIND(?targetWidth * 100 / ?paddedWidth  AS ?sizePercentage)
                                     BIND(?offsetX * ?sizePercentage / 100 as ?offsetAbsoluteX) 
                                     BIND(?offsetY * ?sizePercentage / 100 as ?offsetAbsoluteY) 
                                 }'
-                                template="{{> template}}"
-                                options='{
-                                    "showFilter": false,
-                                    "pageSizeSelection": "[5,10,20,50]"
-                                }'
-                            >
-                                <template id="template">
-                                    {{#each bindings}}
-                                        <tr>
-                                            <td></td>
-                                            <td>
-                                                <div class="bso-component image-region-display">
-                                                    <div class="bso-component image-region-display-container">
-                                                        <div class="image-region-display-background">
-                                                            <img src="{{image.value}}/{{paddedX.value}},{{paddedY.value}},{{paddedWidth.value}},{{paddedHeight.value}}/pct:{{sizePercentage.value}}/0/default.jpg" />
-                                                        </div>
-                                                        <div class="image-region-display-foreground"
-                                                            style="padding:{{offsetAbsoluteY.value}}px {{offsetAbsoluteX.value}}px;" >
-                                                            <img src="{{image.value}}/{{x.value}},{{y.value}},{{width.value}},{{height.value}}/pct:{{sizePercentage.value}}/0/default.jpg" />
-                                                        </div>
+                            template="{{> template}}"
+                            options='{
+                                "showFilter": false,
+                                "pageSizeSelection": "[5,10,20,50]"
+                            }'
+                        >
+                            <template id="template">
+                                {{#each bindings}}
+                                    <tr>
+                                        <td>
+                                            <div class="bso-component image-region-display">
+                                                <div class="bso-component image-region-display-container">
+                                                    <div class="image-region-display-background">
+                                                        <img src="{{image.value}}/{{paddedX.value}},{{paddedY.value}},{{paddedWidth.value}},{{paddedHeight.value}}/pct:{{sizePercentage.value}}/0/default.jpg" />
+                                                    </div>
+                                                    <div class="image-region-display-foreground"
+                                                        style="padding:{{offsetAbsoluteY.value}}px {{offsetAbsoluteX.value}}px;" >
+                                                        <img src="{{image.value}}/{{x.value}},{{y.value}},{{width.value}},{{height.value}}/pct:{{sizePercentage.value}}/0/default.jpg" />
                                                     </div>
                                                 </div>
-                                            </td>
-                                        </tr>
-                                    {{/each}}
-                                </template>
-                            </semantic-table>        
-                        </mp-event-trigger>
-                    </table>
+                                            </div>
+                                        </td>
+                                        <td>{{label.value}}</td>
+                                    </tr>
+                                {{/each}}
+                            </template>
+                        </semantic-table>        
+                    </mp-event-trigger>
+                </table>
 
             </mp-event-target-refresh>
 
         </div>
+    </div>
 </div>
 
 [[> partial:pageFooter]]

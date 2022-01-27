@@ -257,7 +257,7 @@ ol.page-breadcrumb {
   padding: 0.5rem;
 }
 .bso-component.image-region-display .image-region-display-container {
-  max-width: 400px;
+  margin-bottom: 1rem;
 }
 .bso-component.image-region-display .image-region-display-container .image-region-display-background {
   position: absolute;

@@ -20,13 +20,13 @@
                         <mp-overlay-dialog title="Image Viewer" type="modal" bs-size="xl">
                             <mp-overlay-dialog-trigger><a>[[i18n "openInViewer" bundle="bso"]]</a></mp-overlay-dialog-trigger>
                             <mp-overlay-dialog-content
-                            id="image-modal">
-                                <mp-page-loader 
-                                    iri="[[ resolvePrefix 'page:viewImage']]"
-                                    urlqueryparam-imageiri="{{IIIFimage.value}}"
-                                    urlqueryparam-overlay="true"
-                                ></mp-page-loader>
-                        </mp-overlay-dialog-content>
+                                id="image-modal">
+                                    <mp-page-loader 
+                                        iri="[[ resolvePrefix 'page:viewImage']]"
+                                        urlqueryparam-imageiri="{{IIIFimage.value}}"
+                                        urlqueryparam-overlay="true"
+                                    ></mp-page-loader>
+                            </mp-overlay-dialog-content>
                         </mp-overlay-dialog>
                     </mp-event-trigger>
 
