@@ -306,7 +306,7 @@
                                             <li class="bso-tag Person"><semantic-link uri="{{subject.value}}"></semantic-link></li>
                                     </ul>
                                 </td>
-                                <td>{{#if roles.value}}{{#each (split roles.value ' ')}}<mp-label iri="{{this}}"></mp-label>{{/each}}{{/if}} ({{#each (split global_roles.value ' ')}}<mp-label iri="{{this}}"></mp-label>{{/each}})</td>
+                                <td>{{#if roles.value}}{{#each (split roles.value ' ')}}[[> addComma]]<mp-label iri="{{this}}"></mp-label>{{/each}}{{/if}} ({{#each (split global_roles.value ' ')}}[[> addComma]]<mp-label iri="{{this}}"></mp-label>{{/each}})</td>
                             </tr>
                             {{/each}}
                         </table>
@@ -831,6 +831,10 @@
         </template>
     </semantic-if>
 
+[[/inline]]
+
+[[#*inline "addComma"]]
+{{#if @first}}{{else}}, {{/if}}
 [[/inline]]
 
 [[> partial:pageFooter]]
