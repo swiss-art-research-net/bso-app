@@ -38,13 +38,21 @@
                 <template id="template">
                     {{#each bindings}}
                         <div>
-                            [[i18n "promptUpdateSmapshotRegion" bundle="bso"]]
-                            <div>
-                                <img src="{{iiif_url.value}}/{{regionByPx.value}}/300,/0/default.jpg">
-                            </div>
-
+                            <p>[[i18n "promptUpdateSmapshotRegion" bundle="bso"]]</p>
                             
-                            <button class="btn btn-secondary btn-xs"><semantic-link iri="[[> thisIri]]">[[i18n "back" bundle="bso"]]</semantic-link></button>
+                            <p><img src="{{iiif_url.value}}/{{regionByPx.value}}/300,/0/default.jpg"></p>
+                            
+                            <button class="btn btn-secondary btn-xs">
+                                <semantic-link
+                                    iri="page:selectSmapshotRegionForObject"
+                                    urlqueryparam-objectiri="[[> thisIri]]"
+                                >[[i18n "back" bundle="bso"]]</semantic-link>
+                            </button>
+                            <button class="btn btn-secondary btn-xs">
+                                <semantic-link
+                                    iri="[[> thisIri]]"
+                                >[[i18n "cancel" bundle="bso"]]</semantic-link>
+                            </button>
                             
                             <semantic-context repository="smapshot">
                                     
@@ -60,17 +68,10 @@
                                         }'
                                         post-action="[[> thisIri]]"
                                         variable-params='["type", "image_id", "iiif_url", "regionByPx"]'>
-                                        <button class='btn btn-primary'>
-                                            Update
-                                            
-                                        </button>
+                                        <button class='btn btn-primary'>[[i18n "update" bundle="bso"]]</button>
                                     </semantic-update>
                             
-                            </semantic-context>  
-
-                            <div>
-                                {{smapshot_id.value}} - {{iiif_url.value}} - {{regionByPx.value}}
-                            </div>
+                            </semantic-context>
                         </div>
                     {{/each}}
                 </template>
