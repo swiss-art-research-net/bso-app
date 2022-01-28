@@ -1,0 +1,84 @@
+[[> partial:pageHeader]]
+
+[[#*inline "thisIri"]][[#if objectiri]][[objectiri]][[else]][[urlParam "objectiri"]][[/if]][[/inline]]
+
+[[#*inline "thisForQuery"]]
+    <[[> thisIri]]>
+[[/inline]]
+
+<div class="d-flex flex-md-row flex-column">
+    <div class="bso-component separator sidebar image-display">
+
+        [[#if objectiri]]
+            [[> partial:objectViewImageDisplay objectiri=objectiri]]
+        [[else]]
+            [[> partial:objectViewImageDisplay urlparam="objectiri"]]
+        [[/if]]
+
+    </div>
+    <div class="bso-component main">
+        <div class="bso-component panel">
+            <h2><mp-label iri="[[> thisIri]]"></mp-label></h2>
+
+
+            <semantic-query 
+                query='SELECT ?iiif_url ?smapshot_id ?boundingBox ?regionByPx WHERE {
+                    BIND(<[[urlParam "objectiri"]]> as ?object)
+                    BIND(<[[urlParam "regioniri"]]> as ?region)
+                    ?region crmdig:L49_is_primary_area_of ?iiif_url ;
+                        rso:boundingBox ?bbox .
+                    ?object crm:P1_is_identified_by ?smapshot_identifier .
+                    ?smapshot_identifier crm:P2_has_type <https://smapshot.heig-vd.ch> ;
+                        rdfs:label ?smapshot_id . 
+
+                    BIND(STRAFTER(STR(?bbox), "xywh=") AS ?regionByPx)
+                } LIMIT 1''
+                template="{{>template}}"
+            >
+                <template id="template">
+                    {{#each bindings}}
+                        <div>
+                            <p>[[i18n "promptUpdateSmapshotRegion" bundle="bso"]]</p>
+                            
+                            <p><img src="{{iiif_url.value}}/{{regionByPx.value}}/300,/0/default.jpg"></p>
+                            
+                            <button class="btn btn-secondary btn-xs">
+                                <semantic-link
+                                    iri="page:selectSmapshotRegionForObject"
+                                    urlqueryparam-objectiri="[[> thisIri]]"
+                                >[[i18n "back" bundle="bso"]]</semantic-link>
+                            </button>
+                            <button class="btn btn-secondary btn-xs">
+                                <semantic-link
+                                    iri="[[> thisIri]]"
+                                >[[i18n "cancel" bundle="bso"]]</semantic-link>
+                            </button>
+                            
+                            <semantic-context repository="smapshot">
+                                    
+                                    <semantic-update 
+                                        query='PREFIX : <http://www.metaphacts.com/resource/>
+                                            PREFIX smapshot: <https://smapshot.heig-vd.ch/vocab>
+                                            INSERT  {
+                                            :s :p :o .
+                                            } WHERE {
+                                            VALUES(?type ?image_id ?iiif_url ?regionByPx) {
+                                                ("updateImageRegion" {{smapshot_id.value}} <{{iiif_url.value}}> "{{regionByPx.value}}")
+                                            }
+                                        }'
+                                        post-action="[[> thisIri]]"
+                                        variable-params='["type", "image_id", "iiif_url", "regionByPx"]'>
+                                        <button class='btn btn-primary'>[[i18n "update" bundle="bso"]]</button>
+                                    </semantic-update>
+                            
+                            </semantic-context>
+                        </div>
+                    {{/each}}
+                </template>
+            </semantic-query>
+          
+        </div>
+    </div>
+</div>
+
+[[> partial:pageFooter]]

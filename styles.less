@@ -66,6 +66,7 @@ iframe {
     }
 }
 .btn {
+    margin-right: 0.5rem;
     &.btn-primary {
         background-color: @col-button-primary;
         border-color: lighten(@col-button-primary,4%);
@@ -319,6 +320,27 @@ ol.page-breadcrumb {
             text-align: right;
             padding: 0.5rem;
         }
+    }
+
+    &.image-region-display {
+        
+
+        .image-region-display-container {
+            
+            margin-bottom: 1rem;
+
+            .image-region-display-background {
+                opacity: 0.5;
+            }
+            .image-region-display-foreground {
+                position: absolute;
+                img {
+                    outline: 5px solid red;
+                }
+            }
+
+        }
+        
     }
 
     &.label {

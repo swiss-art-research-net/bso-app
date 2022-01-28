@@ -1,0 +1,163 @@
+[[> partial:pageHeader]]
+
+[[#*inline "thisIri"]][[#if objectiri]][[objectiri]][[else]][[urlParam "objectiri"]][[/if]][[/inline]]
+
+[[#*inline "thisForQuery"]]
+    <[[> thisIri]]>
+[[/inline]]
+
+<mp-event-proxy on-event-type="Dialog.HideAll" proxy-event-type="Component.Refresh" proxy-targets='["regions-table"]'></mp-event-proxy>
+
+<div class="d-flex flex-md-row flex-column">
+    <div class="bso-component separator sidebar image-display">
+
+        [[#if objectiri]]
+            [[> partial:objectViewImageDisplay objectiri=objectiri]]
+        [[else]]
+            [[> partial:objectViewImageDisplay urlparam="objectiri"]]
+        [[/if]]
+
+    </div>
+    <div class="bso-component main">
+        <div class="bso-component panel">
+            <h2><mp-label iri="[[> thisIri]]"></mp-label></h2>
+
+            <p>[[i18n "promptSelectSmapshotRegion" bundle="bso"]]</p>
+
+            <button class="btn btn-secondary btn-xs"><semantic-link iri="[[> thisIri]]">[[i18n "back" bundle="bso"]]</semantic-link></button>
+            <semantic-query
+                query="SELECT DISTINCT ?image ?IIIFimage WHERE {
+                    [[> thisForQuery]] crm:P128_carries ?work .
+                    ?work la:digitally_shown_by ?image .
+                    ?image la:digitally_available_via/la:access_point ?IIIFimage
+                } LIMIT 1"
+                template="{{> template }}"
+                options='{
+                    "showFilter" : false
+                }'
+            >
+                <template id="template">
+                    {{#each bindings}}
+                    <mp-overlay-dialog title="Image Viewer" type="modal" bs-size="xl">
+                        <mp-overlay-dialog-trigger>
+                            <button class="btn btn-primary btn-primary">[[i18n "editRegions" bundle="bso"]]</button>
+                        </mp-overlay-dialog-trigger>
+                        <mp-overlay-dialog-content
+                            id="image-modal">
+                                <mp-page-loader 
+                                    iri="[[ resolvePrefix 'page:viewImage']]"
+                                    urlqueryparam-imageiri="{{IIIFimage.value}}"
+                                    urlqueryparam-overlay="true"
+                                ></mp-page-loader>
+                        </mp-overlay-dialog-content>
+                    </mp-overlay-dialog>
+                    {{/each}}
+                </template>
+            </semantic-query>
+
+            <mp-event-target-refresh id="regions-table">                
+                <table>
+                    <mp-event-trigger type="Component.Refresh" targets='["object-map"]'>
+                        <semantic-query
+                            query='SELECT DISTINCT 
+                                    ?subject
+                                    ?label
+                                    ?image
+                                    ?width
+                                    ?height
+                                    ?x
+                                    ?y
+                                    ?paddedWidth
+                                    ?paddedHeight
+                                    ?paddedX
+                                    ?paddedY
+                                    ?offsetAbsoluteX
+                                    ?offsetAbsoluteY
+                                    ?sizePercentage
+                                WHERE {
+                                    [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
+                                    ?subject crmdig:L49_is_primary_area_of ?image ;
+                                        rso:boundingBox ?bbox ;
+                                        rso:displayLabel ?label .
+                                        
+                                    # Padding of region as percentage
+                                    BIND(0.03 AS ?paddingRelative)
+
+                                    # Target size of region in pixels
+                                    BIND(400 as ?targetWidth)
+                                    
+                                    ?original_image la:digitally_available_via/la:access_point ?image ;
+                                        crm:P43_has_dimension ?dimension_width .
+                                    
+                                    ?dimension_width crm:P2_has_type aat:300055647 ;
+                                        crm:P90_has_value ?image_width .
+                                    
+                                    BIND(STRAFTER(STR(?bbox), "xywh=") AS ?boundingBox)
+                                    BIND(REPLACE(?boundingBox, "\\d*,\\d*,", "") AS ?wh)
+                                    BIND(REPLACE(?boundingBox, "(,\\d*){2}$", "") AS ?xy)
+                                    BIND(xsd:integer(STRBEFORE(?wh, ",")) AS ?width)
+                                    BIND(xsd:integer(STRAFTER(?wh, ",")) AS ?height)
+                                    BIND(xsd:integer(STRBEFORE(?xy, ",")) AS ?x)
+                                    BIND(xsd:integer(STRAFTER(?xy, ",")) AS ?y)
+                                    
+                                    BIND(xsd:integer(xsd:float(?paddingRelative) * xsd:float(?image_width)) as ?paddingAbsolute)
+                                    
+                                    BIND(xsd:integer(?width + ?paddingAbsolute * 2) AS ?paddedWidth)
+                                    BIND(xsd:integer(?height + ?paddingAbsolute * 2) AS ?paddedHeight)
+                                    BIND(xsd:integer(?x - ?paddingAbsolute) AS ?paddedXraw)
+                                    BIND(xsd:integer(?y - ?paddingAbsolute) AS ?paddedYraw)
+                                    BIND(IF(?paddedXraw < 0 , 0 , ?paddedXraw) AS ?paddedX)
+                                    BIND(IF(?paddedYraw < 0 , 0 , ?paddedYraw) AS ?paddedY)
+                                    BIND(?x - ?paddedX AS ?offsetX)
+                                    BIND(?y - ?paddedY AS ?offsetY)
+
+                                    BIND(?targetWidth * 100 / ?paddedWidth  AS ?sizePercentage)
+                                    BIND(?offsetX * ?sizePercentage / 100 as ?offsetAbsoluteX) 
+                                    BIND(?offsetY * ?sizePercentage / 100 as ?offsetAbsoluteY) 
+                                }'
+                            template="{{> template}}"
+                            options='{
+                                "showFilter": false,
+                                "pageSizeSelection": "[5,10,20,50]"
+                            }'
+                        >
+                            <template id="template">
+                                {{#each bindings}}
+                                    <tr>
+                                        <td>
+                                            <div class="bso-component image-region-display">
+                                                <div class="bso-component image-region-display-container">
+                                                    <div class="image-region-display-foreground"
+                                                        style="padding:{{offsetAbsoluteY.value}}px {{offsetAbsoluteX.value}}px;" >
+                                                        <img src="{{image.value}}/{{x.value}},{{y.value}},{{width.value}},{{height.value}}/pct:{{sizePercentage.value}}/0/default.jpg" />
+                                                    </div>
+                                                    <div class="image-region-display-background">
+                                                        <img src="{{image.value}}/{{paddedX.value}},{{paddedY.value}},{{paddedWidth.value}},{{paddedHeight.value}}/pct:{{sizePercentage.value}}/0/default.jpg" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>{{label.value}}</td>
+                                        <td>
+                                            <semantic-link
+                                                iri="page:updateSmapshotRegionForObject"
+                                                urlqueryparam-objectiri="[[> thisIri ]]"
+                                                urlqueryparam-regioniri="{{subject.value}}"
+                                            >
+                                                <button class="btn btn-primary btn-primary">[[i18n "select" bundle="bso"]]</button>
+                                            </semantic-link>
+                                        </td>
+                                    </tr>
+                                {{/each}}
+                            </template>
+                        </semantic-table>        
+                    </mp-event-trigger>
+                </table>
+
+            </mp-event-target-refresh>
+
+        </div>
+    </div>
+</div>
+
+[[> partial:pageFooter]]

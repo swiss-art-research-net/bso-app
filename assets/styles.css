@@ -36,6 +36,9 @@ iframe {
   line-height: 1;
   color: #888;
 }
+.btn {
+  margin-right: 0.5rem;
+}
 .btn.btn-primary {
   background-color: #8c133a;
   border-color: #9e1541;
@@ -255,6 +258,18 @@ ol.page-breadcrumb {
 .bso-component.image-display .caption {
   text-align: right;
   padding: 0.5rem;
+}
+.bso-component.image-region-display .image-region-display-container {
+  margin-bottom: 1rem;
+}
+.bso-component.image-region-display .image-region-display-container .image-region-display-background {
+  opacity: 0.5;
+}
+.bso-component.image-region-display .image-region-display-container .image-region-display-foreground {
+  position: absolute;
+}
+.bso-component.image-region-display .image-region-display-container .image-region-display-foreground img {
+  outline: 5px solid red;
 }
 .bso-component.label {
   font-weight: bold;

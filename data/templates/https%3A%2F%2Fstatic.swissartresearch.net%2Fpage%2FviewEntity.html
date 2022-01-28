@@ -679,6 +679,21 @@
                         urlqueryparam-objectiri="[[> thisIri]]"
                     ><button type="button" class="btn btn-primary btn-s">[[i18n "addData" bundle="bso"]]</button></semantic-link>
 
+                    
+                        <semantic-if
+                            query='ASK { 
+                                [[> thisForQuery ]] crm:P1_is_identified_by ?smapshot_id .
+                                ?smapshot_id crm:P2_has_type <https://smapshot.heig-vd.ch> .
+                            }'
+                            then='{{> smapshotRegionTemplate}}'
+                        >
+                            <template id="smapshotRegionTemplate">
+                                <semantic-link
+                                    iri="page:selectSmapshotRegionForObject"
+                                    urlqueryparam-objectiri="[[> thisIri]]"
+                                ><button type="button" class="btn btn-primary btn-s">[[i18n "editSmapshotRegion" bundle="bso"]]</button></semantic-link>
+                            </template>
+                        </semantic-if>
 
                     <mp-event-target-refresh id="set-image-button">
                         <semantic-if

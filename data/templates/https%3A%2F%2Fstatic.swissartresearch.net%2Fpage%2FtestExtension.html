@@ -1,0 +1,25 @@
+
+[[> partial:pageHeader]]
+[[> partial:contentHeader]]
+
+<h1>Test Extensions</h1>
+
+<semantic-context repository="smapshot">
+   
+  <semantic-update query='PREFIX : <http://www.metaphacts.com/resource/>
+  PREFIX smapshot: <https://smapshot.heig-vd.ch/vocab>
+  INSERT  {
+    :s :p :o .
+  } WHERE {
+    VALUES(?image_id ?iiif_url ?region_px) {
+      ("210758" <https://www.e-rara.ch/zuz/i3f/v20/12581613> "[35,28,2196,1445]")
+    }
+  }' 
+    variable-params='["image_id", "iiif_url", "region_px"]'>
+  <button class='btn btn-primary'>Update Image</button>
+</semantic-update>
+
+</semantic-context>
+
+[[> partial:contentFooter]]
+[[> partial:pageFooter]]
