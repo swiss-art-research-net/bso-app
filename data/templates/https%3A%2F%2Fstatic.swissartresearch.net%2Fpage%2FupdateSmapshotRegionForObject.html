@@ -49,15 +49,16 @@
                             <semantic-context repository="smapshot">
                                     
                                     <semantic-update 
-                                    query='PREFIX : <http://www.metaphacts.com/resource/>
-                                        PREFIX smapshot: <https://smapshot.heig-vd.ch/vocab>
-                                        INSERT  {
-                                        :s :p :o .
-                                        } WHERE {
-                                        VALUES(?type ?image_id ?iiif_url ?regionByPx) {
-                                            ("updateImageRegion" {{smapshot_id.value}} <{{iiif_url.value}}> "{{regionByPx.value}}")
-                                        }
-                                        }' 
+                                        query='PREFIX : <http://www.metaphacts.com/resource/>
+                                            PREFIX smapshot: <https://smapshot.heig-vd.ch/vocab>
+                                            INSERT  {
+                                            :s :p :o .
+                                            } WHERE {
+                                            VALUES(?type ?image_id ?iiif_url ?regionByPx) {
+                                                ("updateImageRegion" {{smapshot_id.value}} <{{iiif_url.value}}> "{{regionByPx.value}}")
+                                            }
+                                        }'
+                                        post-action="[[> thisIri]]"
                                         variable-params='["type", "image_id", "iiif_url", "regionByPx"]'>
                                         <button class='btn btn-primary'>
                                             Update
