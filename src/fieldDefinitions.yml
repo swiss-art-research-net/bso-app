@@ -21,6 +21,7 @@ fields:
       datatype: xsd:anyURI
       minOccurs: 1
       maxOccurs: 1
+      display: hidden
       queries:
         - insert: 'INSERT {
             ?container prov:used $value .
@@ -215,6 +216,7 @@ fields:
       domain: crm:E13_Attribute_Assignment
       range: crm:E1_CRM_Entity
       minOccurs: 1
+      display: hidden
       queries:
         - select: 'SELECT DISTINCT ?value WHERE {
             $subject crm:P141_assigned ?value .
@@ -251,6 +253,7 @@ fields:
       domain: crm:E13_Attribute_Assignment
       range: crm:E1_CRM_Entity
       minOccurs: 1
+      display: hidden
       queries:
         - select: 'SELECT DISTINCT ?value WHERE {
             $subject crm:P141_assigned ?value .
@@ -425,6 +428,7 @@ fields:
       datatype: xsd:anyURI
       domain: crm:E13_Attribute_Assignment
       range: crm:E1_CRM_Entity
+      display: hidden
       minOccurs: 0
       queries:
         - select: 'SELECT DISTINCT ?value WHERE {
@@ -441,6 +445,7 @@ fields:
     - id: region_for_proposition_subject
       label: Regions
       datatype: xsd:anyURI
+      display: hidden
       queries:
         - select: 'SELECT ?value WHERE {
             BIND(URI(STRBEFORE(STR($subject), "/proposition")) as ?propositionSubject)
@@ -464,6 +469,7 @@ fields:
       label: I4 Proposition Set about Subject
       description: Takes a URI or string (which will be attached to the subject to create a URI) and defines it as a I4 Proposition set that is P129 about the subject and P67 refers to the proposition's subject 
       datatype: xsd:string
+      display: hidden
       queries:
         - insert: 'INSERT {
           ?valueSubject a crminf:I4_Proposition_Set ;
@@ -493,6 +499,7 @@ fields:
       datatype: xsd:anyURI
       domain: crm:E13_Attribute_Assignment
       range: crm:E1_CRM_Entity
+      display: hidden
       minOccurs: 0
       queries:
         - select: 'SELECT DISTINCT ?value WHERE {
@@ -579,9 +586,11 @@ fields:
     - id: P2_has_type_for_creation
       label: Type
       datatype: xsd:anyURI
+      display: hidden
       queries:
         - select: 'SELECT ?value WHERE {
-            $subject crm:P2_has_type ?value .
+            $subject a crm:E65_Creation ;
+              crm:P2_has_type ?value .
           }'
         - insert: 'INSERT {
             $subject crm:P2_has_type $value .
@@ -603,9 +612,11 @@ fields:
     - id: P2_has_type_for_production
       label: Type
       datatype: xsd:anyURI
+      display: hidden
       queries:
         - select: 'SELECT ?value WHERE {
-            $subject crm:P2_has_type ?value .
+            $subject a crm:E12_Production ;
+              crm:P2_has_type ?value .
           }'
         - insert: 'INSERT {
             $subject crm:P2_has_type $value .

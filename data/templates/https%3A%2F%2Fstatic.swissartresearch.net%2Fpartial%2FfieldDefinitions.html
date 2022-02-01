@@ -4,6 +4,7 @@
 
             "label": "[[i18n "field_form_for_creating_the_data_in_the_container" bundle="bso"]]",
             "description" : "The identifier of the form that created the data in the container",
+            "display" : "hidden",
             "minOccurs" : "1",
             "maxOccurs" : "1",
             "xsdDatatype" : "xsd:anyURI",
@@ -147,6 +148,7 @@
 
             "label": "[[i18n "field_depicts" bundle="bso"]]",
             "description" : "The entity that is depicted by the object",
+            "display" : "hidden",
             "minOccurs" : "1",
             "xsdDatatype" : "xsd:anyURI",
             "domain" : "crm:E13_Attribute_Assignment",
@@ -162,6 +164,7 @@
 
             "label": "[[i18n "field_depicts" bundle="bso"]]",
             "description" : "The entity that is depicted by the proposition_subject",
+            "display" : "hidden",
             "minOccurs" : "1",
             "xsdDatatype" : "xsd:anyURI",
             "domain" : "crm:E13_Attribute_Assignment",
@@ -297,6 +300,7 @@
 
             "label": "[[i18n "field_is_documented_in" bundle="bso"]]",
             "description" : "The entity that documents the proposition_subject",
+            "display" : "hidden",
             "xsdDatatype" : "xsd:anyURI",
             "domain" : "crm:E13_Attribute_Assignment",
             "range" : "crm:E1_CRM_Entity",
@@ -309,6 +313,7 @@
         "id" : "region_for_proposition_subject",
 
             "label": "[[i18n "field_regions" bundle="bso"]]",
+            "display" : "hidden",
             "xsdDatatype" : "xsd:anyURI",
                 "selectPattern" : "SELECT ?value WHERE { BIND(URI(STRBEFORE(STR($subject), \"/proposition\")) as ?propositionSubject) ?propositionSubject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?iiif_image . ?value crmdig:L49_is_primary_area_of ?iiif_image . }",
         "iri" : "https://platform.swissartresearch.net/instances/fields/region_for_proposition_subject"
@@ -329,6 +334,7 @@
 
             "label": "[[i18n "field_i4_proposition_set_about_subject" bundle="bso"]]",
             "description" : "Takes a URI or string (which will be attached to the subject to create a URI) and defines it as a I4 Proposition set that is P129 about the subject and P67 refers to the proposition&#x27;s subject",
+            "display" : "hidden",
             "xsdDatatype" : "xsd:string",
                 "insertPattern" : "INSERT { ?valueSubject a crminf:I4_Proposition_Set ; crm:P129_is_about $subject ; crm:P67_refers_to ?propositionSubject . } WHERE { BIND((IF(STR(URI(?value)) = ?value, True,False)) as ?isURI) BIND(IF(?isURI, URI(?value), URI(CONCAT(STR($subject), STR(?value)))) as ?valueSubject) BIND(URI(STRBEFORE(STR($subject), \"/proposition\")) as ?propositionSubject) }",
         "iri" : "https://platform.swissartresearch.net/instances/fields/I4_Proposition_Set_about_Subject"
@@ -349,6 +355,7 @@
 
             "label": "[[i18n "field_same_as" bundle="bso"]]",
             "description" : "The entity that is the same as the proposition_subject",
+            "display" : "hidden",
             "xsdDatatype" : "xsd:anyURI",
             "domain" : "crm:E13_Attribute_Assignment",
             "range" : "crm:E1_CRM_Entity",
@@ -407,8 +414,9 @@
         "id" : "P2_has_type_for_creation",
 
             "label": "[[i18n "field_type" bundle="bso"]]",
+            "display" : "hidden",
             "xsdDatatype" : "xsd:anyURI",
-                "selectPattern" : "SELECT ?value WHERE { $subject crm:P2_has_type ?value . }",
+                "selectPattern" : "SELECT ?value WHERE { $subject a crm:E65_Creation ; crm:P2_has_type ?value . }",
                 "insertPattern" : "INSERT { $subject crm:P2_has_type $value . } WHERE {}",
                 "valueSetPattern" : "SELECT DISTINCT ?value  WHERE { { ?creation a crm:E65_Creation ; crm:P2_has_type ?value . ?value a crm:E55_Type ; rdfs:label ?label . } UNION { VALUES (?value) { (type:author) } } } ORDER BY ?label LIMIT 100",
         "iri" : "https://platform.swissartresearch.net/instances/fields/P2_has_type_for_creation"
@@ -418,8 +426,9 @@
         "id" : "P2_has_type_for_production",
 
             "label": "[[i18n "field_type" bundle="bso"]]",
+            "display" : "hidden",
             "xsdDatatype" : "xsd:anyURI",
-                "selectPattern" : "SELECT ?value WHERE { $subject crm:P2_has_type ?value . }",
+                "selectPattern" : "SELECT ?value WHERE { $subject a crm:E12_Production ; crm:P2_has_type ?value . }",
                 "insertPattern" : "INSERT { $subject crm:P2_has_type $value . } WHERE {}",
                 "valueSetPattern" : "SELECT DISTINCT ?value  WHERE { ?creation a crm:E12_Production ; crm:P2_has_type ?value . ?value a crm:E55_Type ; rdfs:label ?label . } ORDER BY ?label LIMIT 100",
         "iri" : "https://platform.swissartresearch.net/instances/fields/P2_has_type_for_production"
