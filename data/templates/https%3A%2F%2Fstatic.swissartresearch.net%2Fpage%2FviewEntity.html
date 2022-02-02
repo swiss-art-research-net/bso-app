@@ -606,6 +606,47 @@
             <template id="template">
                 <div class="bso-component separator panel">
                     <h3>[[i18n "customData" bundle="bso"]]</h3>
+
+                    <semantic-table
+                        query='SELECT ?subject ?label ?actor ?dateCreated WHERE {
+                            [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
+                            {
+                                ?subject a crmsci:S7_Simulation_or_Prediction ;
+                                    crm:P32_used_general_technique <https://smapshot.heig-vd.ch/> ;
+                                    crm:P16_used_specific_object ?image ;
+                                    crm:P14_carried_out_by ?actor ;
+                                    rdfs:label ?label .
+                            } UNION {
+                                GRAPH <https://resource.swissartresearch.net/graph/smapshot/observations> {
+                                    ?subject crm:P129_is_about/crmdig:L49_is_primary_area_of ?image ;
+                                        crm:P94i_was_created_by/crm:P14_carried_out_by ?actor ;
+                                        crm:P94i_was_created_by/crm:P4_has_time-span/crm:P82_at_some_time_within ?dateCreated ;
+                                        rdfs:label ?label .
+                                }
+                            }
+                        }'
+                        options='{
+                            "showFilter": false
+                        }'
+                        column-configuration='[{
+                            "variableName": "subject",
+                            "displayName": "[[i18n "entity" bundle="bso"]]",
+                            "cellTemplate": "{{> subjectTemplate }}"
+                        },
+                        {
+                            "variableName": "actor",
+                            "displayName": "[[i18n "user" bundle="bso"]]"
+                        },
+                        {
+                            "displayName": "[[i18n "created" bundle="bso"]]",
+                            "cellTemplate": "{{dateTimeFormat dateCreated.value \"DD.MM.YYYY\"}}"
+                        }]'
+                    >
+                        <template id="subjectTemplate">
+                            <semantic-link iri="{{subject.value}}"><mp-text-truncate truncate="&hellip;">{{label.value}}</mp-text-truncate></semantic-link>
+                        </template>
+                    </semantic-table>
+
                     <semantic-table
                         query="SELECT ?proposition ?subject ?type ?container ?dateCreated ?parentContainer ?page ?form (GROUP_CONCAT(?entity;SEPARATOR=',') as ?entities) WHERE {
                             ?proposition a crminf:I4_Proposition_Set ;
@@ -626,6 +667,9 @@
                             } 
                         } GROUP BY ?proposition ?subject ?type ?container ?dateCreated ?parentContainer ?page ?form
                         ORDER BY ?dateCreated"
+                        options='{
+                            "showFilter": false
+                        }'
                         column-configuration='[{
                             "displayName": "[[i18n "type" bundle="bso"]]",
                             "cellTemplate": "<mp-label iri=\"{{type.value}}\"></mp-label>"
@@ -674,11 +718,11 @@
                             {{/if}}
                         </template>
                     </semantic-table>
+                    
                     <semantic-link
                         iri="page:addEditDataForObject"
                         urlqueryparam-objectiri="[[> thisIri]]"
                     ><button type="button" class="btn btn-primary btn-s">[[i18n "addData" bundle="bso"]]</button></semantic-link>
-
                     
                         <semantic-if
                             query='ASK { 
