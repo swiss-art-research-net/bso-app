@@ -10,23 +10,20 @@ searchLimit="100"
     <semantic-search-query-keyword
       [[#if searchPlaceholder]]placeholder='[[searchPlaceholder]]'[[/if]]
       domain='<http://www.w3.org/2000/01/rdf-schema#Resource>'
-      query='
-        #backwards compatibility
-        [[#if searchPattern]]
-          SELECT ?subject WHERE {
-            [[searchPattern]]
-          } ORDER BY DESC(?score) ?length
-        [[else]]
-      PREFIX lookup: <http://www.metaphacts.com/ontologies/platform/repository/lookup#>
-      SELECT ?subject ?description WHERE {
-      SERVICE Repository:lookup {
-        ?subject lookup:token ?__token__ .
-        ?subject lookup:description ?description .
-        ?subject lookup:score ?score .
-        ?subject lookup:limit [[#if searchLimit]][[searchLimit]][[else]]10[[/if]] .
-      }
-      }
-  [[/if]]'
+      query=' SELECT ?subject WHERE {
+            ?subject a ?type ; 
+              rdfs:label|crm:P1_is_identified_by|crm:P1_is_identified_by/rdfs:label ?searchTerm . 
+            ?type rdfs:label ?typeLabel . 
+            VALUES(?type) {
+              (search:Person)
+              (search:Object)
+              (search:Place)
+              (search:Type)
+            } 
+            ?searchTerm bds:search ?__token__ ;
+              bds:relevance ?score ; 
+              bds:matchAllTerms "true"
+          } ORDER BY DESC(?score)'
     ></semantic-search-query-keyword>
         <semantic-search-result-holder>
             <semantic-search-result>
