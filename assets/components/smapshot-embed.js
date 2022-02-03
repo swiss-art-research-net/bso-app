@@ -13,7 +13,7 @@
  * </smapshot-embed>
  *
  * 
- * <!-- width optional width and height attributes -->
+ * <!-- with optional width and height attributes -->
  * <smapshot-embed 
  *  iri="https://resource.swissartresearch.net/artwork/nb-162431" 
  *  width="100%"
