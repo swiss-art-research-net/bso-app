@@ -1,23 +1,42 @@
-<style>
-  .component-page-toolbar{
-    display: none;
-  }
-</style>
-<ol class="page-breadcrumb">
-  <li>
-    <mp-link title="Home" url="/">Home</mp-link>
-  </li>
-  <li class="active">
-    Simple Keyword Search
-  </li>
-</ol>
+[[> partial:pageHeader]]
 
-<div class="page">
-	<div class='page__body'>
-    [[!-- 
-    	Don't modify or overwrite this page in your domain specific instance of the platform.
-      If you need to adjust the placeholder, limit or query-pattern, just re-use the include as below.
-    --]]
-    [[> partial:simpleSearchInclude searchLimit="100" searchPlaceholder=(i18n "globalSearchInputPrompt" bundle="bso") ]]
-  </div>
-</div>
+
+  <bs-row>
+    <bs-col sm="12">
+
+      [[#> partial:baseSearch]]
+
+        <bs-row>
+          <bs-col md-offset="1" sm="12" md="10">
+            <h2 class="gap">[[i18n "search" bundle="bso"]]</h2>
+            <semantic-search-query-keyword 
+            domain='<http://www.cidoc-crm.org/cidoc-crm/E1_CRM_Entity>'
+            query='SELECT ?subject WHERE {
+                ?subject a ?type ; 
+                  rdfs:label|crm:P1_is_identified_by|crm:P1_is_identified_by/rdfs:label ?searchTerm . 
+                ?type rdfs:label ?typeLabel . 
+                VALUES(?type) {
+                  (search:Person)
+                  (search:Object)
+                  (search:Place)
+                  (search:Type)
+                } 
+            
+                SERVICE <http://www.bigdata.com/rdf/search#search> {
+                    ?searchTerm
+                              bds:search        ?__token__ ;
+                              bds:relevance     ?score ;
+                              bds:matchAllTerms "true";
+                              bds:rank          ?rank .
+                }
+              } ORDER BY DESC(?score)
+            '
+            ></semantic-search-query-keyword>
+          </bs-col>
+        </bs-row>
+      [[/ partial:baseSearch]]
+    </bs-col>
+  </bs-row>
+
+[[> partial:contentFooter]]
+[[> partial:pageFooter]]
