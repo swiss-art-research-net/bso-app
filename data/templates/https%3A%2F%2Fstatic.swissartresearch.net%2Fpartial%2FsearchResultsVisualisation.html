@@ -3,7 +3,7 @@
   <div class="bso-component card-container">
     <semantic-table
       id="grid-result"
-      query="SELECT DISTINCT ?subject ?score ?date WHERE {
+      query="SELECT DISTINCT ?subject ?date WHERE {
         OPTIONAL {
           ?subject skos:prefLabel ?label .
         }
@@ -40,7 +40,7 @@
             <semantic-table 
               id="panel-result"
               prefetch-labels="false"
-              query="SELECT DISTINCT ?subject ?date ?score WHERE {
+              query="SELECT DISTINCT ?subject ?date WHERE {
                 OPTIONAL {
                   ?subject dcterms:date ?date .
                 }
