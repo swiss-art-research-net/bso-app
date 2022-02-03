@@ -3,7 +3,7 @@
 <div class="bso-component home-search">
     <bs-col md="10" md-offset="1">
         <div class="bso-component simple-search">            
-            [[> partial:simpleSearchInclude hideTabs="true" searchLimit="100" searchPlaceholder=(i18n "globalSearchInputPrompt" bundle="bso") searchPattern="?subject a ?type ; rdfs:label|crm:P1_is_identified_by|crm:P1_is_identified_by/rdfs:label ?searchTerm . ?type rdfs:label ?typeLabel . VALUES(?type){(search:Person) (search:Object) (search:Place) (search:Type)} ?searchTerm bds:search ?__token__ ."]]
+            [[> partial:simpleSearchInclude hideTabs="true" searchLimit="100" searchPlaceholder=(i18n "globalSearchInputPrompt" bundle="bso") searchPattern="?subject a ?type ; rdfs:label|crm:P1_is_identified_by|crm:P1_is_identified_by/rdfs:label ?searchTerm . ?type rdfs:label ?typeLabel . VALUES(?type){(search:Person) (search:Object) (search:Place) (search:Type)} ?searchTerm bds:search ?__token__ ; bds:matchAllTerms \"true\" ."]]
         </div>
     </bs-col>
 </div>
