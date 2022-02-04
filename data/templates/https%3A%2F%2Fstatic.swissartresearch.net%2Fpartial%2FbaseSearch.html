@@ -40,6 +40,12 @@
         "label": "[[i18n "depicts" bundle="bso"]]"
       },
       {
+        "iri": "<https://platform.swissartresearch.net/Entity_depicted_together_with_Entity>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Entity>",
+        "hasRange": "<https://platform.swissartresearch.net/search/Entity>",
+        "label": "[[i18n "depictedTogetherWith" bundle="bso"]]"
+      },
+      {
         "iri": "<https://platform.swissartresearch.net/Thing_created_by_Person>",
         "hasDomain": "<https://platform.swissartresearch.net/search/Entity>",
         "hasRange": "<https://platform.swissartresearch.net/search/Person>",
@@ -156,6 +162,13 @@
                   ?__value__ a crm:E53_Place .
               }
             }
+          }"
+      }],
+      "<https://platform.swissartresearch.net/Entity_depicted_together_with_Entity>": [{
+        "kind": "resource",
+        "queryPattern": "{
+            ?subject ^crm:P138_represents/crm:P138_represents ?__value__ .
+            FILTER(?subject != ?__value__) .
           }"
       }],
       "<https://platform.swissartresearch.net/Thing_from_Material>": [{
