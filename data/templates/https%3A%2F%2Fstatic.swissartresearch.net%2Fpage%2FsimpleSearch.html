@@ -10,7 +10,11 @@
             <span class="bso-component label">[[i18n "search" bundle="bso"]]</span>
           </bs-col>
           <bs-col sm="12" md="11">
-            <semantic-search-query-keyword min-search-term-length='3' debounce='600' placeholder="[[i18n "globalSearchInputPrompt" bundle="bso" ]]" domain='<http://www.cidoc-crm.org/cidoc-crm/E1_CRM_Entity>'
+            <semantic-search-query-keyword 
+              min-search-term-length='3' 
+              debounce='600'
+              placeholder="[[i18n "globalSearchInputPrompt" bundle="bso" ]]"
+              domain='<https://platform.swissartresearch.net/search/Entity>'
               query='SELECT ?subject WHERE {
                     ?subject a ?type ; 
                       rdfs:label|crm:P1_is_identified_by|crm:P1_is_identified_by/rdfs:label ?searchTerm . 
@@ -58,21 +62,23 @@
                     }'
                     template="{{> template}}">
                   <template id="template">
-                    {{#each bindings}}
-                      <semantic-link iri="page:simpleSearch" urlqueryparam-browse="{{key.value}}">
-                        <button class="btn btn-md {{#ifCond type.value '==' selectedType.value}}btn-primary{{else}}btn-secondary{{/ifCond}}">{{label.value}}</button>
-                      </semantic-link>
-                    {{/each}}
-                    [[#if (urlParam "browse")]]
-                      <semantic-link iri="page:simpleSearch">
-                        <button class="btn btn-md btn-tertiary">Clear</button>
-                      </semantic-link>
-                    [[/if]]
+                    <div class="bso-component button-set">
+                      {{#each bindings}}
+                        <semantic-link iri="page:simpleSearch" urlqueryparam-browse="{{key.value}}">
+                          <button class="btn btn-md {{#ifCond type.value '==' selectedType.value}}btn-primary{{else}}btn-secondary{{/ifCond}}">{{label.value}}</button>
+                        </semantic-link>
+                      {{/each}}
+                      [[#if (urlParam "browse")]]
+                        <semantic-link iri="page:simpleSearch">
+                          <button class="btn btn-md btn-tertiary">Clear</button>
+                        </semantic-link>
+                      [[/if]]
+                    </div>
                   </template>
                 </semantic-query>
                 [[#if (urlParam "browse")]]
                   <semantic-search-query-constant 
-                    domain='<http://www.cidoc-crm.org/cidoc-crm/E1_CRM_Entity>'
+                    domain='<https://platform.swissartresearch.net/search/Entity>'    
                     query='SELECT ?subject WHERE {
                       ?subject a search:[[urlParam "browse"]] .
                     }'>
