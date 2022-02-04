@@ -1,27 +1,3 @@
-
-[[> partial:pageHeader]]
-[[> partial:contentHeader]]
-
-<h2 class="gap">[[i18n "browseDossiers" bundle="bso"]]</h2>
-
-<div>
-  <semantic-link iri="page:search">[[i18n "goToSearch" bundle="bso"]]</semantic-link>
-</div>
-
-[[#> partial:baseSearch]]
-
-<semantic-search-query-constant
-
-  domain='<https://platform.swissartresearch.net/search/Entity>'
-  query='
-    SELECT ?subject WHERE {
-      ?subject a search:Object ;
-        crm:P2_has_type <https://resource.swissartresearch.net/type/level/dossier> .
-    }
-  '
-></semantic-search-query-constant>
-
-[[/ partial:baseSearch]]
-
-[[> partial:contentFooter]]
-[[> partial:pageFooter]]
+[[> page:search
+typeLimitation="dossiers"
+queryConstant="SELECT ?subject WHERE { ?subject a search:Object ; crm:P2_has_type <https://resource.swissartresearch.net/type/level/dossier> .}"]]
