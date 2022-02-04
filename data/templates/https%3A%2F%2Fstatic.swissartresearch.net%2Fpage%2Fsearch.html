@@ -1,40 +1,100 @@
 [[> partial:pageHeader]]
-[[> partial:contentHeader]]
+[[#> partial:baseSearch]]
 
-<h2 class="gap">[[i18n "search" bundle="bso"]]</h2>
-
-<div>
-  <semantic-link iri="page:browseImages">[[i18n "browseImages" bundle="bso"]]</semantic-link>
+<div class="bso-component main">
+  <div class="bso-component panel">
+    <bs-row>
+      <bs-col sm="12">
+        <bs-row>
+          <bs-col sm="12" md="1">
+            <span class="bso-component label">[[i18n "search" bundle="bso"]]</span>
+          </bs-col>
+          <bs-col sm="12" md="11">
+            <semantic-search-query-keyword 
+              min-search-term-length='3' 
+              debounce='600'
+              placeholder="[[i18n "globalSearchInputPrompt" bundle="bso" ]]"
+              domain='<https://platform.swissartresearch.net/search/Entity>'
+              query='SELECT ?subject WHERE {
+                    ?subject a ?type ; 
+                      rdfs:label|crm:P1_is_identified_by|crm:P1_is_identified_by/rdfs:label ?searchTerm . 
+                    ?type rdfs:label ?typeLabel . 
+                    VALUES(?type) {
+                      [[#if (urlParam "browse")]]
+                        (search:[[urlParam "browse"]])
+                      [[else]]
+                        (search:Person)
+                        (search:Object)
+                        (search:Place)
+                        (search:Type)
+                      [[/if]]
+                    }                 
+                    SERVICE <http://www.bigdata.com/rdf/search#search> {
+                        ?searchTerm
+                                  bds:search        ?__token__ ;
+                                  bds:relevance     ?score ;
+                                  bds:matchAllTerms "true";
+                                  bds:rank          ?rank .
+                    }
+                  } ORDER BY DESC(?score)
+                '>
+            </semantic-search-query-keyword>
+          </bs-col>
+        </bs-row>
+        <bs-row>
+          <bs-col sm="12">
+            <bs-row>
+              <bs-col sm="12" md="1">
+                <span class="bso-component label">[[i18n "browse" bundle="bso"]]</span>
+              </bs-col>
+              <bs-col sm="12" md="11">
+                <semantic-query 
+                  query='SELECT ?type ?key ?label ?selectedType WHERE {
+                      [[#if (urlParam "browse")]]
+                        BIND(search:[[urlParam "browse"]] as ?selectedType)
+                      [[/if]]
+                      VALUES(?type ?key ?label) {
+                        (search:Object "Object" "[[i18n "images" bundle="bso"]]")
+                        (search:Person "Person" "[[i18n "persons" bundle="bso"]]")
+                        (search:Place "Place" "[[i18n "places" bundle="bso"]]")
+                        (search:Type "Type" "[[i18n "concepts" bundle="bso"]]")
+                      }
+                    }'
+                    template="{{> template}}">
+                  <template id="template">
+                    <div class="bso-component button-set">
+                      {{#each bindings}}
+                        <semantic-link iri="page:search" urlqueryparam-browse="{{key.value}}">
+                          <button class="btn btn-md {{#ifCond type.value '==' selectedType.value}}btn-primary{{else}}btn-secondary{{/ifCond}}">{{label.value}}</button>
+                        </semantic-link>
+                      {{/each}}
+                      [[#if (urlParam "browse")]]
+                        <semantic-link iri="page:search">
+                          <button class="btn btn-md btn-tertiary">Clear</button>
+                        </semantic-link>
+                      [[/if]]
+                    </div>
+                  </template>
+                </semantic-query>
+                [[#if (urlParam "browse")]]
+                  <semantic-search-query-constant 
+                    domain='<https://platform.swissartresearch.net/search/Entity>'    
+                    query='SELECT ?subject WHERE {
+                      ?subject a search:[[urlParam "browse"]] .
+                    }'>
+                  </semantic-search-query-constant>
+                [[/if]]
+              </bs-col>
+            </bs-row>
+          </bs-col>
+        </bs-row>
+      </bs-col>
+    </bs-row>
+  </div>
 </div>
 
-[[#> partial:baseSearch]]
-  <semantic-search-query-builder
-    resource-selector='{
-      "query": "
-        prefix bds: <http://www.bigdata.com/rdf/search#>
-
-        SELECT DISTINCT ?suggestion ?label WHERE {
-          ?label bds:search ?__token__.
-          ?label bds:relevance ?score.
-          ?label bds:minRelevance \"0.5\".
-          ?label bds:matchAllTerms \"true\".
-          {
-            ?suggestion (rdfs:label|crm:P3_has_note|crm:P82_at_some_time_within) ?label.
-          } UNION {
-            ?suggestion (crm:P1_is_identified_by/crm:P3_has_note) ?label.
-          }
-          FILTER(EXISTS {
-            { FILTER(?__relationPattern__) }
-          })
-        }
-        ORDER BY DESC(?score)
-        LIMIT 30
-      ",
-      "suggestionTupleTemplate": "<span title=\"{{label.value}}\">{{label.value}}</span>",
-      "noSuggestionsTemplate": "<div class=\"suggestion-no-matches\">[[i18n "noMatchesFound" bundle="bso"]]</div>"
-    }'
-  ></semantic-search-query-builder>
 [[/ partial:baseSearch]]
+
 
 [[> partial:contentFooter]]
 [[> partial:pageFooter]]
