@@ -55,7 +55,7 @@
     <bs-row>
         <bs-col md="2">
             <h3>[[i18n "dossiers" bundle="bso"]]</h3>
-            [[> resourceSummary type='search:Object' condition='crm:P2_has_type <https://resource.swissartresearch.net/type/level/dossier>' label='dossiers']]
+            [[> resourceSummary type='search:Object' condition='crm:P2_has_type <https://resource.swissartresearch.net/type/level/dossier>' label='dossiers' link='page:browseDossiers']]
         </bs-col>
         <bs-col md="10" class="bso-component card-container horizontal-scroll">
             [[#> cards type='search:Object' ]]
@@ -129,6 +129,14 @@
             <semantic-link 
                 iri="page:search"
                 urlqueryparam-browse="[[browse]]"
+            >
+                [[i18n "seeAll" bundle="bso"]]</semantic-link>
+        </div>
+    [[/if]]
+    [[#if link]]
+        <div class="bottom">
+            <semantic-link 
+                iri="[[link]]"
             >
                 [[i18n "seeAll" bundle="bso"]]</semantic-link>
         </div>

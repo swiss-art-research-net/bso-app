@@ -209,7 +209,9 @@
 
   [[> @partial-block ]]
 
-  <div class="bso-component panel dark separator">
+  [[#if separator]]
+    <div class="bso-component panel dark separator">
+  [[/if]]
     <bs-row>
       <bs-col md="3" sm="12">
         <semantic-search-facet
@@ -266,5 +268,7 @@
       
       </bs-col>
     </bs-row>
-  </div>   
+  [[#if separator]]
+    </div>   
+  [[/if]]
 </semantic-search>
