@@ -1,5 +1,5 @@
 <semantic-search
-  limit='100'
+  limit='1000'
   categories='{
     "<http://www.cidoc-crm.org/cidoc-crm/E52_Time-Span>": [{
       "kind": "date-range",
@@ -52,12 +52,6 @@
         "label": "[[i18n "inCollection" bundle="bso"]]"
       },
       {
-        "iri": "<https://platform.swissartresearch.net/Thing_held_by_Actor>",
-        "hasDomain": "<https://platform.swissartresearch.net/search/Entity>",
-        "hasRange": "<https://platform.swissartresearch.net/search/Person>",
-        "label": "[[i18n "inCollection" bundle="bso"]]"
-      },
-      {
         "iri": "<https://platform.swissartresearch.net/Thing_acquired_from_Actor>",
         "hasDomain": "<https://platform.swissartresearch.net/search/Entity>",
         "hasRange": "<https://platform.swissartresearch.net/search/Person>",
@@ -92,6 +86,12 @@
         "hasDomain": "<https://platform.swissartresearch.net/search/Entity>",
         "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E52_Time-Span>",
         "label": "[[i18n "dateDied" bundle="bso"]]"
+      },
+      {
+        "iri": "<https://platform.swissartresearch.net/Person_acted_as_Type>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Entity>",
+        "hasRange": "<https://platform.swissartresearch.net/search/Type>",
+        "label": "[[i18n "actedAs" bundle="bso"]]"
       }
     ]
   }'
@@ -183,6 +183,13 @@
             FILTER(STRDT(STR(?begin), xsd:date) <= ?__dateEndValue__) .
             FILTER(STRDT(STR(?end), xsd:date) >= ?__dateBeginValue__) .
           }"
+      }],
+      "<https://platform.swissartresearch.net/Person_acted_as_Type>": [{
+        "kind": "resource",
+        "queryPattern": "{
+            ?creation crm:P14_carried_out_by ?subject ;
+              crm:P2_has_type ?__value__ .
+        }"
       }]
     }'
   >
