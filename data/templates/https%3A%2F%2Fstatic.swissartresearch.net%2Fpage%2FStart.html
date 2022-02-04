@@ -12,7 +12,7 @@
     <bs-row>
         <bs-col md="2">
             <h3>[[i18n "images" bundle="bso"]]</h3>
-            [[> resourceSummary type='search:Object' label='images' link='page:browseImages']]
+            [[> resourceSummary type='search:Object' label='images' browse='Object']]
         </bs-col>
         <bs-col md="10" class="bso-component card-container horizontal-scroll">
             [[#> cards type='search:Object' ]]
@@ -25,7 +25,7 @@
     <bs-row>
         <bs-col md="2">
             <h3>[[i18n "places" bundle="bso"]]</h3>
-            [[> resourceSummary type='search:Place' label='places']]
+            [[> resourceSummary type='search:Place' label='places' browse='Place']]
         </bs-col>
         <bs-col md="10" class="bso-component card-container horizontal-scroll">
             [[#> cards type='search:Place' ]]
@@ -39,7 +39,7 @@
     <bs-row>
         <bs-col md="2">
             <h3>[[i18n "persons" bundle="bso"]]</h3>
-            [[> resourceSummary type='search:Person' label='persons' link='page:browsePersons']]
+            [[> resourceSummary type='search:Person' label='persons' browse='Person']]
         </bs-col>
         <bs-col md="10" class="bso-component card-container horizontal-scroll">
             <div class="bso-component card-image-align-top" style="display: inherit;">
@@ -55,7 +55,7 @@
     <bs-row>
         <bs-col md="2">
             <h3>[[i18n "dossiers" bundle="bso"]]</h3>
-            [[> resourceSummary type='search:Object' condition='crm:P2_has_type <https://resource.swissartresearch.net/type/level/dossier>' label='dossiers' link='page:browseDossiers']]
+            [[> resourceSummary type='search:Object' condition='crm:P2_has_type <https://resource.swissartresearch.net/type/level/dossier>' label='dossiers']]
         </bs-col>
         <bs-col md="10" class="bso-component card-container horizontal-scroll">
             [[#> cards type='search:Object' ]]
@@ -69,7 +69,7 @@
     <bs-row>
         <bs-col md="2">
             <h3>[[i18n "concepts" bundle="bso"]]</h3>
-            [[> resourceSummary type='search:Type' label='concepts']]
+            [[> resourceSummary type='search:Type' label='concepts' browse='Type']]
         </bs-col>
         <bs-col md="10" class="bso-component card-container horizontal-scroll">
             [[#> cards type='search:Type' ]]
@@ -124,9 +124,12 @@
         }"
         template="{{#each bindings}}[[i18n "entitiesSummaryPre" bundle="bso"]] {{num.value}} [[i18n "entitiesSummaryPost" (i18n label bundle="bso") bundle="bso"]]{{/each}}"
     ></semantic-query>
-    [[#if link]]
+    [[#if browse]]
         <div class="bottom">
-            <semantic-link iri="[[link]]">
+            <semantic-link 
+                iri="page:search"
+                urlqueryparam-browse="[[browse]]"
+            >
                 [[i18n "seeAll" bundle="bso"]]</semantic-link>
         </div>
     [[/if]]
