@@ -36,9 +36,6 @@ iframe {
   line-height: 1;
   color: #888;
 }
-.btn {
-  margin-right: 0.5rem;
-}
 .btn.btn-primary {
   background-color: #8c133a;
   border-color: #9e1541;
@@ -300,6 +297,9 @@ ol.page-breadcrumb {
 .bso-component.panel {
   background-color: #fff;
   padding: 2rem 0 2rem 2rem;
+}
+.bso-component.panel.dark {
+  background-color: #f1f1f1;
 }
 .bso-component.panel .row {
   margin-right: 0;
