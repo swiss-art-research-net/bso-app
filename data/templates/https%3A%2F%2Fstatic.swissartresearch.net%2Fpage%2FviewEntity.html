@@ -599,7 +599,16 @@
             <!-- Is About -->
             [[#> objectsTable condition='$subject crm:P129_is_about|crm:P140_assigned_attribute_to ?target  .' label='isAbout' ]]
 
-                [[> thisForQuery]] crm:P129_is_about|crm:P140_assigned_attribute_to $subject .
+                {
+                    [[> thisForQuery]] crm:P129_is_about|crm:P140_assigned_attribute_to $subject .
+                    FILTER NOT EXISTS {
+                        ?iiif la:access_point $subject .
+                    }
+                } UNION {
+                    [[> thisForQuery]] crm:P140_assigned_attribute_to ?iiif_image .
+                    $subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?iiif_image .
+                }
+                }
             
             [[/ objectsTable]]
         </div>
