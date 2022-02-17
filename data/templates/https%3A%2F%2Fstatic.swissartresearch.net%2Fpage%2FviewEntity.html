@@ -601,13 +601,13 @@
 
                 {
                     [[> thisForQuery]] crm:P129_is_about|crm:P140_assigned_attribute_to $subject .
-                    FILTER NOT EXISTS {
+                    OPTIONAL {
                         ?iiif la:access_point $subject .
                     }
+                    FILTER(!BOUND(?iiif))
                 } UNION {
                     [[> thisForQuery]] crm:P140_assigned_attribute_to ?iiif_image .
                     $subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?iiif_image .
-                }
                 }
             
             [[/ objectsTable]]
