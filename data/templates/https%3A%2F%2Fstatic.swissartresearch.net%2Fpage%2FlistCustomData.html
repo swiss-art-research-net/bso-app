@@ -1,66 +1,128 @@
 
 [[> partial:pageHeader]]
 [[> partial:contentHeader]]
-    <div class="container-fluid">
-        <bs-row class="bso-component panel">
-            <bs-col sm="12">
-               <h2>Contributed Data</h2>
-               <semantic-table
-                   query="SELECT ?proposition ?subject ?resource ?type ?container ?parentContainer WHERE {
-                       ?proposition a crminf:I4_Proposition_Set ;
-                           crm:P67_refers_to ?resource ;
-                           crm:P129_is_about ?subject .
-                       ?subject a ?type .
-                       BIND(URI(STRBEFORE(STR(?proposition), '/context')) as ?container)
-                       ?parentContainer ldp:contains ?container .
-                   }"
-                   column-configuration='[{
-                       "variableName": "resource",
-                       "cellTemplate": "<semantic-link iri=\"{{resource.value}}\" urlqueryparam-view=\"page\"></semantic-link>"
-                   },
-                   {
-                       "displayName": "[[i18n "type" bundle="bso"]]",
-                       "cellTemplate": "<mp-label iri=\"{{type.value}}\"></mp-label>"
-                   },
-                   {
-                       "displayName": "[[i18n "view" bundle="bso"]]",
-                       "cellTemplate": "<semantic-link iri=\"http://www.metaphacts.com/resource/assets/NamedGraph\" urlqueryparam-view=\"graph\" urlqueryparam-graph=\"{{proposition.value}}\">[[i18n "view" bundle="bso"]]</semantic-link>"
-                   },
-                   {
-                       "displayName": "[[i18n "delete" bundle="bso"]]",
-                       "cellTemplate": "<semantic-link iri=\"page:deleteContainerFromParent\" urlqueryparam-container=\"{{container.value}}\" urlqueryparam-parent=\"{{parentContainer.value}}\" urlqueryparam-back=\"[[this]]\">[[i18n "delete" bundle="bso"]]</semantic-link>"
-                   }]'
-               ></semantic-table>
 
-               <h2>Regions</h2>
-               <semantic-table
-                   query="SELECT ?subject ?graphName WHERE {
-                       GRAPH ?g {
-                        ?subject a crmdig:D35_Area ;
-                            crmdig:L49_is_primary_area_of ?image .
-                       }
-                       FILTER NOT EXISTS { ?subject crm:P2_has_type type:imageRegion }
-                       BIND(REPLACE(STR(?g), (REPLACE(STR(?g), '\\w*$', '')), '')   AS ?graphName)
-                   }"
-                   column-configuration='[{
-                        "variableName": "subject",
-                        "displayName": "Region",
-                        "cellTemplate": "<mp-resource-thumbnail iri=\"{{subject.value}}\"></mp-resource-thumbnail>"
-                    },
-                    {
-                       "variableName": "subject",
-                       "displayName": "Subject",
-                       "cellTemplate": "<semantic-link iri=\"{{subject.value}}\" urlqueryparam-view=\"page\"></semantic-link>"
-                   },
-                   {
-                       "variableName": "graphName",
-                       "displayName": "Graph",
-                       "showFilter": true
-                   }]'
-               ></semantic-table>
-            </bs-col>
-        </bs-row>
-    </div>
+<h2 class="gap">[[i18n "customData" bundle="bso"]]</h2>
 
+<bs-tabs default-active-key="[[#if (urlParam "tab")]][[urlParam "tab"]][[else]]contributed-data[[/if]]">
+    <bs-tab event-key="contributed-data" title="[[i18n "contributedData" bundle="bso"]]" class="panel">
+        <div class="bso-component panel">
+            <semantic-table
+                query="SELECT ?proposition ?subject ?resource ?type ?container ?parentContainer WHERE {
+                    ?proposition a crminf:I4_Proposition_Set ;
+                        crm:P67_refers_to ?resource ;
+                        crm:P129_is_about ?subject .
+                    ?subject a ?type .
+                    BIND(URI(STRBEFORE(STR(?proposition), '/context')) as ?container)
+                    ?parentContainer ldp:contains ?container .
+                }"
+                column-configuration='[{
+                    "variableName": "resource",
+                    "cellTemplate": "<semantic-link iri=\"{{resource.value}}\" urlqueryparam-view=\"page\"></semantic-link>"
+                },
+                {
+                    "displayName": "[[i18n "type" bundle="bso"]]",
+                    "cellTemplate": "<mp-label iri=\"{{type.value}}\"></mp-label>"
+                },
+                {
+                    "displayName": "[[i18n "view" bundle="bso"]]",
+                    "cellTemplate": "<semantic-link iri=\"http://www.metaphacts.com/resource/assets/NamedGraph\" urlqueryparam-view=\"graph\" urlqueryparam-graph=\"{{proposition.value}}\">[[i18n "view" bundle="bso"]]</semantic-link>"
+                },
+                {
+                    "displayName": "[[i18n "delete" bundle="bso"]]",
+                    "cellTemplate": "<semantic-link iri=\"page:deleteContainerFromParent\" urlqueryparam-container=\"{{container.value}}\" urlqueryparam-parent=\"{{parentContainer.value}}\" urlqueryparam-back=\"[[this]]\">[[i18n "delete" bundle="bso"]]</semantic-link>"
+                }]'
+                no-result-template="[[i18n "noContributedData" bundle="bso"]]"
+            ></semantic-table>
+        </div>
+    </bs-tab>
+    <bs-tab event-key="regions" title="[[i18n "regions" bundle="bso"]]">
+        <div class="bso-component panel">
+            <semantic-table
+                query="SELECT ?subject ?graphName WHERE {
+                    GRAPH ?g {
+                    ?subject a crmdig:D35_Area ;
+                        crmdig:L49_is_primary_area_of ?image .
+                    }
+                    FILTER NOT EXISTS { ?subject crm:P2_has_type type:imageRegion }
+                    BIND(REPLACE(STR(?g), (REPLACE(STR(?g), '\\w*$', '')), '')   AS ?graphName)
+                }"
+                column-configuration='[{
+                    "variableName": "subject",
+                    "displayName": "Region",
+                    "cellTemplate": "<mp-resource-thumbnail iri=\"{{subject.value}}\"></mp-resource-thumbnail>"
+                },
+                {
+                    "variableName": "subject",
+                    "displayName": "Subject",
+                    "cellTemplate": "<semantic-link iri=\"{{subject.value}}\" urlqueryparam-view=\"page\"></semantic-link>"
+                },
+                {
+                    "variableName": "graphName",
+                    "displayName": "Graph",
+                    "showFilter": true
+                }]'
+                no-result-template="[[i18n "noRegions" bundle="bso"]]"
+            ></semantic-table>
+        </div>
+    </bs-tab>
+    <bs-tab event-key="annotations" title="[[i18n "annotations" bundle="bso"]]">
+        <div class="bso-component panel">
+            <semantic-table
+                query='SELECT ?annotation ?body ?creator ?date ?typeOfTargetLabel WHERE {
+                    ?annotation a oa:annotation ;
+                        oa:body/rdfs:label ?body ;
+                        oa:target ?target .
+                    ?target a ?typeOfTarget .
+                    OPTIONAL {
+                        ?annotation crm:P14_carried_out_by ?creator .
+                    }
+                    OPTIONAL {
+                        ?annotation crm:P4_has_time-span/crm:P82_at_some_time_within ?date
+                    }
+                    VALUES (?typeOfTarget ?typeOfTargetLabel) {
+                        (crm:E36_Visual_Item "Image")
+                        (crmdig:D35_Area "Region")
+                    }
+                }'
+                column-configuration='[{
+                    "variableName": "annotation",
+                    "displayName": "[[i18n "annotation" bundle="bso"]]"
+                },
+                {
+                    "variableName": "body",
+                    "displayName": "[[i18n "note" bundle="bso"]]",
+                    "cellTemplate": "{{> bodyTemplate}}"
+                },
+                {
+                    "variableName": "creator",
+                    "displayName": "[[i18n "creator" bundle="bso"]]",
+                    "showFilter": true,
+                    "multiselect": true
+                },
+                {
+                    "variableName": "date",
+                    "displayName": "[[i18n "date" bundle="bso"]]"
+                },
+                {
+                    "variableName": "typeOfTargetLabel",
+                    "displayName": "[[i18n "type" bundle="bso"]]",
+                    "showFilter": true,
+                    "multiselect": true
+                }]'
+                no-result-template="[[i18n "noAnnotations" bundle="bso"]]">
+                <template id="bodyTemplate">
+                    <div style="max-width: 30rem;">
+                        <mp-text-truncate lines="2" expand="{{> expand}}" collapse="{{> collapse}}">
+                            <template id="expand"> <a>&hellip;[[i18n "readMore" bundle="bso"]]</a></template>
+                            <template id="collapse"><span><br/><a>[[i18n "showLess" bundle="bso"]]</a></span></template>
+                            {{{body.value}}}
+                        </mp-text-truncate>
+                    </div>
+                </template>
+            </semantic-table>
+        </div>
+    </bs-tab>
+</bs-tabs>
 [[> partial:contentFooter]]
 [[> partial:pageFooter]]

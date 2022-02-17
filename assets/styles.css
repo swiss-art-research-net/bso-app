@@ -420,6 +420,9 @@ ol.page-breadcrumb {
 .semantic-form .autocomplete-text-field .Select-value dl dd {
   display: none;
 }
+.tab-pane .bso-component.panel {
+  margin-top: -0.7rem;
+}
 @font-face {
   font-family: 'HK Grotesk';
   font-style: normal;
