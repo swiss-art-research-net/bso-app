@@ -423,10 +423,31 @@
     },
 
     {
+        "id" : "P2_has_type_for_person_roles",
+
+            "label": "[[i18n "field_type" bundle="bso"]]",
+            "display" : "hidden",
+            "minOccurs" : "1",
+            "xsdDatatype" : "xsd:anyURI",
+            "treePatterns": {
+                "type": "full",
+                "rootsQuery": "SELECT DISTINCT ?item ?hasChildren WHERE { BIND(iqvoc:_482eebdb as ?parent) ?item a skos:Concept ; skos:broader ?parent . OPTIONAL { ?subItem skos:broader ?item } BIND(BOUND(?subItem) AS ?hasChildren) }",
+                "childrenQuery": "SELECT ?item ?hasChildren WHERE { ?item skos:broader ?parent . OPTIONAL { ?subItem skos:broader ?item } BIND(BOUND(?subItem) AS ?hasChildren) }",
+                "parentsQuery": "SELECT ?item ?parent WHERE { ?item skos:broader ?parent . FILTER(?parent != iqvoc:_482eebdb) }",
+                "searchQuery": "SELECT DISTINCT ?item ?label ?score ?hasChildren WHERE { BIND(iqvoc:_482eebdb as ?parent) ?item a skos:Concept ; skos:broader ?parent ; skos:prefLabel ?label . BIND(false AS ?hasChildren) FILTER REGEX(STR(?label), ?__token__, \"i\") } ORDER BY DESC (?score) (?label)"
+            },
+                "selectPattern" : "SELECT ?value WHERE { $subject crm:P2_has_type ?value . }",
+                "insertPattern" : "INSERT { $subject crm:P2_has_type $value . } WHERE {}",
+                "valueSetPattern" : "SELECT DISTINCT ?value  WHERE { BIND(iqvoc:_482eebdb as ?root) ?root skos:narrower/skos:narrower* ?value . } ORDER BY ?label",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/P2_has_type_for_person_roles"
+    },
+
+    {
         "id" : "P2_has_type_for_production",
 
             "label": "[[i18n "field_type" bundle="bso"]]",
             "display" : "hidden",
+            "minOccurs" : "1",
             "xsdDatatype" : "xsd:anyURI",
             "treePatterns": {
                 "type": "full",
@@ -475,6 +496,27 @@
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P140_assigned_attribute_to ?value . }",
                 "insertPattern" : "INSERT { $subject crm:P140_assigned_attribute_to ?value . } WHERE {}",
         "iri" : "https://platform.swissartresearch.net/instances/fields/P140_assigned_attribute_to"
+    },
+
+    {
+        "id" : "role_for_contributor",
+
+            "label": "[[i18n "field_role" bundle="bso"]]",
+            "display" : "hidden",
+            "minOccurs" : "1",
+            "maxOccurs" : "1",
+            "xsdDatatype" : "xsd:anyURI",
+            "treePatterns": {
+                "type": "full",
+                "rootsQuery": "SELECT DISTINCT ?item ?hasChildren WHERE { BIND(iqvoc:_482eebdb as ?parent) ?item a skos:Concept ; skos:broader ?parent . OPTIONAL { ?subItem skos:broader ?item } BIND(BOUND(?subItem) AS ?hasChildren) }",
+                "childrenQuery": "SELECT ?item ?hasChildren WHERE { ?item skos:broader ?parent . OPTIONAL { ?subItem skos:broader ?item } BIND(BOUND(?subItem) AS ?hasChildren) }",
+                "parentsQuery": "SELECT ?item ?parent WHERE { ?item skos:broader ?parent . FILTER(?parent != iqvoc:_482eebdb) }",
+                "searchQuery": "SELECT DISTINCT ?item ?label ?score ?hasChildren WHERE { BIND(iqvoc:_482eebdb as ?parent) ?item a skos:Concept ; skos:broader ?parent ; skos:prefLabel ?label . BIND(false AS ?hasChildren) FILTER REGEX(STR(?label), ?__token__, \"i\") } ORDER BY DESC (?score) (?label)"
+            },
+                "selectPattern" : "SELECT ?value WHERE { $subject a crm:E12_Production ; crm:P2_has_type ?value . }",
+                "insertPattern" : "INSERT { $subject crm:P2_has_type $value . } WHERE {}",
+                "valueSetPattern" : "SELECT DISTINCT ?value  WHERE { ?creation a crm:E12_Production ; crm:P2_has_type ?value . ?value a crm:E55_Type ; rdfs:label ?label . } ORDER BY ?label LIMIT 100",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/role_for_contributor"
     },
 
     {

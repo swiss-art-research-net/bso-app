@@ -42,16 +42,21 @@
 
         <semantic-if
             query="ASK { [[>thisForQuery]] a search:Object}"
-            then="{{> template}}"
+            then="{{> data-form-template}}"
         >
-            <template id="template">
+            <template id="data-form-template">
                 <bs-tabs class="bso-component form-selector" default-active-key="[[urlParam "form"]]">
-                    <bs-tab event-key="object_subproduction" title="[[i18n "production" bundle="bso"]]">
-                        [[> object_subproduction]]
+                    <bs-tab event-key="object_persons" title="[[i18n "contributors" bundle="bso"]]">
+                        [[> object_contributors]]
                     </bs-tab>
-                    <bs-tab event-key="object_subcreation" title="[[i18n "creation" bundle="bso"]]">
-                        [[> object_subcreation]]
-                    </bs-tab>
+                    [[#if (urlParam "form")]]
+                        <bs-tab event-key="object_subproduction" title="[[i18n "production" bundle="bso"]]">
+                            [[> object_subproduction]]
+                        </bs-tab>
+                        <bs-tab event-key="object_subcreation" title="[[i18n "creation" bundle="bso"]]">
+                            [[> object_subcreation]]
+                        </bs-tab>
+                    [[/if]]
                     <bs-tab event-key="object_work_depicts" title="[[i18n "depicts" bundle="bso"]]" >
                         [[> object_work_depicts]]
                     </bs-tab>
@@ -79,6 +84,86 @@
 [[> partial:contentFooter]]
 [[> partial:pageFooter]]
 
+[[#* inline "object_contributors"]]
+
+<mp-event-target-template-render id="object_contributors_next_step" template="{{> object_contributors_template}}">
+    <template id="object_contributors_template">
+        {{#if role}}
+            <div class="bso-component separator next-step">
+                <div class="bso-component form-content">
+                    [[i18n "addContributor" bundle="bso"]]: <mp-label iri="{{role}}"></mp-label>
+                    <semantic-query
+                        query='SELECT ?context ?role ?node ?form WHERE { 
+                            BIND(<{{role}}> as ?role)
+                            ?role skos:broader?/skos:relatedMatch ?context .
+                            VALUES (?context ?node ?form) {
+                                (crm:E12_Production "production" "object_subproduction")
+                                (crm:E11_Modification "production" "object_subproduction")
+                                (crm:E65_Creation "creation" "object_subcreation")
+                            }
+                        } LIMIT 1'
+                        template="{{> form-template}}"
+                        no-result-template="<p>No context found for role.</pageHeader>">
+                        <template id="form-template">
+                            {{#each bindings}}
+                                <div>
+                                    <p>[[i18n "context" bundle="bso"]]: <mp-label iri="{{context.value}}"></mp-label></p>
+                                    <semantic-form
+                                        subject="[[urlParam "subjectiri"]]"
+                                        new-subject-template="[[>thisIri]]/proposition/{{UUID}}"
+                                        fields='[[> partial:fieldDefinitions ]]'
+                                        post-action='[[> thisIri]]'
+                                        urlqueryparam-view='page'
+                                    >
+                                        <semantic-form-hidden-input for="I4_Proposition_Set_about_Subject" replace-value="/container/context"></semantic-form-hidden-input>
+                                        <semantic-form-hidden-input for="container_form_id" replace-value="[[ resolvePrefix "page:addEditDataForObject"]]#{{form.value}}"></semantic-form-hidden-input>
+                            
+                                        <semantic-form-hidden-input for="P9_consists_of-reversed" replace-value="[[> thisIri]]/{{node.value}}"></semantic-form-hidden-input>
+                                        <semantic-form-hidden-input for="type" replace-value="{{context.value}}"></semantic-form-hidden-input>
+                                        <semantic-form-hidden-input for="P2_has_type" replace-value="{{role.value}}"></semantic-form-hidden-input>
+
+                                        <semantic-form-autocomplete-input for="P14_carried_out_by"></semantic-form-autocomplete-input>
+                                        <button name="submit" class="btn btn-primary btn-md">[[i18n "save" bundle="bso"]]</button>
+                                    </semantic-form>
+                                
+                                </div>
+                            {{/each}}
+                        </template>
+                    </semantic-query>
+                </div>
+            </div>
+        {{else}}
+            <div class="bso-component separator next-step">
+                <div class="bso-component form-content">
+                    <p>Select the role of the contributor you'd like to add</p>
+                    <semantic-tree query="
+                    SELECT ?node ?parent WHERE {
+                        BIND(iqvoc:_482eebdb as ?root)
+                        ?root skos:narrower* ?node .
+                        ?parent skos:narrower ?node .
+                        ?node skos:prefLabel ?label .
+                    } ORDER BY ?label"
+                        tuple-template='{{> node}}'
+                    >
+                        <template id="node">
+                            <span>
+                                {{#ifCond node.value "==" "https://iqvoc.swissartresearch.net/_4c28919d"}}
+                                    <mp-label iri="{{node.value}}"></mp-label>
+                                {{else}}
+                                    <mp-event-trigger type="Component.TemplateUpdate" targets='["object_contributors_next_step"]' data='{"role": "{{node.value}}"}'>
+                                        <a><mp-label iri="{{node.value}}"></mp-label></a>
+                                    </mp-event-trigger>
+                                {{/ifCond}}
+                            </span>
+                        </template>
+                    </semantic-tree>
+                </div>
+            </div>
+        {{/if}}
+    </template>
+</mp-event-target-template-render>
+[[/inline]]
+
 [[#* inline "object_subproduction"]]
 
 <div class="bso-component separator next-step">
@@ -98,7 +183,7 @@
             <semantic-form-select-input for="subproduction_type"></semantic-form-select-input>
             <div>Note: once we have the roles we could determine the subproduction type based on the role (e.g. colouring->E11, engraving->E12)</div>
             <semantic-form-autocomplete-input for="P14_carried_out_by"></semantic-form-autocomplete-input>
-            <semantic-form-tree-picker-input for="P2_has_type_for_production"></semantic-form-tree-picker-input>
+            <semantic-form-tree-picker-input for="P2_has_type_for_person_roles"></semantic-form-tree-picker-input>
             <button name="submit" class="btn btn-primary btn-md">[[i18n "save" bundle="bso"]]</button>
         </semantic-form>
     </div>
@@ -123,7 +208,7 @@
             <semantic-form-hidden-input for="type" replace-value="[[resolvePrefix "crm:E65_Creation"]]"></semantic-form-hidden-input>
             
             <semantic-form-autocomplete-input for="P14_carried_out_by"></semantic-form-autocomplete-input>
-            <semantic-form-select-input for="P2_has_type_for_creation"></semantic-form-select-input>
+            <semantic-form-tree-picker-input for="P2_has_type_for_person_roles"></semantic-form-tree-picker-input>
             <button name="submit" class="btn btn-primary btn-md">[[i18n "save" bundle="bso"]]</button>
         </semantic-form>
     </div>
