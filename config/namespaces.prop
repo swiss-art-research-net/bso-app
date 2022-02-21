@@ -27,3 +27,4 @@ type=https://resource.swissartresearch.net/type/
 schema=http://schema.org/
 frbroo=http://iflastandards.info/ns/fr/frbr/frbroo/
 oa=http://www.w3.org/ns/oa#
+iqvoc=https://iqvoc.swissartresearch.net/
