@@ -616,9 +616,10 @@
         [[#if (hasPermission "api:ldp:*")]]
         <semantic-if query="ASK { [[> thisForQuery]] a ?type . VALUES (?type) {(search:Object) (crmdig:D35_Area)} .}" then="{{> template}}">
             <template id="template">
-                <div class="bso-component separator panel">
+                <div class="bso-component separator panel button-set">
                     <h3>[[i18n "customData" bundle="bso"]]</h3>
 
+                    <!-- Display data created-->
                     <semantic-table
                         query='SELECT ?subject ?label ?actor ?dateCreated WHERE {
                             [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
@@ -742,12 +743,19 @@
                                 ?smapshot_id crm:P2_has_type <https://smapshot.heig-vd.ch> .
                             }'
                             then='{{> smapshotRegionTemplate}}'
+                            else='{{> smapshotSubmissionTemplate}}'
                         >
                             <template id="smapshotRegionTemplate">
                                 <semantic-link
                                     iri="page:selectSmapshotRegionForObject"
                                     urlqueryparam-objectiri="[[> thisIri]]"
                                 ><button type="button" class="btn btn-primary btn-s">[[i18n "editSmapshotRegion" bundle="bso"]]</button></semantic-link>
+                            </template>
+                            <template id="smapshotSubmissionTemplate">
+                                <semantic-link
+                                    iri="page:selectSmapshotRegionForObject"
+                                    urlqueryparam-objectiri="[[> thisIri]]"
+                                ><button type="button" class="btn btn-primary btn-s">[[i18n "submitToSmapshot" bundle="bso"]]</button></semantic-link>
                             </template>
                         </semantic-if>
 

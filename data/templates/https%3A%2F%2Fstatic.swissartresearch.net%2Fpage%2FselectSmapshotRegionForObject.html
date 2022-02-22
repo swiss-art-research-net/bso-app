@@ -61,6 +61,7 @@
                         <semantic-query
                             query='SELECT DISTINCT 
                                     ?subject
+                                    ?smapshot_id
                                     ?label
                                     ?image
                                     ?width
@@ -79,6 +80,12 @@
                                     ?subject crmdig:L49_is_primary_area_of ?image ;
                                         rso:boundingBox ?bbox ;
                                         rso:displayLabel ?label .
+
+                                    OPTIONAL {
+                                        [[> thisForQuery]] crm:P1_is_identified_by ?smapshot_identifier .
+                                        ?smapshot_identifier crm:P2_has_type <https://smapshot.heig-vd.ch> ;
+                                            rdfs:label ?smapshot_id . 
+                                    }
                                         
                                     # Padding of region as percentage
                                     BIND(0.03 AS ?paddingRelative)
@@ -140,7 +147,7 @@
                                         <td>{{label.value}}</td>
                                         <td>
                                             <semantic-link
-                                                iri="page:updateSmapshotRegionForObject"
+                                                iri="{{#if smapshot_id.value}}page:updateSmapshotRegionForObject{{else}}page:submitSmapshotRegionForObject{{/if}}"
                                                 urlqueryparam-objectiri="[[> thisIri ]]"
                                                 urlqueryparam-regioniri="{{subject.value}}"
                                             >
