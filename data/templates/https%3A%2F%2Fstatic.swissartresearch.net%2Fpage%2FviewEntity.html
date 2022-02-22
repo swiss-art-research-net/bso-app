@@ -188,10 +188,10 @@
                         # Temporary filter as IIIF Manifests for SFF data are not yet available
                         FILTER(! REGEX('[[> thisIri ]]', 'SFF', 'i'))
                     } UNION {
-                        ?attribute_assignment crm:P32_used_general_technique <https://smapshot.heig-vd.ch/> ;
-                            crm:P1_is_identified_by ?smapshot_id ;
-                            crm:P16_used_specific_object/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries [[> thisForQuery]] .
-                        BIND(URI(CONCAT('https://smapshot.heig-vd.ch/visit/', ?smapshot_id)) as ?subject) .
+                        [[> thisForQuery]] crm:P1_is_identified_by ?smapshot_identifier .
+                        ?smapshot_identifier crm:P2_has_type <https://smapshot.heig-vd.ch> ;
+                            rdfs:label ?smapshot_id .
+                        BIND(URI(CONCAT('https://smapshot.heig-vd.ch/contribute/', ?smapshot_id)) as ?subject) .
                         BIND('sMapshot' as ?label)
                     }
                 }"
