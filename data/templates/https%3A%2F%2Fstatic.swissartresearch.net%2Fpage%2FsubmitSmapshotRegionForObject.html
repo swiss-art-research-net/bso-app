@@ -1,0 +1,50 @@
+[[> partial:pageHeader]]
+
+[[#*inline "thisIri"]][[#if objectiri]][[objectiri]][[else]][[urlParam "objectiri"]][[/if]][[/inline]]
+
+[[#*inline "thisForQuery"]]
+    <[[> thisIri]]>
+[[/inline]]
+
+<div class="d-flex flex-md-row flex-column">
+    <div class="bso-component separator sidebar image-display">
+
+        [[#if objectiri]]
+            [[> partial:objectViewImageDisplay objectiri=objectiri]]
+        [[else]]
+            [[> partial:objectViewImageDisplay urlparam="objectiri"]]
+        [[/if]]
+
+    </div>
+    <div class="bso-component main">
+        <div class="bso-component panel">
+            <h2><mp-label iri="[[> thisIri]]"></mp-label></h2>
+          
+            <semantic-table
+                query='SELECT ?artist ?artist_name ?smapshot_id WHERE {
+                    BIND([[> thisForQuery]] as ?object) .
+                    ?object crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by ?artist .
+                    OPTIONAL {
+                        ?artist skos:prefLabel ?artist_preferred_name .
+                    }
+                    {
+                        SELECT ?artist (SAMPLE(?artist_label) as ?artist_label_example) WHERE {
+                            ?artist rdfs:label ?artist_label .
+                        } GROUP BY ?artist
+                    }
+                    BIND(IF(BOUND(?artist_preferred_name), ?artist_preferred_name, ?artist_label_example) as ?artist_name)
+                    OPTIONAL {
+                        SERVICE <http://smapshotapi:5000/sparql> {
+                            ?smapshotArtist a smapshotapi:Photographer ;
+                                smapshotapi:attribute_id ?smapshot_id ;
+                                smapshotapi:attribute_last_name ?artist_name .
+                        }
+                    }
+                }'
+            ></semantic-table>
+           
+        </div>
+    </div>
+</div>
+
+[[> partial:pageFooter]]
