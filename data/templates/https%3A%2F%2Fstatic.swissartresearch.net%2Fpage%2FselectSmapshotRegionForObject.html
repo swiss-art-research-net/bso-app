@@ -24,43 +24,46 @@
 
             <p>[[i18n "promptSelectSmapshotRegion" bundle="bso"]]</p>
 
-            <button class="btn btn-secondary btn-xs"><semantic-link iri="[[> thisIri]]">[[i18n "back" bundle="bso"]]</semantic-link></button>
-            <semantic-query
-                query="SELECT DISTINCT ?image ?IIIFimage WHERE {
-                    [[> thisForQuery]] crm:P128_carries ?work .
-                    ?work la:digitally_shown_by ?image .
-                    ?image la:digitally_available_via/la:access_point ?IIIFimage
-                } LIMIT 1"
-                template="{{> template }}"
-                options='{
-                    "showFilter" : false
-                }'
-            >
-                <template id="template">
-                    {{#each bindings}}
-                    <mp-overlay-dialog title="Image Viewer" type="modal" bs-size="xl">
-                        <mp-overlay-dialog-trigger>
-                            <button class="btn btn-primary btn-primary">[[i18n "editRegions" bundle="bso"]]</button>
-                        </mp-overlay-dialog-trigger>
-                        <mp-overlay-dialog-content
-                            id="image-modal">
-                                <mp-page-loader 
-                                    iri="[[ resolvePrefix 'page:viewImage']]"
-                                    urlqueryparam-imageiri="{{IIIFimage.value}}"
-                                    urlqueryparam-overlay="true"
-                                ></mp-page-loader>
-                        </mp-overlay-dialog-content>
-                    </mp-overlay-dialog>
-                    {{/each}}
-                </template>
-            </semantic-query>
-
+            <div class="bso-component button-set">
+                <button class="btn btn-secondary btn-xs"><semantic-link iri="[[> thisIri]]">[[i18n "back" bundle="bso"]]</semantic-link></button>
+                
+                <semantic-query
+                    query="SELECT DISTINCT ?image ?IIIFimage WHERE {
+                        [[> thisForQuery]] crm:P128_carries ?work .
+                        ?work la:digitally_shown_by ?image .
+                        ?image la:digitally_available_via/la:access_point ?IIIFimage
+                    } LIMIT 1"
+                    template="{{> template }}"
+                    options='{
+                        "showFilter" : false
+                    }'
+                >
+                    <template id="template">
+                        {{#each bindings}}
+                        <mp-overlay-dialog title="Image Viewer" type="modal" bs-size="xl">
+                            <mp-overlay-dialog-trigger>
+                                <button class="btn btn-primary btn-primary">[[i18n "editRegions" bundle="bso"]]</button>
+                            </mp-overlay-dialog-trigger>
+                            <mp-overlay-dialog-content
+                                id="image-modal">
+                                    <mp-page-loader 
+                                        iri="[[ resolvePrefix 'page:viewImage']]"
+                                        urlqueryparam-imageiri="{{IIIFimage.value}}"
+                                        urlqueryparam-overlay="true"
+                                    ></mp-page-loader>
+                            </mp-overlay-dialog-content>
+                        </mp-overlay-dialog>
+                        {{/each}}
+                    </template>
+                </semantic-query>
+            </div>
             <mp-event-target-refresh id="regions-table">                
                 <table>
                     <mp-event-trigger type="Component.Refresh" targets='["object-map"]'>
                         <semantic-query
                             query='SELECT DISTINCT 
                                     ?subject
+                                    ?smapshot_id
                                     ?label
                                     ?image
                                     ?width
@@ -79,6 +82,12 @@
                                     ?subject crmdig:L49_is_primary_area_of ?image ;
                                         rso:boundingBox ?bbox ;
                                         rso:displayLabel ?label .
+
+                                    OPTIONAL {
+                                        [[> thisForQuery]] crm:P1_is_identified_by ?smapshot_identifier .
+                                        ?smapshot_identifier crm:P2_has_type <https://smapshot.heig-vd.ch> ;
+                                            rdfs:label ?smapshot_id . 
+                                    }
                                         
                                     # Padding of region as percentage
                                     BIND(0.03 AS ?paddingRelative)
@@ -140,7 +149,7 @@
                                         <td>{{label.value}}</td>
                                         <td>
                                             <semantic-link
-                                                iri="page:updateSmapshotRegionForObject"
+                                                iri="{{#if smapshot_id.value}}page:updateSmapshotRegionForObject{{else}}page:submitSmapshotRegionForObject{{/if}}"
                                                 urlqueryparam-objectiri="[[> thisIri ]]"
                                                 urlqueryparam-regioniri="{{subject.value}}"
                                             >
