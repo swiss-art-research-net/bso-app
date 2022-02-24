@@ -5,30 +5,34 @@ class ImageRegionSelector extends HTMLElement {
         
     }
     static get observedAttributes(){
-      return ["src", "width", "height"];
+      return ["iiif", "width", "height", "target"];
     }
 
     connectedCallback(){
         let id = "image-" + this.uuidv4();
-        let src = this.getAttribute("src");
-        let width = this.getAttribute("width");
-        let height = this.getAttribute("height");
+        let iiif = this.getAttribute("iiif");
+        let width = this.getAttribute("width") || "";
+        let height = this.getAttribute("height") || "";
+        let target = this.getAttribute("target");
   
         const wrapper = document.createElement("div");
         const img = wrapper.appendChild(document.createElement("img"));
+
+        let src = iiif + `/full/${width},${height}/0/default.jpg`;
         img.src = src;
-        if (width) {
-          img.width = width;
-        }
-        if (height) {
-          img.height = height;
-        }
-        img.id = id
+        img.id = id;
   
         this._contents.append(wrapper);
         this.appendChild(this._contents);
-        var croppr = new Croppr(`#${id}`, {
-            // options
+        this.croppr = new Croppr(`#${id}`, {
+            returnMode: 'ratio',
+            onCropEnd: function(value) {
+                let iiifCrop = iiif + `/pct:${value.x * 100},${value.y * 100},${value.width * 100},${value.height * 100}/${width},${height}/0/default.jpg`;
+                document.querySelectorAll('[data-foo="value"]');
+                document.querySelectorAll(`[image-region-target="${target}"]`).forEach(function(el) {
+                  el.setAttribute("src", iiifCrop);
+                });
+              }
           });
     }
 
