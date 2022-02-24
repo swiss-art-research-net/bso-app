@@ -21,8 +21,6 @@
  * </smapshot-embed>
  * 
  */
-
-/*jshint esversion: 6 */
 class SmapshotEmbed extends HTMLElement {
     constructor() {
       super();
