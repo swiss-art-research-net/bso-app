@@ -20,28 +20,63 @@
         <div class="bso-component panel">
             <h2><mp-label iri="[[> thisIri]]"></mp-label></h2>
           
-            <semantic-table
-                query='SELECT ?artist ?artist_name ?smapshot_id WHERE {
+            <semantic-query
+                query='SELECT DISTINCT ?artist WHERE {
                     BIND([[> thisForQuery]] as ?object) .
-                    ?object crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by ?artist .
-                    OPTIONAL {
-                        ?artist skos:prefLabel ?artist_preferred_name .
-                    }
-                    {
-                        SELECT ?artist (SAMPLE(?artist_label) as ?artist_label_example) WHERE {
-                            ?artist rdfs:label ?artist_label .
-                        } GROUP BY ?artist
-                    }
-                    BIND(IF(BOUND(?artist_preferred_name), ?artist_preferred_name, ?artist_label_example) as ?artist_name)
-                    OPTIONAL {
-                        SERVICE <http://smapshotapi:5000/sparql> {
-                            ?smapshotArtist a smapshotapi:Photographer ;
-                                smapshotapi:attribute_id ?smapshot_id ;
-                                smapshotapi:attribute_last_name ?artist_name .
-                        }
-                    }
+                    ?object crm:P128_carries/crm:P94i_was_created_by/crm:P9_consists_of?/crm:P14_carried_out_by ?artist .
                 }'
-            ></semantic-table>
+                template="{{> template}}"
+            >
+                <template id="template">
+                    <div>
+                        {{#each bindings}}
+                            <semantic-query 
+                                query='SELECT ?artist (SAMPLE(?artist_label) as ?artist_name) ?smapshot_id ?uri WHERE {
+                                        BIND(<{{artist.value}}> as ?artist)
+                                        ?artist rdfs:label ?artist_label .
+                                        SERVICE <http://smapshotapi:5000/sparql> {
+                                            ?smapshotArtist a smapshotapi:Photographer ;
+                                                smapshotapi:attribute_id ?smapshot_id ; ;
+                                                smapshotapi:attribute_link ?uri ;
+                                                smapshotapi:attribute_link "{{artist.value}}" .
+                                        }
+                                        FILTER (! REGEX(?uri, "and"))
+                                    } GROUP BY ?artist ?smapshot_id ?uri 
+                                    LIMIT 1'
+                                no-result-template='{{> template-artist-absent}}'
+                                template='{{> template-artist-present}}'
+                            >
+                                    <template id="template-artist-present">
+                                        <div>Found smapshot ID {{bindings.0.smapshot_id.value}} for artist <semantic-link iri="{{bindings.0.artist.value}}"></semantic-link></div>
+                                    </template>
+                                    <template id="template-artist-absent">
+                                        <div>
+                                            <p>No smapshot ID found for artist {{artist_name.value}} ({{artist.value}})</p>
+                                            <semantic-context repository="smapshot">
+                                    
+                                                <semantic-update 
+                                                    query='PREFIX : <http://www.metaphacts.com/resource/>
+                                                        PREFIX smapshot: <https://smapshot.heig-vd.ch/vocab>
+                                                        INSERT  {
+                                                            :s :p :o .
+                                                        } WHERE {
+                                                        VALUES(?type ?lastname ?link) {
+                                                            ("addPhotographer" "artist_name.value" <{{artist.value}}>)
+                                                        }
+                                                    }'
+                                                    post-action="reload"
+                                                    variable-params='["type", "lastname", "link"]'>
+                                                    <button class='btn btn-primary'>[[i18n "add" bundle="bso"]]</button>
+                                                </semantic-update>
+                                        
+                                        </semantic-context>
+                                        </div>
+                                    </template>
+                            </semantic-query>
+                        {{/each}}
+                    </div>
+                </template>
+            </semantic-query>
            
         </div>
     </div>
