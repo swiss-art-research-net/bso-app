@@ -53,7 +53,6 @@
                                         <div>
                                             <p>No smapshot ID found for artist {{artist_name.value}} ({{artist.value}})</p>
                                             <semantic-context repository="smapshot">
-                                    
                                                 <semantic-update 
                                                     query='PREFIX : <http://www.metaphacts.com/resource/>
                                                         PREFIX smapshot: <https://smapshot.heig-vd.ch/vocab>
@@ -68,14 +67,34 @@
                                                     variable-params='["type", "lastname", "link"]'>
                                                     <button class='btn btn-primary'>[[i18n "add" bundle="bso"]]</button>
                                                 </semantic-update>
-                                        
-                                        </semantic-context>
+                                            </semantic-context>
                                         </div>
                                     </template>
                             </semantic-query>
                         {{/each}}
                     </div>
                 </template>
+            </semantic-query>
+
+            <semantic-query
+                query='SELECT DISTINCT ?artist ?smapshot_id WHERE {
+                    # This query asks for the smapshot IDs of all the artist and filters for artists that do not have a smapshot id.
+                    # Therefore, if this query returns results, it means that not all artists are present in smapshot
+                    BIND([[> thisForQuery]] as ?object) .
+                    ?object (crm:P128_carries/crm:P94i_was_created_by/(crm:P9_consists_of?)/crm:P14_carried_out_by) ?artist.
+                    BIND(STR(?artist) as ?artist_str)
+                    OPTIONAL {
+                        SERVICE <http://smapshotapi:5000/sparql> {
+                        ?smapshotArtist rdf:type smapshotapi:Photographer;
+                            smapshotapi:attribute_id ?smapshot_id;
+                            smapshotapi:attribute_link ?artist_str  .
+                        }
+                    }
+                    FILTER(!BOUND(?smapshot_id))
+                }'
+                no-result-template="OK"
+                template="Submit photographers first"
+            >
             </semantic-query>
            
         </div>
