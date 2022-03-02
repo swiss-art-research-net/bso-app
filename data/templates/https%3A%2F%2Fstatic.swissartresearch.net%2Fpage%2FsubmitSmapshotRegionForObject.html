@@ -219,7 +219,7 @@
                     <semantic-table
                         query='SELECT * WHERE {
                             VALUES(?type ?photographer_ids ?iiif_url ?is_published  ?original_id  ?title ?collection_id ?view_type ?license ?observation_enabled  ?correction_enabled ?height ?width ?name ?date_shot ?date_min ?date_max ?longitude ?latitude ?regionByPx) {
-                                ("submitImage" "{{photographer_ids.value}}" <{{iiif_url.value}}> "true" "{{original_id.value}}" "{{title.value}}" "3" "terrestrial" "{{license.value}}" "true" "true" "{{height.value}}" "{{width.value}}" "{{title.value}}" "{{date_shot.value}}" "{{date_min.value}}" "{{date_max.value}}" "{{longitude.value}}" "{{latitude.value}}" "{{regionByPx.value}}")
+                                ("submitImage" "{{photographer_ids.value}}" <{{iiif_url.value}}> "true" "{{original_id.value}}" "{{title.value}}" "36" "terrestrial" "{{license.value}}" "true" "true" "{{height.value}}" "{{width.value}}" "{{title.value}}" "{{date_shot.value}}" "{{date_min.value}}" "{{date_max.value}}" "{{longitude.value}}" "{{latitude.value}}" "{{regionByPx.value}}")
                             }
                         }'
                     ></semantic-table>
@@ -233,7 +233,7 @@
                                     :s :p :o .
                                     } WHERE {
                                         VALUES(?type ?photographer_ids ?iiif_url ?is_published  ?original_id  ?title ?collection_id ?view_type ?license ?observation_enabled  ?correction_enabled ?height ?width ?name ?date_shot ?date_min ?date_max ?longitude ?latitude ?regionByPx) {
-                                            ("submitImage" "{{photographer_ids.value}}" <{{iiif_url.value}}> "true" "{{original_id.value}}" "{{title.value}}" "3" "terrestrial" "{{license.value}}" "true" "true" "{{height.value}}" "{{width.value}}" "{{title.value}}" "{{date_shot.value}}" "{{date_min.value}}" "{{date_max.value}}" "{{longitude.value}}" "{{latitude.value}}" "{{regionByPx.value}}")
+                                            ("submitImage" "{{photographer_ids.value}}" <{{iiif_url.value}}> "true" "{{original_id.value}}" "{{title.value}}" "36" "terrestrial" "{{license.value}}" "true" "true" "{{height.value}}" "{{width.value}}" "{{title.value}}" "{{date_shot.value}}" "{{date_min.value}}" "{{date_max.value}}" "{{longitude.value}}" "{{latitude.value}}" "{{regionByPx.value}}")
                                         }
                                 }'
                                 variable-params='["type", "photographer_ids", "iiif_url", "is_published", "original_id", "title", "collection_id", "view_type", "license", "observation_enabled", "correction_enabled", "height", "width", "name", "date_shot", "date_min", "date_max", "longitude", "latitude", "regionByPx"]'>
