@@ -2,17 +2,20 @@
 [[> partial:contentHeader]]
 
 <bs-row>
-    <bs-col md="6" class="bso-component panel">
+    <bs-col md="12" class="bso-component panel">
 
         <h2>Region Selection Test</h2>
         <image-region-selector 
             target="target"
             target-urlparam="url"
-            iiif="https://www.e-manuscripta.ch/zuzneb/i3f/v20/1720876" width="300">
+            iiif="https://www.e-manuscripta.ch/zuzneb/i3f/v20/1720876" width="600">
         </image-region-selector>
         <div image-region-target="target">
-            <semantic-link iri="page:searchForImageRegion" urlqueryparam-url="https://www.e-manuscripta.ch/zuzneb/i3f/v20/1720876/pct:0,0,1,1/300,/default.jpg"></semantic-link>
+            <a class="btn btn-md btn-primary" href="?uri=[[resolvePrefix "page:testImageRegionSelection"]]&url=https://www.e-manuscripta.ch/zuzneb/i3f/v20/1720876/pct:0,0,100,100/300,/0/default.jpg">Select</a>
         </div>
+        [[#if (urlParam "url")]]
+            <img src="[[urlParam "url"]]" />
+        [[/if]]
     </bs-col>
 </bs-row>
 
