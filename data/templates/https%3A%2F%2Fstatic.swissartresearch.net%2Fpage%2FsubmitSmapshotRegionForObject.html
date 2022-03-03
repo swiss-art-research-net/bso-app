@@ -137,12 +137,12 @@
     <semantic-query 
     query='SELECT 
         ?iiif_url
-        ?boundingBox
         ?regionByPx 
         ?title
         ?width
         ?height
         ?original_id
+        ?name
         (GROUP_CONCAT(DISTINCT ?smapshot_id; separator=",") as ?photographer_ids)
         (SAMPLE(?latitudes) as ?latitude)
         (SAMPLE(?longitudes) as ?longitude)
@@ -167,6 +167,7 @@
 
         ?object (crm:P128_carries/crm:P94i_was_created_by/(crm:P9_consists_of?)/crm:P14_carried_out_by) ?artist.
         BIND(STR(?artist) as ?artist_str)
+        BIND(SUBSTR(?title, 0, 10) as ?name)
         OPTIONAL {
             SERVICE <http://smapshotapi:5000/sparql> {
             ?smapshotArtist rdf:type smapshotapi:Photographer;
@@ -194,16 +195,17 @@
         BIND(IF(BOUND(?long), ?long, "8.2275") as ?longitudes)
         BIND(IF(BOUND(?lat), ?lat, "46.8182") as ?latitudes)
         BIND(STRAFTER(STR(?bbox), "xywh=") AS ?regionByPx)
+        #BIND(UUID() as ?original_id)
         BIND(STRAFTER(STR(?object), "artwork/") AS ?original_id)
     } 
     GROUP BY
         ?iiif_url
-        ?boundingBox
         ?regionByPx 
         ?title
         ?width
         ?height
         ?original_id
+        ?name
     LIMIT 1'
         template="{{> template-perform-submission}}"
     >
@@ -230,7 +232,7 @@
                     <semantic-table
                         query='SELECT * WHERE {
                             VALUES(?type ?photographer_ids ?iiif_url ?is_published  ?original_id  ?title ?collection_id ?view_type ?license ?observation_enabled  ?correction_enabled ?height ?width ?name ?date_shot ?date_min ?date_max ?longitude ?latitude ?regionByPx) {
-                                ("submitImage" "{{photographer_ids.value}}" <{{iiif_url.value}}> "true" "{{original_id.value}}" "{{title.value}}" "36" "terrestrial" "{{license.value}}" "true" "false" "{{height.value}}" "{{width.value}}" "{{title.value}}" "{{date_shot.value}}" "{{date_min.value}}" "{{date_max.value}}" "{{longitude.value}}" "{{latitude.value}}" "{{regionByPx.value}}")
+                                ("submitImage" "{{photographer_ids.value}}" <{{iiif_url.value}}> "true" "{{original_id.value}}" "{{title.value}}" "36" "terrestrial" "{{license.value}}" "true" "false" "{{height.value}}" "{{width.value}}" "{{name.value}}" "{{date_shot.value}}" "{{date_min.value}}" "{{date_max.value}}" "{{longitude.value}}" "{{latitude.value}}" "{{regionByPx.value}}")
                             }
                         }'
                     ></semantic-table>
@@ -244,10 +246,11 @@
                                     :s :p :o .
                                     } WHERE {
                                         VALUES(?type ?photographer_ids ?iiif_url ?is_published  ?original_id  ?title ?collection_id ?view_type ?license ?observation_enabled  ?correction_enabled ?height ?width ?name ?date_shot ?date_min ?date_max ?longitude ?latitude ?regionByPx) {
-                                            ("submitImage" "{{photographer_ids.value}}" <{{iiif_url.value}}> "true" "{{original_id.value}}" "{{title.value}}" "36" "terrestrial" "{{license.value}}" "true" "false" "{{height.value}}" "{{width.value}}" "{{title.value}}" "{{date_shot.value}}" "{{date_min.value}}" "{{date_max.value}}" "{{longitude.value}}" "{{latitude.value}}" "{{regionByPx.value}}")
+                                            ("submitImage" "{{photographer_ids.value}}" <{{iiif_url.value}}> "true" "{{original_id.value}}" "{{title.value}}" "36" "terrestrial" "{{license.value}}" "true" "false" "{{height.value}}" "{{width.value}}" "{{name.value}}" "{{date_shot.value}}" "{{date_min.value}}" "{{date_max.value}}" "{{longitude.value}}" "{{latitude.value}}" "{{regionByPx.value}}")
                                         }
                                 }'
-                                variable-params='["type", "photographer_ids", "iiif_url", "is_published", "original_id", "title", "collection_id", "view_type", "license", "observation_enabled", "correction_enabled", "height", "width", "name", "date_shot", "date_min", "date_max", "longitude", "latitude", "regionByPx"]'>
+                                variable-params='["type", "photographer_ids", "iiif_url", "is_published", "original_id", "title", "collection_id", "view_type", "license", "observation_enabled", "correction_enabled", "height", "width", "name", "date_shot", "date_min", "date_max", "longitude", "latitude", "regionByPx"]'
+                                post-action="[[> thisIri]]">
                                 <button class='btn btn-primary'>[[i18n "submit" bundle="bso"]]</button>
                             </semantic-update>
                     
