@@ -60,8 +60,8 @@
         <!-- smapshot -->
         <semantic-if
             query='ASK { 
-                ?classification crm:P140_assigned_attribute_to [[> thisForQuery ]] ;
-                    crm:P141_assigned <https://resource.swissartresearch.net/type/classification/landscape> .
+                [[> thisForQuery ]] crm:P1_is_identified_by ?smapshot_id .
+                ?smapshot_id crm:P2_has_type <https://smapshot.heig-vd.ch> .
             }'
             then='{{> smapshotTemplate}}'
         >
