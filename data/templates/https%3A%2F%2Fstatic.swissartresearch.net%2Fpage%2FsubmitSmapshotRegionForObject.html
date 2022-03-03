@@ -18,81 +18,109 @@
     </div>
     <div class="bso-component main">
         <div class="bso-component panel">
-            <h2><mp-label iri="[[> thisIri]]"></mp-label></h2>
-          
-            <semantic-query
-                query='SELECT DISTINCT ?artist WHERE {
-                    BIND([[> thisForQuery]] as ?object) .
-                    ?object crm:P128_carries/crm:P94i_was_created_by/crm:P9_consists_of?/crm:P14_carried_out_by ?artist .
-                }'
-                template="{{> template}}"
-            >
-                <template id="template">
-                    [[> component-artist-check]]
-                </template>
-            </semantic-query>
 
-            <semantic-query
-                query='SELECT DISTINCT ?artist ?smapshot_id WHERE {
-                    # This query asks for the smapshot IDs of all the artist and filters for artists that do not have a smapshot id.
-                    # Therefore, if this query returns results, it means that not all artists are present in smapshot
-                    BIND([[> thisForQuery]] as ?object) .
-                    ?object (crm:P128_carries/crm:P94i_was_created_by/(crm:P9_consists_of?)/crm:P14_carried_out_by) ?artist.
-                    BIND(STR(?artist) as ?artist_str)
-                    OPTIONAL {
-                        SERVICE <http://smapshotapi:5000/sparql> {
-                        ?smapshotArtist rdf:type smapshotapi:Photographer;
-                            smapshotapi:attribute_id ?smapshot_id;
-                            smapshotapi:attribute_link ?artist_str  .
-                        }
-                    }
-                    FILTER(!BOUND(?smapshot_id))
-                }'
-                no-result-template="{{> template-submit-image}}"
-                template="{{> template-not-all-artists-present}}"
-            >
-                <template id="template-submit-image">
-                    [[> template-submit-image]]
-                </template>
-                <template id="template-not-all-artists-present">
-                    Add artists to smapshot first
-                </template>
-            </semantic-query>
-           
+
+            <h2>[[i18n "smapshotTitleSubmitImageToSmapshot" bundle="bso"]]</h2>
+            <p>[[i18n "smapshotDescriptionSubmitImageToSmapshot" bundle="bso"]] <semantic-link iri="[[> thisIri]]"></semantic-link></p>
+            
+            <div class="bso-component button-set">
+                <button class="btn btn-secondary btn-xs">
+                    <semantic-link
+                        iri="page:selectSmapshotRegionForObject"
+                        urlqueryparam-objectiri="[[> thisIri]]"
+                    >[[i18n "back" bundle="bso"]]</semantic-link>
+                </button>
+                <button class="btn btn-secondary btn-xs">
+                    <semantic-link
+                        iri="[[> thisIri]]"
+                    >[[i18n "cancel" bundle="bso"]]</semantic-link>
+                </button>
+            </div>
         </div>
-    </div>
+
+        <semantic-query
+            query='SELECT DISTINCT ?artist WHERE {
+                BIND([[> thisForQuery]] as ?object) .
+                ?object crm:P128_carries/crm:P94i_was_created_by/crm:P9_consists_of?/crm:P14_carried_out_by ?artist .
+            }'
+            template="{{> template}}"
+        >
+            <template id="template">
+                [[> component-artist-check]]
+            </template>
+        </semantic-query>
+
+        <semantic-query
+            query='SELECT DISTINCT ?artist ?smapshot_id WHERE {
+                # This query asks for the smapshot IDs of all the artist and filters for artists that do not have a smapshot id.
+                # Therefore, if this query returns results, it means that not all artists are present in smapshot
+                BIND([[> thisForQuery]] as ?object) .
+                ?object (crm:P128_carries/crm:P94i_was_created_by/(crm:P9_consists_of?)/crm:P14_carried_out_by) ?artist.
+                BIND(STR(?artist) as ?artist_str)
+                OPTIONAL {
+                    SERVICE <http://smapshotapi:5000/sparql> {
+                    ?smapshotArtist rdf:type smapshotapi:Photographer;
+                        smapshotapi:attribute_id ?smapshot_id;
+                        smapshotapi:attribute_link ?artist_str  .
+                    }
+                }
+                FILTER(!BOUND(?smapshot_id))
+            }'
+            no-result-template="{{> template-submit-image}}"
+            template="{{> template-not-all-artists-present}}"
+        >
+            <template id="template-submit-image">
+                [[> template-submit-image]]
+            </template>
+            <template id="template-not-all-artists-present">
+                
+            </template>
+        </semantic-query>
+    </div>    
 </div>
 
 [[> partial:pageFooter]]
 
 [[#* inline "component-artist-check"]]
 
-<div>
-    {{#each bindings}}
-        <semantic-query 
-            query='SELECT ?artist (SAMPLE(?artist_label) as ?artist_name) ?smapshot_id ?uri WHERE {
-                    BIND(<{{artist.value}}> as ?artist)
-                    ?artist rdfs:label ?artist_label .
-                    SERVICE <http://smapshotapi:5000/sparql> {
-                        ?smapshotArtist a smapshotapi:Photographer ;
-                            smapshotapi:attribute_id ?smapshot_id ; ;
-                            smapshotapi:attribute_link ?uri ;
-                            smapshotapi:attribute_link "{{artist.value}}" .
-                    }
-                    FILTER (! REGEX(?uri, "and"))
-                } GROUP BY ?artist ?smapshot_id ?uri 
-                LIMIT 1'
-            no-result-template='{{> template-artist-absent}}'
-            template='{{> template-artist-present}}'
-        >
-                <template id="template-artist-present">
-                    <div>Found smapshot ID {{bindings.0.smapshot_id.value}} for artist <semantic-link iri="{{bindings.0.artist.value}}"></semantic-link></div>
-                </template>
-                <template id="template-artist-absent">
-                    [[> template-artist-absent]]
-                </template>
-        </semantic-query>
-    {{/each}}
+<div class="bso-component panel">
+    <p>[[i18n "smapshotCheckingForPersons" bundle="bso"]]&hellip;</p>
+    <table>
+        <thead>
+            <tr><th>[[i18n "person" bundle="bso"]]</th><th>[[i18n "smapshotId" bundle="bso"]]</th><th></th></tr>
+        </thead>
+        <tbody>
+            {{#each bindings}}
+                <semantic-query 
+                    query='SELECT ?artist (SAMPLE(?artist_label) as ?artist_name) ?smapshot_id ?uri WHERE {
+                            BIND(<{{artist.value}}> as ?artist)
+                            ?artist rdfs:label ?artist_label .
+                            SERVICE <http://smapshotapi:5000/sparql> {
+                                ?smapshotArtist a smapshotapi:Photographer ;
+                                    smapshotapi:attribute_id ?smapshot_id ; ;
+                                    smapshotapi:attribute_link ?uri ;
+                                    smapshotapi:attribute_link "{{artist.value}}" .
+                            }
+                            FILTER (! REGEX(?uri, "and"))
+                        } GROUP BY ?artist ?smapshot_id ?uri 
+                        LIMIT 1'
+                    no-result-template='{{> template-artist-absent}}'
+                    template='{{> template-artist-present}}'
+                >
+                        <template id="template-artist-present">
+                            <tr>
+                                <td><semantic-link iri="{{bindings.0.artist.value}}"></semantic-link></td>
+                                <td>{{bindings.0.smapshot_id.value}}</td>
+                                <td>[[i18n "ok" bundle="bso"]]</td>
+                            </tr>
+                        </template>
+                        <template id="template-artist-absent">
+                            [[> template-artist-absent]]
+                        </template>
+                </semantic-query>
+            {{/each}}
+        </tbody>
+    </table>
 </div>
 [[/inline]]
 
@@ -106,23 +134,28 @@
         template='{{> template-artist-absent-submit}}'
     >
         <template id="template-artist-absent-submit">
-            <p>No smapshot ID found for artist {{bindings.0.artist_name.value}} ({{artist.value}})</p>
-            <semantic-context repository="smapshot">
-                <semantic-update 
-                    query='PREFIX : <http://www.metaphacts.com/resource/>
-                        PREFIX smapshot: <https://smapshot.heig-vd.ch/vocab>
-                        INSERT  {
-                            :s :p :o .
-                        } WHERE {
-                        VALUES(?type ?lastname ?link) {
-                            ("addPhotographer" "{{bindings.0.artist_name.value}}" <{{artist.value}}>)
-                        }
-                    }'
-                    post-action="reload"
-                    variable-params='["type", "lastname", "link"]'>
-                    <button class='btn btn-primary'>[[i18n "add" bundle="bso"]]</button>
-                </semantic-update>
-            </semantic-context>
+            <tr>
+                <td><semantic-link iri="{{bindings.0.artist.value}}"></semantic-link></td>
+                <td>[[i18n "none" bundle="bso"]]</td>
+                <td>
+                    <semantic-context repository="smapshot">
+                        <semantic-update 
+                            query='PREFIX : <http://www.metaphacts.com/resource/>
+                                PREFIX smapshot: <https://smapshot.heig-vd.ch/vocab>
+                                INSERT  {
+                                    :s :p :o .
+                                } WHERE {
+                                VALUES(?type ?lastname ?link) {
+                                    ("addPhotographer" "{{bindings.0.artist_name.value}}" <{{artist.value}}>)
+                                }
+                            }'
+                            post-action="reload"
+                            variable-params='["type", "lastname", "link"]'>
+                            <button class='btn btn-primary'>[[i18n "addToSmapshot" bundle="bso"]]</button>
+                        </semantic-update>
+                    </semantic-context>
+                </td>
+            </tr>
         </template>
     </semantic-query>
     
@@ -131,9 +164,8 @@
 
 [[#* inline "template-submit-image"]]
 
-<div>
+<div class="bso-component panel next-step separator">
 
-    <p>OK</p>
     <semantic-query 
     query='SELECT 
         ?iiif_url
@@ -213,32 +245,11 @@
 
             {{#each bindings}}
                 <div>
-                    <p>[[i18n "promptUpdateSmapshotRegion" bundle="bso"]]</p>
+                    <p>[[i18n "promptSubmitSmapshotRegion" bundle="bso"]]</p>
                     
                     <p><img src="{{iiif_url.value}}/{{regionByPx.value}}/300,/0/default.jpg"></p>
                     
-                    <button class="btn btn-secondary btn-xs">
-                        <semantic-link
-                            iri="page:selectSmapshotRegionForObject"
-                            urlqueryparam-objectiri="[[> thisIri]]"
-                        >[[i18n "back" bundle="bso"]]</semantic-link>
-                    </button>
-                    <button class="btn btn-secondary btn-xs">
-                        <semantic-link
-                            iri="[[> thisIri]]"
-                        >[[i18n "cancel" bundle="bso"]]</semantic-link>
-                    </button>
-
-                    <semantic-table
-                        query='SELECT * WHERE {
-                            VALUES(?type ?photographer_ids ?iiif_url ?is_published  ?original_id  ?title ?collection_id ?view_type ?license ?observation_enabled  ?correction_enabled ?height ?width ?name ?date_shot ?date_min ?date_max ?longitude ?latitude ?regionByPx) {
-                                ("submitImage" "{{photographer_ids.value}}" <{{iiif_url.value}}> "true" "{{original_id.value}}" "{{title.value}}" "36" "terrestrial" "{{license.value}}" "true" "false" "{{height.value}}" "{{width.value}}" "{{name.value}}" "{{date_shot.value}}" "{{date_min.value}}" "{{date_max.value}}" "{{longitude.value}}" "{{latitude.value}}" "{{regionByPx.value}}")
-                            }
-                        }'
-                    ></semantic-table>
-                    
                     <semantic-context repository="smapshot">
-                            
                             <semantic-update 
                                 query='PREFIX : <http://www.metaphacts.com/resource/>
                                     PREFIX smapshot: <https://smapshot.heig-vd.ch/vocab>
