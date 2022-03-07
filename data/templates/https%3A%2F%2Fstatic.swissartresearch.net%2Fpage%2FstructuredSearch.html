@@ -1,0 +1,39 @@
+[[> partial:pageHeader]]
+[[#> partial:baseSearch separator="True"]]
+
+<div class="bso-component main">
+  <div class="bso-component panel">
+    <bs-row>
+      <bs-col sm="12">
+        <bs-row>
+          <bs-col sm="12" md="1">
+            <span class="bso-component label">[[i18n "search" bundle="bso"]]</span>
+          </bs-col>
+          <bs-col sm="12" md="11">
+            <semantic-search-query-builder
+              resource-selector='{
+                "query": "SELECT DISTINCT ?suggestion ?label WHERE {
+                  ?suggestion crm:P1_is_identified_by?/rdfs:label ?label .
+                  ?label bds:search ?__token__ ;
+                    bds:matchAllTerms \"true\" ;
+                    bds:relevance ?score .
+                } ORDER BY DESC(?score)",
+                "suggestionTupleTemplate": "{{> suggestionTemplate}}"
+              }'
+            >
+              <template id="suggestionTemplate">
+                <mp-label iri="{{suggestion.value}}"></mp-label>
+              </template>
+            </semantic-search-query-builder>
+          </bs-col>
+        </bs-row>
+      </bs-col>
+    </bs-row>
+  </div>
+</div>
+
+[[/ partial:baseSearch]]
+
+
+[[> partial:contentFooter]]
+[[> partial:pageFooter]]
