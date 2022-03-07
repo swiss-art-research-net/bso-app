@@ -181,7 +181,7 @@
         "kind": "literal",
         "queryPattern": "{
             ?subject a ?type .
-            FILTER NOT EXISTS {
+            MINUS {
               ?subject crm:P1_is_identified_by/crm:P2_has_type <https://smapshot.heig-vd.ch> .
             }
             BIND(\"true\" as ?literal) .
@@ -273,7 +273,7 @@
 
             <mp-sparql-result-counts 
               id="search_results_count"
-              query="SELECT DISTINCT * {}"
+              query="SELECT DISTINCT ?subject {}"
               template='<div>{{#if hasLimit}} <bs-alert variant="warning"> Showing {{numberOfResults}} of {{totalNumberOfResults}} matches. <strong>Please, refine your search.</strong> </bs-alert> {{else}} <p>Found <em>{{numberOfResults}}</em> results</p>{{/if}}</div>'>
             </mp-sparql-result-counts>
             
