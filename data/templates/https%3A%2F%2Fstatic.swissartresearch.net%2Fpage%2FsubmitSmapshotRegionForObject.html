@@ -6,6 +6,19 @@
     <[[> thisIri]]>
 [[/inline]]
 
+[[#*inline "artistQueryForObject"]]
+
+OPTIONAL {
+    ?object crm:P128_carries/crm:P94i_was_created_by/crm:P9_consists_of?/crm:P14_carried_out_by ?creator .
+}
+OPTIONAL {
+    ?object crm:P108i_was_produced_by/crm:P9_consists_of?/crm:P14_carried_out_by ?producer .
+}
+BIND(<https://resource.swissartresearch.net/actor/9420DB7A-42B4-32A2-8488-743A7FB7022C> as ?anonymous)
+BIND(IF(BOUND(?creator), ?creator, IF(BOUND(?producer), ?producer, ?anonymous)) as ?artist)
+
+[[/inline]]
+
 <div class="d-flex flex-md-row flex-column">
     <div class="bso-component separator sidebar image-display">
 
@@ -41,7 +54,7 @@
         <semantic-query
             query='SELECT DISTINCT ?artist WHERE {
                 BIND([[> thisForQuery]] as ?object) .
-                ?object crm:P128_carries/crm:P94i_was_created_by/crm:P9_consists_of?/crm:P14_carried_out_by ?artist .
+                [[> artistQueryForObject]]
             }'
             template="{{> template}}"
         >
@@ -55,7 +68,7 @@
                 # This query asks for the smapshot IDs of all the artist and filters for artists that do not have a smapshot id.
                 # Therefore, if this query returns results, it means that not all artists are present in smapshot
                 BIND([[> thisForQuery]] as ?object) .
-                ?object (crm:P128_carries/crm:P94i_was_created_by/(crm:P9_consists_of?)/crm:P14_carried_out_by) ?artist.
+                [[> artistQueryForObject]]
                 BIND(STR(?artist) as ?artist_str)
                 OPTIONAL {
                     SERVICE <http://smapshotapi:5000/sparql> {
@@ -197,7 +210,8 @@
         ?height_entity crm:P2_has_type aat:300055644 ;
             crm:P90_has_value ?height .
 
-        ?object (crm:P128_carries/crm:P94i_was_created_by/(crm:P9_consists_of?)/crm:P14_carried_out_by) ?artist.
+        [[> artistQueryForObject]]
+
         BIND(STR(?artist) as ?artist_str)
         BIND(SUBSTR(?title, 0, 10) as ?name)
         OPTIONAL {
@@ -256,8 +270,8 @@
                                     INSERT  {
                                     :s :p :o .
                                     } WHERE {
-                                        VALUES(?type ?photographer_ids ?iiif_url ?is_published  ?original_id  ?title ?collection_id ?view_type ?license ?observation_enabled  ?correction_enabled ?height ?width ?name ?date_shot ?date_min ?date_max ?longitude ?latitude ?regionByPx) {
-                                            ("submitImage" "{{photographer_ids.value}}" <{{iiif_url.value}}> "true" "{{original_id.value}}" "{{title.value}}" "36" "terrestrial" "{{license.value}}" "true" "false" "{{height.value}}" "{{width.value}}" "{{name.value}}" "{{date_shot.value}}" "{{date_min.value}}" "{{date_max.value}}" "{{longitude.value}}" "{{latitude.value}}" "{{regionByPx.value}}")
+                                        VALUES(?type ?photographer_ids ?iiif_url ?is_published  ?original_id  ?title ?collection_id ?view_type ?license ?observation_enabled  ?correction_enabled ?height ?width ?name ?date_shot {{#if date_min.value}}?date_min{{/if}} {{#if date_max.value}}?date_max{{/if}} ?longitude ?latitude ?regionByPx) {
+                                            ("submitImage" "{{photographer_ids.value}}" <{{iiif_url.value}}> "true" "{{original_id.value}}" "{{title.value}}" "36" "terrestrial" "{{license.value}}" "true" "false" "{{height.value}}" "{{width.value}}" "{{name.value}}" "{{date_shot.value}}" {{#if date_min.value}}"{{date_min.value}}"{{/if}} {{#if date_max.value}}"{{date_max.value}}"{{/if}} "{{longitude.value}}" "{{latitude.value}}" "{{regionByPx.value}}")
                                         }
                                 }'
                                 variable-params='["type", "photographer_ids", "iiif_url", "is_published", "original_id", "title", "collection_id", "view_type", "license", "observation_enabled", "correction_enabled", "height", "width", "name", "date_shot", "date_min", "date_max", "longitude", "latitude", "regionByPx"]'
