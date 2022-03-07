@@ -98,6 +98,12 @@
         "hasDomain": "<https://platform.swissartresearch.net/search/Entity>",
         "hasRange": "<https://platform.swissartresearch.net/search/Type>",
         "label": "[[i18n "actedAs" bundle="bso"]]"
+      },
+      {
+        "iri": "<https://platform.swissartresearch.net/Entity_has_no_smapshot_identifier>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Entity>",
+        "hasRange": "<https://platform.swissartresearch.net/search/Type>",
+        "label": "[[i18n "smapshotNotPresent" bundle="bso"]]"
       }
     ]
   }'
@@ -169,6 +175,16 @@
         "queryPattern": "{
             ?subject ^crm:P138_represents/crm:P138_represents ?__value__ .
             FILTER(?subject != ?__value__) .
+          }"
+      }],
+      "<https://platform.swissartresearch.net/Entity_has_no_smapshot_identifier>": [{
+        "kind": "literal",
+        "queryPattern": "{
+            ?subject a ?type .
+            FILTER NOT EXISTS {
+              ?subject crm:P1_is_identified_by/crm:P2_has_type <https://smapshot.heig-vd.ch> .
+            }
+            BIND(\"true\" as ?literal) .
           }"
       }],
       "<https://platform.swissartresearch.net/Thing_from_Material>": [{
