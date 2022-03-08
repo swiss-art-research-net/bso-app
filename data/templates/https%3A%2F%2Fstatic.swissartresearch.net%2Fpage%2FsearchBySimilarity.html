@@ -4,7 +4,32 @@
   <div class="bso-component panel">
     <bs-row>
       <bs-col sm="12">
-        
+        [[#if (urlParam "url")]]
+          <img src="[[urlParam "url"]]" style="max-height:300px" />
+          <semantic-context repository="pastec">
+
+            <semantic-table
+              query='PREFIX pastec: <http://service.swissartresearch.net/pastec/> 
+              SELECT ?candidate ?entity WHERE 
+              { 
+                  <[[urlParam "url"]]> a pastec:Image ;
+                      pastec:hasSimilarImage ?candidate ;
+                      pastec:hasSimilarEntity ?entity .
+              }'
+              column-configuration='[
+                {
+                  "variableName": "entity"
+                },
+                {
+                  "variableName": "entity",
+                  "cellTemplate": "<mp-resource-thumbnail iri=\"{{entity.value}}\"></mp-resource-thumbnail>"
+                }
+              ]'
+              no-result-template="Nothing found"
+            ></semantic-table>
+
+          </semantic-context>
+        [[/if]]
       </bs-col>
     </bs-row>
   </div>
