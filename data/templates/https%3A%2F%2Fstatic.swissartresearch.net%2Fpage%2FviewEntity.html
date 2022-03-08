@@ -797,49 +797,45 @@
         </semantic-if>
         [[/if]]
 
-        <semantic-if query="ASK { ?classification (crm:P140_assigned_attribute_to/^crm:P1_is_identified_by/^crm:P128_carries)|(crm:P140_assigned_attribute_to/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries) [[> thisForQuery]] ; crm:P33_used_specific_technique ?technique . VALUES (?technique) {(<https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb>) (<https://github.com/swiss-art-research-net/bso-image-similarity>)}. }" then="{{> template}}">
-            <template id="template">
-                <div class="bso-component separator panel">
+        <div class="bso-component separator panel">
 
-                    <details>
-                        <summary>
-                            <h3>[[i18n "similarEntities" bundle="bso"]]</h3>
-                        </summary>
+            <details>
+                <summary>
+                    <h3>[[i18n "similarEntities" bundle="bso"]]</h3>
+                </summary>
 
-                        <semantic-query
-                            query="SELECT ?image WHERE {
-                                [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
-                            } LIMIT 1"
-                            template="{{> imageSearchTemplate}}"
-                        >
-                            <template id="imageSearchTemplate">
-                                <semantic-link
-                                    iri="page:testImageRegionSelection"
-                                    urlqueryparam-imageiri="{{bindings.0.image.value}}"
-                                ><a class="btn btn-primary">Custom Search</a></semantic-link>
-                            </template>
-                        </semantic-query>
+                <semantic-query
+                    query="SELECT ?image WHERE {
+                        [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
+                    } LIMIT 1"
+                    template="{{> imageSearchTemplate}}"
+                >
+                    <template id="imageSearchTemplate">
+                        <semantic-link
+                            iri="page:testImageRegionSelection"
+                            urlqueryparam-imageiri="{{bindings.0.image.value}}"
+                        ><a class="btn btn-primary">Custom Search</a></semantic-link>
+                    </template>
+                </semantic-query>
 
-                        [[#> objectsTable condition='?classification crm:P140_assigned_attribute_to/^crm:P1_is_identified_by/^crm:P128_carries $subject ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> .' label='byTitle' ]]
+                [[#> objectsTable condition='?classification crm:P140_assigned_attribute_to/^crm:P1_is_identified_by/^crm:P128_carries $subject ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> .' label='byTitle' ]]
 
-                            ?classification crm:P140_assigned_attribute_to/^crm:P1_is_identified_by/^crm:P128_carries [[> thisForQuery]] ;
-                                crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> ;
-                                crm:P141_assigned/^crm:P1_is_identified_by/^crm:P128_carries $subject ;
-                                rdf:value ?score .
-                        
-                        [[/ objectsTable]]
+                    ?classification crm:P140_assigned_attribute_to/^crm:P1_is_identified_by/^crm:P128_carries [[> thisForQuery]] ;
+                        crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> ;
+                        crm:P141_assigned/^crm:P1_is_identified_by/^crm:P128_carries $subject ;
+                        rdf:value ?score .
+                
+                [[/ objectsTable]]
 
-                        [[#> objectsTable condition='?classification crm:P140_assigned_attribute_to/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries $subject ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> .' label='visually' ]]
+                [[#> objectsTable condition='?classification crm:P140_assigned_attribute_to/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries $subject ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> .' label='visually' ]]
 
-                            ?classification crm:P140_assigned_attribute_to/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries [[> thisForQuery]] ;
-                                crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> ;
-                                crm:P141_assigned/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries $subject .
-                        
-                        [[/ objectsTable]]
-                    </details>
-                </div>
-            </template>
-        </semantic-if>
+                    ?classification crm:P140_assigned_attribute_to/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries [[> thisForQuery]] ;
+                        crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> ;
+                        crm:P141_assigned/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries $subject .
+                
+                [[/ objectsTable]]
+            </details>
+        </div>
 
         <div class="bso-component separator panel">
 
