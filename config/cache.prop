@@ -1,0 +1,6 @@
+repository.LabelCache = maximumSize=100000\\,expireAfterAccess=30d
+platform.FieldDefinitionGeneratorCache = maximumSize=1000\\,expireAfterAccess=100d
+platform.PageViewConfigCache = maximumSize=1000\\,expireAfterAccess=30d
+repository.DescriptionCache = maximumSize=100000\\,expireAfterAccess=30d
+platform.TemplateIncludeCache = maximumSize=1000\\,expireAfterAccess=1d
+platform.QueryTemplateCache = maximumSize=5\\,expireAfterAccess=1d
