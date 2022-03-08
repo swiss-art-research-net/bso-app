@@ -184,22 +184,23 @@ BIND(IF(BOUND(?creator), ?creator, IF(BOUND(?producer), ?producer, ?anonymous)) 
         ?iiif_url
         ?regionByPx 
         ?title
+        ?title_clean
         ?width
         ?height
         ?original_id
         ?name
+        ?license
         (GROUP_CONCAT(DISTINCT ?smapshot_id; separator=",") as ?photographer_ids)
         (SAMPLE(?latitudes) as ?latitude)
         (SAMPLE(?longitudes) as ?longitude)
         (SAMPLE(?dates_shot) as ?date_shot)
         (SAMPLE(?date_min) as ?date_min)
         (SAMPLE(?date_max) as ?date_max)
-        (SAMPLE(?licenses) as ?license) 
     WHERE {
         BIND(<[[urlParam "objectiri"]]> as ?object)
         BIND(<[[urlParam "regioniri"]]> as ?region)
         ?object rdfs:label ?title  ;
-            crm:P109_has_current_or_former_curator/rdfs:label ?licenses .
+            crm:P109_has_current_or_former_curator ?collection .
         ?region crmdig:L49_is_primary_area_of ?iiif_url ;
             rso:boundingBox ?bbox .
         ?image la:digitally_available_via/la:access_point ?iiif_url ;
@@ -214,6 +215,7 @@ BIND(IF(BOUND(?creator), ?creator, IF(BOUND(?producer), ?producer, ?anonymous)) 
 
         BIND(STR(?artist) as ?artist_str)
         BIND(SUBSTR(?title, 0, 10) as ?name)
+        BIND(REPLACE(?title, "\"", "", "i") as ?title_clean)
         OPTIONAL {
             SERVICE <http://smapshotapi:5000/sparql> {
             ?smapshotArtist rdf:type smapshotapi:Photographer;
@@ -243,15 +245,23 @@ BIND(IF(BOUND(?creator), ?creator, IF(BOUND(?producer), ?producer, ?anonymous)) 
         BIND(STRAFTER(STR(?bbox), "xywh=") AS ?regionByPx)
         #BIND(UUID() as ?original_id)
         BIND(STRAFTER(STR(?object), "artwork/") AS ?original_id)
+
+        VALUES (?collection ?license) {
+            (<https://d-nb.info/gnd/1012546-2> "Zentralbibliothek Zürich")
+            (<https://d-nb.info/gnd/10171799-4> "Schweizerische Nationalbibliotek")
+            (<https://d-nb.info/gnd/1196831858> "Stiftung Familie Fehlmann")
+        }
     } 
     GROUP BY
         ?iiif_url
         ?regionByPx 
         ?title
+        ?title_clean
         ?width
         ?height
         ?original_id
         ?name
+        ?license
     LIMIT 1'
         template="{{> template-perform-submission}}"
     >
@@ -271,7 +281,7 @@ BIND(IF(BOUND(?creator), ?creator, IF(BOUND(?producer), ?producer, ?anonymous)) 
                                     :s :p :o .
                                     } WHERE {
                                         VALUES(?type ?photographer_ids ?iiif_url ?is_published  ?original_id  ?title ?collection_id ?view_type ?license ?observation_enabled  ?correction_enabled ?height ?width ?name ?date_shot {{#if date_min.value}}?date_min{{/if}} {{#if date_max.value}}?date_max{{/if}} ?longitude ?latitude ?regionByPx) {
-                                            ("submitImage" "{{photographer_ids.value}}" <{{iiif_url.value}}> "true" "{{original_id.value}}" "{{title.value}}" "36" "terrestrial" "{{license.value}}" "true" "false" "{{height.value}}" "{{width.value}}" "{{name.value}}" "{{date_shot.value}}" {{#if date_min.value}}"{{date_min.value}}"{{/if}} {{#if date_max.value}}"{{date_max.value}}"{{/if}} "{{longitude.value}}" "{{latitude.value}}" "{{regionByPx.value}}")
+                                            ("submitImage" "{{photographer_ids.value}}" <{{iiif_url.value}}> "true" "{{original_id.value}}" "{{title_clean.value}}" "36" "terrestrial" "{{license.value}}" "true" "false" "{{height.value}}" "{{width.value}}" "{{name.value}}" "{{date_shot.value}}" {{#if date_min.value}}"{{date_min.value}}"{{/if}} {{#if date_max.value}}"{{date_max.value}}"{{/if}} "{{longitude.value}}" "{{latitude.value}}" "{{regionByPx.value}}")
                                         }
                                 }'
                                 variable-params='["type", "photographer_ids", "iiif_url", "is_published", "original_id", "title", "collection_id", "view_type", "license", "observation_enabled", "correction_enabled", "height", "width", "name", "date_shot", "date_min", "date_max", "longitude", "latitude", "regionByPx"]'
