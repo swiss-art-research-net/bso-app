@@ -11,7 +11,9 @@
             iiif="https://www.e-manuscripta.ch/zuzneb/i3f/v20/1720876" width="600">
         </image-region-selector>
         <div image-region-target="target">
-            <a class="btn btn-md btn-primary" href="?uri=[[resolvePrefix "page:testImageRegionSelection"]]&url=https://www.e-manuscripta.ch/zuzneb/i3f/v20/1720876/pct:0,0,100,100/300,/0/default.jpg">Select</a>
+            <a 
+                class="btn btn-md btn-primary" 
+                href="?uri=[[resolvePrefix "page:searchBySimilarity"]]&imageurl=https://www.e-manuscripta.ch/zuzneb/i3f/v20/1720876/pct:0,0,100,100/300,/0/default.jpg">Select</a>
         </div>
         [[#if (urlParam "url")]]
             <img src="[[urlParam "url"]]" />
