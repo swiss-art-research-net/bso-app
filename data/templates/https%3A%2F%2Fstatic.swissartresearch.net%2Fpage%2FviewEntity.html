@@ -267,7 +267,7 @@
                         BIND(crm:E12_Production as ?global_role)
                     } UNION 
                     {
-                        [[> thisForQuery]] (crm:P128_carries/crm:P94i_was_created_by) ?event .
+                        [[> thisForQuery]] (crm:P128_carries?/crm:P94i_was_created_by) ?event .
                         BIND(crm:E65_Creation as ?global_role)
                     }
                     {
@@ -608,10 +608,71 @@
                 } UNION {
                     [[> thisForQuery]] crm:P140_assigned_attribute_to ?iiif_image .
                     $subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?iiif_image .
-                }
+                } 
             
             [[/ objectsTable]]
         </div>
+
+        <!-- References -->
+        <semantic-if 
+            query="ASK {
+                ?attribute_assignment crm:P140_assigned_attribute_to|crm:P141_assigned [[> thisForQuery]] ;
+                    crm:P177_assigned_property_of_type crm:P67_refers_to .
+            }"
+            then="{{> template-references}}"
+        >
+            <template id="template-references">
+                <div class="bso-component separator panel">
+
+                    <h3>[[i18n "references" bundle="bso"]]</h3>
+
+                    <!-- References on -->
+                    [[#> objectsTable condition='?attribute_assignment crm:P140_assigned_attribute_to ?object; crm:P141_assigned $subject ; crm:P177_assigned_property_of_type crm:P67_refers_to' label='references' ]]
+
+                        ?attribute_assignment crm:P140_assigned_attribute_to $subject; 
+                            crm:P141_assigned [[> thisForQuery]] ; 
+                            crm:P177_assigned_property_of_type crm:P67_refers_to .
+                    
+                    [[/ objectsTable]]
+                </div>
+                <semantic-if
+                    query="ASK {
+                        ?annotation crm:P140_assigned_attribute_to [[> thisForQuery]] ;
+                                crm:P177_assigned_property_of_type crm:P67_refers_to .
+                    }"
+                    then="{{> template-referenced-by}}"
+                >
+                    <template id="template-referenced-by">
+                        <div class="bso-component panel no-padding">
+                            <span class="bso-component label padding-left padding-bottom">[[i18n "referencedBy" bundle="bso"]]</span>
+                            <semantic-table
+                                query="SELECT ?annotation ?reference ?page WHERE {
+                                    ?annotation crm:P140_assigned_attribute_to [[> thisForQuery]] ;
+                                        crm:P141_assigned ?reference ;
+                                        crm:P177_assigned_property_of_type crm:P67_refers_to .
+                                    OPTIONAL {
+                                        ?annotation crm:P1_is_identified_by ?page_identifier .
+                                        ?page_identifier crm:P2_has_type aat:300445022 ;
+                                            rdfs:label ?page .
+                                    }
+                                }"
+                                options='{
+                                    "showFilter": false
+                                }'
+                                column-configuration='[{
+                                    "variableName": "reference",
+                                    "displayName": "[[i18n "reference" bundle="bso"]]"
+                                },
+                                {
+                                    "variableName": "page",
+                                    "displayName": "[[i18n "page" bundle="bso"]]"
+                                }]'
+                            ></semantic-table>
+                        </div>
+                    </template>
+                </semantic-if>
+            </template>
+        </semantic-if>
 
         [[#if (hasPermission "api:ldp:*")]]
         <semantic-if query="ASK { [[> thisForQuery]] a ?type . VALUES (?type) {(search:Object) (crmdig:D35_Area)} .}" then="{{> template}}">

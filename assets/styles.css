@@ -271,6 +271,20 @@ ol.page-breadcrumb {
 .bso-component.label {
   font-weight: bold;
 }
+.bso-component.label.padding-left {
+  padding-left: 2rem;
+}
+.bso-component.label.padding-bottom {
+  padding-bottom: 2rem;
+  display: inline-block;
+}
+.bso-component.label.padding-right {
+  padding-right: 2rem;
+}
+.bso-component.label.padding-top {
+  padding-top: 2rem;
+  display: inline-block;
+}
 .bso-component.main {
   flex: 2;
 }
@@ -300,6 +314,9 @@ ol.page-breadcrumb {
 }
 .bso-component.panel.dark {
   background-color: #f1f1f1;
+}
+.bso-component.panel.no-padding {
+  padding: 0;
 }
 .bso-component.panel .row {
   margin-right: 0;

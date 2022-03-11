@@ -343,6 +343,20 @@ ol.page-breadcrumb {
 
     &.label {
         font-weight: bold;
+        &.padding-left {
+            padding-left: 2rem;
+        }
+        &.padding-bottom {
+            padding-bottom: 2rem;
+            display: inline-block;
+        }
+        &.padding-right {
+            padding-right: 2rem;
+        }
+        &.padding-top {
+            padding-top: 2rem;
+            display: inline-block;
+        }
     }
 
     &.main {
@@ -377,6 +391,9 @@ ol.page-breadcrumb {
         background-color: @col-white;
         &.dark {
             background-color: @col-bg;
+        }
+        &.no-padding {
+            padding: 0;
         }
         padding: 2rem 0 2rem 2rem;
         .row {
