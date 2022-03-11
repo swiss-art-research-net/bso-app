@@ -499,6 +499,18 @@
     },
 
     {
+        "id" : "P141_assigned",
+
+            "label": "[[i18n "field_assigned" bundle="bso"]]",
+            "description" : "The entity to which has been assigned",
+            "maxOccurs" : "1",
+            "xsdDatatype" : "xsd:anyURI",
+                "selectPattern" : "SELECT ?value WHERE { $subject crm:P141_assigned ?value . }",
+                "insertPattern" : "INSERT { $subject crm:P141_assigned ?value . } WHERE {}",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/P141_assigned"
+    },
+
+    {
         "id" : "role_for_contributor",
 
             "label": "[[i18n "field_role" bundle="bso"]]",
