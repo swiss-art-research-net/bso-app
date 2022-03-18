@@ -23,15 +23,14 @@
   </div>
 
 [[/inline]]
-
 <div class="bso-component">
   <mp-event-trigger type="Component.Refresh" targets='["object-map"]'>
     [[#if hideTabs]]
       [[> cardView]]
     [[else]]
-      <bs-tabs>
+      <bs-tabs default-active-key='[[#if view]][[view]][[else]]grid[[/if]]'>
         
-      <bs-tab event-key="grid" title="[[i18n "grid" bundle="bso"]]">
+      <bs-tab event-key="grid" title="[[i18n "grid" bundle="bso"]]" >
         [[> cardView]]
       </bs-tab>
 
