@@ -7,7 +7,7 @@ query='
         ?place a crm:E53_Place ;
             rdfs:label ?description ;
             (crmdig:L54_is_same-as/wdt:P625)|crm:P168_place_is_defined_by ?wkt .
-  }
+  } LIMIT 1000
 '
 tuple-template='{{> template }}'
 >
