@@ -8518,7 +8518,18 @@ WHERE{
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#anyURI",
     "selectPattern": "prefix owl: <http://www.w3.org/2002/07/owl#> SELECT ?value WHERE { $subject <http://www.ics.forth.gr/isl/CRMdig/L54_is_same-as> ?value . }",
     "deletePattern": "prefix owl: <http://www.w3.org/2002/07/owl#> DELETE { $subject <http://www.ics.forth.gr/isl/CRMdig/L54_is_same-as> ?value .} WHERE {}",
-    "insertPattern": "prefix owl: <http://www.w3.org/2002/07/owl#> INSERT { $subject <http://www.ics.forth.gr/isl/CRMdig/L54_is_same-as> ?value . } WHERE {}"
+    "insertPattern": "prefix owl: <http://www.w3.org/2002/07/owl#> 
+      prefix wdt: <http://www.wikidata.org/prop/direct/>
+      INSERT { 
+        $subject <http://www.ics.forth.gr/isl/CRMdig/L54_is_same-as> ?value . 
+        ?value wdt:P18 ?image .
+      } WHERE {
+        OPTIONAL {
+          SERVICE <https://query.wikidata.org/sparql> {
+            ?value wdt:P18 ?image .
+          }
+        }
+      }"
 }
 [[/inline]]
 
