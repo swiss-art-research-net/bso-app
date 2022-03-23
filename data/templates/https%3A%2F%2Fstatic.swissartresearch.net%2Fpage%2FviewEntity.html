@@ -924,7 +924,13 @@
                 </semantic-if>
             </mp-event-target-refresh>
 
-            <semantic-if query="ASK { [[> thisForQuery]] a ?type . VALUES (?type) {(search:Person) }}" then="{{> template}}">
+            <semantic-if query="ASK { 
+                GRAPH ?g {
+                    [[> thisForQuery]] a ?type . 
+                }
+                BIND(URI(STRBEFORE(STR(?g), '/context')) as ?container)
+                ?parentContainer ldp:contains ?container .
+                VALUES (?type) {(search:Person) }}" then="{{> template}}">
                 <template id="template">
                     <semantic-link
                         iri="page:editPerson"
@@ -934,6 +940,25 @@
                     </semantic-link>
                 </template>
             </semantic-if>
+
+            <semantic-query
+                query='SELECT ?container ?parentContainer WHERE {
+                    BIND(URI("[[> thisIri]]/container") AS ?container) 
+                    ?parentContainer ldp:contains ?container .
+                } LIMIT 1'
+                template="{{> deleteButtonTemplate}}"
+            >
+                <template id="deleteButtonTemplate">
+                    {{#each bindings}}
+                        <semantic-link iri="page:deleteContainerFromParent" 
+                            urlqueryparam-container="{{container.value}}" 
+                            urlqueryparam-parent="{{parentContainer.value}}" 
+                            urlqueryparam-back="[[resolvePrefix "page:Start"]]">
+                            <button class="btn btn-primary btn-s">[[i18n "delete" bundle="bso"]]</button>
+                        </semantic-link>
+                    {{/each}}
+                </template>
+            </semantic-query>
         </div>
     </div>
 [[/inline]]
