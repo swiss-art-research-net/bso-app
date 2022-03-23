@@ -165,6 +165,27 @@
 
             </mp-event-target-refresh>
 
+
+            <div>
+            [[i18n "smapshotAPICheck" bundle="bso"]]:
+                <semantic-context repository="smapshot">
+                    <mp-event-target-refresh id="smapshot-api-check">
+                        <semantic-query
+                            query='SELECT ?smapshot_id WHERE {
+                                ?smapshotArtist rdf:type smapshotapi:Photographer;
+                                smapshotapi:attribute_id ?smapshot_id;
+                                smapshotapi:attribute_link "https://resource.swissartresearch.net/actor/19962602-D81C-3BEE-A156-57D843A0D888".
+                                }'
+                            template='[[i18n "ok" bundle="bso"]] '
+                        ></semantic-query>
+                    </mp-event-target-refresh>
+                </semantic-context>
+                <mp-event-trigger type="Component.Refresh" targets='["smapshot-api-check"]'>
+                    <button class="btn btn-secondary btn-xs">[[i18n "refresh" bundle="bso"]]</button>
+                  </mp-event-trigger>
+                  
+            </div>
+
         </div>
     </div>
 </div>
