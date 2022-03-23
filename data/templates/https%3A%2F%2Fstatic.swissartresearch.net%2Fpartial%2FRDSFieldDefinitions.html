@@ -1574,6 +1574,7 @@ PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
 INSERT {
   ?subject crm:P2_has_type ?value.
   ?value crm:P2_has_type <https://resource.swissartresearch.net/type/gender>.
+  ?value a crm:E55_Type .
   ?value rdfs:label ?label_en.
   ?value rdfs:label ?label_de.
 }WHERE{
@@ -6758,7 +6759,7 @@ SELECT DISTINCT ?value ?label WHERE {
     "label": "Preferred Name",
     "description": "This field is used to indicate the main name attributed to the documented person. No part break down of name is here implied. The full name of an individual is expected here where available.",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#anyURI",
-    "minOccurs": "0",
+    "minOccurs": "1",
     "selectPattern": "SELECT ?value ?label WHERE {
   $subject crm:P1_is_identified_by ?value.
   ?value a crm:E33_E41_Linguistic_Appellation.
@@ -6938,6 +6939,7 @@ WHERE {
   ?lang rdfs:label ?lang_label.
 }",
     "deletePattern": "DELETE {
+  ?root rdfs:label ?value .
   ?subject crm:P190_is_expressed_in ?value.
   ?subject crm:P72_has_language ?lang.
 } WHERE {
@@ -6945,13 +6947,16 @@ WHERE {
   ?subject crm:P72_has_language ?lang.
   ?lang a crm:E56_Language.
   ?lang rdfs:label ?lang_label.
+  BIND(URI(STRBEFORE(STR(?subject),\"/appellation\")) as ?root)
 }",
     "insertPattern": "INSERT {
+  ?root rdfs:label ?value.
   ?subject crm:P190_is_expressed_in ?value.
   ?subject crm:P72_has_language ?lang.
   ?lang a crm:E56_Language.
   ?lang rdfs:label ?lang_label.
 } WHERE {
+  BIND(URI(STRBEFORE(STR(?subject),\"/appellation\")) as ?root)
   {	SELECT ?lang ?lang_label WHERE {
       BIND(LANG(?value) as ?langTag)
       VALUES ( ?lang ?langTag ?lang_label) {
@@ -7838,7 +7843,7 @@ WHERE {
   ?type_uri a crm:E55_Type.
   ?type rdfs:label \"Name Part\"
 } WHERE { 
-  BIND(IRI(CONCAT(STR($subject),\"/appellation/\", MD5(str($value)))) as ?appellation_uri).  
+  BIND(IRI(CONCAT(STR($subject),\"/appellation/\", MD5(str($value)))) as ?part_uri).  
   BIND(IRI(CONCAT(\"https://resource.swissartresearch.net/type/\", ENCODE_FOR_URI(LCASE(\"Name Part\")))) as ?type_uri). 
 } "
 }
