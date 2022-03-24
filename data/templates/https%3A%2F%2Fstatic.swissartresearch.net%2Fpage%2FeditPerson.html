@@ -108,52 +108,52 @@
         </semantic-form-composite-input>
 
 
-      <semantic-form-composite-input 
-        for="Person_Birth_Place"
-        new-subject-template="/birth"
-        fields='[
-            [[> Birth_Place ]],
-            [[> Person_Birth_Date_earliest ]],
-            [[> Person_Birth_Date_latest ]]
-    ]'>
-        <semantic-form-autocomplete-input for='Birth_Place'
-            value-binding-name="subject"
-            lookup-query='{
-                "type": "lookup",
-                "entityType": "http://schema.swissartresearch.net/ontology/rds#Place",
-                "limit": 20,
-                "lookupServiceName": "federated-lookup"
-                }'
-            template='{{> autocompletionTemplate}}'>
-            [[> autocompletionTemplate]]
-        </semantic-form-autocomplete-input>
-        <semantic-form-datetime-input for="Person_Birth_Date_earliest"></semantic-form-datetime-input>
-        <semantic-form-datetime-input for="Person_Birth_Date_latest"></semantic-form-datetime-input>
-    </semantic-form-composite-input>
+        <semantic-form-composite-input 
+            for="Person_Birth_Place"
+            new-subject-template="/birth"
+            fields='[
+                [[> Birth_Place ]],
+                [[> Person_Birth_Date_earliest ]],
+                [[> Person_Birth_Date_latest ]]
+        ]'>
+            <semantic-form-autocomplete-input for='Birth_Place'
+                value-binding-name="subject"
+                lookup-query='{
+                    "type": "lookup",
+                    "entityType": "http://schema.swissartresearch.net/ontology/rds#Place",
+                    "limit": 20,
+                    "lookupServiceName": "federated-lookup"
+                    }'
+                template='{{> autocompletionTemplate}}'>
+                [[> autocompletionTemplate]]
+            </semantic-form-autocomplete-input>
+            <semantic-form-datetime-input for="Person_Birth_Date_earliest"></semantic-form-datetime-input>
+            <semantic-form-datetime-input for="Person_Birth_Date_latest"></semantic-form-datetime-input>
+        </semantic-form-composite-input>
 
-    <semantic-form-composite-input 
-        for="Person_Death_Place"
-        new-subject-template="/death"
-        fields='[
-        [[> Death_Place ]],
-        [[> Death_Date_Earliest ]],
-        [[> Death_Date_Latest ]]
-    ]'>
-    
-        <semantic-form-autocomplete-input for='Death_Place'
-            value-binding-name="subject"
-            lookup-query='{
-                "type": "lookup",
-                "entityType": "http://schema.swissartresearch.net/ontology/rds#Place",
-                "limit": 20,
-                "lookupServiceName": "federated-lookup"
-                }'
-            template='{{> autocompletionTemplate}}'>
-            [[> autocompletionTemplate]]
-        </semantic-form-autocomplete-input>    
-        <semantic-form-datetime-input for="Death_Date_Earliest"></semantic-form-datetime-input>
-        <semantic-form-datetime-input for="Death_Date_Latest"></semantic-form-datetime-input>
-    </semantic-form-composite-input>
+        <semantic-form-composite-input 
+            for="Person_Death_Place"
+            new-subject-template="/death"
+            fields='[
+            [[> Death_Place ]],
+            [[> Death_Date_Earliest ]],
+            [[> Death_Date_Latest ]]
+        ]'>
+        
+            <semantic-form-autocomplete-input for='Death_Place'
+                value-binding-name="subject"
+                lookup-query='{
+                    "type": "lookup",
+                    "entityType": "http://schema.swissartresearch.net/ontology/rds#Place",
+                    "limit": 20,
+                    "lookupServiceName": "federated-lookup"
+                    }'
+                template='{{> autocompletionTemplate}}'>
+                [[> autocompletionTemplate]]
+            </semantic-form-autocomplete-input>    
+            <semantic-form-datetime-input for="Death_Date_Earliest"></semantic-form-datetime-input>
+            <semantic-form-datetime-input for="Death_Date_Latest"></semantic-form-datetime-input>
+        </semantic-form-composite-input>
 
         <semantic-form-errors></semantic-form-errors>
         <div class="bso-component button-set">
