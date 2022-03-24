@@ -443,6 +443,10 @@ ol.page-breadcrumb {
 .semantic-form .cardinality-support__group-instance {
   border-width: 1px;
 }
+.semantic-form .cardinality-support__add-value--another {
+  font-weight: normal;
+  font-size: 0.9rem;
+}
 .tab-pane .bso-component.panel {
   margin-top: -0.7rem;
 }
