@@ -55,7 +55,7 @@
             [[> Short_Biography ]]
         ]'
     >
-        <semantic-form-hidden-input for="Type-hidden" replace-values='["http://www.cidoc-crm.org/cidoc-crm/E39_Actor", "http://www.cidoc-crm.org/cidoc-crm/E21_Person", "[[resolvePrefix 'search:Person']]"]'></semantic-form-hidden-input>
+        <semantic-form-hidden-input for="Type-hidden" replace-values='["http://www.cidoc-crm.org/cidoc-crm/E39_Actor", "http://www.cidoc-crm.org/cidoc-crm/E21_Person", "[[resolvePrefix 'search:Person']]", "[[resolvePrefix 'rds:Person']]"]'></semantic-form-hidden-input>
         
         <semantic-form-composite-input 
             for="Person_Name"
@@ -107,7 +107,6 @@
           <semantic-form-text-input for="Alternative_Name_-_Source"></semantic-form-text-input>  
         </semantic-form-composite-input>
 
-
         <semantic-form-composite-input 
             for="Person_Birth_Place"
             new-subject-template="/birth"
@@ -154,6 +153,75 @@
             <semantic-form-datetime-input for="Death_Date_Earliest"></semantic-form-datetime-input>
             <semantic-form-datetime-input for="Death_Date_Latest"></semantic-form-datetime-input>
         </semantic-form-composite-input>
+    
+        <semantic-form-autocomplete-input
+            for="Person_Father"
+            value-binding-name="subject"
+            lookup-query='{
+            "type": "lookup",
+            "entityType": "[[resolvePrefix "search:Person"]]",
+            "limit": 20,
+            "lookupServiceName": "default-lookup"
+            }'
+            template='{{> autocompletionTemplate}}'>
+            [[> autocompletionTemplate]]
+            
+        </semantic-form-autocomplete-input>
+        
+        <semantic-form-autocomplete-input
+            for="Person_Mother"
+            value-binding-name="subject"
+            lookup-query='{
+            "type": "lookup",
+            "entityType": "[[resolvePrefix "search:Person"]]",
+            "limit": 20,
+            "lookupServiceName": "default-lookup"
+            }'
+            template='{{> autocompletionTemplate}}'>
+            [[> autocompletionTemplate]]
+            
+        </semantic-form-autocomplete-input>
+        [[> addNewPersonButton]]
+
+        <semantic-form-text-input for="National_Affiliation"></semantic-form-text-input>
+  
+        <semantic-form-composite-input 
+            for="Person_Social_Relations"
+            new-subject-template="/relation/{{Person_Social_Relations_-_Relation}}"
+            fields='[
+            [[> Person_Social_Relations_-_Relation ]],
+            [[> Person_Social_Relations_-_Relation_Type ]]
+        ]'>
+              <semantic-form-autocomplete-input
+                for="Person_Social_Relations_-_Relation"
+                value-binding-name="subject"
+                lookup-query='{
+                  "type": "lookup",
+                  "entityType": "[[resolvePrefix "search:Person"]]",
+                  "limit": 20,
+                  "lookupServiceName": "default-lookup"
+                }'
+                template='{{> autocompletionTemplate}}'>
+                [[> autocompletionTemplate]]
+                
+              </semantic-form-autocomplete-input>
+          <semantic-form-text-input for="Person_Social_Relations_-_Relation_Type"></semantic-form-text-input>
+        </semantic-form-composite-input>
+  
+        <semantic-form-composite-input
+            for="Institutional_Affiliation"
+            new-subject-template="/joining/{{Person_Institutional_Affiliation_Value}}"
+            fields='[
+            [[> Person_Institutional_Affiliation_Value ]],
+            [[> Person_Institutional_Affiliation_Role ]],
+            [[> Person_Institutional_Affiliation_Start_Date_Earliest ]],
+            [[> Person_Institutional_Affiliation_Start_Date_Latest ]]
+        ]'>
+          <semantic-form-text-input for="Person_Institutional_Affiliation_Value"></semantic-form-text-input>
+          <semantic-form-text-input for="Person_Institutional_Affiliation_Role"></semantic-form-text-input>
+          <semantic-form-datetime-input for="Person_Institutional_Affiliation_Start_Date_Earliest"></semantic-form-datetime-input>
+          <semantic-form-datetime-input for="Person_Institutional_Affiliation_Start_Date_Latest"></semantic-form-datetime-input>
+        </semantic-form-composite-input>
 
         <semantic-form-errors></semantic-form-errors>
         <div class="bso-component button-set">
@@ -176,6 +244,14 @@
 <template id='autocompletionTemplate'>
     [[> partial:lookupCandidateTemplate]]
 </template>
+[[/inline]]
+
+[[#*inline "addNewPersonButton"]]
+<semantic-link
+iri="page:editPerson"
+target="_blank">
+    <button class="btn btn-secondary btn-xs">[[i18n "createNewPerson" bundle="bso"]]</button>
+</semantic-link>
 [[/inline]]
 
 [[> partial:pageFooter]]
