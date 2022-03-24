@@ -37,11 +37,22 @@
         persistence="ldp"
         form-id="persons"
         post-action="redirect"
+        browser-persistence="True"
         fields='[
             [[> SameAs]],
             [[> Type-hidden ]],
             [[> Person_Name ]],
-            [[> Person_Gender ]]
+            [[> Person_Gender ]],
+            [[> Person_Alternate_Name ]],
+            [[> Person_Birth_Place ]],
+            [[> Person_Death_Place ]],
+            [[> Person_Father ]],
+            [[> Person_Mother ]],
+            [[> National_Affiliation ]],
+            [[> Person_Social_Relations ]],
+            [[> Institutional_Affiliation ]],
+            [[> Citation ]],
+            [[> Short_Biography ]]
         ]'
     >
         <semantic-form-hidden-input for="Type-hidden" replace-values='["http://www.cidoc-crm.org/cidoc-crm/E39_Actor", "http://www.cidoc-crm.org/cidoc-crm/E21_Person", "[[resolvePrefix 'search:Person']]"]'></semantic-form-hidden-input>
@@ -74,6 +85,75 @@
         </semantic-form-autocomplete-input>
 
         <semantic-form-select-input for="Person_Gender"></semantic-form-select-input>
+
+        <semantic-form-composite-input 
+            for="Person_Alternate_Name"
+            new-subject-template="/appellation/{{Person_Alternate_Name_Value}}"
+            fields='[
+              [[> Person_Alternate_Name_Value ]],
+              [[> Person_Alternate_Name_Type ]],
+              [[> Alternate_Name_Use_Period_earliest ]],
+              [[> Alternate_Name_Use_Period_latest ]],
+              [[> Alternate_Name_Attributed_by ]],
+              [[> Alternative_Name_-_Source ]]
+        ]'>
+          <semantic-form-text-input for="Person_Alternate_Name_Value"
+                                    languages='["en","de","fr","it","sp","ca","cs","da","nl","fi","gr","hu","no","pt","sv","ru","jp","ko"]'>
+          </semantic-form-text-input>  
+          <semantic-form-text-input for="Person_Alternate_Name_Type"'></semantic-form-text-input>  
+          <semantic-form-datetime-input for="Alternate_Name_Use_Period_earliest"></semantic-form-datetime-input>  
+          <semantic-form-datetime-input for="Alternate_Name_Use_Period_latest"></semantic-form-datetime-input>  
+          <semantic-form-text-input for="Alternate_Name_Attributed_by"></semantic-form-text-input>  
+          <semantic-form-text-input for="Alternative_Name_-_Source"></semantic-form-text-input>  
+        </semantic-form-composite-input>
+
+
+      <semantic-form-composite-input 
+        for="Person_Birth_Place"
+        new-subject-template="/birth"
+        fields='[
+            [[> Birth_Place ]],
+            [[> Person_Birth_Date_earliest ]],
+            [[> Person_Birth_Date_latest ]]
+    ]'>
+        <semantic-form-autocomplete-input for='Birth_Place'
+            value-binding-name="subject"
+            lookup-query='{
+                "type": "lookup",
+                "entityType": "http://schema.swissartresearch.net/ontology/rds#Place",
+                "limit": 20,
+                "lookupServiceName": "federated-lookup"
+                }'
+            template='{{> autocompletionTemplate}}'>
+            [[> autocompletionTemplate]]
+        </semantic-form-autocomplete-input>
+        <semantic-form-datetime-input for="Person_Birth_Date_earliest"></semantic-form-datetime-input>
+        <semantic-form-datetime-input for="Person_Birth_Date_latest"></semantic-form-datetime-input>
+    </semantic-form-composite-input>
+
+    <semantic-form-composite-input 
+        for="Person_Death_Place"
+        new-subject-template="/death"
+        fields='[
+        [[> Death_Place ]],
+        [[> Death_Date_Earliest ]],
+        [[> Death_Date_Latest ]]
+    ]'>
+    
+        <semantic-form-autocomplete-input for='Death_Place'
+            value-binding-name="subject"
+            lookup-query='{
+                "type": "lookup",
+                "entityType": "http://schema.swissartresearch.net/ontology/rds#Place",
+                "limit": 20,
+                "lookupServiceName": "federated-lookup"
+                }'
+            template='{{> autocompletionTemplate}}'>
+            [[> autocompletionTemplate]]
+        </semantic-form-autocomplete-input>    
+        <semantic-form-datetime-input for="Death_Date_Earliest"></semantic-form-datetime-input>
+        <semantic-form-datetime-input for="Death_Date_Latest"></semantic-form-datetime-input>
+    </semantic-form-composite-input>
 
         <semantic-form-errors></semantic-form-errors>
         <div class="bso-component button-set">
