@@ -4,12 +4,12 @@
 
 <h2 class="gap">[[i18n "customData" bundle="bso"]]</h2>
 
-<bs-tabs default-active-key="[[#if (urlParam "tab")]][[urlParam "tab"]][[else]]contributed-data[[/if]]">
-    <bs-tab event-key="contributed-data" title="[[i18n "contributedData" bundle="bso"]]" class="panel">
-        [[> contributedData]]
-    </bs-tab>
+<bs-tabs default-active-key="[[#if (urlParam "tab")]][[urlParam "tab"]][[else]]entities[[/if]]">
     <bs-tab event-key="entities" title="[[i18n "contributedEntities" bundle="bso"]]">
         [[> contributedEntities]]
+    </bs-tab>
+    <bs-tab event-key="contributed-data" title="[[i18n "contributedData" bundle="bso"]]" class="panel">
+        [[> contributedData]]
     </bs-tab>
     <bs-tab event-key="regions" title="[[i18n "regions" bundle="bso"]]">
         [[> regions]]
@@ -22,7 +22,6 @@
 [[> partial:pageFooter]]
 
 [[#*inline "contributedData"]]
-
 <div class="bso-component panel">
     <semantic-table
         query="SELECT ?proposition ?subject ?resource ?type ?container ?parentContainer WHERE {
@@ -115,6 +114,12 @@
 
 [[#*inline "contributedEntities"]]
 <div class="bso-component panel">
+    <div class="bso-component button-set">
+        <semantic-link
+            iri="page:editPerson">
+            <button class="btn btn-primary btn-md">[[i18n "addNewPerson" bundle="bso"]]</button>
+        </semantic-link>
+    </div>
     <semantic-table
         query="SELECT * WHERE {
             GRAPH ?g {
