@@ -18,5 +18,22 @@
       mph:quadMode true
     ];
   lookup:configuration [
-      lookup:type "metaphacts:blazegraphLookup"
+      lookup:type "metaphacts:blazegraphLookup";      
+			lookup:datasetQuery """
+        SELECT DISTINCT ?candidate ?dataset ?datasetLabel WHERE {
+          GRAPH ?dataset {
+            ?candidate ?p ?o .
+          }
+          OPTIONAL { ?dataset rdfs:label ?datasetLabel . }
+        }
+      """;
+      lookup:typeBlockTemplate """
+          ?candidate a ?targetType .
+          VALUES (?targetType) {
+            (search:Person)
+            (search:Place)
+            (search:Type)
+          }
+        }
+      """
     ] .
