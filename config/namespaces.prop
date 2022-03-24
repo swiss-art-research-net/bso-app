@@ -29,3 +29,4 @@ frbroo=http://iflastandards.info/ns/fr/frbr/frbroo/
 oa=http://www.w3.org/ns/oa#
 iqvoc=https://iqvoc.swissartresearch.net/
 smapshotapi=https://smapshot.heig-vd.ch/api/v1/
+rds=http://schema.swissartresearch.net/ontology/rds#
