@@ -673,6 +673,7 @@
                 </semantic-if>
             </template>
         </semantic-if>
+
         [[#if (hasPermission "api:ldp:*")]]
         <semantic-if query="ASK { [[> thisForQuery]] a ?type . VALUES (?type) {(search:Object) (search:Person) (crmdig:D35_Area)} .}" then="{{> customDataTemplate}}">
             <template id="customDataTemplate">[[> customDataTemplate]]</template>
@@ -726,7 +727,25 @@
         <div class="bso-component separator panel">
 
             <h3>[[i18n "fields" bundle="bso"]]</h3>
-            [[> partial:fieldsTable iri=entityiri param="entityiri" ]]
+
+            <semantic-if
+                query="ASK { 
+                    GRAPH ?g {
+                        [[> thisForQuery]] a ?type . 
+                    }
+                    BIND(URI(STRBEFORE(STR(?g), '/context')) as ?container)
+                    ?parentContainer ldp:contains ?container .
+                    VALUES (?type) {(search:Person) }}"
+                then="{{> customEntity}}"
+                else="{{> defaultEntity}}"
+            >
+                <template id="customEntity">
+                    [[> fieldsForCustomEntities]]
+                </template>
+                <template id="defaultEntity">
+                    [[> partial:fieldsTable iri=entityiri param="entityiri"]]
+                </template>
+            </semantic-if>
 
         </div>
     </div>
@@ -961,6 +980,71 @@
             </semantic-query>
         </div>
     </div>
+[[/inline]]
+
+[[#*inline "fieldsForCustomEntities"]]
+[[> partial:RDSFieldDefinitions]]
+    <mp-field-visualization
+    subject='[[> thisIri]]'
+    fields='[
+        [[> Identifiers-vis]],
+        [[> Name-vis]],
+        [[> Person_Name_Part-readOnly]],
+        [[> Person_Name_Honorific-readOnly]],
+        [[> Person_Gender-readOnly]],
+        [[> Person_Alternate_Name-readOnly]],
+        [[> Alternative_Name_Attributed_by-vis]],
+        [[> Alternative_Name_Source-vis]],
+        [[> Person_Birth_Date]],
+        [[> Birth_Place-readOnly]],
+        [[> Person_Death_Date]],
+        [[> Death_Place-readOnly]],
+        [[> Person_Mother]],
+        [[> Person_Father]],
+        [[> National_Affiliation]],
+        [[> Social_Relations]],
+        [[> Intitutional_Affiliation-vis]],
+        [[> Associate]],
+        [[> Educational_Training-vis]],
+        [[> Floruit_read_only]],
+        [[> Occupation_General_Role]],
+        [[> Person_Citation]],
+        [[> Short_Biography-readOnly]],
+        [[> Long_Biography-readOnly]],
+        [[> Languages_Used]]
+    ]'
+    template='{{> property-table}}'>
+    <template id="property-table">
+        <dl>
+        {{#each fields as |field|}}
+            {{#ifCond field.display "==" "hidden"}}
+            {{else}}
+            {{#if field.values}}
+                <dt>{{field.label.0.value}}</dt>
+                {{#each field.values as |value|}}
+                <dd>
+                {{#ifCond field.xsdDatatype.value "=="  "http://www.w3.org/2001/XMLSchema#anyURI"}}
+                    <semantic-link iri="{{value.value.value}}">{{#if value.label}}{{value.label}}{{/if}}</semantic-link>
+                {{else}}
+                    {{#ifCond field.xsdDatatype.value "==" "schema:URL"}}
+                    <a href="{{value.value.value}}" target="_blank">{{value.label}}</a>
+                    {{else}}
+                    {{#if value.label}}
+                        {{ value.label }}
+                    {{else}}
+                        {{ value.value.value }}
+                    {{/if}}
+                    {{/ifCond}}
+                {{/ifCond}}
+                </dd>
+                {{/each}}
+            {{/if}}
+            {{/ifCond}}
+        {{/each}}
+        </dl>
+    </template>
+    </mp-field-visualization>
+
 [[/inline]]
 
 [[#*inline "objectsTable"]]
