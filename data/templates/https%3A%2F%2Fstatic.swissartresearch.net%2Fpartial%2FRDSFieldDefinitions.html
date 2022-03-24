@@ -605,7 +605,7 @@ SELECT ?value ?label WHERE {
     "iri": "http://www.metaphacts.com/fieldDefinition/Dissolution_Date_latest",
     "label": "Dissolution Date - Latest",
     "description": "This field is used to indicate the latest known date for the dissolution of the documented group.",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
     "minOccurs": "0",
     "selectPattern": "SELECT ?value ?label WHERE {
   ?subject  <http://www.cidoc-crm.org/cidoc-crm/P4_has_time-span> ?timespan.
@@ -1873,7 +1873,7 @@ WHERE {
     "label": "Alternative Title Use Period (earliest)",
     "description": "This field is used to indicate the earliest known date for use of this name for the documented artwork.",
     "domain": "crm:E22_Man-Made_Object",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
     "minOccurs": "0",
     "selectPattern": "SELECT distinct ?value ?label
 WHERE {
@@ -1938,7 +1938,7 @@ WHERE {
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Artwork_Destruction_Date_Latest",
     "label": "Destruction Date Latest",
     "description": "This field is used to indicate the latest date for the destruction of the documented artwork.",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
     "minOccurs": "0",
     "deletePattern": "DELETE { ?timespan crm:P82b_end_of_the_end ?value.} WHERE 
 {
@@ -3014,7 +3014,7 @@ SELECT ?value ?label WHERE {
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Person_Institutional_Affiliation_Start_Date_Earliest",
     "label": "Person Institutional Affiliation Start Date (earliest)",
     "description": "This field is used to indicate the earliest known date of becoming an member of an institution by the documented individual.",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
     "minOccurs": "0",
     "selectPattern": "SELECT ?value ?label WHERE {
   ?subject crm:P4_has_time-span ?timespan_uri.
@@ -3488,7 +3488,7 @@ WHERE {
     "label": "Bibliographic Item Publication Date (latest)",
     "description": "This field is used to indicate the latest known date for the birth of the documented bibliographic item.",
     "domain": "crm:E52_Time-span",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
     "selectPattern": "SELECT ?value ?label WHERE {
   $subject crm:P4_has_time-span ?timespan_uri.
   ?timespan_uri a crm:E52_Time-Span.
@@ -3515,7 +3515,7 @@ WHERE {
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Artwork_Destruction_Date_Earliest",
     "label": "Destruction Date Earliest",
     "description": "This field is used to indicate the earliest date for the destruction of the documented artwork.",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
     "minOccurs": "0",
     "selectPattern": "SELECT ?value ?label WHERE {
   ?subject crm:P4_has_time-span ?timespan.
@@ -3596,7 +3596,7 @@ SELECT ?value ?label WHERE {
     "label": "Alternative Name Use Period (earliest)",
     "description": "This field is used to indicate the earliest known date for use of this name for the documented person.",
     "domain": "http://www.cidoc-crm.org/cidoc-crm/E21_Person",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
     "minOccurs": "0",
     "selectPattern": "SELECT distinct ?value ?label WHERE {
   ?subject frbroo:R64i_was_name_used_by ?name_act_start.
@@ -3650,7 +3650,7 @@ SELECT ?value ?label WHERE {
     "label": "Alternative Title Use Period (latest)",
     "description": "This field is used to indicate the latest known date for use of this name for the documented artwork.",
     "domain": "crm:E22_Man-Made_Object",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
     "minOccurs": "0",
     "selectPattern": "SELECT distinct ?value ?label
 WHERE {
@@ -3794,7 +3794,7 @@ WHERE {
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Artwork_Conservation_Event_Latest",
     "label": "Date - Latest",
     "description": "This field is used to indicate the latest date for a conservation event performed on the documented artwork.",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
     "minOccurs": "0",
     "selectPattern": "SELECT ?value ?label WHERE {
   ?subject crm:P4_has_time-span ?timespan_uri.
@@ -3825,7 +3825,7 @@ WHERE {
     "iri": "https://rds-dev.swissartresearch.net/container/fieldDefinitionContainer/Person_Birth_Date_latest",
     "label": "Birth Date (latest)",
     "description": "This field is used to indicate the latest known date for the birth of the documented person.",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
     "minOccurs": "0",
     "selectPattern": "SELECT DISTINCT ?value ?label 
 WHERE {
@@ -4375,7 +4375,7 @@ SELECT ?value ?label WHERE {
     "id": "Historical_Parthood_-_Historically_part_of_Place_-_Earliest_Date_Time",
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Historical_Parthood_-_Historically_part_of_Place_-_Earliest_Date_Time",
     "label": "Historical Parthood - Historically part of Place - Earliest Date Time",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
     "minOccurs": "0",
     "selectPattern": "PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
 SELECT ?value ?label WHERE {
@@ -4779,7 +4779,7 @@ INSERT {
     "iri": "http://www.metaphacts.com/fieldDefinition/Dissolution_Date_earliest",
     "label": "Dissolution Date - Earliest",
     "description": "This field is used to indicate the earliest known date for the dissolution of the documented group.",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
     "minOccurs": "0",
     "selectPattern": "SELECT ?value ?label WHERE {
   ?subject  <http://www.cidoc-crm.org/cidoc-crm/P4_has_time-span> ?timespan.
@@ -4840,7 +4840,7 @@ SELECT ?value ?label WHERE {
     "id": "Place_Type_Start_Date",
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Place_Type_Start_Date",
     "label": "Place Type Start Date",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
     "minOccurs": "0",
     "selectPattern": "SELECT ?value ?label WHERE {
   ?subject crm:P4_has_time-span ?timespan_uri.
@@ -4870,7 +4870,7 @@ SELECT ?value ?label WHERE {
     "id": "Place_Type_End_Date",
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Place_Type_End_Date",
     "label": "Place Type End Date",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
     "minOccurs": "0",
     "selectPattern": "SELECT ?value ?label WHERE {
   ?subject crm:P4_has_time-span ?timespan_uri.
@@ -5012,7 +5012,7 @@ SELECT ?value ?label WHERE {
     "id": "Floruit_Date_earliest",
     "iri": "http://www.metaphacts.com/fieldDefinition/Floruit_Date_earliest",
     "label": "Floruit Date (earliest)",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
     "minOccurs": "0",
     "selectPattern": "PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
 SELECT ?value ?label WHERE {
@@ -5210,7 +5210,7 @@ INSERT {
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Person_Institutional_Affiliation_Start_Date_Latest",
     "label": "Person Institutional Affiliation Start Date (latest)",
     "description": "This field is used to indicate the latest known date of becoming an member of an institution by the documented individual.",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
     "minOccurs": "0",
     "selectPattern": "SELECT ?value ?label WHERE {
   ?subject crm:P4_has_time-span ?timespan_uri.
@@ -5904,7 +5904,7 @@ WHERE {
     "label": "Bibliographic Item Publication Date (earliest)",
     "description": "This field is used to indicate the earliest known date for the birth of the documented bibliographic item.",
     "domain": "crm:E52_Time-span",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
     "selectPattern": "SELECT ?value ?label WHERE {
   $subject crm:P4_has_time-span ?timespan_uri.
   ?timespan_uri a crm:E52_Time-Span.
@@ -6365,7 +6365,7 @@ WHERE {
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Artwork_Conservation_Event_Earliest",
     "label": "Date - Latest",
     "description": "This field is used to indicate the earliest date for a conservation event performed on the documented artwork.",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
     "minOccurs": "0",
     "selectPattern": "SELECT ?value ?label WHERE {
   ?subject crm:P4_has_time-span ?timespan_uri.
@@ -6396,7 +6396,7 @@ WHERE {
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Artwork_Production_Date_Earliest",
     "label": "Production Date (earliest)",
     "description": "This field is used to indicate the earliest date for the creation of the documented artwork.",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
     "minOccurs": "0",
     "selectPattern": "SELECT ?value ?label WHERE {
   ?subject crm:P4_has_time-span ?timespan.
@@ -6426,7 +6426,7 @@ WHERE {
     "id": "Death_Date_Wikidata",
     "iri": "http://www.metaphacts.com/fieldDefinition/Death_Date_Wikidata",
     "label": "Death Date [Wikidata]",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
     "selectPattern": "SELECT ?value ?label 
 WHERE{
   ?subject <http://www.ics.forth.gr/isl/CRMdig/L54_is_same-as> ?wiki_wikidata.
@@ -6497,7 +6497,7 @@ WHERE {
     "iri": "https://rds-dev.swissartresearch.net/container/fieldDefinitionContainer/Person_Birth_Date_earliest",
     "label": "Birth Date (earliest)",
     "description": "This field is used to indicate the earliest known date for the birth of the documented person.",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
     "minOccurs": "0",
     "selectPattern": "SELECT DISTINCT ?value ?label WHERE {
   ?subject crm:P4_has_time-span ?timespan_uri. 
@@ -6515,6 +6515,37 @@ WHERE {
   ?subject crm:P4_has_time-span ?timespan_uri. 
   ?timespan_uri a crm:E52_Time-Span.
   ?timespan_uri crm:P82a_begin_of_the_begin ?value.
+} WHERE {
+  BIND(IRI(CONCAT(STR($subject),\"/timespan\")) as ?timespan_uri)
+}"
+}
+[[/inline]]
+
+
+[[#*inline "Person_Birth_Date_Single"]]
+{
+    "id": "Person_Birth_Date_Single",
+    "iri": "https://rds-dev.swissartresearch.net/container/fieldDefinitionContainer/Person_Birth_Date_Single",
+    "label": "Birth Date",
+    "description": "This field is used to indicate the date for the birth of the documented person.",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
+    "minOccurs": "0",
+    "selectPattern": "SELECT DISTINCT ?value ?label WHERE {
+  ?subject crm:P4_has_time-span ?timespan_uri. 
+  ?timespan_uri a crm:E52_Time-Span.
+  ?timespan_uri crm:P82_at_some_time_within ?value.
+}",
+    "deletePattern": "DELETE {
+  ?timespan_uri crm:P82_at_some_time_within ?value
+}WHERE{
+  ?subject crm:P4_has_time-span ?timespan_uri. 
+  ?timespan_uri a crm:E52_Time-Span.
+  ?timespan_uri crm:P82_at_some_time_within ?value.
+}",
+    "insertPattern": "INSERT {
+  ?subject crm:P4_has_time-span ?timespan_uri. 
+  ?timespan_uri a crm:E52_Time-Span.
+  ?timespan_uri crm:P82_at_some_time_within ?value.
 } WHERE {
   BIND(IRI(CONCAT(STR($subject),\"/timespan\")) as ?timespan_uri)
 }"
@@ -7075,7 +7106,7 @@ WHERE {
     "id": "Floruit_Date_latest",
     "iri": "http://www.researchspace.org/instances/fields/Floruit_Date_latest",
     "label": "Floruit Date (latest)",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
     "minOccurs": "0",
     "selectPattern": "PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
 SELECT ?value ?label WHERE {
@@ -7237,7 +7268,7 @@ INSERT {
     "label": "Alternative Name Use Period (latest)",
     "description": "This field is used to indicate the latest known date for use of this name for the documented person.",
     "domain": "http://www.cidoc-crm.org/cidoc-crm/E21_Person",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
     "minOccurs": "0",
     "selectPattern": "SELECT distinct ?value ?label
 WHERE {
@@ -7593,7 +7624,7 @@ INSERT {
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Artwork_Provenance_Past_Ownership_Period_Statement_Latest",
     "label": "Artwork Provenance Past Ownership Period Statement (latest)",
     "description": "This field is used to indicate the latest date for an ownership period of the documented artwork.",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
     "minOccurs": "0",
     "selectPattern": "SELECT ?value ?label WHERE {
   ?subject crm:P4_has_time-span ?timespan_uri.
@@ -8051,7 +8082,7 @@ WHERE{
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Artwork_Production_Date_Latest",
     "label": "Production Date (latest)",
     "description": "This field is used to indicate the latest date for the creation of the documented artwork.",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
     "minOccurs": "0",
     "selectPattern": "SELECT ?value ?label WHERE {
   ?subject crm:P4_has_time-span ?timespan.
@@ -8163,7 +8194,7 @@ WHERE {
     "iri": "https://rds-dev.swissartresearch.net/container/fieldDefinitionContainer/Death_Date_Latest",
     "label": "Person Death Date (latest)",
     "description": "This field is used to indicate the latest known date for the death of the documented person.",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
     "minOccurs": "0",
     "selectPattern": "SELECT DISTINCT ?value ?label 
 WHERE {
@@ -9449,7 +9480,7 @@ WHERE {
     "iri": "http://www.metaphacts.com/fieldDefinition/Formation_Date_earliest",
     "label": "Formation Date - Earliest",
     "description": "This field is used to indicate the earliest known date for the formation of the documented group.",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
     "minOccurs": "0",
     "selectPattern": "SELECT ?value ?label WHERE {
  ?subject  <http://www.cidoc-crm.org/cidoc-crm/P4_has_time-span> ?timespan.
@@ -9501,7 +9532,7 @@ SELECT ?value ?label WHERE {
     "iri": "https://rds-dev.swissartresearch.net/container/fieldDefinitionContainer/Death_Date_Earliest",
     "label": "Person Death Date (earliest)",
     "description": "This field is used to indicate the earliest known date for the death of the documented person.",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
     "minOccurs": "0",
     "selectPattern": "SELECT DISTINCT ?value ?label 
 WHERE {
@@ -9790,7 +9821,7 @@ WHERE{
     "iri": "http://www.metaphacts.com/fieldDefinition/Formation_Date_latest",
     "label": "Formation Date - Latest",
     "description": "This field is used to indicate the latest known date for the formation of the documented group.",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
     "minOccurs": "0",
     "selectPattern": "SELECT ?value ?label WHERE {
   ?subject  <http://www.cidoc-crm.org/cidoc-crm/P4_has_time-span> ?timespan.
@@ -9878,7 +9909,7 @@ SELECT ?lang ?langTag ?label WHERE {
     "id": "Birth_Date_Wikidata",
     "iri": "http://www.metaphacts.com/fieldDefinition/Birth_Date_Wikidata",
     "label": "Birth Date [Wikidata]",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
     "selectPattern": "SELECT ?value ?label 
 WHERE{
   ?subject <http://www.ics.forth.gr/isl/CRMdig/L54_is_same-as> ?wiki_wikidata.
