@@ -576,14 +576,14 @@ WHERE {
     "iri": "http://www.metaphacts.com/fieldDefinition/Place_Alternate_Name-readOnly",
     "label": "Place Alternative Title",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#string",
-    "selectPattern": "PREFIX frbr: <http://iflastandards.info/ns/fr/frbr/frbroo/>
+    "selectPattern": "PREFIX frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
 SELECT ?value ?label WHERE {
   ?subject crm:P1_is_identified_by ?place_name.
   ?place_name rdfs:label ?place_name_label.
   OPTIONAL {
-  	?place_name frbr:R64i_was_name_used_by ?name_activity_uri.
+  	?place_name frbroo:R64i_was_name_used_by ?name_activity_uri.
   	?name_activity_uri crm:P4_has_time-span ?timespan_uri.
   }
   OPTIONAL {
@@ -676,17 +676,17 @@ INSERT {
     "label": "Floruit Subject",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#string",
     "selectPattern": "SELECT ?value ?label WHERE {
-  ?subject frbr:R59_had_typical_subject ?type.
+  ?subject frbroo:R59_had_typical_subject ?type.
   ?type a <http://www.cidoc-crm.org/cidoc-crm/E55_Type>.
   ?type rdfs:label ?value.
 }",
     "deletePattern": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
-PREFIX frbr: <http://iflastandards.info/ns/fr/frbr/frbroo/>
+PREFIX frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/>
 DELETE {
-	?subject frbr:R59_had_typical_subject ?type.
+	?subject frbroo:R59_had_typical_subject ?type.
 } WHERE {
-  ?subject frbr:R59_had_typical_subject ?type.
+  ?subject frbroo:R59_had_typical_subject ?type.
   ?type a <http://www.cidoc-crm.org/cidoc-crm/E55_Type>.
   ?type rdfs:label ?value.
   ?type crm:P2_has_type ?type2.
@@ -696,7 +696,7 @@ DELETE {
     "insertPattern": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
 INSERT { 
-  ?subject frbr:R59_had_typical_subject ?type.
+  ?subject frbroo:R59_had_typical_subject ?type.
   ?type a <http://www.cidoc-crm.org/cidoc-crm/E55_Type>.
   ?type rdfs:label ?value.
   ?type crm:P2_has_type ?type2.
@@ -767,8 +767,8 @@ WHERE {
     "description": "This field is used to indicate the publisher of the bibliographic item.",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#string",
     "selectPattern": "SELECT ?value ?label WHERE {
-  ?subject frbr:R24_created ?pub_event. 
-  ?pub_event a frbr:F30_Publication_Event. 	
+  ?subject frbroo:R24_created ?pub_event. 
+  ?pub_event a frbroo:F30_Publication_Event. 	
   $pub_event crm:P01_has_domain ?carried_uri.
     ?carried_uri a crm:PC14_Carried_out_by.
     ?carried_uri crm:P02_has_range ?actor_uri.
@@ -1196,11 +1196,11 @@ WHERE {
     "description": "This field is used to indicate the place of birth of the documented bibliographic item.",
     "domain": "crm:E53_Place",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#anyURI",
-    "selectPattern": "PREFIX frbr: <http://iflastandards.info/ns/fr/frbr/frbroo/>
+    "selectPattern": "PREFIX frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/>
 SELECT distinct ?value ?label
 WHERE {
-  ?subject frbr:R24_created ?pub_event. 
-  ?pub_event a frbr:F30_Publication_Event. 
+  ?subject frbroo:R24_created ?pub_event. 
+  ?pub_event a frbroo:F30_Publication_Event. 
   ?pub_event crm:P7_took_place_at ?value. 
   ?value a crm:E53_Place.
   ?value rdfs:label ?place.
@@ -1522,7 +1522,7 @@ INSERT {
     "id": "Bibliographic_Item_Type",
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Bibliographic_Item_Type",
     "label": "Bibliographic Item Type",
-    "domain": "frbr:F24_Publication_Expression",
+    "domain": "frbroo:F24_Publication_Expression",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#string",
     "selectPattern": "SELECT ?value ?label WHERE {
   $subject crm:P2_has_type ?value.
@@ -1612,15 +1612,15 @@ INSERT {
   ?timespan_uri crm:P82b_end_of_the_end ?value.
 }
 WHERE {
-  ?subject frbr:R64i_was_name_used_by ?name_activity_uri.
-  ?name_activity_uri a frbr:F52_Name_Use_Activity .
+  ?subject frbroo:R64i_was_name_used_by ?name_activity_uri.
+  ?name_activity_uri a frbroo:F52_Name_Use_Activity .
   ?name_activity_uri crm:P4_has_time-span ?timespan_uri.
   ?timespan_uri a crm:E52_Time-Span.
   ?timespan_uri crm:P82b_end_of_the_end ?value.
 }",
     "insertPattern": "INSERT { 
-  ?subject frbr:R64i_was_name_used_by ?name_activity_uri.
-  ?name_activity_uri a frbr:F52_Name_Use_Activity .
+  ?subject frbroo:R64i_was_name_used_by ?name_activity_uri.
+  ?name_activity_uri a frbroo:F52_Name_Use_Activity .
   ?name_activity_uri crm:P4_has_time-span ?timespan_uri.
   ?timespan_uri a crm:E52_Time-Span.
   ?timespan_uri crm:P82b_end_of_the_end ?value.
@@ -1877,8 +1877,8 @@ WHERE {
     "minOccurs": "0",
     "selectPattern": "SELECT distinct ?value ?label
 WHERE {
-  ?subject frbr:R64i_was_name_used_by ?name_act_start.
-  ?name_act_start a frbr:F52_Name_Use_Activity.
+  ?subject frbroo:R64i_was_name_used_by ?name_act_start.
+  ?name_act_start a frbroo:F52_Name_Use_Activity.
   ?name_act_start crm:P4_has_time-span ?timespan_start.
   ?timespan_start a crm:E52_Time-Span.
   ?timespan_start crm:P82a_begin_of_the_begin ?value.
@@ -1886,15 +1886,15 @@ WHERE {
     "deletePattern": "DELETE {
   ?timespan crm:P82a_begin_of_the_begin ?value
 }WHERE{
-  ?subject frbr:R64i_was_name_used_by ?name_act.
-  ?name_act a frbr:F52_Name_Use_Activity.
+  ?subject frbroo:R64i_was_name_used_by ?name_act.
+  ?name_act a frbroo:F52_Name_Use_Activity.
   ?name_act crm:P4_has_time-span ?timespan.
   ?timespan a crm:E52_Time-Span.
   ?timespan crm:P82a_begin_of_the_begin ?value 
 }",
     "insertPattern": "INSERT { 
-  ?subject frbr:R64i_was_name_used_by ?name_act.
-  ?name_act a frbr:F52_Name_Use_Activity.
+  ?subject frbroo:R64i_was_name_used_by ?name_act.
+  ?name_act a frbroo:F52_Name_Use_Activity.
   ?name_act crm:P4_has_time-span ?timespan.
   ?timespan a crm:E52_Time-Span.
   ?timespan crm:P82a_begin_of_the_begin ?value
@@ -1965,7 +1965,7 @@ WHERE {
     "description": "An alternative name for a person",
     "domain": "http://www.cidoc-crm.org/cidoc-crm/E21_Person",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#string",
-    "selectPattern": "PREFIX frbr: <http://iflastandards.info/ns/fr/frbr/frbroo/>
+    "selectPattern": "PREFIX frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
 SELECT DISTINCT ?value WHERE {
@@ -1977,8 +1977,8 @@ SELECT DISTINCT ?value WHERE {
   ?name crm:P72_has_language ?lang.
   ?lang a crm:E56_Language.
   ?lang rdfs:label ?lang_label.
-  ?name frbr:R64i_was_name_used_by ?name_act.
-  ?name_act a frbr:F52_Name_Use_Activity.
+  ?name frbroo:R64i_was_name_used_by ?name_act.
+  ?name_act a frbroo:F52_Name_Use_Activity.
   ?name_act crm:P4_has_time-span ?timespan.
   ?timespan a crm:E52_Time-Span.
   OPTIONAL {
@@ -2674,7 +2674,7 @@ WHERE {
   ?subject crm:P166i_had_presence ?presence_uri.
   ?presence_uri a crm:E93_Presence.
   ?presence_uri crm:P10i_contains ?name_activity_uri.
-  ?name_activity_uri a frbr:F52_Name_Use_Activity.
+  ?name_activity_uri a frbroo:F52_Name_Use_Activity.
   ?name_activity_uri crm:R64_used_name ?name_uri. 
   ?name_uri a crm:E41_Appellation.
   ?name_uri rdfs:label ?value.
@@ -2684,7 +2684,7 @@ WHERE {
   ?subject crm:P166i_had_presence ?presence_uri.
   ?presence_uri a crm:E93_Presence.
   ?presence_uri crm:P10i_contains ?name_activity_uri.
-  ?name_activity_uri a frbr:F52_Name_Use_Activity.
+  ?name_activity_uri a frbroo:F52_Name_Use_Activity.
   ?name_activity_uri crm:R64_used_name ?name_uri. 
   ?name_uri a crm:E41_Appellation.
   ?name_uri rdfs:label ?value.
@@ -3472,7 +3472,7 @@ WHERE {
   ?floruit <http://www.cidoc-crm.org/cidoc-crm/P2_has_type> ?type.
   ?type a <http://www.cidoc-crm.org/cidoc-crm/E55_Type>.
   ?type rdfs:label \"Education\".
-  ?floruit frbr:R59_had_typical_subject ?type.
+  ?floruit frbroo:R59_had_typical_subject ?type.
   ?type a <http://www.cidoc-crm.org/cidoc-crm/E55_Type>.
   ?type rdfs:label ?value.
 }",
@@ -3599,8 +3599,8 @@ SELECT ?value ?label WHERE {
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#dateTime",
     "minOccurs": "0",
     "selectPattern": "SELECT distinct ?value ?label WHERE {
-  ?subject frbr:R64i_was_name_used_by ?name_act_start.
-  ?name_act_start a frbr:F52_Name_Use_Activity.
+  ?subject frbroo:R64i_was_name_used_by ?name_act_start.
+  ?name_act_start a frbroo:F52_Name_Use_Activity.
   ?name_act_start crm:P4_has_time-span ?timespan_start.
   ?timespan_start a crm:E52_Time-Span.
   ?timespan_start crm:P82a_begin_of_the_begin ?value.
@@ -3608,15 +3608,15 @@ SELECT ?value ?label WHERE {
     "deletePattern": "DELETE {
   ?timespan crm:P82a_begin_of_the_begin ?value
 }WHERE{
-  ?subject frbr:R64i_was_name_used_by ?name_act.
-  ?name_act a frbr:F52_Name_Use_Activity.
+  ?subject frbroo:R64i_was_name_used_by ?name_act.
+  ?name_act a frbroo:F52_Name_Use_Activity.
   ?name_act crm:P4_has_time-span ?timespan.
   ?timespan a crm:E52_Time-Span.
   ?timespan crm:P82a_begin_of_the_begin ?value 
 }",
     "insertPattern": "INSERT { 
-  ?subject frbr:R64i_was_name_used_by ?name_act.
-  ?name_act a frbr:F52_Name_Use_Activity.
+  ?subject frbroo:R64i_was_name_used_by ?name_act.
+  ?name_act a frbroo:F52_Name_Use_Activity.
   ?name_act crm:P4_has_time-span ?timespan.
   ?timespan a crm:E52_Time-Span.
   ?timespan crm:P82a_begin_of_the_begin ?value
@@ -3654,8 +3654,8 @@ SELECT ?value ?label WHERE {
     "minOccurs": "0",
     "selectPattern": "SELECT distinct ?value ?label
 WHERE {
-  ?subject frbr:R64i_was_name_used_by ?name_act_start.
-  ?name_act_start a frbr:F52_Name_Use_Activity.
+  ?subject frbroo:R64i_was_name_used_by ?name_act_start.
+  ?name_act_start a frbroo:F52_Name_Use_Activity.
   ?name_act_start crm:P4_has_time-span ?timespan_start.
   ?timespan_start a crm:E52_Time-Span.
   ?timespan_start crm:P82b_end_of_the_end ?value.
@@ -3663,15 +3663,15 @@ WHERE {
     "deletePattern": "DELETE {
   ?timespan crm:P82b_end_of_the_end ?value
 } WHERE {
-  ?subject frbr:R64i_was_name_used_by ?name_act.
-  ?name_act a frbr:F52_Name_Use_Activity.
+  ?subject frbroo:R64i_was_name_used_by ?name_act.
+  ?name_act a frbroo:F52_Name_Use_Activity.
   ?name_act crm:P4_has_time-span ?timespan.
   ?timespan a crm:E52_Time-Span.
   ?timespan crm:P82b_end_of_the_end ?value 
 }",
     "insertPattern": "INSERT { 
-  ?subject frbr:R64i_was_name_used_by ?name_act.
-  ?name_act a frbr:F52_Name_Use_Activity.
+  ?subject frbroo:R64i_was_name_used_by ?name_act.
+  ?name_act a frbroo:F52_Name_Use_Activity.
   ?name_act crm:P4_has_time-span ?timespan.
   ?timespan a crm:E52_Time-Span.
   ?timespan crm:P82b_end_of_the_end ?value
@@ -3859,7 +3859,7 @@ WHERE {
     "selectPattern": "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX crmarch: <http://www.tobedetermined.org/CRMarch/>
-PREFIX frbr: <http://www.cidoc-crm.org/frbr/>
+PREFIX frbroo: <http://www.cidoc-crm.org/frbr/>
 
 SELECT  ?value ?label
 
@@ -4006,11 +4006,11 @@ SELECT DISTINCT ?value ?label WHERE {
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Bibliographic_Item_Title_Value",
     "label": "Bibliographic Item Title",
     "description": "This field is used to indicate the main name attributed to the documented bibliographic item. No part break down of name is here implied. The full name of an individual is expected here where available.",
-    "domain": "frbr:F24_Publication_Expression",
+    "domain": "frbroo:F24_Publication_Expression",
     "xsdDatatype": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString",
     "selectPattern": "SELECT distinct ?value ?label
 WHERE {
-  $subject a frbr:F24_Publication_Expression.
+  $subject a frbroo:F24_Publication_Expression.
   ?subject crm:P1_is_identified_by ?appellation_iri . 
   ?appellation_iri a crm:E41_Appellation.
   ?appellation_iri crm:P2_has_type ?appellation_type.
@@ -4646,8 +4646,8 @@ WHERE{
     "description": "This field is used to indicate the publisher of the bibliographic item.",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#string",
     "selectPattern": "SELECT ?value ?label WHERE {
-  ?subject frbr:R24_created ?pub_event. 
-  ?pub_event a frbr:F30_Publication_Event. 	
+  ?subject frbroo:R24_created ?pub_event. 
+  ?pub_event a frbroo:F30_Publication_Event. 	
   $pub_event crm:P01_has_domain ?carried_uri.
     ?carried_uri a crm:PC14_Carried_out_by.
     ?carried_uri crm:P02_has_range ?actor_uri.
@@ -4810,7 +4810,7 @@ INSERT {
     "iri": "http://www.researchspace.org/instances/fields/Floruit_read_only",
     "label": "Floruit",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#string",
-    "selectPattern": "PREFIX frbr: <http://iflastandards.info/ns/fr/frbr/frbroo/>
+    "selectPattern": "PREFIX frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
 SELECT ?value ?label WHERE {
@@ -4825,7 +4825,7 @@ SELECT ?value ?label WHERE {
   ?timespan crm:P82a_begin_of_the_begin ?start.
   ?timespan crm:P82b_end_of_the_end ?end.
   OPTIONAL {
-    ?floruit frbr:R59_had_typical_subject ?sub.
+    ?floruit frbroo:R59_had_typical_subject ?sub.
   	?sub rdfs:label ?sub_label
    }
   BIND(CONCAT(STR(?place),\" (\",STR(xsd:date(?start)),\"-\",STR(xsd:date(?end)),\") \",?sub_label) AS ?value)
@@ -4986,12 +4986,12 @@ INSERT {
     "label": "Activity",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#string",
     "selectPattern": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX frbr: <http://iflastandards.info/ns/fr/frbr/frbroo/>
+PREFIX frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/>
 PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
 SELECT ?value ?label WHERE {
   ?subject <http://www.cidoc-crm.org/cidoc-crm/P14i_performed> ?floruit.
   ?floruit a <http://iflastandards.info/ns/fr/frbr/frbroo/F51_Pursuit>.
-  ?floruit frbr:R59_had_typical_subject ?type.
+  ?floruit frbroo:R59_had_typical_subject ?type.
   ?type a <http://www.cidoc-crm.org/cidoc-crm/E55_Type>.
   ?type rdfs:label ?type_label.
   ?floruit <http://www.cidoc-crm.org/cidoc-crm/P7_took_place_at> ?place . 
@@ -5075,7 +5075,7 @@ SELECT ?value ?label WHERE {
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#string",
     "selectPattern": "PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
 SELECT ?value ?label WHERE {
-  ?subject crm:P98i_was_brought_into_life ?born_timespan . 
+  ?subject crm:P98i_was_born ?born_timespan . 
   ?born_timespan a crm:E67_Birth.
   ?born_timespan crm:P4_has_time-span ?timespan_uri. 
   ?timespan_uri a crm:E52_Time-Span.
@@ -5089,7 +5089,7 @@ SELECT ?value ?label WHERE {
   BIND(CONCAT(coalesce(?start,?unknown),\"-\",coalesce(?end,?unknown)) AS ?value)
 } limit 1",
     "insertPattern": "INSERT {
-  ?subject <http://www.cidoc-crm.org/cidoc-crm/P98i_was_brought_into_life> ?born_timespan . 
+  ?subject <http://www.cidoc-crm.org/cidoc-crm/P98i_was_born> ?born_timespan . 
   ?born_timespan a <http://www.cidoc-crm.org/cidoc-crm/E67_Birth>.
   ?born_timespan <http://www.cidoc-crm.org/cidoc-crm/P4_has_time-span> ?timespan_uri. 
   ?timespan_uri rdfs:label ?value
@@ -5304,7 +5304,7 @@ INSERT {
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Bibliographic_Item_Part_Of",
     "label": "Bibliographic Item Part Of",
     "description": "This field is used to indicate the belonging of the particular bibliographic item to a larger bibliographic unit, such as the relation between a chapter and a book, an article and a journal issue etc.",
-    "domain": "frbr:F24_Publication_Expression",
+    "domain": "frbroo:F24_Publication_Expression",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#anyURI",
     "selectPattern": "SELECT ?value ?label WHERE {
   $subject crm:P106i_forms_part_of $value.  
@@ -5318,7 +5318,7 @@ INSERT {
       ?type_uri rdfs:label \"Part Of\"
 } WHERE {BIND(IRI(CONCAT(STR($subject),\"/type/\", MD5(\"Part Of\"))) as ?type_uri).}",
     "autosuggestionPattern": "SELECT ?value ?label WHERE {
-  ?value a frbr:F24_Publication_Expression.
+  ?value a frbroo:F24_Publication_Expression.
   ?value crm:P1_is_identified_by ?appel_uri . 
   ?appel_uri a crm:E41_Appellation.
   ?appel_uri rdfs:label ?label.
@@ -5466,15 +5466,15 @@ WHERE {}"
   ?timespan_uri crm:P82a_begin_of_the_begin ?value.
 }
 WHERE {
-  ?subject frbr:R64i_was_name_used_by ?name_activity_uri.
-  ?name_activity_uri a frbr:F52_Name_Use_Activity .
+  ?subject frbroo:R64i_was_name_used_by ?name_activity_uri.
+  ?name_activity_uri a frbroo:F52_Name_Use_Activity .
   ?name_activity_uri crm:P4_has_time-span ?timespan_uri.
   ?timespan_uri a crm:E52_Time-Span.
   ?timespan_uri crm:P82a_begin_of_the_begin ?value.
 }",
     "insertPattern": "INSERT { 
-  ?subject frbr:R64i_was_name_used_by ?name_activity_uri.
-  ?name_activity_uri a frbr:F52_Name_Use_Activity .
+  ?subject frbroo:R64i_was_name_used_by ?name_activity_uri.
+  ?name_activity_uri a frbroo:F52_Name_Use_Activity .
   ?name_activity_uri crm:P4_has_time-span ?timespan_uri.
   ?timespan_uri a crm:E52_Time-Span.
   ?timespan_uri crm:P82a_begin_of_the_begin ?value.
@@ -5627,18 +5627,18 @@ INSERT {
     "minOccurs": "0",
     "selectPattern": "SELECT DISTINCT ?value ?label 
 WHERE {
-  ?subject crm:P98i_was_brought_into_life ?value . 
+  ?subject crm:P98i_was_born ?value . 
   ?value a crm:E67_Birth.
 }",
     "deletePattern": "DELETE { 
-  ?subject crm:P98i_was_brought_into_life ?value . 
+  ?subject crm:P98i_was_born ?value . 
 } 
 WHERE {
-  ?subject crm:P98i_was_brought_into_life ?value . 
+  ?subject crm:P98i_was_born ?value . 
   ?value a crm:E67_Birth.
 }",
     "insertPattern": "INSERT {
-  ?subject crm:P98i_was_brought_into_life ?value. 
+  ?subject crm:P98i_was_born ?value. 
   ?value a crm:E67_Birth.
 } WHERE {}"
 }
@@ -6627,23 +6627,23 @@ WHERE {
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#anyURI",
     "minOccurs": "0",
     "selectPattern": "SELECT ?value ?label WHERE {
-  ?subject crm:P98i_was_brought_into_life ?birth_uri.
+  ?subject crm:P98i_was_born ?birth_uri.
   ?birth_uri a crm:E67_Birth .
   ?birth_uri crm:P96_by_mother ?value.
   ?value a crm:E21_Person .
 }",
     "deletePattern": "DELETE {
-  ?subject crm:P98i_was_brought_into_life ?birth_uri.
+  ?subject crm:P98i_was_born ?birth_uri.
   ?birth_uri crm:P96_by_mother ?value.
 }
 WHERE {
-  ?subject crm:P98i_was_brought_into_life ?birth_uri.
+  ?subject crm:P98i_was_born ?birth_uri.
   ?birth_uri a crm:E67_Birth .
   ?birth_uri crm:P96_by_mother ?value.
   ?value a crm:E21_Person .
 }",
     "insertPattern": "INSERT { 
-  ?subject crm:P98i_was_brought_into_life ?birth_uri.
+  ?subject crm:P98i_was_born ?birth_uri.
   ?birth_uri a crm:E67_Birth .
   ?birth_uri crm:P96_by_mother ?value.
   ?value a crm:E21_Person .
@@ -6868,23 +6868,23 @@ WHERE {
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#anyURI",
     "minOccurs": "0",
     "selectPattern": "SELECT ?value ?label WHERE {
-  ?subject crm:P98i_was_brought_into_life ?birth_uri.
+  ?subject crm:P98i_was_born ?birth_uri.
   ?birth_uri a crm:E67_Birth .
   ?birth_uri crm:P97_from_father ?value.
   ?value a crm:E21_Person .
 }",
     "deletePattern": "DELETE {
-  ?subject crm:P98i_was_brought_into_life ?birth_uri.
+  ?subject crm:P98i_was_born ?birth_uri.
   ?birth_uri crm:P97_from_father ?value.
 }
 WHERE {
-  ?subject crm:P98i_was_brought_into_life ?birth_uri.
+  ?subject crm:P98i_was_born ?birth_uri.
   ?birth_uri a crm:E67_Birth .
   ?birth_uri crm:P97_from_father ?value.
   ?value a crm:E21_Person .
 }",
     "insertPattern": "INSERT { 
-  ?subject crm:P98i_was_brought_into_life ?birth_uri.
+  ?subject crm:P98i_was_born ?birth_uri.
   ?birth_uri a crm:E67_Birth .
   ?birth_uri crm:P97_from_father ?value.
   ?value a crm:E21_Person .
@@ -7241,8 +7241,8 @@ INSERT {
     "minOccurs": "0",
     "selectPattern": "SELECT distinct ?value ?label
 WHERE {
-  ?subject frbr:R64i_was_name_used_by ?name_act_start.
-  ?name_act_start a frbr:F52_Name_Use_Activity.
+  ?subject frbroo:R64i_was_name_used_by ?name_act_start.
+  ?name_act_start a frbroo:F52_Name_Use_Activity.
   ?name_act_start crm:P4_has_time-span ?timespan_start.
   ?timespan_start a crm:E52_Time-Span.
   ?timespan_start crm:P82b_end_of_the_end ?value.
@@ -7250,15 +7250,15 @@ WHERE {
     "deletePattern": "DELETE {
   ?timespan crm:P82b_end_of_the_end ?value
 } WHERE {
-  ?subject frbr:R64i_was_name_used_by ?name_act.
-  ?name_act a frbr:F52_Name_Use_Activity.
+  ?subject frbroo:R64i_was_name_used_by ?name_act.
+  ?name_act a frbroo:F52_Name_Use_Activity.
   ?name_act crm:P4_has_time-span ?timespan.
   ?timespan a crm:E52_Time-Span.
   ?timespan crm:P82b_end_of_the_end ?value 
 }",
     "insertPattern": "INSERT { 
-  ?subject frbr:R64i_was_name_used_by ?name_act.
-  ?name_act a frbr:F52_Name_Use_Activity.
+  ?subject frbroo:R64i_was_name_used_by ?name_act.
+  ?name_act a frbroo:F52_Name_Use_Activity.
   ?name_act crm:P4_has_time-span ?timespan.
   ?timespan a crm:E52_Time-Span.
   ?timespan crm:P82b_end_of_the_end ?value
@@ -7972,7 +7972,7 @@ WHERE {
     "selectPattern": "SELECT DISTINCT ?value ?label 
 WHERE {
   $subject a <http://www.cidoc-crm.org/cidoc-crm/E21_Person>.
-  ?subject <http://www.cidoc-crm.org/cidoc-crm/P98i_was_brought_into_life> ?birth_event. 
+  ?subject <http://www.cidoc-crm.org/cidoc-crm/P98i_was_born> ?birth_event. 
   ?birth_event  a <http://www.cidoc-crm.org/cidoc-crm/E67_Birth>.
   ?birth_event <http://www.cidoc-crm.org/cidoc-crm/P7_took_place_at> ?value.
   ?value a <http://www.cidoc-crm.org/cidoc-crm/E53_Place>
@@ -8185,7 +8185,7 @@ WHERE {
   ?timespan_uri a crm:E52_Time-Span.
   ?timespan_uri crm:P82b_end_of_the_end ?value.
 } WHERE {
-  BIND(IRI(CONCAT(STR($subject),\"/timespan/\", MD5(str($subject)))) as ?timespan_uri)
+  BIND(IRI(CONCAT(STR($subject),\"/timespan\")) as ?timespan_uri)
 }"
 }
 [[/inline]]
@@ -8389,11 +8389,11 @@ INSERT {
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Bibliographic_Item_Title",
     "label": "Bibliographic Item Title",
     "description": "This field is used to indicate the main name attributed to the documented bibliographic item. No part break down of name is here implied. The full name of an individual is expected here where available.",
-    "domain": "frbr:F24_Publication_Expression",
+    "domain": "frbroo:F24_Publication_Expression",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#anyURI",
     "selectPattern": "SELECT distinct ?value ?label
 WHERE {
-  $subject a frbr:F24_Publication_Expression.
+  $subject a frbroo:F24_Publication_Expression.
   ?subject crm:P1_is_identified_by ?appellation_iri . 
   ?appellation_iri a crm:E41_Appellation.
   ?appellation_iri crm:P2_has_type ?appellation_type.
@@ -9147,13 +9147,13 @@ INSERT {
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Bibliographic_Item_Publication",
     "label": "Bibliographic Item Publication",
     "description": "This field is used to indicate the place of birth of the documented bibliographic item.",
-    "domain": "frbr:F24_Publication_Expression",
+    "domain": "frbroo:F24_Publication_Expression",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#anyURI",
-    "selectPattern": "PREFIX frbr: <http://iflastandards.info/ns/fr/frbr/frbroo/>
+    "selectPattern": "PREFIX frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/>
 SELECT distinct ?value ?label
 WHERE {
-?subject frbr:R24_created ?pub_event. 
-  ?pub_event a frbr:F30_Publication_Event. 
+?subject frbroo:R24_created ?pub_event. 
+  ?pub_event a frbroo:F30_Publication_Event. 
   ?pub_event crm:P7_took_place_at ?place_uri. 
   ?place_uri a crm:E53_Place.
   ?place_uri rdfs:label ?place.
@@ -9163,15 +9163,15 @@ WHERE {
    BIND(CONCAT(?place, \" from: \",str(?earliest),\" until: \",str(?latest)) as ?value)
 }",
     "deletePattern": "DELETE {
-?subject frbr:R24_created ?value. 
+?subject frbroo:R24_created ?value. 
   } where { 
-?subject frbr:R24_created ?value. 
-  ?value a frbr:F30_Publication_Event.
+?subject frbroo:R24_created ?value. 
+  ?value a frbroo:F30_Publication_Event.
 }",
-    "insertPattern": "PREFIX frbr: <http://iflastandards.info/ns/fr/frbr/frbroo/>
+    "insertPattern": "PREFIX frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/>
 INSERT { 
-  ?subject frbr:R24_created ?value. 
-  ?value a frbr:F30_Publication_Event.
+  ?subject frbroo:R24_created ?value. 
+  ?value a frbroo:F30_Publication_Event.
 } WHERE {}"
 }
 [[/inline]]
@@ -9361,7 +9361,7 @@ SELECT ?value ?label WHERE {
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Identifier_Bibliographic_Item",
     "label": "Identifier (Bibliographic Item)",
     "description": "An identifier for the person",
-    "domain": "frbr:F24_Publication_Expression",
+    "domain": "frbroo:F24_Publication_Expression",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#anyURI",
     "selectPattern": "SELECT ?value ?label WHERE {
   ?subject <http://www.cidoc-crm.org/cidoc-crm/P1_is_identified_by> ?value.
@@ -9372,9 +9372,9 @@ SELECT ?value ?label WHERE {
   ?value a <http://www.cidoc-crm.org/cidoc-crm/E42_Identifier>.
   
 }",
-    "insertPattern": "PREFIX frbr: <http://iflastandards.info/ns/fr/frbr/frbroo/>
+    "insertPattern": "PREFIX frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/>
 INSERT { 
-  ?subject a frbr:F24_Publication_Expression.
+  ?subject a frbroo:F24_Publication_Expression.
   ?subject <http://www.cidoc-crm.org/cidoc-crm/P1_is_identified_by> ?value.
   ?value a <http://www.cidoc-crm.org/cidoc-crm/E42_Identifier> .
 } WHERE {}"
@@ -9480,13 +9480,13 @@ WHERE {
     "iri": "http://www.metaphacts.com/fieldDefinition/Scope_Of_Activity",
     "label": "Scope Of Activity",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#anyURI",
-    "selectPattern": "PREFIX frbr: <http://iflastandards.info/ns/fr/frbr/frbroo/>
+    "selectPattern": "PREFIX frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
 SELECT ?value ?label WHERE {
   $subject crm:P14i_performed ?value.
-  ?value a frbr:F51_Pursuit.
-  ?value frbr:R59_had_typical_subject ?t.
+  ?value a frbroo:F51_Pursuit.
+  ?value frbroo:R59_had_typical_subject ?t.
   ?t a crm:E55_Type.
   ?t rdfs:label \"Field of Activity\".
 }",
@@ -9702,7 +9702,7 @@ WHERE {
     "selectPattern": "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX crmarch: <http://www.tobedetermined.org/CRMarch/>
-PREFIX frbr: <http://www.cidoc-crm.org/frbr/>
+PREFIX frbroo: <http://www.cidoc-crm.org/frbr/>
 
 SELECT   ?value
 
