@@ -223,6 +223,22 @@
           <semantic-form-datetime-input for="Person_Institutional_Affiliation_Start_Date_Latest"></semantic-form-datetime-input>
         </semantic-form-composite-input>
 
+        <semantic-form-composite-input 
+          for="Citation"
+          new-subject-template="/citation/{{Citation_Value}}"
+          fields='[
+            [[> Citation_Value ]],
+            [[> Citation_Source ]]
+        ]'>
+            <semantic-form-text-input for="Citation_Value"></semantic-form-text-input>
+            <semantic-form-text-input for="Citation_Source"></semantic-form-text-input>
+        </semantic-form-composite-input>
+
+        <semantic-form-text-input for="Short_Biography"
+                                    languages='["en","de","fr","it","sp","ca","cs","da","nl","fi","gr","hu","no","pt","sv","ru","jp","ko"]'
+                                    multiline=true>
+        </semantic-form-text-input>
+
         <semantic-form-errors></semantic-form-errors>
         <div class="bso-component button-set">
             [[#if edit]]
