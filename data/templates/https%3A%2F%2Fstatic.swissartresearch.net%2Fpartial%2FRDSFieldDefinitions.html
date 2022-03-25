@@ -814,7 +814,7 @@ WHERE {
     "xsdDatatype": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString",
     "selectPattern": "SELECT DISTINCT ?value ?label WHERE {
   ?subject <http://www.cidoc-crm.org/cidoc-crm/P67i_is_referred_to_by> ?info_iri.
-  ?info_iri crm:P2_has_type <https://resource.swissartresearch.net/type/biography>.
+  ?info_iri crm:P2_has_type <https://resource.swissartresearch.net/type/biographical_note>.
   ?info_iri rdfs:value ?value.
 }",
     "deletePattern": "DELETE {
@@ -823,7 +823,7 @@ WHERE {
   ?subject a <http://www.cidoc-crm.org/cidoc-crm/E21_Person>.
   ?subject <http://www.cidoc-crm.org/cidoc-crm/P67i_is_referred_to_by> ?info_iri.
   ?info_iri a <http://www.cidoc-crm.org/cidoc-crm/E73_Information_Object>.
-  ?info_iri crm:P2_has_type <https://resource.swissartresearch.net/type/biography>.
+  ?info_iri crm:P2_has_type <https://resource.swissartresearch.net/type/biographical_note>.
   ?info_iri rdfs:value ?value.
 }",
     "insertPattern": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -832,8 +832,8 @@ INSERT {
   ?subject a <http://www.cidoc-crm.org/cidoc-crm/E21_Person>.
   ?subject <http://www.cidoc-crm.org/cidoc-crm/P67i_is_referred_to_by> ?info_iri.
   ?info_iri a <http://www.cidoc-crm.org/cidoc-crm/E73_Information_Object>.
-  ?info_iri crm:P2_has_type <https://resource.swissartresearch.net/type/biography>.
-  <https://resource.swissartresearch.net/type/biography> a crm:E55_Type;
+  ?info_iri crm:P2_has_type <https://resource.swissartresearch.net/type/biographical_note>.
+  <https://resource.swissartresearch.net/type/biographical_note> a crm:E55_Type;
     rdfs:label \"Biography\".
   ?info_iri rdfs:value ?value.
   ?infor_iri <http://www.cidoc-crm.org/cidoc-crm/P72_has_language> ?lang.
@@ -9571,7 +9571,7 @@ WHERE {
   ?subject a <http://www.cidoc-crm.org/cidoc-crm/E21_Person>.
   ?subject <http://www.cidoc-crm.org/cidoc-crm/P67i_is_referred_to_by> ?info_iri.
   ?info_iri a <http://www.cidoc-crm.org/cidoc-crm/E73_Information_Object>.
-  ?info_iri <http://www.cidoc-crm.org/cidoc-crm/P2_has_type> <https://resource.swissartresearch.net/biographical_note>.
+  ?info_iri <http://www.cidoc-crm.org/cidoc-crm/P2_has_type> <https://resource.swissartresearch.net/type/biographical_note>.
   ?info_iri rdfs:value ?value
 }",
     "insertPattern": "INSERT { $subject ?predicate $value} WHERE {}"
