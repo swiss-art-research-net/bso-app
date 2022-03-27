@@ -80,7 +80,7 @@
                       tuple-template='{{> template }}'
                       no-result-template='<bs-alert variant="info">[[i18n "noResultsWithCoordinates" bundle="bso"]]</bs-alert>'
                   >
-                      <template id='template'>{{> partial:cardObject}}</template>
+                      <template id='template'>{{> partial:cardObject noFallback="true"}}</template>
                   </semantic-map>
               </mp-event-target-refresh>
           </div>
