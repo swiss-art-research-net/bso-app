@@ -36,9 +36,11 @@
             </mp-resource-link-container>
           </mp-has-permission>
 
-          <mp-resource-link-container propagate-link="true" iri='https://static.swissartresearch.net/page/listCustomData'>
-            <bs-menu-item>Custom Data</bs-menu-item>
-          </mp-resource-link-container>
+          <mp-has-permission permission='forms:ldp:*'>
+            <mp-resource-link-container propagate-link="true" iri='https://static.swissartresearch.net/page/listCustomData'>
+              <bs-menu-item>Custom Data</bs-menu-item>
+            </mp-resource-link-container>
+          </mp-has-permission>
 
           <mp-has-permission permission='pages:view:Admin:DataImportExport'>
             <bs-dropdown-divider></bs-dropdown-divider>
