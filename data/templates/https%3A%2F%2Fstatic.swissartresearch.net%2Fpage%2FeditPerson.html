@@ -1,6 +1,9 @@
 [[> partial:RDSFieldDefinitions]]
 
-[[> partial:pageHeader]]
+[[#if (urlParam "overlay")]]
+[[else]]
+    [[> partial:pageHeader]]
+[[/if]]
 
 [[#*inline "thisIri"]][[urlParam "entityiri"]][[/inline]]
 
@@ -42,7 +45,11 @@
         [[/if]]
         persistence="ldp"
         form-id="persons"
+        [[#if (urlParam "redirect")]]
+            post-action="[[ urlParam "redirect"]]"
+        [[else]]
         post-action="redirect"
+        [[/if]]
         browser-persistence="True"
         fields='[
             [[> SameAs]],

@@ -68,6 +68,9 @@ iframe {
 .gap {
   margin-bottom: 2rem;
 }
+.gap-small {
+  margin-bottom: 1rem;
+}
 .knowledgeGraphBar h1 {
   font-size: 1rem;
   font-weight: bold;
@@ -427,7 +430,7 @@ ol.page-breadcrumb {
 .modal-backdrop {
   opacity: 0.8;
 }
-.modal-body {
+.overlay-modal__body.modal-body {
   padding: 0.5rem;
   padding-top: 2rem;
 }

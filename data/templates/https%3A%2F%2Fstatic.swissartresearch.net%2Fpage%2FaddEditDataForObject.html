@@ -90,6 +90,23 @@
 [[> partial:contentFooter]]
 [[> partial:pageFooter]]
 
+[[#* inline "add-new-person"]]
+    <mp-event-proxy on-event-type="Form.ResourceCreated" proxy-event-type="Dialog.HideAll"></mp-event-proxy>
+    <mp-overlay-dialog title="[[i18n "addNewPerson" bundle="bso"]]" type="lightbox">
+        <mp-overlay-dialog-trigger>
+            <div class="bso-component gap-small">
+                <button class="btn btn-secondary btn-xs">[[i18n "createNewPerson" bundle="bso"]]</button>
+            </div>
+        </mp-overlay-dialog-trigger>
+        <mp-overlay-dialog-content>
+            <mp-page-loader iri="page:editPerson" 
+                urlqueryparam-overlay="true" 
+                urlqueryparam-redirect="event">
+            </mp-page-loader>
+        </mp-overlay-dialog-content>
+    </mp-overlay-dialog>
+[[/inline]]
+
 [[#* inline "object_contributors"]]
 
 <mp-event-target-template-render id="object_contributors_next_step" template="{{> object_contributors_template}}">
@@ -129,6 +146,7 @@
                                         <semantic-form-hidden-input for="P2_has_type" replace-value="{{role.value}}"></semantic-form-hidden-input>
 
                                         <semantic-form-autocomplete-input for="P14_carried_out_by"></semantic-form-autocomplete-input>
+                                        [[> add-new-person]]
                                         <button name="submit" class="btn btn-primary btn-md">[[i18n "save" bundle="bso"]]</button>
                                     </semantic-form>
                                 
@@ -189,6 +207,7 @@
             <semantic-form-select-input for="subproduction_type"></semantic-form-select-input>
             <div>Note: once we have the roles we could determine the subproduction type based on the role (e.g. colouring->E11, engraving->E12)</div>
             <semantic-form-autocomplete-input for="P14_carried_out_by"></semantic-form-autocomplete-input>
+            [[> add-new-person]]
             <semantic-form-tree-picker-input for="P2_has_type_for_person_roles"></semantic-form-tree-picker-input>
             <button name="submit" class="btn btn-primary btn-md">[[i18n "save" bundle="bso"]]</button>
         </semantic-form>
@@ -214,6 +233,7 @@
             <semantic-form-hidden-input for="type" replace-value="[[resolvePrefix "crm:E65_Creation"]]"></semantic-form-hidden-input>
             
             <semantic-form-autocomplete-input for="P14_carried_out_by"></semantic-form-autocomplete-input>
+            [[> add-new-person]]
             <semantic-form-tree-picker-input for="P2_has_type_for_person_roles"></semantic-form-tree-picker-input>
             <button name="submit" class="btn btn-primary btn-md">[[i18n "save" bundle="bso"]]</button>
         </semantic-form>
