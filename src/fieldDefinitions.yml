@@ -727,8 +727,10 @@ fields:
             SELECT DISTINCT ?value ?label WHERE {
               ?value a search:Person ;
                 rdfs:label ?label .
-              ?label bds:search ?__token__ .
-            } ORDER BY ?label
+              ?label bds:search ?__token__ ;
+                bds:relevance ?score ; 
+                bds:matchAllTerms "true"
+            } ORDER BY DESC(?score)
             LIMIT 10'
         - valueSet: 'SELECT ?value ?label  WHERE {
               ?value a search:Person ;
