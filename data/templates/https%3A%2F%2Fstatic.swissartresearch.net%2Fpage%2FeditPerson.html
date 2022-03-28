@@ -15,7 +15,13 @@
     </div>
     <div class="bso-component main">
         <div class="bso-component panel">
-            [[> edit-person-form edit=(urlParam "entityiri")]]
+            [[#if (hasPermission "api:ldp:*")]]
+                [[> edit-person-form edit=(urlParam "entityiri")]]
+            [[else]]
+                <bs-alert variant="warning">
+                    [[i18n "noPermissionToAccessPage" bundle="bso"]]
+                </bs-alert>
+            [[/if]]
         </div>
     </div>
 </div>

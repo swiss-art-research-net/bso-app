@@ -35,49 +35,55 @@
 
        <h2>[[#if (urlParam "subjectiri")]][[i18n "editData" bundle="bso"]][[else]][[i18n "addNewData" bundle="bso"]][[/if]]</h2>
 
-        [[#if (urlParam "subjectiri")]]
-        [[else]]
-            <p>[[i18n "addDataAbout" bundle="bso"]]</p>
-        [[/if]]
+        [[#if (hasPermission "api:ldp:*")]]
+            [[#if (urlParam "subjectiri")]]
+            [[else]]
+                <p>[[i18n "addDataAbout" bundle="bso"]]</p>
+            [[/if]]
 
-        <semantic-if
-            query="ASK { [[>thisForQuery]] a search:Object}"
-            then="{{> data-form-template}}"
-        >
-            <template id="data-form-template">
-                <bs-tabs class="bso-component form-selector" default-active-key="[[urlParam "form"]]">
-                    <bs-tab event-key="object_persons" title="[[i18n "contributors" bundle="bso"]]">
-                        [[> object_contributors]]
-                    </bs-tab>
-                    [[#if (urlParam "form")]]
-                        <bs-tab event-key="object_subproduction" title="[[i18n "production" bundle="bso"]]">
-                            [[> object_subproduction]]
-                        </bs-tab>
-                        <bs-tab event-key="object_subcreation" title="[[i18n "creation" bundle="bso"]]">
-                            [[> object_subcreation]]
-                        </bs-tab>
-                    [[/if]]
-                    <bs-tab event-key="object_work_depicts" title="[[i18n "depicts" bundle="bso"]]" >
-                        [[> object_work_depicts]]
-                    </bs-tab>
-                    <bs-tab event-key="object_sameas" title="[[i18n "externalLinks" bundle="bso"]]">
-                        [[> object_sameas]]
-                    </bs-tab>
-                </template>
-            </semantic-if>
             <semantic-if
-                query="ASK { [[>thisForQuery]] a crmdig:D35_Area}"
-                then="{{> template}}"
+                query="ASK { [[>thisForQuery]] a search:Object}"
+                then="{{> data-form-template}}"
             >
-                <template id="template">
+                <template id="data-form-template">
                     <bs-tabs class="bso-component form-selector" default-active-key="[[urlParam "form"]]">
-                        <bs-tab event-key="region_depicts" title="[[i18n "depicts" bundle="bso"]]" >
-                            [[> region_depicts]]
+                        <bs-tab event-key="object_persons" title="[[i18n "contributors" bundle="bso"]]">
+                            [[> object_contributors]]
                         </bs-tab>
-                    </bs-tabs>
-                </template>
-            </semantic-if>
-        </bs-tabs>
+                        [[#if (urlParam "form")]]
+                            <bs-tab event-key="object_subproduction" title="[[i18n "production" bundle="bso"]]">
+                                [[> object_subproduction]]
+                            </bs-tab>
+                            <bs-tab event-key="object_subcreation" title="[[i18n "creation" bundle="bso"]]">
+                                [[> object_subcreation]]
+                            </bs-tab>
+                        [[/if]]
+                        <bs-tab event-key="object_work_depicts" title="[[i18n "depicts" bundle="bso"]]" >
+                            [[> object_work_depicts]]
+                        </bs-tab>
+                        <bs-tab event-key="object_sameas" title="[[i18n "externalLinks" bundle="bso"]]">
+                            [[> object_sameas]]
+                        </bs-tab>
+                    </template>
+                </semantic-if>
+                <semantic-if
+                    query="ASK { [[>thisForQuery]] a crmdig:D35_Area}"
+                    then="{{> template}}"
+                >
+                    <template id="template">
+                        <bs-tabs class="bso-component form-selector" default-active-key="[[urlParam "form"]]">
+                            <bs-tab event-key="region_depicts" title="[[i18n "depicts" bundle="bso"]]" >
+                                [[> region_depicts]]
+                            </bs-tab>
+                        </bs-tabs>
+                    </template>
+                </semantic-if>
+            </bs-tabs>
+        [[else]]
+            <bs-alert variant="warning">
+                [[i18n "noPermissionToAccessPage" bundle="bso"]]
+            </bs-alert>
+        [[/if]]
     </bs-col>
 </bs-row>
 
