@@ -90,8 +90,9 @@
 [[> partial:contentFooter]]
 [[> partial:pageFooter]]
 
+<mp-event-proxy on-event-type="Form.ResourceCreated" proxy-event-type="Dialog.HideAll"></mp-event-proxy>
+
 [[#* inline "add-new-person"]]
-    <mp-event-proxy on-event-type="Form.ResourceCreated" proxy-event-type="Dialog.HideAll"></mp-event-proxy>
     <mp-overlay-dialog title="[[i18n "addNewPerson" bundle="bso"]]" type="lightbox">
         <mp-overlay-dialog-trigger>
             <div class="bso-component gap-small">
