@@ -113,12 +113,31 @@
 <mp-event-target-template-render id="object_contributors_next_step" template="{{> object_contributors_template}}">
     <template id="object_contributors_template">
         {{#if role}}
+            <mp-event-proxy
+                on-event-type="Form.ResourceCreated"
+                proxy-event-type="Component.TemplateUpdate"
+                proxy-targets='["object_contributors_next_step"]' 
+                data='{
+                    "role": "{{role}}",
+                    "entityCreated": true
+                }'
+            ></mp-event-proxy>
             <div class="bso-component separator next-step">
                 <div class="bso-component form-content">
                     [[i18n "addContributor" bundle="bso"]]: <mp-label iri="{{role}}"></mp-label>
+
                     <semantic-query
-                        query='SELECT ?context ?role ?node ?form WHERE { 
+                        query='SELECT ?context ?role ?node ?form {{#if entityCreated}}?lastEntityCreated{{/if}} WHERE { 
                             BIND(<{{role}}> as ?role)
+                            {{#if entityCreated}}
+                                {
+                                    SELECT ?lastEntityCreated WHERE {
+                                        Platform:formContainer ldp:contains ?container .
+                                        ?container prov:generatedAtTime ?dateCreated
+                                        BIND(URI(STRBEFORE(STR(?container), "/container")) as ?lastEntityCreated)
+                                    } ORDER BY DESC(?dateCreated) LIMIT 1
+                                }
+                            {{/if}}
                             ?role skos:broader?/skos:relatedMatch ?context .
                             VALUES (?context ?node ?form) {
                                 (crm:E12_Production "production" "object_subproduction")
@@ -146,7 +165,16 @@
                                         <semantic-form-hidden-input for="type" replace-value="{{context.value}}"></semantic-form-hidden-input>
                                         <semantic-form-hidden-input for="P2_has_type" replace-value="{{role.value}}"></semantic-form-hidden-input>
 
-                                        <semantic-form-autocomplete-input for="P14_carried_out_by"></semantic-form-autocomplete-input>
+                                        {{#if lastEntityCreated}}
+                                            <semantic-form-autocomplete-input
+                                                for="P14_carried_out_by"
+                                                default-value="{{lastEntityCreated.value}}"
+                                            ></semantic-form-autocomplete-input>
+                                        {{else}}
+                                            <semantic-form-autocomplete-input
+                                                for="P14_carried_out_by"
+                                            ></semantic-form-autocomplete-input>
+                                        {{/if}}
                                         [[> add-new-person]]
                                         <button name="submit" class="btn btn-primary btn-md">[[i18n "save" bundle="bso"]]</button>
                                     </semantic-form>
