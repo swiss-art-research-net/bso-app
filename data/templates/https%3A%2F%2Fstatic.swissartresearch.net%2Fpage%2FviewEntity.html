@@ -972,7 +972,8 @@
                         <semantic-link iri="page:deleteContainerFromParent" 
                             urlqueryparam-container="{{container.value}}" 
                             urlqueryparam-parent="{{parentContainer.value}}" 
-                            urlqueryparam-back="[[resolvePrefix "page:Start"]]">
+                            urlqueryparam-back="[[this]]"
+                            urlqueryparam-redirect="page:listCustomData">
                             <button class="btn btn-primary btn-s">[[i18n "delete" bundle="bso"]]</button>
                         </semantic-link>
                     {{/each}}

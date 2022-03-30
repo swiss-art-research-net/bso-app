@@ -40,7 +40,7 @@
                     <div class="modal-content">
                         <div class="modal-body">
                             <p>[[i18n "resourceDeleted" bundle="bso"]]</p>
-                            <semantic-link iri="[[urlParam "back"]]" urlqueryparam-view="page" class="btn btn-primary btn-md">[[i18n "back" bundle="bso"]]</semantic-link>
+                            <semantic-link iri="[[#if (urlParam "redirect")]][[urlParam "redirect"]][[else]][[urlParam "back"]][[/if]]" urlqueryparam-view="page" class="btn btn-primary btn-md">[[i18n "back" bundle="bso"]]</semantic-link>
                         </div>
                     </div>
                 </div>
