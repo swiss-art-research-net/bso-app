@@ -7,20 +7,33 @@
         <bs-row class="bso-component panel">
             <bs-col sm="12">
                 <h2>[[i18n "delete" bundle="bso"]]</h2>
-                <div class="gap">
-                    [[i18n "confirmDelete" bundle="bso"]] <mp-label iri="[[urlParam "container"]]"></mp-label> [[urlParam "container"]]
-                </div>
-                <div class="bso-component button-set">
-                    <semantic-link
-                        iri="[[urlParam "back"]]"
-                        urlqueryparam-view="page"
-                        type="button"
-                        class="btn-secondary btn"
-                    >[[i18n "cancel" bundle="bso"]]</semantic-link>
-                    <mp-ldp-remove-from-container-action container="[[urlParam "parent"]]" iri="[[urlParam "container"]]">
-                        <button type="button" class="btn btn-primary">[[i18n "delete" bundle="bso"]]</button>
-                    </mp-ldp-remove-from-container-action>
-                </div>
+                <semantic-if
+                    query='ASK {
+                        {
+                            BIND(URI(STRBEFORE("[[urlParam "container"]]", "/container")) as ?resource)
+                            BIND(URI(CONCAT("[[urlParam "container"]]", "/context")) as ?resourceGraph)
+                            GRAPH ?g {
+                                ?s ?p ?resource .
+                            }
+                            FILTER(?g != ?resourceGraph)
+                        } UNION {
+                            BIND(URI(STRBEFORE("[[urlParam "container"]]", "/container")) as ?resource)
+                            BIND(URI(CONCAT("[[urlParam "container"]]", "/context")) as ?resourceGraph)
+                            GRAPH ?g {
+                                ?resource ?p ?o .
+                            }
+                            FILTER(?g != ?resourceGraph)
+                        }  
+                    }'
+                    then="{{> template-resource-in-use}}"
+                    else="{{> template-delete-resource}}">
+                    <template id="template-resource-in-use">
+                        [[> component-resource-in-use]]
+                    </template>
+                    <template id="template-delete-resource">
+                        [[> component-delete-resource]]
+                    </template>
+                </semantic-if>
             </bs-col>
         </bs-row>
     </div>
@@ -54,6 +67,127 @@
         [[i18n "noPermissionToAccessPage" bundle="bso"]]
     </bs-alert>
 [[/if]]
+
+[[#*inline "component-delete-resource"]]
+
+<div class="gap">
+    <semantic-query
+        query='SELECT DISTINCT ?resource WHERE {
+            BIND(URI(STRBEFORE("[[urlParam "container"]]", "/container")) as ?resource)
+        }'
+        template='{{> template-delete-resource-confirmation}}'
+        no-result-template='[[i18n "confirmDelete" bundle="bso"]] <mp-label iri="[[urlParam "container"]]"></mp-label> [[urlParam "container"]]'>
+        <template id="template-delete-resource-confirmation">
+            <p>[[i18n "confirmDelete" bundle="bso"]]
+                {{#each bindings}}
+                    <semantic-link iri="{{resource.value}}"></semantic-link>
+                {{/each}}
+            </p> 
+        </template>
+    </semantic-query>
+</div>
+<div class="bso-component button-set">
+    <semantic-link
+        iri="[[urlParam "back"]]"
+        urlqueryparam-view="page"
+        type="button"
+        class="btn-secondary btn"
+    >[[i18n "cancel" bundle="bso"]]</semantic-link>
+    <mp-ldp-remove-from-container-action container="[[urlParam "parent"]]" iri="[[urlParam "container"]]">
+        <button type="button" class="btn btn-primary">[[i18n "delete" bundle="bso"]]</button>
+    </mp-ldp-remove-from-container-action>
+</div>
+
+[[/inline]]
+
+[[#*inline "component-resource-in-use"]]
+
+<p>[[i18n "confirmDeletionResourceInUse" bundle="bso"]]</p>
+<p>[[i18n "confirmDeletionListEntities" bundle="bso"]]</p>
+<semantic-table
+    query='SELECT DISTINCT ?entity ?entityGraph ?entityContainer ?entityParentContainer WHERE {
+        {
+            BIND(URI(STRBEFORE("[[urlParam "container"]]", "/container")) as ?resource)
+            BIND(URI(CONCAT("[[urlParam "container"]]", "/context")) as ?resourceGraph)
+            GRAPH ?entityGraph {
+                ?s ?p ?resource .
+            }
+            OPTIONAL {
+                ?entityGraph crm:P67_refers_to ?entity .
+            }
+            FILTER(?entityGraph != ?resourceGraph)
+        } UNION {
+            BIND(URI(STRBEFORE("[[urlParam "container"]]", "/container")) as ?resource)
+            BIND(URI(CONCAT("[[urlParam "container"]]", "/context")) as ?resourceGraph)
+            GRAPH ?entityGraph {
+                ?resource ?p ?o .
+            }
+            OPTIONAL {
+                ?entityGraph crm:P67_refers_to ?entity .
+            }
+            FILTER(?entityGraph != ?resourceGraph)
+        }
+        BIND(URI(STRBEFORE(STR(?entityGraph), "/context")) as ?entityContainer)
+        OPTIONAL {
+            ?entityParentContainer ldp:contains ?entityContainer .
+        }
+    }'
+    options='{
+        "showFilter": false
+    }'
+    column-configuration='[
+    {
+        "variableName": "entity",
+        "displayName": "[[i18n "entity" bundle="bso"]]"
+    },
+    {
+        "variableName": "entityGraph",
+        "displayName": "[[i18n "graph" bundle="bso"]]",
+        "cellTemplate": "<semantic-link iri=\"[[resolvePrefix "Assets:NamedGraph"]]\" urlqueryparam-view=\"graph\" urlqueryparam-graph=\"{{entityGraph.value}}\">[[i18n "view" bundle="bso"]]</semantic-link>"
+    },
+    {
+        "variableName": "entityContainer",
+        "displayName": "[[i18n "delete" bundle="bso"]]",
+        "cellTemplate": "{{> template-delete-container}}"
+    }]'
+>
+    <template id="template-delete-container">
+        {{#if entityParentContainer.value}}
+            <mp-overlay-dialog type="modal" bs-size="large">
+                <mp-overlay-dialog-trigger>
+                    <button type="button" class="btn btn-secondary btn-xs">[[i18n "delete" bundle="bso"]]</button>
+                </mp-overlay-dialog-trigger>
+                <mp-overlay-dialog-content>
+                    <div style="width:800px;height:600px;margin:0 -.5rem 1rem -.5rem;">
+                        <ontodia query='
+                            CONSTRUCT {
+                            ?s ?p ?o
+                            } WHERE {
+                                GRAPH <{{entityGraph.value}}> {
+                                    ?s ?p ?o .
+                                }
+                                FILTER(?p != rdf:type)
+                            }
+                        '>
+                            <ontodia-canvas></ontodia-canvas>
+                        </ontodia>
+                    </div>
+                    <p>[[i18n "confirmDeletionAboveStatements" bundle="bso"]]</p>
+                    <div class="bso-component button-set">
+                        <mp-event-trigger type="Dialog.HideAll">
+                            <button type="button" class="btn btn-secondary btn-xs">[[i18n "cancel" bundle="bso"]]</button>
+                        </mp-event-trigger>
+                        <mp-ldp-remove-from-container-action container="{{entityParentContainer.value}}" iri="{{entityContainer.value}}">
+                            <button type="button" class="btn btn-primary btn-xs">[[i18n "delete" bundle="bso"]]</button>
+                        </mp-ldp-remove-from-container-action>
+                    </div>
+                </mp-overlay-dialog-content>
+            </mp-overlay-dialog>
+        {{/if}}
+    </template>
+</semantic-table>
+
+[[/inline]]
 
 [[> partial:contentFooter]]
 [[> partial:pageFooter]]
