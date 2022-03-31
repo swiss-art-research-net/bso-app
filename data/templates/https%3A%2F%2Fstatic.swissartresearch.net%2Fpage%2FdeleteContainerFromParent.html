@@ -71,18 +71,23 @@
 [[#*inline "component-delete-resource"]]
 
 <div class="gap">
+    [[i18n "confirmDelete" bundle="bso"]] <mp-label iri="[[urlParam "container"]]"></mp-label> [[urlParam "container"]]?
     <semantic-query
-        query='SELECT DISTINCT ?resource WHERE {
-            BIND(URI(STRBEFORE("[[urlParam "container"]]", "/container")) as ?resource)
+        query='SELECT DISTINCT ?subject WHERE {
+            BIND(URI(STRBEFORE("[[urlParam "container"]]", "/container")) as ?subject)
+            GRAPH <[[urlParam "container"]]/context> {
+                ?subject rdfs:label ?label .
+            }
         }'
         template='{{> template-delete-resource-confirmation}}'
-        no-result-template='[[i18n "confirmDelete" bundle="bso"]] <mp-label iri="[[urlParam "container"]]"></mp-label> [[urlParam "container"]]'>
+        no-result-template=''>
         <template id="template-delete-resource-confirmation">
-            <p>[[i18n "confirmDelete" bundle="bso"]]
+            <p>[[i18n "confirmDeleteResourcesContained" bundle="bso"]]:</p>
+            <div class="bso-component card-container">
                 {{#each bindings}}
-                    <semantic-link iri="{{resource.value}}"></semantic-link>
+                    {{> partial:cardObject subject=subject}}
                 {{/each}}
-            </p> 
+            </div>
         </template>
     </semantic-query>
 </div>
