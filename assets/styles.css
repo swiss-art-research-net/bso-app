@@ -490,3 +490,24 @@ ol.page-breadcrumb {
 .show-facet-button.show-facet-button__hide {
   display: none;
 }
+.system-spinner {
+  font-weight: bold;
+  color: #964a4a;
+}
+.system-spinner__icon {
+  vertical-align: middle;
+  animation: fa-spin 2s infinite linear;
+}
+@keyframes fa-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}
+.system-spinner__icon:before {
+  content: '\f1ce';
+  color: #964a4a;
+  font-weight: bold;
+}

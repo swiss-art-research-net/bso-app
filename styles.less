@@ -607,3 +607,28 @@ ol.page-breadcrumb {
  .show-facet-button.show-facet-button__hide {
      display: none;
  }
+
+
+ .system-spinner {
+
+    font-weight: bold;
+    color: @col-brand;
+    
+    &__icon {
+        vertical-align: middle;
+        animation: fa-spin 2s infinite linear;
+        @keyframes fa-spin {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(359deg);
+          }
+        }
+        &:before {
+            content: '\f1ce';
+            color: @col-brand;
+            font-weight: bold;
+        }
+    }
+}
