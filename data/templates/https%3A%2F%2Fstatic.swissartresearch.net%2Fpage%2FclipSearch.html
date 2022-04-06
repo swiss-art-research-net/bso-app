@@ -1,0 +1,52 @@
+[[> partial:pageHeader]]
+
+<bs-row>
+  <bs-col md-offset="1" md="10">
+    <div style="margin-top:4rem;">
+      
+<semantic-search
+
+    limit="100"
+  >
+  <semantic-search-query-keyword
+          query='
+            PREFIX  clip: <https://service.swissartresearch.net/clip/>
+            SELECT ?subject WHERE {
+                SERVICE <http://clip-service:5000/sparql> {
+                  ?request a clip:Request ;
+                    clip:queryString ?__token__ ;
+                    clip:minScore "0.2" ;
+                    clip:score ?score ;
+                    clip:iiifUrl ?subject .
+                } 
+            }'
+  ></semantic-search-query-keyword>
+
+  <semantic-search-result-holder>
+    <semantic-search-result>
+      <div class="bso-component card-container">
+      <semantic-table id='table' query='SELECT * WHERE { 
+        } ORDER BY DESC(?score)'
+        tuple-template='{{> template }}'
+        options='{
+          "showFilter": false
+        }'
+        >
+          <template id="template">
+            <semantic-query
+              query="SELECT ?subject WHERE {
+                BIND(<{{subject.value}}> as ?iiif)
+                ?subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?iiif .
+              } LIMIT 1"
+              template="{{> partial:cardObject subject=bindings.0.subject}}"></semantic-query>
+          </template>
+        </semantic-table>
+        </div>
+    </semantic-search-result>
+  </semantic-search-result-holder>
+</semantic-search>
+    </div>
+  </bs-col>
+</bs-row>
+
+[[> partial:pageFooter]]
