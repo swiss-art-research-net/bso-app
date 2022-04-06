@@ -5,10 +5,9 @@
     <div style="margin-top:4rem;">
       
 <semantic-search
-
-    limit="100"
-  >
-  <semantic-search-query-keyword
+  limit="100"
+>
+  <semantic-search-keyword-prefetch
           query='
             PREFIX  clip: <https://service.swissartresearch.net/clip/>
             SELECT ?subject WHERE {
@@ -20,7 +19,7 @@
                     clip:iiifUrl ?subject .
                 } 
             }'
-  ></semantic-search-query-keyword>
+  ></semantic-search-keyword-prefetch>
 
   <semantic-search-result-holder>
     <semantic-search-result>
