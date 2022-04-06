@@ -124,6 +124,10 @@ ol.page-breadcrumb {
 .QueryBuilder--searchClause {
   background-color: #fff;
 }
+.bso-component.article-text {
+  max-width: 55rem;
+  margin-bottom: 0.5rem;
+}
 .bso-component.button-set .btn {
   margin-right: 0.5rem;
 }
