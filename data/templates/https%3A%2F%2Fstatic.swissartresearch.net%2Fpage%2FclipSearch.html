@@ -42,7 +42,7 @@ limit="100"
                       SERVICE <http://clip-service:5000/sparql> {
                         ?request a clip:Request ;
                           clip:queryString ?__token__ ;
-                          clip:minScore "0.22" ;
+                          clip:minScore "0.2" ;
                           clip:score ?score ;
                           clip:iiifUrl ?subject .
                       } 
@@ -58,14 +58,14 @@ limit="100"
 
       <semantic-search-result-holder>
         <semantic-search-result>
-          <div class="bso-component card-container">
-
           <mp-sparql-result-counts 
             id="search_results_count"
             query="SELECT DISTINCT ?subject {}"
             template='<div>{{#if hasLimit}} <bs-alert variant="warning"> Showing {{numberOfResults}} of {{totalNumberOfResults}} matches. <strong>Please, refine your search.</strong> </bs-alert> {{else}} <p>Found <em>{{numberOfResults}}</em> results</p>{{/if}}</div>'>
           </mp-sparql-result-counts>
           
+          <div class="bso-component card-container">
+              
           <semantic-table id='table' 
             query='SELECT * WHERE { } ORDER BY DESC(?score)'
             current-page="1"
