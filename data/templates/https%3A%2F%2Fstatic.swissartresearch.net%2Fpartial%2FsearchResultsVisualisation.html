@@ -3,7 +3,7 @@
   <div class="bso-component card-container">
     <semantic-table
       id="grid-result"
-      query="SELECT DISTINCT ?subject ?date WHERE {
+      query="SELECT DISTINCT ?subject ?date ?type WHERE {
         OPTIONAL {
           ?subject skos:prefLabel ?label .
         }

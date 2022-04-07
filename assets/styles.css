@@ -143,6 +143,7 @@ ol.page-breadcrumb {
 .bso-component.card.mode-crop {
   height: 16rem;
   min-width: 20rem;
+  width: 20rem;
 }
 .bso-component.card.mode-crop .card-image {
   height: 12rem;
