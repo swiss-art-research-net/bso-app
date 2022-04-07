@@ -183,13 +183,33 @@ ol.page-breadcrumb {
         transition: box-shadow 0.5s;
         box-shadow: rgba(0,0,0,0.07) 0px 2px 10px;
         margin-left: 1rem;
-        min-width: 20rem;
-        width: 18rem;
-        height: 16rem;
         position: relative;
 
         &:hover {
             box-shadow: rgba(0,0,0,0.1) 0px 5px 10px;
+        }
+
+        &.mode-crop {
+            height: 16rem;
+            min-width: 20rem;
+            .card-image {
+                height: 12rem;
+                width:100%;
+            }
+        }
+
+        &.mode-fullImage {
+            min-width: 7rem;
+            .card-body {
+                max-width: 20rem;
+            }
+            .card-image {
+                img.resource-thumbnail {
+                    min-height: 7rem;
+                    max-height: 15rem;
+                    margin: auto;
+                }
+            }
         }
 
         a {
@@ -207,10 +227,6 @@ ol.page-breadcrumb {
             background-color: @col-bg-pale;
             display: flex;
             overflow: hidden;
-            height: 12rem;
-            img {
-                width: 100%;
-            }
             .icon {
                 opacity: .5;
                 text-align: center;
@@ -602,6 +618,10 @@ ol.page-breadcrumb {
   }
   
  // Overrides
+
+ .DataTable--table-grid-layout {
+     align-items: initial;
+ }
 
  .mirador-btn.mirador-icon-metadata-view, .mirador-btn.mirador-icon-window-menu {
      // Hide mirador buttons because information it contains is hardcoded
