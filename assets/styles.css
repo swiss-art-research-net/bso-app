@@ -149,6 +149,9 @@ ol.page-breadcrumb {
   height: 12rem;
   width: 100%;
 }
+.bso-component.card.mode-crop .card-image img {
+  max-width: 100%;
+}
 .bso-component.card.mode-fullImage {
   min-width: 7rem;
 }
