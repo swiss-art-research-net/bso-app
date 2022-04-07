@@ -9,27 +9,25 @@ limit="100"
       <bs-row>
         <bs-col sm="12">
           <h3>[[i18n "searchAI" bundle="bso"]]</h3>
-          <p>
-            <mp-text-truncate lines="1" expand="{{> expand}}" collapse="{{> collapse}}">
-              <template id="expand"><p style="color: gray;"><a>Read more</a></p></template>
-              <template id="collapse"><span style="color: gray;">(<a>show less</a>)</span></template>
-              <p class="bso-component article-text">
-                Enter a description for an image and the system will try to find an image in the BSO collection that matches the description.<br>
-              </p>
-              <p class="bso-component article-text">
-                This search uses <a href="https://github.com/openai/CLIP">CLIP</a>, an artificial neural network trained on a very large collection of images and their captions. 
-                Using CLIP, it is possible to calculate the similarity between a text and images. The search returns the images from the collection that match the entered text most closely.
-              </p>
-              <p class="bso-component article-text">
-                The search always returns results, even when the collection does not contain any image that closely matches the search text.
-                Therefore the search will work better for things that actually appear in the collection (e.g. 'a mountain', 'a group of people', 'sailboats on a lake')
-                than for things that are unlikely to be present (e.g. 'a spaceship', 'brutalist architecture').
-              </p>
-              <p class="bso-component article-text">
-                As CLIP has been trained on english captions, the search will work better for english text than for other languages.
-              </p>
-            </mp-text-truncate>
-          </p>
+          <mp-text-truncate lines="1" expand="{{> expand}}" collapse="{{> collapse}}">
+            <template id="expand"><p style="color: gray;"><a>Read more</a></p></template>
+            <template id="collapse"><span style="color: gray;">(<a>show less</a>)</span></template>
+            <p class="bso-component article-text">
+              Enter a description for an image and the system will try to find an image in the BSO collection that matches the description.<br>
+            </p>
+            <p class="bso-component article-text">
+              This search uses <a href="https://github.com/openai/CLIP">CLIP</a>, an artificial neural network trained on a very large collection of images and their captions. 
+              Using CLIP, it is possible to calculate the similarity between a text and images. The search returns the images from the collection that match the entered text most closely.
+            </p>
+            <p class="bso-component article-text">
+              The search always returns results, even when the collection does not contain any image that closely matches the search text.
+              Therefore the search will work better for things that actually appear in the collection (e.g. 'a mountain', 'a group of people', 'sailboats on a lake')
+              than for things that are unlikely to be present (e.g. 'a spaceship', 'brutalist architecture').
+            </p>
+            <p class="bso-component article-text">
+              As CLIP has been trained on english captions, the search will work better for english text than for other languages.
+            </p>
+          </mp-text-truncate>
           <bs-row>
             <bs-col sm="12" md="1">
               <span class="bso-component label">[[i18n "search" bundle="bso"]]</span>
