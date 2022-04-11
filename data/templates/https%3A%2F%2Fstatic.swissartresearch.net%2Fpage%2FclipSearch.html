@@ -1,9 +1,6 @@
 [[> partial:pageHeader]]
+[[#> partial:baseSearch separator="True"]]
 
-  
-<semantic-search
-limit="100"
->
   <div class="bso-component main">
     <div class="bso-component panel">
       <bs-row>
@@ -34,60 +31,19 @@ limit="100"
               <span class="bso-component label">[[i18n "search" bundle="bso"]]</span>
             </bs-col>
             <bs-col sm="12" md="11">
-              <semantic-search-keyword-prefetch
-                query='
-                  PREFIX  clip: <https://service.swissartresearch.net/clip/>
-                  SELECT * WHERE {
-                      SERVICE <http://clip-service:5000/sparql> {
-                        ?request a clip:Request ;
-                          clip:queryString ?__token__ ;
-                          clip:minScore "0.2" ;
-                          clip:score ?score ;
-                          clip:iiifUrl ?subject .
-                      } 
-                  }'
-              ></semantic-search-keyword-prefetch>
+            <semantic-search-keyword-prefetch
+                domain='<https://platform.swissartresearch.net/search/Entity>'
+                query='{
+                  "type": "lookup",
+                  "limit": 20,
+                  "lookupServiceName": "clip-lookup"
+                }'>
+              </semantic-search-keyword-prefetch>
             </bs-col>
           </bs-row>
         </bs-col>
       </bs-row>
     </div>
-
-    <div class="bso-component panel dark separator">
-
-      <semantic-search-result-holder>
-        <semantic-search-result>
-          <mp-sparql-result-counts 
-            id="search_results_count"
-            query="SELECT DISTINCT ?subject {}"
-            template='<div>{{#if hasLimit}} <bs-alert variant="warning"> Showing {{numberOfResults}} of {{totalNumberOfResults}} matches. <strong>Please, refine your search.</strong> </bs-alert> {{else}} <p>Found <em>{{numberOfResults}}</em> results</p>{{/if}}</div>'>
-          </mp-sparql-result-counts>
-          
-          <div class="bso-component card-container">
-              
-          <semantic-table id='table' 
-            query='SELECT * WHERE { } ORDER BY DESC(?score)'
-            current-page="1"
-            prefetch-labels="false"
-            tuple-template='{{> template }}'
-            options='{
-              "showFilter": false,
-              "pageSizeSelection": true
-            }'
-            >
-              <template id="template">
-                <semantic-query
-                  query="SELECT ?subject WHERE {
-                    BIND(<{{subject.value}}> as ?iiif)
-                    ?subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?iiif .
-                  } LIMIT 1"
-                  template="{{> partial:cardObject mode='fullImage' subject=bindings.0.subject}}"></semantic-query>
-              </template>
-            </semantic-table>
-            </div>
-        </semantic-search-result>
-      </semantic-search-result-holder>
-
-    </div>
   </div>
-</semantic-search>
+
+[[/ partial:baseSearch]]
