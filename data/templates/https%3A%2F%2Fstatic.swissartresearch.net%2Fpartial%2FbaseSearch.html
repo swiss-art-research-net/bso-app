@@ -163,11 +163,7 @@
         "kind": "resource",
         "queryPattern": "{
             ?subject crm:P128_carries?/crm:P138_represents ?__value__ .
-            FILTER NOT EXISTS {
-              GRAPH <https://resource.swissartresearch.net/graph/smapshot> {
-                  ?__value__ a crm:E53_Place .
-              }
-            }
+            ?__value__ a/rdfs:subClassOf search:Entity .
           }"
       }],
       "<https://platform.swissartresearch.net/Entity_depicted_together_with_Entity>": [{
@@ -232,6 +228,7 @@
       <bs-col md="3" sm="12">
         <semantic-search-facet
           open-by-default="true"
+          facet-values-threshold="1000"
           value-relations='{
             "<https://platform.swissartresearch.net/Thing_from_Time>": {
               "kind": "date-range",
