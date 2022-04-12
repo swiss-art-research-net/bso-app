@@ -66,6 +66,7 @@
                   <semantic-map
                       id="map-result"
                       query="SELECT DISTINCT ?subject ?wkt WHERE {
+                          hint:Query hint:optimizer 'Runtime' .
                           {
                               ?subject a search:Place ;
                                   crmdig:L54_is_same-as/wdt:P625 ?wkt .
