@@ -22,6 +22,7 @@
   lookup:configuration [
       lookup:type "metaphacts:sparqlLookup";
       lookup:targetRepository "default";
+      lookup:cacheConfig "maximumSize=100000,expireAfterAccess=30d";
       lookup:datasetQuery """
         SELECT DISTINCT ?candidate ?dataset ?datasetLabel WHERE {
          	GRAPH ?dataset {

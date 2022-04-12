@@ -4,6 +4,7 @@
     <semantic-table
       id="grid-result"
       query="SELECT DISTINCT ?subject ?date ?type WHERE {
+        hint:Query hint:optimizer 'Runtime' .
         OPTIONAL {
           ?subject skos:prefLabel ?label .
         }
