@@ -689,6 +689,8 @@
                             <h3>[[i18n "similarEntities" bundle="bso"]]</h3>
                         </summary>
 
+                        
+                        [[#if (hasPermission "api:ldp:*")]]
                         <semantic-query
                             query="SELECT ?image WHERE {
                                 [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
@@ -702,6 +704,7 @@
                                 ><a class="btn btn-primary">Custom Search</a></semantic-link>
                             </template>
                         </semantic-query>
+                        [[/if]]
 
                         [[#> objectsTable condition='?classification crm:P140_assigned_attribute_to/^crm:P1_is_identified_by/^crm:P128_carries $subject ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> .' label='byTitle' ]]
 
