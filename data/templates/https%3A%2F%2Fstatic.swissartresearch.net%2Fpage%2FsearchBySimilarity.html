@@ -21,7 +21,7 @@
               }
               ?iiif ^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries ?candidate .
               }'
-              tuple-template="{{> partial:cardObject subject=candidate}}"
+              tuple-template="{{> partial:cardObject subject=candidate mode='fullImage'}}"
               no-result-template="Nothing found"
             ></semantic-table
         [[/if]]
