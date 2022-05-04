@@ -100,6 +100,12 @@
         "label": "[[i18n "actedAs" bundle="bso"]]"
       },
       {
+        "iri": "<https://platform.swissartresearch.net/Person_has_Gender>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Entity>",
+        "hasRange": "<https://platform.swissartresearch.net/search/Type>",
+        "label": "[[i18n "hasGender" bundle="bso"]]"
+      },
+      {
         "iri": "<https://platform.swissartresearch.net/Entity_has_no_smapshot_identifier>",
         "hasDomain": "<https://platform.swissartresearch.net/search/Entity>",
         "hasRange": "<https://platform.swissartresearch.net/search/Type>",
@@ -215,6 +221,12 @@
         "queryPattern": "{
             ?creation crm:P14_carried_out_by ?subject ;
               crm:P2_has_type ?__value__ .
+        }"
+      }],
+      "<https://platform.swissartresearch.net/Person_has_Gender>": [{
+        "kind": "resource",
+        "queryPattern": "{
+            ?subject crmdig:L54_is_same-as/gndo:gender ?__value__ .
         }"
       }]
     }'
