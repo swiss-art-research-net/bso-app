@@ -31,3 +31,4 @@ iqvoc=https://iqvoc.swissartresearch.net/
 smapshotapi=https://smapshot.heig-vd.ch/api/v1/
 rds=http://schema.swissartresearch.net/ontology/rds#
 clip=https://service.swissartresearch.net/clip/
+hint=http://www.bigdata.com/queryHints#
