@@ -689,19 +689,6 @@
                             <h3>[[i18n "similarEntities" bundle="bso"]]</h3>
                         </summary>
 
-                        <semantic-query
-                            query="SELECT ?image WHERE {
-                                [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
-                            } LIMIT 1"
-                            template="{{> imageSearchTemplate}}"
-                        >
-                            <template id="imageSearchTemplate">
-                                <semantic-link
-                                    iri="page:testImageRegionSelection"
-                                    urlqueryparam-imageiri="{{bindings.0.image.value}}"
-                                ><a class="btn btn-primary">Custom Search</a></semantic-link>
-                            </template>
-                        </semantic-query>
 
                         [[#> objectsTable condition='?classification crm:P140_assigned_attribute_to/^crm:P1_is_identified_by/^crm:P128_carries $subject ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> .' label='byTitle' ]]
 
@@ -979,6 +966,21 @@
                     {{/each}}
                 </template>
             </semantic-query>
+
+            <semantic-query
+                query="SELECT ?image WHERE {
+                    [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
+                } LIMIT 1"
+                template="{{> imageSearchTemplate}}"
+            >
+                <template id="imageSearchTemplate">
+                    <semantic-link
+                        iri="page:testImageRegionSelection"
+                        urlqueryparam-imageiri="{{bindings.0.image.value}}"
+                    ><a class="btn btn-primary">Similarity Search</a></semantic-link>
+                </template>
+            </semantic-query>
+            
         </div>
     </div>
 [[/inline]]

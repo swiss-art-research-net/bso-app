@@ -6,29 +6,24 @@
       <bs-col sm="12">
         [[#if (urlParam "url")]]
           <img src="[[urlParam "url"]]" style="max-height:300px" />
-          <semantic-context repository="pastec">
-
             <semantic-table
-              query='PREFIX pastec: <http://service.swissartresearch.net/pastec/> 
-              SELECT ?candidate ?entity WHERE 
-              { 
-                  <[[urlParam "url"]]> a pastec:Image ;
-                      pastec:hasSimilarImage ?candidate ;
-                      pastec:hasSimilarEntity ?entity .
+              query='SELECT ?candidate ?score WHERE {
+                {
+                  SELECT ?iiif ?score_private WHERE {
+                      SERVICE <http://clip-service:5000/sparql> {
+                        ?request a clip:Request ;
+                            clip:queryURL <[[urlParam "url"]]> ;
+                            clip:minScore "0.2" ;
+                            clip:score ?score ;
+                            clip:iiifUrl ?iiif .
+                      }
+                  } LIMIT 100
+              }
+              ?iiif ^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries ?candidate .
               }'
-              column-configuration='[
-                {
-                  "variableName": "entity"
-                },
-                {
-                  "variableName": "entity",
-                  "cellTemplate": "<mp-resource-thumbnail iri=\"{{entity.value}}\"></mp-resource-thumbnail>"
-                }
-              ]'
+              tuple-template="{{> partial:cardObject subject=candidate mode='fullImage'}}"
               no-result-template="Nothing found"
-            ></semantic-table>
-
-          </semantic-context>
+            ></semantic-table
         [[/if]]
       </bs-col>
     </bs-row>
