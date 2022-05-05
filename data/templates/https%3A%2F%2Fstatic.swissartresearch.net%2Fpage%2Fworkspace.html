@@ -17,155 +17,167 @@
   <bs-tab event-key="visual
   Similarities" title="[[i18n "visualSimilarities" bundle="bso" ]]">
 
-    <mp-event-trigger type="Component.Refresh" targets='["edit-cell"]'>
-      <a>Refresh</a>
-    </mp-event-trigger>
+    [[> module-visual-similarities]]
 
-    <mp-selection-group>
-      <div>
-        <mp-selection-action-choice id='demo' selection='demo' title='With selected ...'>
-          <!-- Possible actions -->
-          <mp-create-set-action></mp-create-set-action>
-
-        </mp-selection-action-choice>
-        <semantic-table query="SELECT ?subject ?image ?crop ?ratio ?num_classification WHERE {
-            {
-                SELECT DISTINCT ?image ?subject (COUNT(?classification) as ?num_classification) WHERE {
-                    ?subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
-                    ?classification crm:P140_assigned_attribute_to ?image ;
-                        crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> .
-                } 
-                GROUP BY ?image ?subject
-            }
-            ?region crmdig:L49_is_primary_area_of ?image ;
-              rso:boundingBox ?boundingBox ;
-              crm:P2_has_type <https://resource.swissartresearch.net/type/imageRegion> ;
-              crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-segmentation> .
-            FILTER(?num_classification > 4)  
-            BIND(REPLACE(?boundingBox, 'xywh=', '') AS ?crop)
-            BIND(REPLACE(?boundingBox, 'xywh=\\d*,\\d*,', '') as ?wh)
-            BIND(xsd:float(STRBEFORE(?wh, ',')) as ?width)
-            BIND(xsd:float(STRAFTER(?wh, ',')) as ?height)
-            BIND(?width/?height as ?ratio)
-
-            
-        } ORDER BY DESC(?num_classification) ?subject" column-configuration='[
-          {
-            "variableName": "subject",
-            "displayName": "Subject",
-            "cellTemplate": "{{> subjectTemplate}}"
-          }, 
-          {"displayName": " ", "cellTemplate": "{{> editCell}}"},
-          {"displayName": "Entity", "variableName": "subject"},
-          {"displayName": "Image", "variableName": "image"},
-          {"displayName": "Region ratio", "variableName": "ratio", "showFilter": true, "filterType": "number"},
-          {"displayName": "Number of Classifications", "variableName": "num_classification", "showFilter": true, "filterType": "number"}  
-        ]' options='{
-          "showFilter":false
-        }' number-of-displayed-rows=20>
-          <template id='subjectTemplate'>
-            <div>
-              <mp-selection-toggle selection='demo' tag='{{subject.value}}'></mp-selection-toggle>
-            </div>
-          </template>
-          <template id="editCell">
-
-            <mp-overlay-dialog title="Image Viewer" type="modal" bs-size="xl">
-              <mp-overlay-dialog-trigger><button>
-                  <mp-event-target-refresh id="edit-cell">
-                    <img src="{{image.value}}/{{crop.value}}/300,/0/default.jpg">
-                  </mp-event-target-refresh>
-                </button></mp-overlay-dialog-trigger>
-              <mp-overlay-dialog-content id="image-modal">
-                <mp-page-loader iri="[[ resolvePrefix 'page:viewImage']]" urlqueryparam-imageiri="{{image.value}}"
-                  urlqueryparam-overlay="true"></mp-page-loader>
-              </mp-overlay-dialog-content>
-            </mp-overlay-dialog>
-          </template>
-        </semantic-table>
-      </div>
-    </mp-selection-group>
   </bs-tab>
   <bs-tab event-key="preferredLabels" title="[[i18n "preferredLabels" bundle="bso" ]]">
 
-    <semantic-table options='{
-        "showColumnFilters": "True"
-      }' query='SELECT ?subject ?type (GROUP_CONCAT(?label; SEPARATOR=" / ") as ?labels) (COUNT(DISTINCT ?label) as ?num_labels) ?pref_label WHERE {
-        ?subject a ?type ;
-          rdfs:label|(crmdig:L54_is_same-as/gndo:preferredName) ?label .
-        OPTIONAL {
-          ?subject skos:prefLabel ?pref_label .
-        }
-        VALUES (?type) {
-          (search:Person)
-          (search:Place)
-          (search:Type)
-        }
-      } GROUP BY ?subject ?type ?pref_label
-      ORDER BY DESC(?num_labels)' column-configuration='[
-        {"displayName": "Entity", "variableName": "subject", "showFilter": false, "filterType": "multiselect"},
-        {"displayName": "Type", "variableName": "type", "showFilter": true},
-        {"displayName": "Number of Labels", "variableName": "num_labels", "showFilter": true},
-        {"displayName": "Preferred Label", "cellTemplate": "{{> currentLabel}}"},
-        {"displayName": "Edit", "cellTemplate": "{{> editForm}}"}
-      ]'>
-      <template id="currentLabel">
-        <mp-event-proxy on-event-source="form-preflabel-{{subject.value}}" proxy-event-type="Component.Refresh"
-          proxy-targets='["form-updated-{{subject.value}}"]' data='{"id": "xy"}'>
-        </mp-event-proxy>
+    [[> module-preferred-labels]]
 
-        <mp-event-target-refresh id="form-updated-{{subject.value}}">
-          <semantic-query query="SELECT ?value WHERE {
-            GRAPH sari:prefLabels {
-              BIND(<{{subject.value}}> as $subject)
-              $subject skos:prefLabel ?value .
-            }
-          }"></semantic-query>
-        </mp-event-target-refresh>
-      </template>
-      <template id="editForm">
-        <div style="min-width:20rem">
-          <semantic-form id='form-preflabel-{{subject.value}}' persistence='sparql' post-action='event'
-            subject='{{subject.value}}' fields='[
-              {
-                "id": "inline_prefLabel",
-                "label": "Preferred Label",
-                "xsdDatatype": "xsd:string",
-                "maxOccurs": "1",
-                "selectPattern": "SELECT ?value WHERE {
-                  GRAPH sari:prefLabels {
-                    $subject skos:prefLabel ?value .
-                  }
-                }",
-                "insertPattern": "INSERT {
-                    GRAPH sari:prefLabels {
-                      $subject skos:prefLabel $value .
-                    }
-                  } WHERE {}",
-                "deletePattern": "DELETE { 
-                    GRAPH sari:prefLabels {
-                      $subject skos:prefLabel $value .
-                    }
-                  } WHERE { 
-                    GRAPH sari:prefLabels {
-                      $subject skos:prefLabel $value  .
-                    }
-                  }",
-                "valueSetPattern": "SELECT DISTINCT ?value WHERE {
-                  BIND(<{{subject.value}}> as $subject)
-                  $subject rdfs:label|(crmdig:L54_is_same-as/gndo:preferredName) ?value .
-                }"
-              }]'>
-            <semantic-form-select-input for="inline_prefLabel"></semantic-form-select-input>
-            <button name="submit" class="btn btn-primary btn-xs">[[i18n "save" bundle="bso"]]</button>
-            <button name="reset" class="btn btn-secondary btn-xs">[[i18n "reset" bundle="bso"]]</button>
-          </semantic-form>
-        </div>
-      </template>
-    </semantic-table>
   </bs-tab>
 </bs-tabs>
 
 
 [[> partial:contentFooter]]
 [[> partial:pageFooter]]
+
+[[#*inline "module-preferred-labels"]]
+
+<semantic-table options='{
+  "showColumnFilters": "True"
+}' query='SELECT ?subject ?type (GROUP_CONCAT(?label; SEPARATOR=" / ") as ?labels) (COUNT(DISTINCT ?label) as ?num_labels) ?pref_label WHERE {
+  ?subject a ?type ;
+    rdfs:label|(crmdig:L54_is_same-as/gndo:preferredName) ?label .
+  OPTIONAL {
+    ?subject skos:prefLabel ?pref_label .
+  }
+  VALUES (?type) {
+    (search:Person)
+    (search:Place)
+    (search:Type)
+  }
+} GROUP BY ?subject ?type ?pref_label
+ORDER BY DESC(?num_labels)' column-configuration='[
+  {"displayName": "Entity", "variableName": "subject", "showFilter": false, "filterType": "multiselect"},
+  {"displayName": "Type", "variableName": "type", "showFilter": true},
+  {"displayName": "Number of Labels", "variableName": "num_labels", "showFilter": true},
+  {"displayName": "Preferred Label", "cellTemplate": "{{> currentLabel}}"},
+  {"displayName": "Edit", "cellTemplate": "{{> editForm}}"}
+]'>
+<template id="currentLabel">
+  <mp-event-proxy on-event-source="form-preflabel-{{subject.value}}" proxy-event-type="Component.Refresh"
+    proxy-targets='["form-updated-{{subject.value}}"]' data='{"id": "xy"}'>
+  </mp-event-proxy>
+
+  <mp-event-target-refresh id="form-updated-{{subject.value}}">
+    <semantic-query query="SELECT ?value WHERE {
+      GRAPH sari:prefLabels {
+        BIND(<{{subject.value}}> as $subject)
+        $subject skos:prefLabel ?value .
+      }
+    }"></semantic-query>
+  </mp-event-target-refresh>
+</template>
+<template id="editForm">
+  <div style="min-width:20rem">
+    <semantic-form id='form-preflabel-{{subject.value}}' persistence='sparql' post-action='event'
+      subject='{{subject.value}}' fields='[
+        {
+          "id": "inline_prefLabel",
+          "label": "Preferred Label",
+          "xsdDatatype": "xsd:string",
+          "maxOccurs": "1",
+          "selectPattern": "SELECT ?value WHERE {
+            GRAPH sari:prefLabels {
+              $subject skos:prefLabel ?value .
+            }
+          }",
+          "insertPattern": "INSERT {
+              GRAPH sari:prefLabels {
+                $subject skos:prefLabel $value .
+              }
+            } WHERE {}",
+          "deletePattern": "DELETE { 
+              GRAPH sari:prefLabels {
+                $subject skos:prefLabel $value .
+              }
+            } WHERE { 
+              GRAPH sari:prefLabels {
+                $subject skos:prefLabel $value  .
+              }
+            }",
+          "valueSetPattern": "SELECT DISTINCT ?value WHERE {
+            BIND(<{{subject.value}}> as $subject)
+            $subject rdfs:label|(crmdig:L54_is_same-as/gndo:preferredName) ?value .
+          }"
+        }]'>
+      <semantic-form-select-input for="inline_prefLabel"></semantic-form-select-input>
+      <button name="submit" class="btn btn-primary btn-xs">[[i18n "save" bundle="bso"]]</button>
+      <button name="reset" class="btn btn-secondary btn-xs">[[i18n "reset" bundle="bso"]]</button>
+    </semantic-form>
+  </div>
+</template>
+</semantic-table>
+[[/inline]]
+
+[[#*inline "module-visual-similarities"]]
+
+<mp-event-trigger type="Component.Refresh" targets='["edit-cell"]'>
+  <a>Refresh</a>
+</mp-event-trigger>
+
+<mp-selection-group>
+  <div>
+    <mp-selection-action-choice id='demo' selection='demo' title='With selected ...'>
+      <!-- Possible actions -->
+      <mp-create-set-action></mp-create-set-action>
+
+    </mp-selection-action-choice>
+    <semantic-table query="SELECT ?subject ?image ?crop ?ratio ?num_classification WHERE {
+        {
+            SELECT DISTINCT ?image ?subject (COUNT(?classification) as ?num_classification) WHERE {
+                ?subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
+                ?classification crm:P140_assigned_attribute_to ?image ;
+                    crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> .
+            } 
+            GROUP BY ?image ?subject
+        }
+        ?region crmdig:L49_is_primary_area_of ?image ;
+          rso:boundingBox ?boundingBox ;
+          crm:P2_has_type <https://resource.swissartresearch.net/type/imageRegion> ;
+          crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-segmentation> .
+        FILTER(?num_classification > 4)  
+        BIND(REPLACE(?boundingBox, 'xywh=', '') AS ?crop)
+        BIND(REPLACE(?boundingBox, 'xywh=\\d*,\\d*,', '') as ?wh)
+        BIND(xsd:float(STRBEFORE(?wh, ',')) as ?width)
+        BIND(xsd:float(STRAFTER(?wh, ',')) as ?height)
+        BIND(?width/?height as ?ratio)
+
+        
+    } ORDER BY DESC(?num_classification) ?subject" column-configuration='[
+      {
+        "variableName": "subject",
+        "displayName": "Subject",
+        "cellTemplate": "{{> subjectTemplate}}"
+      }, 
+      {"displayName": " ", "cellTemplate": "{{> editCell}}"},
+      {"displayName": "Entity", "variableName": "subject"},
+      {"displayName": "Image", "variableName": "image"},
+      {"displayName": "Region ratio", "variableName": "ratio", "showFilter": true, "filterType": "number"},
+      {"displayName": "Number of Classifications", "variableName": "num_classification", "showFilter": true, "filterType": "number"}  
+    ]' options='{
+      "showFilter":false
+    }' number-of-displayed-rows=20>
+      <template id='subjectTemplate'>
+        <div>
+          <mp-selection-toggle selection='demo' tag='{{subject.value}}'></mp-selection-toggle>
+        </div>
+      </template>
+      <template id="editCell">
+
+        <mp-overlay-dialog title="Image Viewer" type="modal" bs-size="xl">
+          <mp-overlay-dialog-trigger><button>
+              <mp-event-target-refresh id="edit-cell">
+                <img src="{{image.value}}/{{crop.value}}/300,/0/default.jpg">
+              </mp-event-target-refresh>
+            </button></mp-overlay-dialog-trigger>
+          <mp-overlay-dialog-content id="image-modal">
+            <mp-page-loader iri="[[ resolvePrefix 'page:viewImage']]" urlqueryparam-imageiri="{{image.value}}"
+              urlqueryparam-overlay="true"></mp-page-loader>
+          </mp-overlay-dialog-content>
+        </mp-overlay-dialog>
+      </template>
+    </semantic-table>
+  </div>
+</mp-selection-group>
+[[/inline]]
