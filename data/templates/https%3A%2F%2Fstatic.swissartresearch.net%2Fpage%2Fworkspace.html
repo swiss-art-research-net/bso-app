@@ -14,8 +14,13 @@
 <h2 class="gap">[[i18n "workspace" bundle="bso"]]</h2>
 
 <bs-tabs>
-  <bs-tab event-key="visual
-  Similarities" title="[[i18n "visualSimilarities" bundle="bso" ]]">
+  <bs-tab event-key="collaboratorNetworks" title="[[i18n "collaboratorNetworks" bundle="bso"]]">
+
+    [[> module-collaborator-networks]]
+
+  </bs-tab>
+  
+  <bs-tab event-key="visualSimilarities" title="[[i18n "visualSimilarities" bundle="bso" ]]">
 
     [[> module-visual-similarities]]
 
@@ -30,6 +35,74 @@
 
 [[> partial:contentFooter]]
 [[> partial:pageFooter]]
+
+[[#*inline "module-collaborator-networks"]]
+
+<semantic-search>
+  <semantic-search-query-constant
+    query="SELECT DISTINCT ?subject  WHERE {
+        BIND(<https://resource.swissartresearch.net/type/439E0621-F21B-3B87-A6A4-4ECC88F2E36D> as ?type_zeichner)
+        ?subject a search:Person .
+        FILTER EXISTS {
+            ?any_event crm:P14_carried_out_by ?subject ;
+                   crm:P2_has_type ?type_zeichner .
+        }
+    }">
+  </semantic-search-query-constant>
+  <semantic-search-result-holder>
+    <semantic-search-result>
+      <semantic-table id="network-result"
+        query="SELECT DISTINCT ?subject ?collaborator WHERE {
+          ?object crm:P128_carries/crm:P94i_was_created_by ?event.
+          ?event crm:P14_carried_out_by ?subject .
+          {
+              ?object crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by ?collaborator .
+          } UNION {
+              ?object crm:P108i_was_produced_by/crm:P14_carried_out_by ?collaborator
+          }
+          FILTER(?subject != ?collaborator)
+        }"
+        options='{
+          "enableGrouping": true,
+          "groupingOptions": {"groupedBy": ["subject"]}
+        }'
+        column-configuration='[{
+            "variableName": "subject",
+            "displayName": "main"
+          },
+          {
+            "variableName": "collaborator",
+            "displayName": "collaborator"
+          }
+        ]'
+      ></semantic-table>
+      <semantic-graph id="network-graph"
+          height="600px"
+        query='CONSTRUCT {
+          ?s ?p ?o
+        } WHERE {
+          ?object crm:P128_carries/crm:P94i_was_created_by ?event.
+          ?event crm:P14_carried_out_by ?subject .
+          {
+              ?object crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by ?collaborator .
+          } UNION {
+              ?object crm:P108i_was_produced_by/crm:P14_carried_out_by ?collaborator
+          }
+          FILTER(?subject != ?collaborator)
+
+          BIND(?subject as ?s)
+          BIND(?collaborator as ?o)
+          BIND(search:collaboratesWith as ?p)
+        } LIMIT 100'
+      >
+        <semantic-graph-layout-cose-bilkent ideal-edge-length=50></semantic-graph-layout-cose-bilkent>
+        <semantic-graph-extension-navigator style="height: 150px; width: 150px;"></semantic-graph-extension-navigator>
+        <semantic-graph-extension-panzoom pan-indicator-min-opacity=0.1></semantic-graph-extension-panzoom>
+      </semantic-graph>
+  </semantic-search-result-holder>
+</semantic-search>
+
+[[/inline]]
 
 [[#*inline "module-preferred-labels"]]
 
