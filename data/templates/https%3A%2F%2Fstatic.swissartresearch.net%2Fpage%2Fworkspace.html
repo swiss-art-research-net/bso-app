@@ -38,19 +38,51 @@
 
 [[#*inline "module-collaborator-networks"]]
 
-<semantic-search>
-  <semantic-search-query-constant
-    query="SELECT DISTINCT ?subject  WHERE {
-        BIND(<https://resource.swissartresearch.net/type/439E0621-F21B-3B87-A6A4-4ECC88F2E36D> as ?type_zeichner)
-        ?subject a search:Person .
-        FILTER EXISTS {
-            ?any_event crm:P14_carried_out_by ?subject ;
-                   crm:P2_has_type ?type_zeichner .
+<semantic-search
+    limit="1000"
+    optimizer="blazegraph"
+    search-profile='{
+      "categories": [
+        {"iri": "<https://platform.swissartresearch.net/search/Person>", "label": "Person", "thumbnail": "../images/fcs/actors.svg"},
+        {"iri": "<https://platform.swissartresearch.net/search/Type>", "label": "Concept", "thumbnail": "../images/fcs/concepts.svg"},
+        {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E55_Type>", "label": "Type", "thumbnail": "../images/fcs/concepts.svg"}
+
+      ],
+      "relations": [
+        {
+          "iri": "<https://platform.swissartresearch.net/Person_acted_as_Type>",
+          "hasDomain": "<https://platform.swissartresearch.net/search/Person>",
+          "hasRange": "<https://platform.swissartresearch.net/search/Type>",
+          "label": "[[i18n "actedAs" bundle="bso"]]"
         }
+      ]
+    }'
+    relations='{
+      "<https://platform.swissartresearch.net/Person_acted_as_Type>": [{
+        "kind": "resource",
+        "queryPattern": "{
+            ?creation crm:P14_carried_out_by ?subject ;
+              crm:P2_has_type ?__value__ .
+        }"
+      }]
+    }'
+  >
+  <semantic-search-query-constant
+    domain="<https://platform.swissartresearch.net/search/Person>"
+    query="SELECT DISTINCT ?subject  WHERE {
+        ?subject a search:Person .
     }">
   </semantic-search-query-constant>
+  <semantic-search-facet
+    open-by-default="true"
+    facet-values-threshold="1000"></semantic-search-facet>
   <semantic-search-result-holder>
     <semantic-search-result>
+      <mp-sparql-result-counts 
+        id="search_results_count"
+        query="SELECT DISTINCT ?subject {}"
+        template='<div>{{#if hasLimit}} <bs-alert variant="warning"> Showing {{numberOfResults}} of {{totalNumberOfResults}} matches. <strong>Please, refine your search.</strong> </bs-alert> {{else}} <p>Found <em>{{numberOfResults}}</em> results</p>{{/if}}</div>'>
+      </mp-sparql-result-counts>
       <semantic-table id="network-result"
         query="SELECT DISTINCT ?subject ?collaborator WHERE {
           ?object crm:P128_carries/crm:P94i_was_created_by ?event.
@@ -61,7 +93,9 @@
               ?object crm:P108i_was_produced_by/crm:P14_carried_out_by ?collaborator
           }
           FILTER(?subject != ?collaborator)
-        }"
+        }
+        GROUP BY ?subject ?collaborator 
+        ORDER BY ?subject ?collaborator"
         options='{
           "enableGrouping": true,
           "groupingOptions": {"groupedBy": ["subject"]}
@@ -72,11 +106,13 @@
           },
           {
             "variableName": "collaborator",
-            "displayName": "collaborator"
+            "displayName": "collaborators",
+            "aggregation": "count",
+            "aggregationCellTemplate": "{{value}}"
           }
         ]'
       ></semantic-table>
-      <semantic-graph id="network-graph"
+      <!-- <semantic-graph id="network-graph"
           height="600px"
         query='CONSTRUCT {
           ?s ?p ?o
@@ -93,12 +129,12 @@
           BIND(?subject as ?s)
           BIND(?collaborator as ?o)
           BIND(search:collaboratesWith as ?p)
-        } LIMIT 100'
+        }'
       >
         <semantic-graph-layout-cose-bilkent ideal-edge-length=50></semantic-graph-layout-cose-bilkent>
         <semantic-graph-extension-navigator style="height: 150px; width: 150px;"></semantic-graph-extension-navigator>
         <semantic-graph-extension-panzoom pan-indicator-min-opacity=0.1></semantic-graph-extension-panzoom>
-      </semantic-graph>
+      </semantic-graph> -->
   </semantic-search-result-holder>
 </semantic-search>
 
