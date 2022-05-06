@@ -118,29 +118,7 @@
           }
         ]'
       ></semantic-table>
-      <semantic-graph id="network-graph"
-        height="600px"
-        query='CONSTRUCT {
-          ?s ?p ?o
-        } WHERE {
-          ?object crm:P128_carries/crm:P94i_was_created_by ?event.
-          ?event crm:P14_carried_out_by ?subject .
-          {
-              ?object crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by ?collaborator .
-          } UNION {
-              ?object crm:P108i_was_produced_by/crm:P14_carried_out_by ?collaborator
-          }
-          FILTER(?subject != ?collaborator)
-
-          BIND(?subject as ?s)
-          BIND(?collaborator as ?o)
-          BIND(search:collaboratesWith as ?p)
-        }'
-      >
-        <semantic-graph-layout-cose-bilkent ideal-edge-length=50></semantic-graph-layout-cose-bilkent>
-        <semantic-graph-extension-navigator style="height: 150px; width: 150px;"></semantic-graph-extension-navigator>
-        <semantic-graph-extension-panzoom pan-indicator-min-opacity=0.1></semantic-graph-extension-panzoom>
-      </semantic-graph>
+    </semantic-search-result>
   </semantic-search-result-holder>
 </semantic-search>
 
