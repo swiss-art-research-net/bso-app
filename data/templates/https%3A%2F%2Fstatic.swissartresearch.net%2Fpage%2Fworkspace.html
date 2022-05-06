@@ -39,7 +39,7 @@
 [[#*inline "module-collaborator-networks"]]
 
 <semantic-search
-    limit="1000"
+    limit="250"
     optimizer="blazegraph"
     search-profile='{
       "categories": [
@@ -73,9 +73,15 @@
         ?subject a search:Person .
     }">
   </semantic-search-query-constant>
+
   <semantic-search-facet
     open-by-default="true"
     facet-values-threshold="1000"></semantic-search-facet>
+
+
+  <semantic-search-facet-breadcrumbs>
+  </semantic-search-facet-breadcrumbs>
+
   <semantic-search-result-holder>
     <semantic-search-result>
       <mp-sparql-result-counts 
@@ -112,8 +118,8 @@
           }
         ]'
       ></semantic-table>
-      <!-- <semantic-graph id="network-graph"
-          height="600px"
+      <semantic-graph id="network-graph"
+        height="600px"
         query='CONSTRUCT {
           ?s ?p ?o
         } WHERE {
@@ -134,7 +140,7 @@
         <semantic-graph-layout-cose-bilkent ideal-edge-length=50></semantic-graph-layout-cose-bilkent>
         <semantic-graph-extension-navigator style="height: 150px; width: 150px;"></semantic-graph-extension-navigator>
         <semantic-graph-extension-panzoom pan-indicator-min-opacity=0.1></semantic-graph-extension-panzoom>
-      </semantic-graph> -->
+      </semantic-graph>
   </semantic-search-result-holder>
 </semantic-search>
 
