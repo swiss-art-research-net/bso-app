@@ -865,7 +865,7 @@
 
             <semantic-if query="ASK { [[> thisForQuery]] a ?type . VALUES (?type) {(search:Object)  (crmdig:D35_Area)} .}" then="{{> objectButtonTemplate}}">
                 <template id="objectButtonTemplate">
-                    <div>
+                    <span>
                         <semantic-link
                             iri="page:addEditDataForObject"
                             urlqueryparam-objectiri="[[> thisIri]]"
@@ -892,7 +892,7 @@
                                 ><button type="button" class="btn btn-primary btn-s">[[i18n "submitToSmapshot" bundle="bso"]]</button></semantic-link>
                             </template>
                         </semantic-if>
-                    </div>
+                    </span>
                 </template>
             </semantic-if>
 
@@ -909,22 +909,20 @@
                     then="{{> notthere}}"
                 >
                     <template id="notthere">
-                        <div>
-                            <semantic-update
-                                variable-params='["region"]'
-                                post-action='reload'
-                                query="INSERT {
-                                    GRAPH <https://platform.swissartresearch.net/imageRegions> {
-                                        ?region crm:P2_has_type type:imageRegion .
-                                    }
-                                } WHERE {
-                                    [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of ?region .
-                                    ?region rso:displayLabel 'image' .
-                                }"
-                            >
-                                <a class="btn btn-primary">Set image region</a>
-                            </semantic-update>
-                        </div>
+                        <semantic-update
+                            variable-params='["region"]'
+                            post-action='reload'
+                            query="INSERT {
+                                GRAPH <https://platform.swissartresearch.net/imageRegions> {
+                                    ?region crm:P2_has_type type:imageRegion .
+                                }
+                            } WHERE {
+                                [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of ?region .
+                                ?region rso:displayLabel 'image' .
+                            }"
+                        >
+                            <a class="btn btn-primary">Set image region</a>
+                        </semantic-update>
                     </template>
                     
                 </semantic-if>
