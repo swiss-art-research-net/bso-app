@@ -93,11 +93,6 @@
             query='ASK {
                 BIND([[> thisForQuery]] as ?s)
                 ?s a search:Person .
-                ?event crm:P14_carried_out_by ?s, ?o .
-                ?subEvent crm:P2_has_type ?p ;
-                    crm:P14_carried_out_by ?o ;
-                    ^crm:P9_consists_of ?event .
-                FILTER(?s != ?o)
             }'
             then='{{> personNetworkTemplate}}'
         >
@@ -111,10 +106,13 @@
                                         ?s ?p ?o .
                                     } WHERE {
                                         BIND([[> thisForQuery]] as ?s)
-                                        ?event crm:P14_carried_out_by ?s, ?o .
-                                        ?subEvent crm:P2_has_type ?p ;
-                                            crm:P14_carried_out_by ?o ;
-                                            ^crm:P9_consists_of ?event .
+                                        ?object (crm:P128_carries/crm:P94i_was_created_by|crm:P108i_was_produced_by)/crm:P14_carried_out_by ?s, ?o .
+                                        OPTIONAL {
+                                            ?subEvent crm:P2_has_type ?eventType ;
+                                                crm:P14_carried_out_by ?o ;
+                                                ^crm:P9_consists_of/(^crm:P94i_was_created_by/^crm:P128_carries|^crm:P108i_was_produced_by) ?object .
+                                        }
+                                        BIND(IF(BOUND(?eventType), ?eventType, search:collaborator) as ?p)
                                         FILTER(?s != ?o)
                                     }'>
                                     <semantic-graph-layout-cose-bilkent ideal-edge-length=150></semantic-graph-layout-cose-bilkent>
