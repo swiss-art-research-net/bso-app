@@ -91,7 +91,13 @@
         <!-- person -->
         <semantic-if
             query='ASK {
-                [[> thisForQuery ]] a search:Person .
+                BIND([[> thisForQuery]] as ?s)
+                ?s a search:Person .
+                ?event crm:P14_carried_out_by ?s, ?o .
+                ?subEvent crm:P2_has_type ?p ;
+                    crm:P14_carried_out_by ?o ;
+                    ^crm:P9_consists_of ?event .
+                FILTER(?s != ?o)
             }'
             then='{{> personNetworkTemplate}}'
         >
