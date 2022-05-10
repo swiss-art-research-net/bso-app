@@ -257,6 +257,9 @@ ol.page-breadcrumb {
 .bso-component.field-visualisation nav.nav.nav-tabs a.active {
   font-weight: bold;
 }
+.bso-component.graph .alert-component__warning {
+  display: none;
+}
 .bso-component.home-search {
   background-image: url(https://www.e-manuscripta.ch/i3f/v20/1640931/pct:3,20,95,50/2800,/0/default.jpg);
   background-position: bottom;

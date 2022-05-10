@@ -88,11 +88,51 @@
             </template>
         </semantic-if>
 
+        <!-- person -->
+        <semantic-if
+            query='ASK {
+                [[> thisForQuery ]] a search:Person .
+            }'
+            then='{{> personNetworkTemplate}}'
+        >
+            <template id="personNetworkTemplate">
+                <bs-panel>
+                    <div style="width:300px">
+                        [[#*inline "person-network"]]
+                            <div class="bso-component graph">
+                                <semantic-graph height="[[height]]px"
+                                    query='CONSTRUCT {
+                                        ?s ?p ?o .
+                                    } WHERE {
+                                        BIND([[> thisForQuery]] as ?s)
+                                        ?event crm:P14_carried_out_by ?s, ?o .
+                                        ?subEvent crm:P2_has_type ?p ;
+                                            crm:P14_carried_out_by ?o ;
+                                            ^crm:P9_consists_of ?event .
+                                        FILTER(?s != ?o)
+                                    }'>
+                                    <semantic-graph-layout-cose-bilkent ideal-edge-length=150></semantic-graph-layout-cose-bilkent>
+                                </semantic-graph>
+                            </div>
+                        [[/inline]]
+                        [[> person-network height=300]]
+                        <div class="caption">
+                            <mp-overlay-dialog title="Network View" type="modal" bs-size="xl">
+                                <mp-overlay-dialog-trigger><a>[[i18n "openInViewer" bundle="bso"]]</a></mp-overlay-dialog-trigger>
+                                <mp-overlay-dialog-content id="smapshot-modal">
+                                    [[> person-network height=600]]
+                                </mp-overlay-dialog-content>
+                            </mp-overlay-dialog>
+                        </div>
+                    </div>
+                </bs-panel>
+            </template>
+        </semantic-if>
+
     </div>
     <div class="bso-component main">
         <div class="bso-component panel">
             <h2><mp-label iri="[[> thisIri]]"></mp-label></h2>
-
             <!-- Description -->
             <semantic-query
                 query="SELECT ?label ?source ?sourceLabel WHERE {
