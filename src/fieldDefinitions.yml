@@ -442,6 +442,25 @@ fields:
             BIND(URI(STRBEFORE(STR($subject), "/proposition")) as ?proposition_subject)
           }'
 
+    - id: rdfs_label_as_P141_to_proposition_subject
+      label: Label
+      description: A human-readable lable for the entity
+      datatype: xsd:langString
+      domain: crm:E13_Attribute_Assignment
+      range: crm:E1_CRM_Entity
+      display: hidden
+      minOccurs: 1
+      queries:
+        - select: 'SELECT DISTINCT ?value WHERE {
+            $subject crm:P141_assigned ?value .
+          }'
+        - insert: 'INSERT {
+            $subject crm:P141_assigned $value .
+            ?proposition_subject rdfs:label $value .
+          } WHERE {
+            BIND(URI(STRBEFORE(STR($subject), "/proposition")) as ?proposition_subject)
+          }'          
+
     - id: region_for_proposition_subject
       label: Regions
       datatype: xsd:anyURI

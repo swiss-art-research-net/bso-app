@@ -829,7 +829,7 @@
             </semantic-table>
 
             <semantic-table
-                query="SELECT ?proposition ?subject ?type ?container ?dateCreated ?parentContainer ?page ?form (GROUP_CONCAT(?entity;SEPARATOR=',') as ?entities) WHERE {
+                query="SELECT ?proposition ?subject ?type ?container ?dateCreated ?parentContainer ?page ?form (GROUP_CONCAT(?entity;SEPARATOR=',') as ?entities) (GROUP_CONCAT(?string;SEPARATOR=',') as ?strings) WHERE {
                     ?proposition a crminf:I4_Proposition_Set ;
                         crm:P67_refers_to [[> thisForQuery]] ;
                         crm:P129_is_about ?subject .
@@ -842,10 +842,16 @@
                     BIND(STRAFTER(STR(?page_and_form), '#') as ?form)
                     OPTIONAL {
                         ?subject crm:P14_carried_out_by ?entity .
+                        FILTER(isIRI(?entity))
                     } 
                     OPTIONAL {
                         ?subject crm:P141_assigned ?entity .
+                        FILTER(isIRI(?entity))
                     } 
+                    OPTIONAL {
+                        ?subject crm:P141_assigned ?string .
+                        FILTER(!isIRI(?string))
+                    }
                 } GROUP BY ?proposition ?subject ?type ?container ?dateCreated ?parentContainer ?page ?form
                 ORDER BY ?dateCreated"
                 options='{
@@ -896,6 +902,9 @@
                 <template id="entityTemplate">
                     {{#if entities.value}}
                         {{#each (split entities.value ",")}}<semantic-link iri="{{this}}"></semantic-link>{{#unless @last}}, {{/unless}}{{/each}}
+                    {{/if}}
+                    {{#if strings.value}}
+                        {{#each (split strings.value ",")}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}
                     {{/if}}
                 </template>
             </semantic-table>
