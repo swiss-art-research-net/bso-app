@@ -48,11 +48,30 @@
             </template>
             <template id="template">
                 <bs-panel>
-                    <mp-resource-thumbnail iri="[[> thisIri]]">
-                        <mp-resource-thumbnail-fallback>
-                            <span></span>
-                        </mp-resource-thumbnail-fallback>
-                    </mp-resource-thumbnail>
+                    <sari-resource-thumbnail iri="[[> thisIri]]" template="{{> template}}">
+                        <template id="template">
+                            <img src="{{thumbnail}}" />
+                            <semantic-query
+                                query="SELECT * WHERE {
+                                    BIND(<{{thumbnail}}> as ?thumbnail)
+                                    ?thumbnail crmdig:L54_is_same-as?/crm:P104_is_subject_to ?right .
+                                    ?right crm:P2_has_type ?license .
+                                    OPTIONAL {
+                                        ?right crm:P105_right_held_by ?rightsHolder .
+                                    }
+                                } LIMIT 1"
+                                template="{{> licenseTemplate}}">
+                                <template id="licenseTemplate">
+                                    <div class="bso-component image-license">
+                                        [[i18n "imageLicense" bundle="bso"]]: <mp-label iri="{{ bindings.0.license.value }}"></mp-label>.
+                                        {{#if bindings.0.rightsHolder.value}}
+                                            [[i18n "by" bundle="bso"]] <mp-label iri="{{ bindings.0.rightsHolder.value}}"></mp-label>
+                                        {{/if}}
+                                    </div>
+                                </template>
+                            </semantic-query>
+                        </template>
+                    </sari-resource-thumbnail>
                 </bs-panel>
             </template>
         </semantic-if>
