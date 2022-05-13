@@ -36,7 +36,6 @@ class ImageRegionSelector extends HTMLElement {
           const children = el.children;
           for (let i = 0; i < children.length; i++) {
             const child = children[i];
-            console.log(child.getAttribute('href'))
             let newUrl = parent.updateURLParameter(child.getAttribute('href'), urlparam, iiifCrop);
             console.log(newUrl);
             child.setAttribute('href', newUrl);

@@ -107,11 +107,55 @@
             </template>
         </semantic-if>
 
+        <!-- person -->
+        <semantic-if
+            query='ASK {
+                BIND([[> thisForQuery]] as ?s)
+                ?s a search:Person .
+            }'
+            then='{{> personNetworkTemplate}}'
+        >
+            <template id="personNetworkTemplate">
+                <bs-panel>
+                    <div style="width:300px">
+                        [[#*inline "person-network"]]
+                            <div class="bso-component graph">
+                                <semantic-graph height="[[height]]px"
+                                    query='CONSTRUCT {
+                                        ?s ?p ?o .
+                                    } WHERE {
+                                        BIND([[> thisForQuery]] as ?s)
+                                        ?object (crm:P128_carries/crm:P94i_was_created_by|crm:P108i_was_produced_by)/crm:P14_carried_out_by ?s, ?o .
+                                        OPTIONAL {
+                                            ?subEvent crm:P2_has_type ?eventType ;
+                                                crm:P14_carried_out_by ?o ;
+                                                ^crm:P9_consists_of/(^crm:P94i_was_created_by/^crm:P128_carries|^crm:P108i_was_produced_by) ?object .
+                                        }
+                                        BIND(IF(BOUND(?eventType), ?eventType, search:collaborator) as ?p)
+                                        FILTER(?s != ?o)
+                                    }'>
+                                    <semantic-graph-layout-cose-bilkent ideal-edge-length=150></semantic-graph-layout-cose-bilkent>
+                                </semantic-graph>
+                            </div>
+                        [[/inline]]
+                        [[> person-network height=300]]
+                        <div class="caption">
+                            <mp-overlay-dialog title="[[i18n "networkView" bundle="bso"]]" type="modal" bs-size="xl">
+                                <mp-overlay-dialog-trigger><a>[[i18n "openInViewer" bundle="bso"]]</a></mp-overlay-dialog-trigger>
+                                <mp-overlay-dialog-content id="smapshot-modal">
+                                    [[> person-network height=600]]
+                                </mp-overlay-dialog-content>
+                            </mp-overlay-dialog>
+                        </div>
+                    </div>
+                </bs-panel>
+            </template>
+        </semantic-if>
+
     </div>
     <div class="bso-component main">
         <div class="bso-component panel">
             <h2><mp-label iri="[[> thisIri]]"></mp-label></h2>
-
             <!-- Description -->
             <semantic-query
                 query="SELECT ?label ?source ?sourceLabel WHERE {
@@ -694,7 +738,7 @@
         </semantic-if>
 
         [[#if (hasPermission "api:ldp:*")]]
-        <semantic-if query="ASK { [[> thisForQuery]] a ?type . VALUES (?type) {(search:Object) (search:Person) (crmdig:D35_Area)} .}" then="{{> customDataTemplate}}">
+        <semantic-if query="ASK { [[> thisForQuery]] a ?type . VALUES (?type) {(search:Object) (search:Person) (search:Place) (search:Type) (crmdig:D35_Area)} .}" then="{{> customDataTemplate}}">
             <template id="customDataTemplate">[[> customDataTemplate]]</template>
         </semantic-if>
         [[/if]]
@@ -759,136 +803,142 @@
 
 [[#*inline "customDataTemplate"]]
     <div class="bso-component separator panel">
-        <h3>[[i18n "customData" bundle="bso"]]</h3>
+        <h3>[[i18n "workspace" bundle="bso"]]</h3>
 
-        <semantic-if query="ASK { [[> thisForQuery]] a ?type . VALUES (?type) {(search:Object)  (crmdig:D35_Area)} .}" then="{{> dataTableTemplate}}">
-            <template id="dataTableTemplate">
-                <div>
-                    <!-- Display data created-->
-                    <semantic-table
-                        query='SELECT ?subject ?label ?actor ?dateCreated WHERE {
-                            [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
-                            {
-                                ?subject a crmsci:S7_Simulation_or_Prediction ;
-                                    crm:P32_used_general_technique <https://smapshot.heig-vd.ch/> ;
-                                    crm:P16_used_specific_object ?image ;
-                                    crm:P14_carried_out_by ?actor ;
-                                    rdfs:label ?label .
-                            } UNION {
-                                GRAPH <https://resource.swissartresearch.net/graph/smapshot/observations> {
-                                    ?subject crm:P129_is_about/crmdig:L49_is_primary_area_of ?image ;
-                                        crm:P94i_was_created_by/crm:P14_carried_out_by ?actor ;
-                                        crm:P94i_was_created_by/crm:P4_has_time-span/crm:P82_at_some_time_within ?dateCreated ;
-                                        rdfs:label ?label .
-                                }
-                            }
-                        }'
-                        options='{
-                            "showFilter": false
-                        }'
-                        column-configuration='[{
-                            "variableName": "subject",
-                            "displayName": "[[i18n "entity" bundle="bso"]]",
-                            "cellTemplate": "{{> subjectTemplate }}"
-                        },
-                        {
-                            "variableName": "actor",
-                            "displayName": "[[i18n "user" bundle="bso"]]"
-                        },
-                        {
-                            "displayName": "[[i18n "created" bundle="bso"]]",
-                            "cellTemplate": "{{dateTimeFormat dateCreated.value \"DD.MM.YYYY\"}}"
-                        }]'
-                    >
-                        <template id="subjectTemplate">
-                            <semantic-link iri="{{subject.value}}"><mp-text-truncate truncate="&hellip;">{{label.value}}</mp-text-truncate></semantic-link>
-                        </template>
-                    </semantic-table>
+        <div>
+            <!-- Display data created-->
+            <semantic-table
+                query='SELECT ?subject ?label ?actor ?dateCreated WHERE {
+                    [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
+                    {
+                        ?subject a crmsci:S7_Simulation_or_Prediction ;
+                            crm:P32_used_general_technique <https://smapshot.heig-vd.ch/> ;
+                            crm:P16_used_specific_object ?image ;
+                            crm:P14_carried_out_by ?actor ;
+                            rdfs:label ?label .
+                    } UNION {
+                        GRAPH <https://resource.swissartresearch.net/graph/smapshot/observations> {
+                            ?subject crm:P129_is_about/crmdig:L49_is_primary_area_of ?image ;
+                                crm:P94i_was_created_by/crm:P14_carried_out_by ?actor ;
+                                crm:P94i_was_created_by/crm:P4_has_time-span/crm:P82_at_some_time_within ?dateCreated ;
+                                rdfs:label ?label .
+                        }
+                    }
+                }'
+                options='{
+                    "showFilter": false
+                }'
+                column-configuration='[{
+                    "variableName": "subject",
+                    "displayName": "[[i18n "entity" bundle="bso"]]",
+                    "cellTemplate": "{{> subjectTemplate }}"
+                },
+                {
+                    "variableName": "actor",
+                    "displayName": "[[i18n "user" bundle="bso"]]"
+                },
+                {
+                    "displayName": "[[i18n "created" bundle="bso"]]",
+                    "cellTemplate": "{{dateTimeFormat dateCreated.value \"DD.MM.YYYY\"}}"
+                }]'
+            >
+                <template id="subjectTemplate">
+                    <semantic-link iri="{{subject.value}}"><mp-text-truncate truncate="&hellip;">{{label.value}}</mp-text-truncate></semantic-link>
+                </template>
+            </semantic-table>
 
-                    <semantic-table
-                        query="SELECT ?proposition ?subject ?type ?container ?dateCreated ?parentContainer ?page ?form (GROUP_CONCAT(?entity;SEPARATOR=',') as ?entities) WHERE {
-                            ?proposition a crminf:I4_Proposition_Set ;
-                                crm:P67_refers_to [[> thisForQuery]] ;
-                                crm:P129_is_about ?subject .
-                            ?subject a ?type .
-                            BIND(URI(STRBEFORE(STR(?proposition), '/context')) as ?container)
-                            ?parentContainer ldp:contains ?container .
-                            ?container prov:used ?page_and_form ;
-                                prov:generatedAtTime ?dateCreated .
-                            BIND(STRBEFORE(STR(?page_and_form), '#') as ?page)
-                            BIND(STRAFTER(STR(?page_and_form), '#') as ?form)
-                            OPTIONAL {
-                                ?subject crm:P14_carried_out_by ?entity .
-                            } 
-                            OPTIONAL {
-                                ?subject crm:P141_assigned ?entity .
-                            } 
-                        } GROUP BY ?proposition ?subject ?type ?container ?dateCreated ?parentContainer ?page ?form
-                        ORDER BY ?dateCreated"
-                        options='{
-                            "showFilter": false
-                        }'
-                        column-configuration='[{
-                            "displayName": "[[i18n "type" bundle="bso"]]",
-                            "cellTemplate": "<mp-label iri=\"{{type.value}}\"></mp-label>"
-                        },
-                        {
-                            "displayName": "[[i18n "entities" bundle="bso"]]",
-                            "cellTemplate": "{{> entityTemplate}}"
-                        },
-                        {
-                            "displayName": "[[i18n "created" bundle="bso"]]",
-                            "cellTemplate": "{{dateTimeFormat dateCreated.value \"DD.MM.YYYY H:mm\"}}"
-                        },
-                        {
-                            "displayName": "[[i18n "actions" bundle="bso"]]",
-                            "cellTemplate": "{{> actionTemplate }}"
-                        }]'
-                    >
-                        <template id="actionTemplate">
-                            <div class="bso-component button-set">
-                                <button class="btn btn-secondary btn-xs">
-                                    <semantic-link iri="http://www.metaphacts.com/resource/assets/NamedGraph" 
-                                        urlqueryparam-view="graph" 
-                                        urlqueryparam-graph="{{proposition.value}}">
-                                        [[i18n "view" bundle="bso"]]
-                                    </semantic-link>
-                                </button>
-                                <button class="btn btn-secondary btn-xs">
-                                    <semantic-link iri="{{ page.value }}"
-                                        urlqueryparam-subjectiri="{{subject.value}}"
-                                        urlqueryparam-objectiri="[[>thisIri]]"
-                                        urlqueryparam-form="{{ form.value }}"
-                                    >[[i18n "edit" bundle="bso"]]</semantic-link>
-                                </button>
-                                <button class="btn btn-secondary btn-xs">
-                                    <semantic-link iri="page:deleteContainerFromParent" 
-                                        urlqueryparam-container="{{container.value}}" 
-                                        urlqueryparam-parent="{{parentContainer.value}}" 
-                                        urlqueryparam-back="[[>thisIri]]">[[i18n "delete" bundle="bso"]]
-                                    </semantic-link>
-                                </button>
-                            </div>
-                        </template>
-                        <template id="entityTemplate">
-                            {{#if entities.value}}
-                                {{#each (split entities.value ",")}}<semantic-link iri="{{this}}"></semantic-link>{{#unless @last}}, {{/unless}}{{/each}}
-                            {{/if}}
-                        </template>
-                    </semantic-table>
-                </div>
-            </template>
-        </semantic-if>
+            <semantic-table
+                query="SELECT ?proposition ?subject ?type ?container ?dateCreated ?parentContainer ?page ?form (GROUP_CONCAT(?entity;SEPARATOR=',') as ?entities) (GROUP_CONCAT(?string;SEPARATOR=',') as ?strings) WHERE {
+                    ?proposition a crminf:I4_Proposition_Set ;
+                        crm:P67_refers_to [[> thisForQuery]] ;
+                        crm:P129_is_about ?subject .
+                    ?subject a ?type .
+                    BIND(URI(STRBEFORE(STR(?proposition), '/context')) as ?container)
+                    ?parentContainer ldp:contains ?container .
+                    ?container prov:used ?page_and_form ;
+                        prov:generatedAtTime ?dateCreated .
+                    BIND(STRBEFORE(STR(?page_and_form), '#') as ?page)
+                    BIND(STRAFTER(STR(?page_and_form), '#') as ?form)
+                    OPTIONAL {
+                        ?subject crm:P14_carried_out_by ?entity .
+                        FILTER(isIRI(?entity))
+                    } 
+                    OPTIONAL {
+                        ?subject crm:P141_assigned ?entity .
+                        FILTER(isIRI(?entity))
+                    } 
+                    OPTIONAL {
+                        ?subject crm:P141_assigned ?string .
+                        FILTER(!isIRI(?string))
+                    }
+                } GROUP BY ?proposition ?subject ?type ?container ?dateCreated ?parentContainer ?page ?form
+                ORDER BY ?dateCreated"
+                options='{
+                    "showFilter": false
+                }'
+                column-configuration='[{
+                    "displayName": "[[i18n "type" bundle="bso"]]",
+                    "cellTemplate": "<mp-label iri=\"{{type.value}}\"></mp-label>"
+                },
+                {
+                    "displayName": "[[i18n "entities" bundle="bso"]]",
+                    "cellTemplate": "{{> entityTemplate}}"
+                },
+                {
+                    "displayName": "[[i18n "created" bundle="bso"]]",
+                    "cellTemplate": "{{dateTimeFormat dateCreated.value \"DD.MM.YYYY H:mm\"}}"
+                },
+                {
+                    "displayName": "[[i18n "actions" bundle="bso"]]",
+                    "cellTemplate": "{{> actionTemplate }}"
+                }]'
+            >
+                <template id="actionTemplate">
+                    <div class="bso-component button-set">
+                        <button class="btn btn-secondary btn-xs">
+                            <semantic-link iri="http://www.metaphacts.com/resource/assets/NamedGraph" 
+                                urlqueryparam-view="graph" 
+                                urlqueryparam-graph="{{proposition.value}}">
+                                [[i18n "view" bundle="bso"]]
+                            </semantic-link>
+                        </button>
+                        <button class="btn btn-secondary btn-xs">
+                            <semantic-link iri="{{ page.value }}"
+                                urlqueryparam-subjectiri="{{subject.value}}"
+                                urlqueryparam-objectiri="[[>thisIri]]"
+                                urlqueryparam-form="{{ form.value }}"
+                            >[[i18n "edit" bundle="bso"]]</semantic-link>
+                        </button>
+                        <button class="btn btn-secondary btn-xs">
+                            <semantic-link iri="page:deleteContainerFromParent" 
+                                urlqueryparam-container="{{container.value}}" 
+                                urlqueryparam-parent="{{parentContainer.value}}" 
+                                urlqueryparam-back="[[>thisIri]]">[[i18n "delete" bundle="bso"]]
+                            </semantic-link>
+                        </button>
+                    </div>
+                </template>
+                <template id="entityTemplate">
+                    {{#if entities.value}}
+                        {{#each (split entities.value ",")}}<semantic-link iri="{{this}}"></semantic-link>{{#unless @last}}, {{/unless}}{{/each}}
+                    {{/if}}
+                    {{#if strings.value}}
+                        {{#each (split strings.value ",")}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}
+                    {{/if}}
+                </template>
+            </semantic-table>
+        </div>
 
         <div class="bso-component button-set">
 
-            <semantic-if query="ASK { [[> thisForQuery]] a ?type . VALUES (?type) {(search:Object)  (crmdig:D35_Area)} .}" then="{{> objectButtonTemplate}}">
+            <semantic-link
+                iri="page:addEditDataForEntity"
+                urlqueryparam-objectiri="[[> thisIri]]"
+            ><button type="button" class="btn btn-primary btn-s">[[i18n "addData" bundle="bso"]]</button></semantic-link>
+
+            <semantic-if query="ASK { [[> thisForQuery]] a ?type . VALUES (?type) {(search:Object) (crmdig:D35_Area)} .}" then="{{> objectButtonTemplate}}">
                 <template id="objectButtonTemplate">
-                    <div>
-                        <semantic-link
-                            iri="page:addEditDataForObject"
-                            urlqueryparam-objectiri="[[> thisIri]]"
-                        ><button type="button" class="btn btn-primary btn-s">[[i18n "addData" bundle="bso"]]</button></semantic-link>
+                    <span>
 
                         <semantic-if
                         query='ASK { 
@@ -911,7 +961,7 @@
                                 ><button type="button" class="btn btn-primary btn-s">[[i18n "submitToSmapshot" bundle="bso"]]</button></semantic-link>
                             </template>
                         </semantic-if>
-                    </div>
+                    </span>
                 </template>
             </semantic-if>
 
@@ -928,22 +978,20 @@
                     then="{{> notthere}}"
                 >
                     <template id="notthere">
-                        <div>
-                            <semantic-update
-                                variable-params='["region"]'
-                                post-action='reload'
-                                query="INSERT {
-                                    GRAPH <https://platform.swissartresearch.net/imageRegions> {
-                                        ?region crm:P2_has_type type:imageRegion .
-                                    }
-                                } WHERE {
-                                    [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of ?region .
-                                    ?region rso:displayLabel 'image' .
-                                }"
-                            >
-                                <a class="btn btn-primary">Set image region</a>
-                            </semantic-update>
-                        </div>
+                        <semantic-update
+                            variable-params='["region"]'
+                            post-action='reload'
+                            query="INSERT {
+                                GRAPH <https://platform.swissartresearch.net/imageRegions> {
+                                    ?region crm:P2_has_type type:imageRegion .
+                                }
+                            } WHERE {
+                                [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of ?region .
+                                ?region rso:displayLabel 'image' .
+                            }"
+                        >
+                            <a class="btn btn-primary">Set image region</a>
+                        </semantic-update>
                     </template>
                     
                 </semantic-if>
@@ -994,7 +1042,7 @@
             >
                 <template id="imageSearchTemplate">
                     <semantic-link
-                        iri="page:testImageRegionSelection"
+                        iri="page:searchByImageRegion"
                         urlqueryparam-imageiri="{{bindings.0.image.value}}"
                     ><a class="btn btn-primary">Similarity Search</a></semantic-link>
                 </template>

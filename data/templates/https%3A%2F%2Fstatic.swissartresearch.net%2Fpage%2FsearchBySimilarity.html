@@ -1,35 +1,85 @@
 [[> partial:pageHeader]]
 
-<div class="bso-component main">
-  <div class="bso-component panel">
-    <bs-row>
-      <bs-col sm="12">
-        [[#if (urlParam "url")]]
-          <img src="[[urlParam "url"]]" style="max-height:300px" />
-            <semantic-table
-              query='SELECT ?candidate ?score WHERE {
-                {
-                  SELECT ?iiif ?score_private WHERE {
-                      SERVICE <http://clip-service:5000/sparql> {
-                        ?request a clip:Request ;
-                            clip:queryURL <[[urlParam "url"]]> ;
-                            clip:minScore "0.2" ;
-                            clip:score ?score ;
-                            clip:iiifUrl ?iiif .
-                      }
-                  } LIMIT 100
-              }
-              ?iiif ^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries ?candidate .
-              }'
-              tuple-template="{{> partial:cardObject subject=candidate mode='fullImage'}}"
-              no-result-template="Nothing found"
-            ></semantic-table
-        [[/if]]
-      </bs-col>
-    </bs-row>
+  
+<semantic-search
+limit="100"
+>
+  <div class="bso-component main">
+    <div class="bso-component panel">
+      <bs-row>
+        <bs-col sm="12">
+          <h3>[[i18n "searchBySemanticImage" bundle="bso"]]</h3>
+          <p class="bso-component article-text">
+            [[i18n "searchBySemanticImageExplanation" bundle="bso"]]
+          </p>
+         
+          <bs-row>
+            <bs-col sm="12" md="2">
+              <span class="bso-component label">[[i18n "searchInput" bundle="bso"]]</span>
+              
+            </bs-col>
+            <bs-col sm="12" md="10">
+              <div class="bso-component gap">
+                <img style="max-width:300px; max-height: 300px;" src="[[urlParam "url"]]">
+              </div>
+              <div>
+                <!-- <input id="image-search-input" type="text" src="[[urlParam "url"]]">
+                <button-navigate value="[[i18n "search" bundle="bso"]]" prefix="?uri=[[resolvePrefix "page:searchBySimilarity"]]&url=" target="image-search-input"></button-navigate> -->
+              </div>
+              <semantic-search-query-constant
+                query='SELECT ?subject WHERE {
+                    SERVICE <http://clip-service:5000/sparql> {
+                      ?request a clip:Request ;
+                          clip:queryURL <[[urlParam "url"]]> ;
+                          clip:minScore "0.2" ;
+                          clip:score ?score ;
+                          clip:iiifUrl ?subject .
+                    }
+                } LIMIT 100'
+              ></semantic-search-query-constant>
+            </bs-col>
+          </bs-row>
+        </bs-col>
+      </bs-row>
+    </div>
+
+    <div class="bso-component panel dark separator">
+
+      <semantic-search-result-holder>
+        <semantic-search-result>
+          <mp-sparql-result-counts 
+            id="search_results_count"
+            query="SELECT DISTINCT ?subject {}"
+            template='<div>{{#if hasLimit}} <bs-alert variant="warning"> Showing {{numberOfResults}} of {{totalNumberOfResults}} matches. <strong>Please, refine your search.</strong> </bs-alert> {{else}} <p>Found <em>{{numberOfResults}}</em> results</p>{{/if}}</div>'>
+          </mp-sparql-result-counts>
+          
+          <div class="bso-component card-container">
+              
+          <semantic-table id='table' 
+            query='SELECT * WHERE { } ORDER BY DESC(?score)'
+            current-page="1"
+            prefetch-labels="false"
+            tuple-template='{{> template }}'
+            options='{
+              "showFilter": false,
+              "pageSizeSelection": true
+            }'
+            >
+              <template id="template">
+                <semantic-query
+                  query="SELECT ?subject WHERE {
+                    BIND(<{{subject.value}}> as ?iiif)
+                    ?subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?iiif .
+                  } LIMIT 1"
+                  template="{{> partial:cardObject mode='fullImage' subject=bindings.0.subject}}"></semantic-query>
+              </template>
+            </semantic-table>
+            </div>
+        </semantic-search-result>
+      </semantic-search-result-holder>
+    </div>
   </div>
-</div>
+</semantic-search>
 
-
-[[> partial:contentFooter]]
 [[> partial:pageFooter]]
+

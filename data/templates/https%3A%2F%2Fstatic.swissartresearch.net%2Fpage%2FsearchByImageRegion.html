@@ -1,0 +1,24 @@
+[[> partial:pageHeader]]
+[[> partial:contentHeader]]
+
+<bs-row>
+    <bs-col md="12" class="bso-component panel">
+
+        <h2>[[i18n "searchBySemanticImageRegion" bundle="bso"]]</h2>
+        <p>[[i18n "searchBySemanticImageRegionPrompt" bundle="bso"]]</p>
+        <div class="bso-component gap">
+            <image-region-selector 
+                target="target"
+                target-urlparam="url"
+                iiif="[[urlParam "imageiri"]]" width="600">
+            </image-region-selector>
+        </div>
+        <div image-region-target="target">
+            <a 
+                class="btn btn-md btn-primary" 
+                href="?uri=[[resolvePrefix "page:searchBySimilarity"]]&url=[[urlParam "imageiri"]]/pct:0,0,100,100/300,/0/default.jpg">Select</a>
+        </div>
+    </bs-col>
+</bs-row>
+[[> partial:contentFooter]]
+[[> partial:pageFooter]]

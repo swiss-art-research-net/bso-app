@@ -42,10 +42,31 @@
             [[/if]]
 
             <semantic-if
-                query="ASK { [[>thisForQuery]] a search:Object}"
-                then="{{> data-form-template}}"
+                query="ASK { [[>thisForQuery]] a ?type .
+                    VALUES (?type) {
+                        (search:Person)
+                        (search:Place)
+                        (search:Type)
+                    }
+                }"
+                then="{{> entity-data-form-template}}"
             >
-                <template id="data-form-template">
+                <template id="entity-data-form-template">
+                    <bs-tabs class="bso-component form-selector" default-active-key="[[urlParam "form"]]">
+                        <bs-tab event-key="entity_labels" title="[[i18n "labels" bundle="bso"]]">
+                            [[> entity_labels]]
+                        </bs-tab>
+                        <bs-tab event-key="entity_sameas" title="[[i18n "externalLinks" bundle="bso"]]">
+                            [[> entity_sameas]]
+                        </bs-tab>
+                    </bs-tabs>
+                </template>
+            </semantic-if>
+            <semantic-if
+                query="ASK { [[>thisForQuery]] a search:Object}"
+                then="{{> object-data-form-template}}"
+            >
+                <template id="object-data-form-template">
                     <bs-tabs class="bso-component form-selector" default-active-key="[[urlParam "form"]]">
                         <bs-tab event-key="object_persons" title="[[i18n "contributors" bundle="bso"]]">
                             [[> object_contributors]]
@@ -61,24 +82,27 @@
                         <bs-tab event-key="object_work_depicts" title="[[i18n "depicts" bundle="bso"]]" >
                             [[> object_work_depicts]]
                         </bs-tab>
-                        <bs-tab event-key="object_sameas" title="[[i18n "externalLinks" bundle="bso"]]">
-                            [[> object_sameas]]
+                        <bs-tab event-key="entity_labels" title="[[i18n "labels" bundle="bso"]]">
+                            [[> entity_labels]]
                         </bs-tab>
-                    </template>
-                </semantic-if>
-                <semantic-if
+                        <bs-tab event-key="entity_sameas" title="[[i18n "externalLinks" bundle="bso"]]">
+                            [[> entity_sameas]]
+                        </bs-tab>
+                    </bs-tabs>
+                </template>
+            </semantic-if>
+            <semantic-if
                     query="ASK { [[>thisForQuery]] a crmdig:D35_Area}"
                     then="{{> template}}"
-                >
-                    <template id="template">
-                        <bs-tabs class="bso-component form-selector" default-active-key="[[urlParam "form"]]">
-                            <bs-tab event-key="region_depicts" title="[[i18n "depicts" bundle="bso"]]" >
-                                [[> region_depicts]]
-                            </bs-tab>
-                        </bs-tabs>
-                    </template>
-                </semantic-if>
-            </bs-tabs>
+            >
+                <template id="template">
+                    <bs-tabs class="bso-component form-selector" default-active-key="[[urlParam "form"]]">
+                        <bs-tab event-key="region_depicts" title="[[i18n "depicts" bundle="bso"]]" >
+                            [[> region_depicts]]
+                        </bs-tab>
+                    </bs-tabs>
+                </template>
+            </semantic-if>
         [[else]]
             <bs-alert variant="warning">
                 [[i18n "noPermissionToAccessPage" bundle="bso"]]
@@ -106,6 +130,59 @@
             </mp-page-loader>
         </mp-overlay-dialog-content>
     </mp-overlay-dialog>
+[[/inline]]
+
+[[#* inline "entity_labels"]]
+<div class="bso-component separator next-step">
+    <div class="bso-component form-content">
+        [[i18n "labels" bundle="bso"]]
+        <semantic-form
+            subject="[[urlParam "subjectiri"]]"
+            new-subject-template="[[>thisIri]]/proposition/{{UUID}}"
+            fields='[[> partial:fieldDefinitions ]]'
+            post-action='[[> thisIri]]'
+            urlqueryparam-view='page'
+        >
+            <semantic-form-hidden-input for="I4_Proposition_Set_about_Subject" replace-value="/container/context"></semantic-form-hidden-input>
+            <semantic-form-hidden-input for="container_form_id" replace-value="[[ resolvePrefix "page:addEditDataForEntity"]]#entity_labels"></semantic-form-hidden-input>
+
+            <semantic-form-hidden-input for="type" replace-value="[[resolvePrefix "crm:E13_Attribute_Assignment"]]"></semantic-form-hidden-input>
+            <semantic-form-hidden-input for="P140_assigned_attribute_to" replace-value="[[>thisIri]]"></semantic-form-hidden-input>
+            
+            <semantic-form-text-input for="rdfs_label_as_P141_to_proposition_subject" languages='["de", "fr", "it", "en"]'></semantic-form-text-input>
+            
+            <button name="submit" class="btn btn-primary btn-md">[[i18n "save" bundle="bso"]]</button>
+        </semantic-form>
+    </div>
+</div>
+[[/inline]]
+
+[[#* inline "entity_sameas"]]
+<div class="bso-component separator next-step">
+    <div class="bso-component form-content">
+        [[i18n "externalLinks" bundle="bso"]]
+        <semantic-form
+            subject="[[urlParam "subjectiri"]]"
+            new-subject-template="[[>thisIri]]/proposition/{{UUID}}"
+            fields='[[> partial:fieldDefinitions ]]'
+            post-action='[[> thisIri]]'
+            urlqueryparam-view='page'
+        >
+            <semantic-form-hidden-input for="I4_Proposition_Set_about_Subject" replace-value="/container/context"></semantic-form-hidden-input>
+            <semantic-form-hidden-input for="container_form_id" replace-value="[[ resolvePrefix "page:addEditDataForEntity"]]#entity_sameas"></semantic-form-hidden-input>
+
+            <semantic-form-hidden-input for="type" replace-value="[[resolvePrefix "crm:E13_Attribute_Assignment"]]"></semantic-form-hidden-input>
+            <semantic-form-hidden-input for="P140_assigned_attribute_to" replace-value="[[>thisIri]]"></semantic-form-hidden-input>
+            
+            <p>[[i18n "externalLinksFormInfo" bundle="bso"]]</p>
+            <semantic-form-text-input for="L54_is_same-as_as_P141_to_proposition_subject"></semantic-form-text-input>
+            
+            <semantic-form-text-input for="P70i_is_documented_in_as_P141_to_proposition_subject"></semantic-form-text-input>
+            
+            <button name="submit" class="btn btn-primary btn-md">[[i18n "save" bundle="bso"]]</button>
+        </semantic-form>
+    </div>
+</div>
 [[/inline]]
 
 [[#* inline "object_contributors"]]
@@ -159,7 +236,7 @@
                                         urlqueryparam-view='page'
                                     >
                                         <semantic-form-hidden-input for="I4_Proposition_Set_about_Subject" replace-value="/container/context"></semantic-form-hidden-input>
-                                        <semantic-form-hidden-input for="container_form_id" replace-value="[[ resolvePrefix "page:addEditDataForObject"]]#{{form.value}}"></semantic-form-hidden-input>
+                                        <semantic-form-hidden-input for="container_form_id" replace-value="[[ resolvePrefix "page:addEditDataForEntity"]]#{{form.value}}"></semantic-form-hidden-input>
                             
                                         <semantic-form-hidden-input for="P9_consists_of-reversed" replace-value="[[> thisIri]]/{{node.value}}"></semantic-form-hidden-input>
                                         <semantic-form-hidden-input for="type" replace-value="{{context.value}}"></semantic-form-hidden-input>
@@ -230,7 +307,7 @@
             urlqueryparam-view='page'
         >
             <semantic-form-hidden-input for="I4_Proposition_Set_about_Subject" replace-value="/container/context"></semantic-form-hidden-input>
-            <semantic-form-hidden-input for="container_form_id" replace-value="[[ resolvePrefix "page:addEditDataForObject"]]#object_subproduction"></semantic-form-hidden-input>
+            <semantic-form-hidden-input for="container_form_id" replace-value="[[ resolvePrefix "page:addEditDataForEntity"]]#object_subproduction"></semantic-form-hidden-input>
 
             <semantic-form-hidden-input for="P9_consists_of-reversed" replace-value="[[> thisIri]]/production"></semantic-form-hidden-input>
             <semantic-form-select-input for="subproduction_type"></semantic-form-select-input>
@@ -256,7 +333,7 @@
             urlqueryparam-view='page'
         >
             <semantic-form-hidden-input for="I4_Proposition_Set_about_Subject" replace-value="/container/context"></semantic-form-hidden-input>
-            <semantic-form-hidden-input for="container_form_id" replace-value="[[ resolvePrefix "page:addEditDataForObject"]]#object_subcreation"></semantic-form-hidden-input>
+            <semantic-form-hidden-input for="container_form_id" replace-value="[[ resolvePrefix "page:addEditDataForEntity"]]#object_subcreation"></semantic-form-hidden-input>
 
             <semantic-form-hidden-input for="P9_consists_of-reversed" replace-value="[[> thisIri]]/creation"></semantic-form-hidden-input>
             <semantic-form-hidden-input for="type" replace-value="[[resolvePrefix "crm:E65_Creation"]]"></semantic-form-hidden-input>
@@ -282,7 +359,7 @@
             urlqueryparam-view='page'
         >
             <semantic-form-hidden-input for="I4_Proposition_Set_about_Subject" replace-value="/container/context"></semantic-form-hidden-input>
-            <semantic-form-hidden-input for="container_form_id" replace-value="[[ resolvePrefix "page:addEditDataForObject"]]#object_work_depicts"></semantic-form-hidden-input>
+            <semantic-form-hidden-input for="container_form_id" replace-value="[[ resolvePrefix "page:addEditDataForEntity"]]#object_work_depicts"></semantic-form-hidden-input>
 
             <semantic-form-hidden-input for="type" replace-value="[[resolvePrefix "crm:E13_Attribute_Assignment"]]"></semantic-form-hidden-input>
             <semantic-form-hidden-input for="P140_assigned_attribute_to" replace-value="[[>thisIri]]/work"></semantic-form-hidden-input>
@@ -307,34 +384,6 @@
 </div>
 [[/inline]]
 
-[[#* inline "object_sameas"]]
-<div class="bso-component separator next-step">
-    <div class="bso-component form-content">
-        [[i18n "externalLinks" bundle="bso"]]
-        <semantic-form
-            subject="[[urlParam "subjectiri"]]"
-            new-subject-template="[[>thisIri]]/proposition/{{UUID}}"
-            fields='[[> partial:fieldDefinitions ]]'
-            post-action='[[> thisIri]]'
-            urlqueryparam-view='page'
-        >
-            <semantic-form-hidden-input for="I4_Proposition_Set_about_Subject" replace-value="/container/context"></semantic-form-hidden-input>
-            <semantic-form-hidden-input for="container_form_id" replace-value="[[ resolvePrefix "page:addEditDataForObject"]]#object_sameas"></semantic-form-hidden-input>
-
-            <semantic-form-hidden-input for="type" replace-value="[[resolvePrefix "crm:E13_Attribute_Assignment"]]"></semantic-form-hidden-input>
-            <semantic-form-hidden-input for="P140_assigned_attribute_to" replace-value="[[>thisIri]]"></semantic-form-hidden-input>
-            
-            <p>[[i18n "externalLinksFormInfo" bundle="bso"]]</p>
-            <semantic-form-text-input for="L54_is_same-as_as_P141_to_proposition_subject"></semantic-form-text-input>
-            
-            <semantic-form-text-input for="P70i_is_documented_in_as_P141_to_proposition_subject"></semantic-form-text-input>
-            
-            <button name="submit" class="btn btn-primary btn-md">[[i18n "save" bundle="bso"]]</button>
-        </semantic-form>
-    </div>
-</div>
-[[/inline]]
-
 [[#* inline "region_depicts"]]
 <div class="bso-component separator next-step">
     <div class="bso-component form-content">
@@ -347,7 +396,7 @@
             urlqueryparam-view='page'
         >
             <semantic-form-hidden-input for="I4_Proposition_Set_about_Subject" replace-value="/container/context"></semantic-form-hidden-input>
-            <semantic-form-hidden-input for="container_form_id" replace-value="[[ resolvePrefix "page:addEditDataForObject"]]#region_depicts"></semantic-form-hidden-input>
+            <semantic-form-hidden-input for="container_form_id" replace-value="[[ resolvePrefix "page:addEditDataForEntity"]]#region_depicts"></semantic-form-hidden-input>
 
             <semantic-form-hidden-input for="type" replace-value="[[resolvePrefix "crm:E13_Attribute_Assignment"]]"></semantic-form-hidden-input>
             <semantic-form-hidden-input for="P140_assigned_attribute_to" replace-value="[[>thisIri]]"></semantic-form-hidden-input>
