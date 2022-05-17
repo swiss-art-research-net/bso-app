@@ -125,6 +125,9 @@
     <semantic-if 
         query='ASK { BIND([[> thisForQuery]] as $subject) . [[condition]] }'
         then='{{> template}}'
+        [[#if noResults]]
+            else="<p>[[i18n noResults bundle="bso"]]</p>"
+        [[/if]]
     >
         <template id="template">
             <div class="bso-component field-visualisation">
@@ -144,6 +147,9 @@
                                   "showFilter": true,
                                   "pageSizeSelection": "[5,10,20,50]"
                                 }'
+                                [[#if noResults]]
+                                no-result-template="<p>[[i18n noResults bundle="bso"]]</p>"
+                                [[/if]]
                 >
                                 </semantic-table>
                             </div>
@@ -233,7 +239,7 @@
 
 [[#*inline "field-visualisation-dates"]]
 <semantic-query
-    query="SELECT DISTINCT ?subject ?event ?eventType WHERE {
+    query="SELECT DISTINCT ?subject ?eventType WHERE {
         [[> thisForQuery]] (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P9_consists_of? ?event .
         ?event crm:P4_has_time-span ?subject .
         ?event a ?eventType .
@@ -530,7 +536,7 @@
 
 [[#*inline "field-visualisation-places"]]
 <semantic-query
-    query="SELECT DISTINCT ?subject ?event ?eventType ?typeClass WHERE {
+    query="SELECT DISTINCT ?subject ?eventType ?typeClass WHERE {
         [[> thisForQuery]] (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P9_consists_of? ?event .
         ?event crm:P7_took_place_at ?subject .
         ?subject a ?type .
@@ -628,7 +634,7 @@
         <bs-col md="9">
             <bs-tab-content>
                 <bs-tab-pane event-key="visualSimilarity">
-                    [[#> component-objects-table condition='?classification crm:P140_assigned_attribute_to/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries $subject ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> .' label='visually' ]]
+                    [[#> component-objects-table condition='?classification crm:P140_assigned_attribute_to/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries $subject ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> .' label='visually' noResults='noVisualSimilaritiesIdentified']]
 
                         ?classification crm:P140_assigned_attribute_to/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries [[> thisForQuery]] ;
                             crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> ;
@@ -637,7 +643,7 @@
                     [[/ component-objects-table]]
                 </bs-tab-pane>
                 <bs-tab-pane event-key="titleSimilarity">
-                    [[#> component-objects-table condition='?classification crm:P140_assigned_attribute_to/^crm:P1_is_identified_by/^crm:P128_carries $subject ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> .' label='byTitle' ]]
+                    [[#> component-objects-table condition='?classification crm:P140_assigned_attribute_to/^crm:P1_is_identified_by/^crm:P128_carries $subject ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> .' label='byTitle' noResults='noTitleSimilaritiesIdentified']]
 
                         ?classification crm:P140_assigned_attribute_to/^crm:P1_is_identified_by/^crm:P128_carries [[> thisForQuery]] ;
                             crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> ;
