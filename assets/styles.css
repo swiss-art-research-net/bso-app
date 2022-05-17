@@ -329,6 +329,24 @@ ol.page-breadcrumb {
 .bso-component.mini-thumbnail img {
   width: 150%;
 }
+.bso-component.nav.nav-tabs {
+  margin-left: -2rem;
+}
+.bso-component.nav.nav-tabs .nav-item:first-child {
+  margin-left: 2rem;
+}
+.bso-component.nav.nav-tabs .nav-item a {
+  border: none;
+  background: none;
+  font-weight: 500;
+  color: #111;
+}
+.bso-component.nav.nav-tabs .nav-item a.active {
+  border-radius: 2px 2px 0 0;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #fff;
+  font-weight: bold;
+}
 .bso-component.object {
   margin: 1rem 0;
 }
@@ -350,20 +368,6 @@ ol.page-breadcrumb {
 }
 .bso-component.panel .row {
   margin-right: 0;
-}
-.bso-component.panel .form-selector,
-.bso-component.panel .form-selector + .tab-content {
-  margin-left: -2rem;
-}
-.bso-component.panel .form-selector {
-  padding-left: 2rem;
-  padding-bottom: 1rem;
-  border-bottom: 0;
-}
-.bso-component.panel .form-selector > .nav-link.active {
-  background-color: #8c133a;
-  border: 1px solid #964a4a;
-  color: #fff;
 }
 .bso-component.panel .form-content {
   padding: 2rem;
@@ -458,6 +462,18 @@ ol.page-breadcrumb {
   font-weight: bold;
   font-size: 1.3em;
   padding-top: 0.8em;
+}
+.bso-component .tab-content .next-step {
+  margin-left: -2rem;
+}
+.bso-component .view-selector {
+  padding-bottom: 1rem;
+  border-bottom: 0;
+}
+.bso-component .view-selector > .nav-link.active {
+  background-color: #8c133a;
+  border: 1px solid #964a4a;
+  color: #fff;
 }
 .modal-backdrop {
   opacity: 0.8;

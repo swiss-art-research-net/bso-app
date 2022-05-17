@@ -9,7 +9,7 @@
 
 [[#if (urlParam "subjectiri")]]
 <style>
-    nav.bso-component.form-selector.nav.nav-tabs {
+    nav.bso-component.view-selector.nav.nav-tabs {
         display:none;
     }
 </style>
@@ -52,7 +52,7 @@
                 then="{{> entity-data-form-template}}"
             >
                 <template id="entity-data-form-template">
-                    <bs-tabs class="bso-component form-selector" default-active-key="[[urlParam "form"]]">
+                    <bs-tabs class="bso-component view-selector" default-active-key="[[urlParam "form"]]">
                         <bs-tab event-key="entity_labels" title="[[i18n "labels" bundle="bso"]]">
                             [[> entity_labels]]
                         </bs-tab>
@@ -67,7 +67,7 @@
                 then="{{> object-data-form-template}}"
             >
                 <template id="object-data-form-template">
-                    <bs-tabs class="bso-component form-selector" default-active-key="[[urlParam "form"]]">
+                    <bs-tabs class="bso-component view-selector" default-active-key="[[urlParam "form"]]">
                         <bs-tab event-key="object_persons" title="[[i18n "contributors" bundle="bso"]]">
                             [[> object_contributors]]
                         </bs-tab>
@@ -96,7 +96,7 @@
                     then="{{> template}}"
             >
                 <template id="template">
-                    <bs-tabs class="bso-component form-selector" default-active-key="[[urlParam "form"]]">
+                    <bs-tabs class="bso-component view-selector" default-active-key="[[urlParam "form"]]">
                         <bs-tab event-key="region_depicts" title="[[i18n "depicts" bundle="bso"]]" >
                             [[> region_depicts]]
                         </bs-tab>
