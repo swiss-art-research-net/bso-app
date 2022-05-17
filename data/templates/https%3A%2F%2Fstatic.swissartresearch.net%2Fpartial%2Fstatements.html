@@ -1,2 +1,75 @@
 [[#*inline "module-statements"]]
+
+<mp-event-target-template-render id="statements-table" template="{{> template}}">
+    <template id="template">
+      <div>
+        {{#if subject}}
+
+            <h4><mp-label iri="{{subject}}"></mp-label></h4>
+            <mp-event-trigger type="Component.TemplateUpdate" targets='["statements-table"]' data='{"subject": "[[subject]]"}'>
+                <span>[[i18n "backTo" bundle="bso"]] <a><mp-label iri="[[subject]]"></mp-label></a></span>
+            </mp-event-trigger>
+        
+            <semantic-table
+                query="SELECT ?s ?p ?o WHERE {
+                    {
+                        BIND(<{{subject}}> AS ?s)
+                        ?s ?p ?o .
+                    } UNION {
+                        BIND(<{{subject}}> AS ?o)
+                        ?s ?p ?o .
+                    }
+                } LIMIT 1000"
+                column-configuration='[[> column-configuration]]'
+            >
+                <template  id="template-iri">
+                    [[> template-iri]]
+                </template>
+            </semantic-table>
+        
+        {{else}}
+            <semantic-table
+                query="SELECT ?s ?p ?o WHERE {
+                    {
+                        BIND(<[[subject]]> as ?s)
+                        ?s ?p ?o .
+                    } UNION {
+                        BIND(<[[subject]]> as ?o)
+                        ?s ?p ?o .
+                    }
+                } LIMIT 1000"
+                column-configuration='[[> column-configuration]]'
+            >
+                <template  id="template-iri">
+                    [[> template-iri]]
+                </template>
+            </semantic-table>
+        
+        {{/if}}
+      </div>
+    </template>
 [[/inline]]
+
+[[#*inline "template-iri"]]
+{{#if (isIri iri)}}
+    <mp-event-trigger type="Component.TemplateUpdate" targets='["statements-table"]' data='{"subject": "{{iri.value}}"}'>
+        <a><mp-label iri="{{iri.value}}"></mp-label></a>
+    </mp-event-trigger>
+{{else}}
+    {{iri.value}}
+{{/if}}
+[[/inline]]
+
+[[#*inline "column-configuration"]]
+[{
+    "variableName": "s",
+    "cellTemplate": "{{> template-iri iri=s}}"
+},{
+    "variableName": "p",
+    "cellTemplate": "{{> template-iri iri=p}}"
+},{
+    "variableName": "o",
+    "cellTemplate": "{{> template-iri iri=o}}"
+}]
+[[/inline]]
+
