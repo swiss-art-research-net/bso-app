@@ -610,32 +610,46 @@
 [[/inline]]
 
 [[#*inline "module-discovery"]]
-<semantic-if query="ASK { ?classification (crm:P140_assigned_attribute_to/^crm:P1_is_identified_by/^crm:P128_carries)|(crm:P140_assigned_attribute_to/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries) [[> thisForQuery]] ; crm:P33_used_specific_technique ?technique . VALUES (?technique) {(<https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb>) (<https://github.com/swiss-art-research-net/bso-image-similarity>)}. }" then="{{> template}}">
-    <template id="template">
-        <div class="bso-component panel">
 
-            <h3>[[i18n "similarEntities" bundle="bso"]]</h3>
+<bs-tab-container default-active-key="visualSimilarity">
+    <bs-row>
+        <bs-col md="3">
+            <bs-nav variant="pills" class="flex-column bso-component">
 
-            [[#> component-objects-table condition='?classification crm:P140_assigned_attribute_to/^crm:P1_is_identified_by/^crm:P128_carries $subject ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> .' label='byTitle' ]]
+                <h4>[[i18n "similarity" bundle="bso"]]</h4>
+                <bs-nav-item>
+                    <bs-nav-link event-key="visualSimilarity">[[i18n "visualSimilarities" bundle="bso"]]</bs-nav-link>
+                </bs-nav-item>
+                <bs-nav-item>
+                    <bs-nav-link event-key="titleSimilarity">[[i18n "titleSimilarities" bundle="bso"]]</bs-nav-link>
+                </bs-nav-item>
+            </bs-nav>
+        </bs-col>
+        <bs-col md="9">
+            <bs-tab-content>
+                <bs-tab-pane event-key="visualSimilarity">
+                    [[#> component-objects-table condition='?classification crm:P140_assigned_attribute_to/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries $subject ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> .' label='visually' ]]
 
-                ?classification crm:P140_assigned_attribute_to/^crm:P1_is_identified_by/^crm:P128_carries [[> thisForQuery]] ;
-                    crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> ;
-                    crm:P141_assigned/^crm:P1_is_identified_by/^crm:P128_carries $subject ;
-                    rdf:value ?score .
-            
-            [[/ component-objects-table]]
+                        ?classification crm:P140_assigned_attribute_to/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries [[> thisForQuery]] ;
+                            crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> ;
+                            crm:P141_assigned/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries $subject .
+                    
+                    [[/ component-objects-table]]
+                </bs-tab-pane>
+                <bs-tab-pane event-key="titleSimilarity">
+                    [[#> component-objects-table condition='?classification crm:P140_assigned_attribute_to/^crm:P1_is_identified_by/^crm:P128_carries $subject ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> .' label='byTitle' ]]
 
-            [[#> component-objects-table condition='?classification crm:P140_assigned_attribute_to/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries $subject ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> .' label='visually' ]]
-
-                ?classification crm:P140_assigned_attribute_to/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries [[> thisForQuery]] ;
-                    crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> ;
-                    crm:P141_assigned/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries $subject .
-            
-            [[/ component-objects-table]]
-            
-        </div>
-    </template>
-</semantic-if>
+                        ?classification crm:P140_assigned_attribute_to/^crm:P1_is_identified_by/^crm:P128_carries [[> thisForQuery]] ;
+                            crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> ;
+                            crm:P141_assigned/^crm:P1_is_identified_by/^crm:P128_carries $subject ;
+                            rdf:value ?score .
+                    
+                    [[/ component-objects-table]]
+                </bs-tab-pane>
+            </bs-tab-content>
+        </bs-col>
+    </bs-row>
+</bs-tab-container>
 [[/inline]]
 
 [[#*inline "module-fields"]]

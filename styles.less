@@ -421,17 +421,31 @@ ol.page-breadcrumb {
                 &:first-child {
                     margin-left:2rem;
                 }
-                a {
+                .nav-link {
                     border: none;
                     background: none;
                     font-weight: 500;
                     color: @col-black;
                 }
-                a.active {
+                .nav-link.active {
                     border-radius: 2px 2px 0 0;
                     border: 1px solid rgba(0,0,0,0.1);
                     border-bottom: 1px solid @col-white;
                     font-weight: bold;
+                }
+            }
+        }
+
+        &.nav-pills {
+            .nav-item {
+                margin-left: -2rem;
+                .nav-link {
+
+                }
+                .nav-link.active {
+                    background-color: @col-brand;
+                    border-radius: 0px 5px 5px 0px;
+                    border: none;
                 }
             }
         }
