@@ -296,10 +296,15 @@
 
             <!-- Places -->
             <semantic-query
-                query="SELECT DISTINCT ?subject ?event ?eventType WHERE {
+                query="SELECT DISTINCT ?subject ?event ?eventType ?typeClass WHERE {
                     [[> thisForQuery]] crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by) ?event .
                     ?event crm:P7_took_place_at ?subject .
+                    ?subject a ?type .
                     ?event a ?eventType .
+                    BIND(STRAFTER(STR(?type), 'search/') as ?typeClass)
+                    VALUES(?type) {
+                        (search:Place)
+                    }
                 }"
                 template="{{> template}}">>
                 <template id="template">
@@ -308,7 +313,7 @@
                         <table>
                             {{#each bindings}}
                             <tr>
-                                <td><semantic-link iri="{{subject.value}}"></semantic-link></td>
+                                <td class="bso-component tags"><semantic-link class-name="bso-tag {{typeClass.value}}" iri="{{subject.value}}"></semantic-link></td>
                                 <td><mp-label iri="{{eventType.value}}"></mp-label></td>
                             </tr>
                             {{/each}}

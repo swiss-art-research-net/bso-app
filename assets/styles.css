@@ -417,21 +417,26 @@ ol.page-breadcrumb {
   margin-top: 1rem;
   padding: 0;
 }
-.bso-component.tags li {
+.bso-component.tags li,
+.bso-component.tags > a {
   background-color: #e2e2f7;
   border-radius: 0.5rem;
   display: inline-block;
   font-size: 0.9rem;
+  font-weight: 500;
   padding: 0.1rem 0.3rem;
   margin-right: 0.5rem;
 }
-.bso-component.tags li.Person {
+.bso-component.tags li.Person,
+.bso-component.tags > a.Person {
   background-color: #a0d1f4;
 }
-.bso-component.tags li.Place {
+.bso-component.tags li.Place,
+.bso-component.tags > a.Place {
   background-color: #e3f7e2;
 }
-.bso-component.tags li a {
+.bso-component.tags li a,
+.bso-component.tags > a a {
   color: #111;
   font-weight: 500;
 }
