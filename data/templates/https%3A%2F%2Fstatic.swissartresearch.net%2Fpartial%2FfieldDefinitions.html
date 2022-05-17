@@ -274,6 +274,18 @@
     },
 
     {
+        "id" : "object_production_place",
+
+            "label": "[[i18n "field_production_place" bundle="bso"]]",
+            "description" : "The place an object has been produced",
+            "xsdDatatype" : "xsd:anyURI",
+            "domain" : "crm:E22_Human-Made_Object",
+            "range" : "crm:E53_Place",
+                "selectPattern" : "SELECT ?value WHERE { $subject crm:P108i_was_produced_by/crm:P7_took_place_at ?value }",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/object_production_place"
+    },
+
+    {
         "id" : "object_publication_note",
 
             "label": "[[i18n "field_publication_information" bundle="bso"]]",

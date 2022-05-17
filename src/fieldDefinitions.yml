@@ -399,6 +399,16 @@ fields:
             $subject crm:P108i_was_produced_by/crm:P4_has_time-span ?value
           }'
 
+    - id: object_production_place
+      label: Production place
+      datatype: xsd:anyURI
+      description: The place an object has been produced
+      domain: crm:E22_Human-Made_Object
+      range: crm:E53_Place
+      queries:
+        - select: 'SELECT ?value WHERE {
+            $subject crm:P108i_was_produced_by/crm:P7_took_place_at ?value
+          }'
         
     - id: object_publication_note
       label: Publication Information
