@@ -33,13 +33,26 @@
                     <bs-nav-link event-key="fields">[[i18n "fields" bundle="bso"]]</bs-nav-link>
                 </bs-nav-item>
                 <semantic-if
-                    query="ASK { [[> thisForQuery]] a search:Object}"
+                    query="ASK { 
+                        [[> thisForQuery]] a ?type .
+                        VALUES (?type) {
+                            (search:Object)
+                            (frbroo:F24_Publication_Expression)
+                        }
+                    }"
                     then="{{>template}}"
                 >
                     <template id="template">
                         <bs-nav-item>
                             <bs-nav-link event-key="references">[[i18n "references" bundle="bso"]]</bs-nav-link>
                         </bs-nav-item>
+                    </template>
+                </semantic-if>
+                <semantic-if
+                    query="ASK { [[> thisForQuery]] a search:Object}"
+                    then="{{>template}}"
+                >
+                    <template id="template">
                         <bs-nav-item>
                             <bs-nav-link event-key="discovery">[[i18n "discovery" bundle="bso"]]</bs-nav-link>
                         </bs-nav-item>
