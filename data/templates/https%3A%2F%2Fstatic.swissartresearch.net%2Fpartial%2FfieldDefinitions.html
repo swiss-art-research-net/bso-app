@@ -65,8 +65,12 @@
 
             "label": "[[i18n "field_earliest_date" bundle="bso"]]",
             "description" : "The beginning of a time frame",
-            "xsdDatatype" : "xsd:dateTime",
+            "minOccurs" : "1",
+            "maxOccurs" : "1",
+            "xsdDatatype" : "xsd:date",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P82a_begin_of_the_begin ?value }",
+                "insertPattern" : "INSERT { $subject crm:P82a_begin_of_the_begin $value . } WHERE { }",
+                "deletePattern" : "DELETE { $subject crm:P82a_begin_of_the_begin ?value . } WHERE { }",
         "iri" : "https://platform.swissartresearch.net/instances/fields/date_from"
     },
 
@@ -75,8 +79,12 @@
 
             "label": "[[i18n "field_latest_date" bundle="bso"]]",
             "description" : "The end of a time frame",
-            "xsdDatatype" : "xsd:dateTime",
+            "minOccurs" : "1",
+            "maxOccurs" : "1",
+            "xsdDatatype" : "xsd:date",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P82b_end_of_the_end ?value }",
+                "insertPattern" : "INSERT { $subject crm:P82b_end_of_the_end $value . } WHERE {}",
+                "deletePattern" : "DELETE { $subject crm:P82b_end_of_the_end ?value . } WHERE {}",
         "iri" : "https://platform.swissartresearch.net/instances/fields/date_to"
     },
 
@@ -85,10 +93,12 @@
 
             "label": "[[i18n "field_label" bundle="bso"]]",
             "description" : "A human-readable label for the entity",
+            "minOccurs" : "1",
             "maxOccurs" : "1",
             "xsdDatatype" : "xsd:string",
                 "insertPattern" : "INSERT { $subject rdfs:label $value . } WHERE {}",
                 "selectPattern" : "SELECT ?value WHERE { $subject rdfs:label ?value . }",
+                "deletePattern" : "DELETE { $subject rdfs:label ?value . } WHERE {}",
         "iri" : "https://platform.swissartresearch.net/instances/fields/label"
     },
 
@@ -305,6 +315,34 @@
             "range" : "crm:E55_Type",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P108i_was_produced_by/crm:P32_used_general_technique ?value . }",
         "iri" : "https://platform.swissartresearch.net/instances/fields/object_production_technique"
+    },
+
+    {
+        "id" : "P4_has_time-span",
+
+            "label": "[[i18n "field_time_span" bundle="bso"]]",
+            "description" : "The time-span of the event",
+            "xsdDatatype" : "xsd:anyURI",
+            "domain" : "crm:E2_Temporal_Entity",
+            "range" : "crm:E52_Time-Span",
+                "selectPattern" : "SELECT ?value WHERE { $subject crm:P4_has_time-span ?value . }",
+                "insertPattern" : "INSERT { $subject crm:P4_has_time-span $value . } WHERE {}",
+                "deletePattern" : "DELETE { $subject crm:P4_has_time-span ?value . } WHERE {}",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/P4_has_time-span"
+    },
+
+    {
+        "id" : "P7_took_place_at",
+
+            "label": "[[i18n "field_place" bundle="bso"]]",
+            "description" : "The place where the event took place",
+            "xsdDatatype" : "xsd:anyURI",
+            "domain" : "crm:E2_Temporal_Entity",
+            "range" : "crm:E53_Place",
+                "selectPattern" : "SELECT ?value WHERE { $subject crm:P7_took_place_at ?value . }",
+                "insertPattern" : "INSERT { $subject crm:P7_took_place_at $value . } WHERE {}",
+                "deletePattern" : "DELETE { $subject crm:P7_took_place_at ?value . } WHERE {}",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/P7_took_place_at"
     },
 
     {

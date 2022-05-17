@@ -92,26 +92,44 @@ fields:
     - id: date_from
       label: Earliest date
       description: The beginning of a time frame
-      datatype: xsd:dateTime
+      datatype: xsd:date
+      maxOccurs: 1
+      minOccurs: 1
       queries:
         - select: 'SELECT ?value WHERE {
           $subject crm:P82a_begin_of_the_begin ?value
+          }'
+        - insert: 'INSERT {
+          $subject crm:P82a_begin_of_the_begin $value .
+          } WHERE {
+          }'
+        - delete: 'DELETE {
+          $subject crm:P82a_begin_of_the_begin ?value .
+          } WHERE {
           }'
 
     - id: date_to
       label: Latest date
       description: The end of a time frame
-      datatype: xsd:dateTime
+      datatype: xsd:date
+      maxOccurs: 1
+      minOccurs: 1
       queries:
         - select: 'SELECT ?value WHERE {
           $subject crm:P82b_end_of_the_end ?value
           }'
+        - insert: 'INSERT {
+          $subject crm:P82b_end_of_the_end $value .
+          } WHERE {}'
+        - delete: 'DELETE {
+            $subject crm:P82b_end_of_the_end ?value .
+            } WHERE {}'
 
     - id: label
       label: Label
       description: A human-readable label for the entity
       datatype: xsd:string
-      minOccurs: 0
+      minOccurs: 1
       maxOccurs: 1
       queries:
         - insert: 'INSERT { 
@@ -120,6 +138,9 @@ fields:
         - select: 'SELECT ?value WHERE {
             $subject rdfs:label ?value .
           }'
+        - delete: 'DELETE {
+            $subject rdfs:label ?value .
+          } WHERE {}'
           
     - id: notes
       label: Notes
@@ -431,6 +452,40 @@ fields:
         - select: 'SELECT ?value WHERE {
             $subject crm:P108i_was_produced_by/crm:P32_used_general_technique ?value .
           }'
+
+    - id: P4_has_time-span
+      label: Time-span
+      datatype: xsd:anyURI
+      description: The time-span of the event
+      domain: crm:E2_Temporal_Entity
+      range: crm:E52_Time-Span
+      queries:
+        - select: 'SELECT ?value WHERE {
+            $subject crm:P4_has_time-span ?value .
+          }'
+        - insert: 'INSERT {
+            $subject crm:P4_has_time-span $value .
+          } WHERE {}'
+        - delete: 'DELETE {
+            $subject crm:P4_has_time-span ?value .
+          } WHERE {}'
+
+    - id: P7_took_place_at
+      label: Place
+      datatype: xsd:anyURI
+      description: The place where the event took place
+      domain: crm:E2_Temporal_Entity
+      range: crm:E53_Place
+      queries:
+        - select: 'SELECT ?value WHERE {
+            $subject crm:P7_took_place_at ?value .
+          }'
+        - insert: 'INSERT {
+            $subject crm:P7_took_place_at $value .
+          } WHERE {}'
+        - delete: 'DELETE {
+            $subject crm:P7_took_place_at ?value .
+          } WHERE {}'
 
     - id: P70i_is_documented_in_as_P141_to_proposition_subject
       label: Is documented in
