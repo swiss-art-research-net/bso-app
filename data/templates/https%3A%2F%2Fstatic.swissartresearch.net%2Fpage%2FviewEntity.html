@@ -17,7 +17,7 @@
             then='{{> mapTemplate}}'
         >
             <template id="mapTemplate">
-                <div style="height:300px;">
+                <div style="height:300px;width:400px;">
                     <semantic-map
                         query='
                             SELECT ?wkt WHERE {
@@ -274,7 +274,7 @@
             <!-- Dates -->
             <semantic-query
                 query="SELECT DISTINCT ?subject ?event ?eventType WHERE {
-                    [[> thisForQuery]] crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by) ?event .
+                    [[> thisForQuery]] (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P9_consists_of? ?event .
                     ?event crm:P4_has_time-span ?subject .
                     ?event a ?eventType .
                 }"
@@ -286,6 +286,34 @@
                             {{#each bindings}}
                             <tr>
                                 <td><semantic-link iri="{{subject.value}}"></semantic-link></td>
+                                <td><mp-label iri="{{eventType.value}}"></mp-label></td>
+                            </tr>
+                            {{/each}}
+                        </table>
+                    </div>
+                </template>
+            </semantic-query>
+
+            <!-- Places -->
+            <semantic-query
+                query="SELECT DISTINCT ?subject ?event ?eventType ?typeClass WHERE {
+                    [[> thisForQuery]] (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P9_consists_of? ?event .
+                    ?event crm:P7_took_place_at ?subject .
+                    ?subject a ?type .
+                    ?event a ?eventType .
+                    BIND(STRAFTER(STR(?type), 'search/') as ?typeClass)
+                    VALUES(?type) {
+                        (search:Place)
+                    }
+                }"
+                template="{{> template}}">>
+                <template id="template">
+                    <div class="bso-component field-visualisation">
+                        <span class="bso-component label">[[i18n "places" bundle="bso"]]</span>
+                        <table>
+                            {{#each bindings}}
+                            <tr>
+                                <td class="bso-component tags"><semantic-link class-name="bso-tag {{typeClass.value}}" iri="{{subject.value}}"></semantic-link></td>
                                 <td><mp-label iri="{{eventType.value}}"></mp-label></td>
                             </tr>
                             {{/each}}
@@ -568,18 +596,6 @@
                 
             [[/ objectsTable]]
 
-
-            <!-- Objects created/produced at time-->
-            [[#> objectsTable condition='?object a search:Object; (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P4_has_time-span $subject' label='works']]
-
-                {
-                    ?subject crm:P108i_was_produced_by/crm:P4_has_time-span [[> thisForQuery]] .
-                } UNION {
-                    ?subject crm:P128_carries/crm:P94i_was_created_by/crm:P4_has_time-span [[> thisForQuery]] .
-                }
-                
-            [[/ objectsTable]]
-
             <!-- Objects acquired from -->
             [[#> objectsTable condition='?object a search:Object; crm:P24i_changed_ownership_through/crm:P23_transferred_title_from $subject' label='worksAcquiredFrom']]
 
@@ -626,6 +642,28 @@
                     GRAPH <https://resource.swissartresearch.net/graph/smapshot> {
                         ?subject a crm:E53_Place .
                     }
+                }
+                
+            [[/ objectsTable]]
+
+            <!-- Objects created/produced at time-->
+            [[#> objectsTable condition='?object a search:Object; (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P4_has_time-span $subject' label='works']]
+
+                {
+                    ?subject crm:P108i_was_produced_by/crm:P4_has_time-span [[> thisForQuery]] .
+                } UNION {
+                    ?subject crm:P128_carries/crm:P94i_was_created_by/crm:P4_has_time-span [[> thisForQuery]] .
+                }
+                
+            [[/ objectsTable]]
+
+            <!-- Objects created/produced at place-->
+            [[#> objectsTable condition='?object a search:Object; (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P7_took_place_at $subject' label='worksProducedOrCreatedAtPlace']]
+
+                {
+                    ?subject crm:P108i_was_produced_by/crm:P7_took_place_at [[> thisForQuery]] .
+                } UNION {
+                    ?subject crm:P128_carries/crm:P94i_was_created_by/crm:P4_has_time-span [[> thisForQuery]] .
                 }
                 
             [[/ objectsTable]]

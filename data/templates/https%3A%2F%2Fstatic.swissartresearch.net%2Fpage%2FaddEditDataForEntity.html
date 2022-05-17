@@ -253,6 +253,32 @@
                                             ></semantic-form-autocomplete-input>
                                         {{/if}}
                                         [[> add-new-person]]
+                                        
+                                        <semantic-form-composite-input
+                                            for='P4_has_time-span'
+                                            new-subject-template='/date'
+                                            fields='[[> partial:fieldDefinitions ]]'
+                                        >
+                                            <semantic-form-text-input for="label"></semantic-form-text-input>
+                                            <semantic-form-text-input for="date_from"></semantic-form-text-input>
+                                            <semantic-form-text-input for="date_to"></semantic-form-text-input>
+                                        </semantic-form-composite-input>
+                                            
+                                        <semantic-form-autocomplete-input
+                                            for="P7_took_place_at"
+                                            value-binding-name="subject"
+                                            lookup-query='{
+                                                "type": "lookup",
+                                                "limit": 20,
+                                                "lookupServiceName": "federated-lookup",
+                                                "entityType": "[[resolvePrefix "rds:Place"]]"
+                                            }'
+                                            template='{{> autocompletionTemplate}}'>
+                                            <template id='autocompletionTemplate'>
+                                                [[> partial:lookupCandidateTemplate]]
+                                            </template>
+                                        </semantic-form-autocomplete-input>
+
                                         <button name="submit" class="btn btn-primary btn-md">[[i18n "save" bundle="bso"]]</button>
                                     </semantic-form>
                                 
@@ -315,6 +341,17 @@
             <semantic-form-autocomplete-input for="P14_carried_out_by"></semantic-form-autocomplete-input>
             [[> add-new-person]]
             <semantic-form-tree-picker-input for="P2_has_type_for_person_roles"></semantic-form-tree-picker-input>
+                                        
+            <semantic-form-composite-input
+                for='P4_has_time-span'
+                new-subject-template='/date/{{UUID}}'
+                fields='[[> partial:fieldDefinitions ]]'
+            >
+                <semantic-form-text-input for="label"></semantic-form-text-input>
+                <semantic-form-text-input for="date_from"></semantic-form-text-input>
+                <semantic-form-text-input for="date_to"></semantic-form-text-input>
+            </semantic-form-composite-input>
+
             <button name="submit" class="btn btn-primary btn-md">[[i18n "save" bundle="bso"]]</button>
         </semantic-form>
     </div>
