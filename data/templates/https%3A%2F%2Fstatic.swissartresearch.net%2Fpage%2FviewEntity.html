@@ -591,28 +591,6 @@
                 
             [[/ objectsTable]]
 
-            <!-- Objects created/produced at time-->
-            [[#> objectsTable condition='?object a search:Object; (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P4_has_time-span $subject' label='works']]
-
-                {
-                    ?subject crm:P108i_was_produced_by/crm:P4_has_time-span [[> thisForQuery]] .
-                } UNION {
-                    ?subject crm:P128_carries/crm:P94i_was_created_by/crm:P4_has_time-span [[> thisForQuery]] .
-                }
-                
-            [[/ objectsTable]]
-
-            <!-- Objects created/produced at place-->
-            [[#> objectsTable condition='?object a search:Object; (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P7_took_place_at $subject' label='works']]
-
-                {
-                    ?subject crm:P108i_was_produced_by/crm:P7_took_place_at [[> thisForQuery]] .
-                } UNION {
-                    ?subject crm:P128_carries/crm:P94i_was_created_by/crm:P4_has_time-span [[> thisForQuery]] .
-                }
-                
-            [[/ objectsTable]]
-
             <!-- Objects acquired from -->
             [[#> objectsTable condition='?object a search:Object; crm:P24i_changed_ownership_through/crm:P23_transferred_title_from $subject' label='worksAcquiredFrom']]
 
@@ -659,6 +637,28 @@
                     GRAPH <https://resource.swissartresearch.net/graph/smapshot> {
                         ?subject a crm:E53_Place .
                     }
+                }
+                
+            [[/ objectsTable]]
+
+            <!-- Objects created/produced at time-->
+            [[#> objectsTable condition='?object a search:Object; (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P4_has_time-span $subject' label='works']]
+
+                {
+                    ?subject crm:P108i_was_produced_by/crm:P4_has_time-span [[> thisForQuery]] .
+                } UNION {
+                    ?subject crm:P128_carries/crm:P94i_was_created_by/crm:P4_has_time-span [[> thisForQuery]] .
+                }
+                
+            [[/ objectsTable]]
+
+            <!-- Objects created/produced at place-->
+            [[#> objectsTable condition='?object a search:Object; (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P7_took_place_at $subject' label='works']]
+
+                {
+                    ?subject crm:P108i_was_produced_by/crm:P7_took_place_at [[> thisForQuery]] .
+                } UNION {
+                    ?subject crm:P128_carries/crm:P94i_was_created_by/crm:P4_has_time-span [[> thisForQuery]] .
                 }
                 
             [[/ objectsTable]]
