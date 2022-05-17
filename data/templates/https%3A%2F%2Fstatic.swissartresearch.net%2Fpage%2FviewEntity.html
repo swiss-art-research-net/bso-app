@@ -653,7 +653,7 @@
             [[/ objectsTable]]
 
             <!-- Objects created/produced at place-->
-            [[#> objectsTable condition='?object a search:Object; (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P7_took_place_at $subject' label='works']]
+            [[#> objectsTable condition='?object a search:Object; (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P7_took_place_at $subject' label='worksProducedOrCreatedAtPlace']]
 
                 {
                     ?subject crm:P108i_was_produced_by/crm:P7_took_place_at [[> thisForQuery]] .
