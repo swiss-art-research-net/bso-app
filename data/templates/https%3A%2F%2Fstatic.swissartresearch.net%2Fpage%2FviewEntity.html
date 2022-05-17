@@ -1,3 +1,5 @@
+[[> partial:statements]]
+
 [[> partial:pageHeader]]
 
 [[#*inline "thisIri"]][[#if entityiri]][[entityiri]][[else]][[urlParam "entityiri"]][[/if]][[/inline]]
@@ -24,7 +26,7 @@
 
             [[> component-description]]
         </div>
-        <bs-tab-container default-active-key="overview">
+        <bs-tab-container default-active-key="[[#if (urlParam "tab")]][[urlParam "tab"]][[else]]overview[[/if]]">
             <bs-nav variant="tabs" class="flex-row bso-component gap">
                 <bs-nav-item>
                     <bs-nav-link event-key="overview">[[i18n "overview" bundle="bso"]]</bs-nav-link>
@@ -58,6 +60,9 @@
                         </bs-nav-item>
                     </template>
                 </semantic-if>
+                <bs-nav-item>
+                    <bs-nav-link event-key="statements">[[i18n "statements" bundle="bso"]]</bs-nav-link>
+                </bs-nav-item>
                 [[#if (hasPermission "api:ldp:*")]]
                     <bs-nav-item>
                         <bs-nav-link event-key="workspace">[[i18n "workspace" bundle="bso"]]</bs-nav-link>
@@ -76,6 +81,13 @@
                 </bs-tab-pane>
                 <bs-tab-pane event-key="discovery">
                     [[> module-discovery]]
+                </bs-tab-pane>
+                <bs-tab-pane event-key="statements">
+                    [[#if entityiri]]
+                        [[> module-statements subject=entityiri]]
+                    [[else]]
+                        [[> module-statements subject=(urlParam "entityiri")]]
+                    [[/if]]
                 </bs-tab-pane>
                 <bs-tab-pane event-key="workspace">
                     [[> module-workspace]]
