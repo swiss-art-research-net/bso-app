@@ -11,1083 +11,1218 @@
 <div class="d-flex flex-md-row flex-column">
     <div class="bso-component separator sidebar image-display">
 
-        <!-- map -->
-        <semantic-if
-            query='ASK { [[> thisForQuery ]] crmdig:L54_is_same-as/wdt:P625 ?coordinates }'
-            then='{{> mapTemplate}}'
-        >
-            <template id="mapTemplate">
-                <div style="height:300px;width:400px;">
-                    <semantic-map
-                        query='
-                            SELECT ?wkt WHERE {
-                                [[> thisForQuery ]] crmdig:L54_is_same-as/wdt:P625 ?wkt
-                        }'
-                        tuple-template='{{> tupleTemplate}}'
-                        >
-                            <template id="tupleTemplate">
-                                <mp-label iri="[[> thisIri]]"></mp-label>
-                            </template>
-                        </semantic-map>
-                </div>
-            </template>
-        </semantic-if>
+        [[> module-sidebar-map]]
+        [[> module-sidebar-image]]
+        [[> module-sidebar-smapshot]]
+        [[> module-sidebar-person-network]]
 
-        <!-- image  -->
-        <semantic-if 
-            query='ASK { [[> thisForQuery ]] a search:Object}'
-            then='{{> objectTemplate }}'
-            else='{{> template}}'
-        >
-            <template id="objectTemplate">
-                [[#if entityiri]]
-                    [[> partial:objectViewImageDisplay objectiri=entityiri]]
-                [[else]]
-                    [[> partial:objectViewImageDisplay urlparam="entityiri"]]
-                [[/if]]
-            </template>
-            <template id="template">
-                <bs-panel>
-                    <sari-resource-thumbnail iri="[[> thisIri]]" template="{{> template}}">
-                        <template id="template">
-                            <img src="{{thumbnail}}" />
-                            <semantic-query
-                                query="SELECT * WHERE {
-                                    BIND(<{{thumbnail}}> as ?thumbnail)
-                                    ?thumbnail crmdig:L54_is_same-as?/crm:P104_is_subject_to ?right .
-                                    ?right crm:P2_has_type ?license .
-                                    OPTIONAL {
-                                        ?right crm:P105_right_held_by ?rightsHolder .
-                                    }
-                                } LIMIT 1"
-                                template="{{> licenseTemplate}}">
-                                <template id="licenseTemplate">
-                                    <div class="bso-component image-license">
-                                        [[i18n "imageLicense" bundle="bso"]]: <mp-label iri="{{ bindings.0.license.value }}"></mp-label>.
-                                        {{#if bindings.0.rightsHolder.value}}
-                                            [[i18n "by" bundle="bso"]] <mp-label iri="{{ bindings.0.rightsHolder.value}}"></mp-label>
-                                        {{/if}}
-                                    </div>
-                                </template>
-                            </semantic-query>
-                        </template>
-                    </sari-resource-thumbnail>
-                </bs-panel>
-            </template>
-        </semantic-if>
-
-        <!-- smapshot -->
-        <semantic-if
-            query='ASK { 
-                [[> thisForQuery ]] crm:P1_is_identified_by ?smapshot_id .
-                ?smapshot_id crm:P2_has_type <https://smapshot.heig-vd.ch> .
-            }'
-            then='{{> smapshotTemplate}}'
-        >
-            <template id="smapshotTemplate">
-                <bs-panel>
-                    <smapshot-embed 
-                        iri="[[> thisIri]]"
-                        width="300"
-                        height="200"
-                    ></smapshot-embed>
-                    <div class="caption">
-                        <mp-overlay-dialog title="Smapshot View" type="modal" bs-size="xl">
-                            <mp-overlay-dialog-trigger><a>[[i18n "openInViewer" bundle="bso"]]</a></mp-overlay-dialog-trigger>
-                            <mp-overlay-dialog-content id="smapshot-modal">
-                                <mp-page-loader 
-                                    iri="[[ resolvePrefix 'page:viewSmapshot']]"
-                                    urlqueryparam-iri="[[> thisIri]]"
-                                    urlqueryparam-overlay="true"
-                                ></mp-page-loader>
-                        </mp-overlay-dialog-content>
-                        </mp-overlay-dialog>
-                    </div>
-                </bs-panel>
-            </template>
-        </semantic-if>
-
-        <!-- person -->
-        <semantic-if
-            query='ASK {
-                BIND([[> thisForQuery]] as ?s)
-                ?s a search:Person .
-            }'
-            then='{{> personNetworkTemplate}}'
-        >
-            <template id="personNetworkTemplate">
-                <bs-panel>
-                    <div style="width:300px">
-                        [[#*inline "person-network"]]
-                            <div class="bso-component graph">
-                                <semantic-graph height="[[height]]px"
-                                    query='CONSTRUCT {
-                                        ?s ?p ?o .
-                                    } WHERE {
-                                        BIND([[> thisForQuery]] as ?s)
-                                        ?object (crm:P128_carries/crm:P94i_was_created_by|crm:P108i_was_produced_by)/crm:P14_carried_out_by ?s, ?o .
-                                        OPTIONAL {
-                                            ?subEvent crm:P2_has_type ?eventType ;
-                                                crm:P14_carried_out_by ?o ;
-                                                ^crm:P9_consists_of/(^crm:P94i_was_created_by/^crm:P128_carries|^crm:P108i_was_produced_by) ?object .
-                                        }
-                                        BIND(IF(BOUND(?eventType), ?eventType, search:collaborator) as ?p)
-                                        FILTER(?s != ?o)
-                                    }'>
-                                    <semantic-graph-layout-cose-bilkent ideal-edge-length=150></semantic-graph-layout-cose-bilkent>
-                                </semantic-graph>
-                            </div>
-                        [[/inline]]
-                        [[> person-network height=300]]
-                        <div class="caption">
-                            <mp-overlay-dialog title="[[i18n "networkView" bundle="bso"]]" type="modal" bs-size="xl">
-                                <mp-overlay-dialog-trigger><a>[[i18n "openInViewer" bundle="bso"]]</a></mp-overlay-dialog-trigger>
-                                <mp-overlay-dialog-content id="smapshot-modal">
-                                    [[> person-network height=600]]
-                                </mp-overlay-dialog-content>
-                            </mp-overlay-dialog>
-                        </div>
-                    </div>
-                </bs-panel>
-            </template>
-        </semantic-if>
-
-    </div>
-    <div class="bso-component main">
-        <div class="bso-component panel">
+</div>
+<div class="bso-component main">
+    <div class="bso-component panel">
+        <div class="bso-component gap">
             <h2><mp-label iri="[[> thisIri]]"></mp-label></h2>
-            <!-- Description -->
-            <semantic-query
-                query="SELECT ?label ?source ?sourceLabel WHERE {
-                    {
-                        [[> thisForQuery]] crm:P129i_is_subject_of ?value .
-                        ?value crm:P2_has_type aat:300435416 ;
-                            rdfs:label ?label .
-                    } UNION {
-                        [[> thisForQuery]] a search:Person ;
-                            crmdig:L54_is_same-as ?source .
-                        ?source gndo:biographicalOrHistoricalInformation ?label .
-                        BIND('GND' as ?sourceLabel)
-                    } UNION {
-                        [[> thisForQuery]] a search:Object ;
-                            crm:P108i_was_produced_by/crm:P9_consists_of ?publication_event .
-                            ?publication_event a frbroo:F30_Publication_Event ;
-                            crm:P3_has_note ?label .
-                    } UNION {
-                        [[> thisForQuery]] a oa:annotation ;
-                            oa:body/rdfs:label ?label .
-                    }
-                }"
-                template="{{>template}}">
-                <template id="template">
-                    {{#each bindings}}
-                        <p class="bso-component description">
-                            {{label.value}}
-                            {{#if source.value}}
-                                <small>([[i18n "source" bundle="bso"]]: <a href="{{source.value}}">{{sourceLabel.value}})</a></small>
-                            {{/if}}
-                        </p>
-                    {{/each}}
-                </template>
-            </semantic-query>
 
-            <!-- Depicts -->
-            <semantic-query
-                query="SELECT DISTINCT ?subject ?type ?typeClass WHERE {
-                    [[> thisForQuery]] crm:P128_carries?/crm:P138_represents ?subject .
-                    OPTIONAL {
-                        ?subject a ?type .
-                        BIND(STRAFTER(STR(?type), 'search/') as ?typeClass)
-                        VALUES(?type) {
-                            (search:Person)
-                            (search:Place)
-                            (search:Type)
-                        }
-                    }
-                    FILTER NOT EXISTS {
-                        GRAPH <https://resource.swissartresearch.net/graph/smapshot> {
-                            ?subject a crm:E53_Place .
-                        }
-                    }
-                } ORDER BY ?type ?subject"
-                template="{{> template}}">
-                <template id="template">
-                    <div class="bso-component field-visualisation">
-                        <span class="bso-component label">[[i18n "depicts" bundle="bso"]]</span>
-                        <ul class="bso-component tags">
-                            {{#each bindings}}
-                                <li class="bso-tag {{typeClass.value}}"><semantic-link uri="{{subject.value}}"></semantic-link></li>
-                            {{/each}}
-                        </ul>
-                    </div>
-                </template>
-            </semantic-query>
-
-            <!-- Same as / External Links -->
-            <semantic-query
-                query="SELECT DISTINCT ?subject ?label WHERE {
-
-                    BIND(<https://d-nb.info/gnd/10171799-4> as ?nb)
-                    BIND(<https://d-nb.info/gnd/1012546-2> as ?zbz)
-                    {
-                        [[> thisForQuery]] crmdig:L54_is_same-as ?subject .
-                    } UNION {
-                        [[> thisForQuery]] crm:P70i_is_documented_in ?subject .
-                        ?attribute_assignment a crm:E13_Attribute_Assignment ; crm:P141_assigned ?subject .
-                    } UNION {
-                        [[> thisForQuery]] a search:Object ;
-                        crm:P109_has_current_or_former_curator ?zbz ;
-                        crmdig:L1i_was_digitized_by/crmdig:L11_had_output/crm:P1_is_identified_by ?subject .
-                    } UNION {
-                        [[> thisForQuery]] a search:Object ;
-                            crm:P109_has_current_or_former_curator ?nb .
-                        BIND(STRAFTER('[[> thisIri]]', 'nb-') as ?nbId)
-                        BIND(URI(CONCAT('https://www.helveticarchives.ch/detail.aspx?ID=', ?nbId)) as ?subject)
-                        BIND('HelveticArchives' as ?label)
-                    } UNION {
-                        [[> thisForQuery]] a search:Object .                            
-                        BIND(URI(REPLACE('[[>thisIri]]','artwork','manifest')) as ?subject) .
-                        BIND('IIIF Manifest' as ?label)
-                        # Temporary filter as IIIF Manifests for SFF data are not yet available
-                        FILTER(! REGEX('[[> thisIri ]]', 'SFF', 'i'))
-                    } UNION {
-                        [[> thisForQuery]] crm:P1_is_identified_by ?smapshot_identifier .
-                        ?smapshot_identifier crm:P2_has_type <https://smapshot.heig-vd.ch> ;
-                            rdfs:label ?smapshot_id .
-                        BIND(URI(CONCAT('https://smapshot.heig-vd.ch/contribute/', ?smapshot_id)) as ?subject) .
-                        BIND('sMapshot' as ?label)
-                    }
-                }"
-                template="{{> template}}">
-                <template id="template">
-                    <div class="bso-component field-visualisation">
-                        <span class="bso-component label">[[i18n "externalLinks" bundle="bso"]]</span>
-                        <ul class="bso-component tags">
-                            {{#each bindings}}
-                                <li class="bso-tag"><a href="{{subject.value}}" target="_blank">{{#if label.value}}{{label.value}}{{else}}<mp-label iri="{{subject.value}}"></mp-label>{{/if}}</a></li>
-                            {{/each}}
-                        </ul>
-                    </div>
-                </template>
-            </semantic-query>
-
-            <!-- Dates -->
-            <semantic-query
-                query="SELECT DISTINCT ?subject ?event ?eventType WHERE {
-                    [[> thisForQuery]] (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P9_consists_of? ?event .
-                    ?event crm:P4_has_time-span ?subject .
-                    ?event a ?eventType .
-                }"
-                template="{{> template}}">>
-                <template id="template">
-                    <div class="bso-component field-visualisation">
-                        <span class="bso-component label">[[i18n "dates" bundle="bso"]]</span>
-                        <table>
-                            {{#each bindings}}
-                            <tr>
-                                <td><semantic-link iri="{{subject.value}}"></semantic-link></td>
-                                <td><mp-label iri="{{eventType.value}}"></mp-label></td>
-                            </tr>
-                            {{/each}}
-                        </table>
-                    </div>
-                </template>
-            </semantic-query>
-
-            <!-- Places -->
-            <semantic-query
-                query="SELECT DISTINCT ?subject ?event ?eventType ?typeClass WHERE {
-                    [[> thisForQuery]] (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P9_consists_of? ?event .
-                    ?event crm:P7_took_place_at ?subject .
-                    ?subject a ?type .
-                    ?event a ?eventType .
-                    BIND(STRAFTER(STR(?type), 'search/') as ?typeClass)
-                    VALUES(?type) {
-                        (search:Place)
-                    }
-                }"
-                template="{{> template}}">>
-                <template id="template">
-                    <div class="bso-component field-visualisation">
-                        <span class="bso-component label">[[i18n "places" bundle="bso"]]</span>
-                        <table>
-                            {{#each bindings}}
-                            <tr>
-                                <td class="bso-component tags"><semantic-link class-name="bso-tag {{typeClass.value}}" iri="{{subject.value}}"></semantic-link></td>
-                                <td><mp-label iri="{{eventType.value}}"></mp-label></td>
-                            </tr>
-                            {{/each}}
-                        </table>
-                    </div>
-                </template>
-            </semantic-query>
-
-            <!-- Contained in -->
-            <semantic-query
-                query="SELECT DISTINCT ?parent ?type ?typeClass WHERE {
-                    BIND([[> thisForQuery]] as ?leaf)
-                    ?leaf crm:P46i_forms_part_of+ ?parent .
-                    OPTIONAL {
-                        ?node ^crm:P46i_forms_part_of ?parent .
-                    }
-                    ?parent a ?type .
-                    BIND(STRAFTER(STR(?type), 'search/') as ?typeClass)
-                    VALUES(?type) {
-                        (search:Object)
-                    }
-                }"
-                template="{{> template}}">
-                <template id="template">
-                    <div class="bso-component field-visualisation">
-                        <span class="bso-component label">[[i18n "containedIn" bundle="bso"]]</span>
-                        <ul class="bso-component tags">
-                            {{#each bindings}}
-                                <li class="bso-tag {{typeClass.value}}"><semantic-link uri="{{parent.value}}" urlqueryparam-view="page"></semantic-link></li>
-                            {{/each}}
-                        </ul>
-                    </div>
-                </template>
-            </semantic-query>
-
-            <!-- Persons involved in creation-->
-            <semantic-query
-                query="SELECT DISTINCT ?subject (GROUP_CONCAT(DISTINCT ?role; SEPARATOR=' ') as ?roles) (GROUP_CONCAT(DISTINCT ?global_role; SEPARATOR=' ') as ?global_roles) WHERE {
-                    BIND(<[[>thisIri]]/meta> as ?meta)
-                    {
-                        [[> thisForQuery]] crm:P108i_was_produced_by ?event .
-                        BIND(crm:E12_Production as ?global_role)
-                    } UNION 
-                    {
-                        [[> thisForQuery]] (crm:P128_carries?/crm:P94i_was_created_by) ?event .
-                        BIND(crm:E65_Creation as ?global_role)
-                    }
-                    {
-                        ?event crm:P14_carried_out_by ?subject .
-                        OPTIONAL {
-                            ?event crm:P9_consists_of ?subevent .
-                            ?subevent crm:P14_carried_out_by ?subject .
-                            OPTIONAL {
-                                ?subevent crm:P2_has_type ?role .
-                            }
-                        }
-                        OPTIONAL {
-                            ?subject crm:P1_is_identified_by ?appellation .
-                            ?appellation crm:P70i_is_documented_in ?meta .
-                            ?appellation rdfs:label ?appellation_label .
-                        }
-                    } UNION {
-                        ?event crm:P9_consists_of ?subevent .
-                        ?subevent crm:P14_carried_out_by ?subject .
-                        OPTIONAL {
-                            ?subevent crm:P2_has_type ?role .
-                        }
-                        OPTIONAL {
-                            ?subject crm:P1_is_identified_by ?appellation .
-                            ?appellation crm:P70i_is_documented_in ?meta .
-                            ?appellation rdfs:label ?appellation_label .
-                        }
-                    }
-                } GROUP BY ?subject"
-                template="{{> template}}">>
-                <template id="template">
-                    <div class="bso-component field-visualisation">
-                        <span class="bso-component label">[[i18n "persons" bundle="bso"]]</span>
-                        <table>
-                            {{#each bindings}}
-                            <tr>
-                                <td>
-                                    <ul class="bso-component tags">
-                                            <li class="bso-tag Person"><semantic-link uri="{{subject.value}}"></semantic-link></li>
-                                    </ul>
-                                </td>
-                                <td>{{#if roles.value}}{{#each (split roles.value ' ')}}[[> addComma]]<mp-label iri="{{this}}"></mp-label>{{/each}}{{/if}} ({{#each (split global_roles.value ' ')}}[[> addComma]]<mp-label iri="{{this}}"></mp-label>{{/each}})</td>
-                            </tr>
-                            {{/each}}
-                        </table>
-                    </div>
-                </template>
-            </semantic-query>
-
-            <!-- Dimensions -->
-            <!-- Dimensions of whole -->
-            <semantic-query
-                query="SELECT ?dimension_label ?dimension_type_label ?dimension_unit ?dimension_value WHERE {
-                    [[>thisForQuery]] crm:P43_has_dimension ?dimension .     
-                    {
-                        ?dimension crm:P2_has_type/rdfs:label ?dimension_type_label ;
-                            crm:P90_has_value ?dimension_value ;
-                            crm:P91_has_unit/rdfs:label ?dimension_unit .
-                            FILTER(LANG(?dimension_type_label) = 'en')
-                    } UNION {
-                        ?dimension rdfs:label ?dimension_label .
-                        FILTER NOT EXISTS {?dimension crm:P90_has_value ?dimension_value }
-                    }
-
-                } ORDER BY DESC(?dimension_unit)"
-                template="{{> dimensionTemplate}}"
-            >
-                <template id="dimensionTemplate">
-                    <div class="bso-component field-visualisation">
-                        <span class="bso-component label">[[i18n "dimensions" bundle="bso"]]</span>
-
-                        <table>
-                            {{#each bindings}}
-                                <tr>
-                                    {{#if dimension_type_label.value}}
-                                        <td>{{dimension_type_label.value}}: {{dimension_value.value}} {{dimension_unit.value}}</td>
-                                    {{/if}}
-                                    {{#if dimension_label}}
-                                        <td>{{dimension_label.value}}</td>
-                                    {{/if}}
-                                </tr>
-                            {{/each}}
-                        </table>
-                </template>
-            </semantic-query>
-    
-            <!-- Dimensions of parts -->
-            <semantic-query
-                query="SELECT ?part ?part_note (SAMPLE(?part_type_labels) as ?part_type_label) WHERE {
-                    GRAPH ?g {
-                        [[> thisForQuery ]] crm:P46_is_composed_of ?part .
-                        ?part crm:P2_has_type/rdfs:label ?part_type_labels .
-                        OPTIONAL {
-                            ?part crm:P3_has_note ?part_note .
-                        }
-                    }
-                } 
-                GROUP BY ?part ?part_note
-                ORDER BY ?part_type_label"
-                template="{{> partTemplate}}"
-            >
-                <template id="partTemplate">
-                    <div class="bso-component field-visualisation">
-                        <span class="bso-component label">[[i18n "dimensions" bundle="bso"]]</span>
-                        <table>
-                            {{#each bindings}}
-                            <tr>
-                                <td><em>{{part_type_label.value}}</em></span>{{#if part_note.value}} ({{part_note.value}}){{/if}}</td>
-                                <td>
-                                    <semantic-query
-                                        query="SELECT ?dimension_label ?dimension_type_label ?dimension_unit ?dimension_value WHERE {
-                                            <{{part.value}}> crm:P43_has_dimension ?dimension .     
-                                            {
-                                                GRAPH ?g {
-                                                    ?dimension crm:P2_has_type/rdfs:label ?dimension_type_label ;
-                                                        crm:P90_has_value ?dimension_value ;
-                                                        crm:P91_has_unit/rdfs:label ?dimension_unit .
-                                                }
-                                            } UNION {
-                                                GRAPH ?g {
-                                                    ?dimension rdfs:label ?dimension_label .
-                                                    FILTER NOT EXISTS {?dimension crm:P90_has_value ?dimension_value }
-                                                }
-                                            }
-              
-                                        } ORDER BY DESC(?dimension_unit)"
-                                        template="{{> dimensionTemplate}}"
-                                    >
-                                        <template id="dimensionTemplate">
-                                            <div>
-                                                {{#each bindings}}
-                                                    {{#if dimension_type_label.value}}
-                                                        {{dimension_type_label.value}}: {{dimension_value.value}} {{dimension_unit.value}}
-                                                    {{/if}}
-                                                    {{#if dimension_label}}
-                                                        {{dimension_label.value}}
-                                                    {{/if}}
-                                                {{/each}}
-                                            </div>
-                                        </template>
-                                    </semantic-query>
-                                </td>
-                            </tr>
-                            {{/each}}
-                        </table>
-                    </div>
-
-                </template>
-            </semantic-query>
-            
-            <!-- Technique -->
-            <semantic-query 
-            query="SELECT ?technique WHERE {
-                [[> thisForQuery]] crm:P108i_was_produced_by/crm:P32_used_general_technique ?technique .
-            }"
-            template="{{> template}}"
-        >
-            <template id="template">
-                <div class="bso-component field-visualisation">
-                    <span class="bso-component label">[[i18n "technique" bundle="bso"]]</span>
-                    <ul class="bso-component tags">
-                        {{#each bindings}}
-                            <li class="bso-tag type"><semantic-link uri="{{technique.value}}" urlqueryparam-view="page"></semantic-link></li>   
-                        {{/each}}     
-                    </ul>
-                </div>
-            </template>
-        </semantic-query>
-
-            <!-- Provenience -->
-            <semantic-query 
-                query="SELECT ?acquisition ?acquisition_note ?previous_owner WHERE {
-                    [[> thisForQuery]] crm:P24i_changed_ownership_through ?acquisition .
-                    OPTIONAL {
-                        ?acquisition crm:P23_transferred_title_from ?previous_owner .
-                    }
-                    OPTIONAL {
-                        ?acquisition crm:P3_has_note ?acquisition_note .
-                    }
-                }"
-                template="{{> template}}"
-            >
-                <template id="template">
-                    <div class="bso-component field-visualisation">
-                        <span class="bso-component label">[[i18n "provenience" bundle="bso"]]</span>
-                        {{#each bindings}}
-                            {{#if previous_owner.value}}
-                                <ul class="bso-component tags">
-                                    <li class="bso-tag person actor"><semantic-link uri="{{previous_owner.value}}" urlqueryparam-view="page"></semantic-link></li>        
-                                </ul>
-                            {{/if}}
-                            {{#if acquisition_note.value}}
-                                <div class="bso-component values">{{acquisition_note.value}}</div>
-                            {{/if}}
-                        {{/each}}
-                    </div>
-                </template>
-            </semantic-query>
-
-            <!-- Inscription -->
-            <semantic-query 
-                query="SELECT ?value_formatted WHERE {
-                    [[> thisForQuery]] crm:P128_carries ?inscription .
-                    ?inscription a crm:E34_Inscription ;
-                      rdfs:label ?value .
-                      BIND(REPLACE(?value, '\n','<br>') AS ?value_formatted)
-                }"
-                template="{{> template}}"
-            >
-                <template id="template">
-                    <div class="bso-component field-visualisation">
-                        <span class="bso-component label">[[i18n "inscription" bundle="bso"]]</span>
-                        <div class="bso-component values">
-                            {{#each bindings}}
-                                <mp-text-truncate lines="3" expand="{{> expand}}" collapse="{{> collapse}}">
-                                    <template id="expand"> <a>&hellip;[[i18n "readMore" bundle="bso"]]</a></template>
-                                    <template id="collapse"><span><br/><a>[[i18n "showLess" bundle="bso"]]</a></span></template>
-                                    {{{value_formatted.value}}}
-                                </mp-text-truncate>    
-                            
-                            {{/each}}
-                        </div>
-                    </div>
-                </template>
-            </semantic-query>
-
-            <!-- Objects created -->
-            [[#> objectsTable condition='?object a search:Object; (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P9_consists_of?/crm:P14_carried_out_by $subject' label='works']]
-
-                {
-                    ?subject crm:P108i_was_produced_by/crm:P9_consists_of?/crm:P14_carried_out_by [[> thisForQuery]] .
-                } UNION {
-                    ?subject crm:P128_carries/crm:P94i_was_created_by/crm:P9_consists_of?/crm:P14_carried_out_by [[> thisForQuery]] .
-                }
-                
-            [[/ objectsTable]]
-
-            <!-- Objects acquired from -->
-            [[#> objectsTable condition='?object a search:Object; crm:P24i_changed_ownership_through/crm:P23_transferred_title_from $subject' label='worksAcquiredFrom']]
-
-                ?subject crm:P24i_changed_ownership_through/crm:P23_transferred_title_from [[> thisForQuery]]
-                
-            [[/ objectsTable]]
-
-            <!-- Objects forming part of -->
-            [[#> objectsTable condition='?object a search:Object; crm:P46i_forms_part_of $subject' label='contains']]
-
-                ?subject crm:P46i_forms_part_of [[> thisForQuery]]
-                
-            [[/ objectsTable]]
-
-            <!-- Regions -->
-            <mp-event-target-refresh id="regions-table">
-                [[#> objectsTable condition='$subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of ?region . FILTER NOT EXISTS {?region crm:P2_has_type type:imageRegion}' label='regions' ]]
-
-                    [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of  $subject.
-                    FILTER NOT EXISTS {?subject crm:P2_has_type type:imageRegion}
-
-                [[/ objectsTable]]
-            </mp-event-target-refresh>
-
-            <!-- Things Depicted -->
-            [[#> objectsTable condition='?thing crm:P138_represents $subject' label='depictedBy' ]]
-
-                ?subject a ?type ; 
-                    crm:P128_carries?/crm:P138_represents [[> thisForQuery]] .
-                VALUES ( ?type ) {
-                    (search:Object)
-                    (crmdig:D35_Area)
-                }
-            
-            [[/ objectsTable]]
-
-            <!-- Places depicted -->
-            [[#> objectsTable condition='$subject crm:P128_carries/crm:P138_represents ?place . ?place a search:Place' label='depictedPlaces']]
-                
-                [[> thisForQuery]] crm:P128_carries/crm:P138_represents $subject .
-                $subject a search:Place .
-
-                FILTER NOT EXISTS {
-                    GRAPH <https://resource.swissartresearch.net/graph/smapshot> {
-                        ?subject a crm:E53_Place .
-                    }
-                }
-                
-            [[/ objectsTable]]
-
-            <!-- Objects created/produced at time-->
-            [[#> objectsTable condition='?object a search:Object; (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P4_has_time-span $subject' label='works']]
-
-                {
-                    ?subject crm:P108i_was_produced_by/crm:P4_has_time-span [[> thisForQuery]] .
-                } UNION {
-                    ?subject crm:P128_carries/crm:P94i_was_created_by/crm:P4_has_time-span [[> thisForQuery]] .
-                }
-                
-            [[/ objectsTable]]
-
-            <!-- Objects created/produced at place-->
-            [[#> objectsTable condition='?object a search:Object; (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P7_took_place_at $subject' label='worksProducedOrCreatedAtPlace']]
-
-                {
-                    ?subject crm:P108i_was_produced_by/crm:P7_took_place_at [[> thisForQuery]] .
-                } UNION {
-                    ?subject crm:P128_carries/crm:P94i_was_created_by/crm:P4_has_time-span [[> thisForQuery]] .
-                }
-                
-            [[/ objectsTable]]
-
-            <!-- Objects owned -->
-            [[#> objectsTable condition='?object a search:Object; crm:P109_has_current_or_former_curator $subject' label='worksHeld']]
-                
-                ?subject crm:P109_has_current_or_former_curator [[> thisForQuery]] .
-                
-            [[/ objectsTable]]
-
-            <!-- Objects of type -->
-            [[#> objectsTable condition='?thing crm:P2_has_type $subject' label='hasType' ]]
-
-                ?subject a search:Object ;
-                    crm:P2_has_type [[> thisForQuery]] .
-            
-            [[/ objectsTable]]
-
-            <!-- Objects created using this technique -->
-            [[#> objectsTable condition='?object a search:Object; crm:P108i_was_produced_by/crm:P32_used_general_technique $subject' label='producedUsingTechnique']]
-
-                ?subject crm:P108i_was_produced_by/crm:P32_used_general_technique [[> thisForQuery]]
-                
-            [[/ objectsTable]]
-
-            <!-- Found on -->
-            [[#> objectsTable condition='?region crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of $subject .' label='foundOn' ]]
-
-                $subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of  [[> thisForQuery]] .
-            
-            [[/ objectsTable]]
-
-            <!-- Is About -->
-            [[#> objectsTable condition='$subject crm:P129_is_about|crm:P140_assigned_attribute_to ?target  .' label='isAbout' ]]
-
-                {
-                    [[> thisForQuery]] crm:P129_is_about|crm:P140_assigned_attribute_to $subject .
-                    OPTIONAL {
-                        ?iiif la:access_point $subject .
-                    }
-                    FILTER(!BOUND(?iiif))
-                } UNION {
-                    [[> thisForQuery]] crm:P140_assigned_attribute_to ?iiif_image .
-                    $subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?iiif_image .
-                } 
-            
-            [[/ objectsTable]]
+            [[> component-description]]
         </div>
-
-        <!-- References -->
-        <semantic-if 
-            query="ASK {
-                ?attribute_assignment crm:P140_assigned_attribute_to|crm:P141_assigned [[> thisForQuery]] ;
-                    crm:P177_assigned_property_of_type crm:P67_refers_to .
-            }"
-            then="{{> template-references}}"
-        >
-            <template id="template-references">
-                <div class="bso-component separator panel">
-
-                    <h3>[[i18n "references" bundle="bso"]]</h3>
-
-                    <!-- References on -->
-                    [[#> objectsTable condition='?attribute_assignment crm:P140_assigned_attribute_to ?object; crm:P141_assigned $subject ; crm:P177_assigned_property_of_type crm:P67_refers_to' label='references' ]]
-
-                        ?attribute_assignment crm:P140_assigned_attribute_to $subject; 
-                            crm:P141_assigned [[> thisForQuery]] ; 
-                            crm:P177_assigned_property_of_type crm:P67_refers_to .
-                    
-                    [[/ objectsTable]]
-                </div>
+        <bs-tab-container default-active-key="overview">
+            <bs-nav variant="tabs" class="flex-row bso-component gap">
+                <bs-nav-item>
+                    <bs-nav-link event-key="overview">[[i18n "overview" bundle="bso"]]</bs-nav-link>
+                </bs-nav-item>
+                <bs-nav-item>
+                    <bs-nav-link event-key="fields">[[i18n "fields" bundle="bso"]]</bs-nav-link>
+                </bs-nav-item>
                 <semantic-if
-                    query="ASK {
-                        ?annotation crm:P140_assigned_attribute_to [[> thisForQuery]] ;
-                                crm:P177_assigned_property_of_type crm:P67_refers_to .
+                    query="ASK { 
+                        [[> thisForQuery]] a ?type .
+                        VALUES (?type) {
+                            (search:Object)
+                            (frbroo:F24_Publication_Expression)
+                        }
                     }"
-                    then="{{> template-referenced-by}}"
+                    then="{{>template}}"
                 >
-                    <template id="template-referenced-by">
-                        <div class="bso-component panel no-padding">
-                            <span class="bso-component label padding-left padding-bottom">[[i18n "referencedBy" bundle="bso"]]</span>
-                            <semantic-table
-                                query="SELECT ?annotation ?reference ?page WHERE {
-                                    ?annotation crm:P140_assigned_attribute_to [[> thisForQuery]] ;
-                                        crm:P141_assigned ?reference ;
-                                        crm:P177_assigned_property_of_type crm:P67_refers_to .
-                                    OPTIONAL {
-                                        ?annotation crm:P1_is_identified_by ?page_identifier .
-                                        ?page_identifier crm:P2_has_type aat:300445022 ;
-                                            rdfs:label ?page .
-                                    }
-                                }"
-                                options='{
-                                    "showFilter": false
-                                }'
-                                column-configuration='[{
-                                    "variableName": "reference",
-                                    "displayName": "[[i18n "reference" bundle="bso"]]"
-                                },
-                                {
-                                    "variableName": "page",
-                                    "displayName": "[[i18n "page" bundle="bso"]]"
-                                }]'
-                            ></semantic-table>
-                        </div>
+                    <template id="template">
+                        <bs-nav-item>
+                            <bs-nav-link event-key="references">[[i18n "references" bundle="bso"]]</bs-nav-link>
+                        </bs-nav-item>
                     </template>
                 </semantic-if>
-            </template>
-        </semantic-if>
-
-        [[#if (hasPermission "api:ldp:*")]]
-        <semantic-if query="ASK { [[> thisForQuery]] a ?type . VALUES (?type) {(search:Object) (search:Person) (search:Place) (search:Type) (crmdig:D35_Area)} .}" then="{{> customDataTemplate}}">
-            <template id="customDataTemplate">[[> customDataTemplate]]</template>
-        </semantic-if>
-        [[/if]]
-        
-        <semantic-if query="ASK { ?classification (crm:P140_assigned_attribute_to/^crm:P1_is_identified_by/^crm:P128_carries)|(crm:P140_assigned_attribute_to/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries) [[> thisForQuery]] ; crm:P33_used_specific_technique ?technique . VALUES (?technique) {(<https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb>) (<https://github.com/swiss-art-research-net/bso-image-similarity>)}. }" then="{{> template}}">
-            <template id="template">
-                <div class="bso-component separator panel">
-
-                    <details>
-                        <summary>
-                            <h3>[[i18n "similarEntities" bundle="bso"]]</h3>
-                        </summary>
-
-
-                        [[#> objectsTable condition='?classification crm:P140_assigned_attribute_to/^crm:P1_is_identified_by/^crm:P128_carries $subject ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> .' label='byTitle' ]]
-
-                            ?classification crm:P140_assigned_attribute_to/^crm:P1_is_identified_by/^crm:P128_carries [[> thisForQuery]] ;
-                                crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> ;
-                                crm:P141_assigned/^crm:P1_is_identified_by/^crm:P128_carries $subject ;
-                                rdf:value ?score .
-                        
-                        [[/ objectsTable]]
-
-                        [[#> objectsTable condition='?classification crm:P140_assigned_attribute_to/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries $subject ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> .' label='visually' ]]
-
-                            ?classification crm:P140_assigned_attribute_to/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries [[> thisForQuery]] ;
-                                crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> ;
-                                crm:P141_assigned/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries $subject .
-                        
-                        [[/ objectsTable]]
-                    </details>
-                </div>
-            </template>
-        </semantic-if>
-
-        <div class="bso-component separator panel">
-
-            <h3>[[i18n "fields" bundle="bso"]]</h3>
-
-            <semantic-if
-                query="ASK { 
-                    GRAPH ?g {
-                        [[> thisForQuery]] a ?type . 
-                    }
-                    BIND(URI(STRBEFORE(STR(?g), '/context')) as ?container)
-                    ?parentContainer ldp:contains ?container .
-                    VALUES (?type) {(search:Person) }}"
-                then="{{> customEntity}}"
-                else="{{> defaultEntity}}"
-            >
-                <template id="customEntity">
-                    [[> fieldsForCustomEntities]]
-                </template>
-                <template id="defaultEntity">
-                    [[> partial:fieldsTable iri=entityiri param="entityiri"]]
-                </template>
-            </semantic-if>
-
-        </div>
+                <semantic-if
+                    query="ASK { [[> thisForQuery]] a search:Object}"
+                    then="{{>template}}"
+                >
+                    <template id="template">
+                        <bs-nav-item>
+                            <bs-nav-link event-key="discovery">[[i18n "discovery" bundle="bso"]]</bs-nav-link>
+                        </bs-nav-item>
+                    </template>
+                </semantic-if>
+                [[#if (hasPermission "api:ldp:*")]]
+                    <bs-nav-item>
+                        <bs-nav-link event-key="workspace">[[i18n "workspace" bundle="bso"]]</bs-nav-link>
+                    </bs-nav-item>
+                [[/if]]
+            </bs-nav>
+            <bs-tab-content>
+                <bs-tab-pane event-key="overview">
+                    [[> module-overview]]
+                </bs-tab-pane>
+                <bs-tab-pane event-key="fields">
+                    [[> module-fields]]
+                </bs-tab-pane>
+                <bs-tab-pane event-key="references">
+                    [[> module-references]]
+                </bs-tab-pane>
+                <bs-tab-pane event-key="discovery">
+                    [[> module-discovery]]
+                </bs-tab-pane>
+                <bs-tab-pane event-key="workspace">
+                    [[> module-workspace]]
+                </bs-tab-pane>
+            </bs-tab-content>
+        </bs-tab-container>
     </div>
 </div>
 
-[[#*inline "customDataTemplate"]]
-    <div class="bso-component separator panel">
-        <h3>[[i18n "workspace" bundle="bso"]]</h3>
-
-        <div>
-            <!-- Display data created-->
-            <semantic-table
-                query='SELECT ?subject ?label ?actor ?dateCreated WHERE {
-                    [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
-                    {
-                        ?subject a crmsci:S7_Simulation_or_Prediction ;
-                            crm:P32_used_general_technique <https://smapshot.heig-vd.ch/> ;
-                            crm:P16_used_specific_object ?image ;
-                            crm:P14_carried_out_by ?actor ;
-                            rdfs:label ?label .
-                    } UNION {
-                        GRAPH <https://resource.swissartresearch.net/graph/smapshot/observations> {
-                            ?subject crm:P129_is_about/crmdig:L49_is_primary_area_of ?image ;
-                                crm:P94i_was_created_by/crm:P14_carried_out_by ?actor ;
-                                crm:P94i_was_created_by/crm:P4_has_time-span/crm:P82_at_some_time_within ?dateCreated ;
-                                rdfs:label ?label .
-                        }
-                    }
-                }'
-                options='{
-                    "showFilter": false
-                }'
-                column-configuration='[{
-                    "variableName": "subject",
-                    "displayName": "[[i18n "entity" bundle="bso"]]",
-                    "cellTemplate": "{{> subjectTemplate }}"
-                },
-                {
-                    "variableName": "actor",
-                    "displayName": "[[i18n "user" bundle="bso"]]"
-                },
-                {
-                    "displayName": "[[i18n "created" bundle="bso"]]",
-                    "cellTemplate": "{{dateTimeFormat dateCreated.value \"DD.MM.YYYY\"}}"
-                }]'
-            >
-                <template id="subjectTemplate">
-                    <semantic-link iri="{{subject.value}}"><mp-text-truncate truncate="&hellip;">{{label.value}}</mp-text-truncate></semantic-link>
-                </template>
-            </semantic-table>
-
-            <semantic-table
-                query="SELECT ?proposition ?subject ?type ?container ?dateCreated ?parentContainer ?page ?form (GROUP_CONCAT(?entity;SEPARATOR=',') as ?entities) (GROUP_CONCAT(?string;SEPARATOR=',') as ?strings) WHERE {
-                    ?proposition a crminf:I4_Proposition_Set ;
-                        crm:P67_refers_to [[> thisForQuery]] ;
-                        crm:P129_is_about ?subject .
-                    ?subject a ?type .
-                    BIND(URI(STRBEFORE(STR(?proposition), '/context')) as ?container)
-                    ?parentContainer ldp:contains ?container .
-                    ?container prov:used ?page_and_form ;
-                        prov:generatedAtTime ?dateCreated .
-                    BIND(STRBEFORE(STR(?page_and_form), '#') as ?page)
-                    BIND(STRAFTER(STR(?page_and_form), '#') as ?form)
-                    OPTIONAL {
-                        ?subject crm:P14_carried_out_by ?entity .
-                        FILTER(isIRI(?entity))
-                    } 
-                    OPTIONAL {
-                        ?subject crm:P141_assigned ?entity .
-                        FILTER(isIRI(?entity))
-                    } 
-                    OPTIONAL {
-                        ?subject crm:P141_assigned ?string .
-                        FILTER(!isIRI(?string))
-                    }
-                } GROUP BY ?proposition ?subject ?type ?container ?dateCreated ?parentContainer ?page ?form
-                ORDER BY ?dateCreated"
-                options='{
-                    "showFilter": false
-                }'
-                column-configuration='[{
-                    "displayName": "[[i18n "type" bundle="bso"]]",
-                    "cellTemplate": "<mp-label iri=\"{{type.value}}\"></mp-label>"
-                },
-                {
-                    "displayName": "[[i18n "entities" bundle="bso"]]",
-                    "cellTemplate": "{{> entityTemplate}}"
-                },
-                {
-                    "displayName": "[[i18n "created" bundle="bso"]]",
-                    "cellTemplate": "{{dateTimeFormat dateCreated.value \"DD.MM.YYYY H:mm\"}}"
-                },
-                {
-                    "displayName": "[[i18n "actions" bundle="bso"]]",
-                    "cellTemplate": "{{> actionTemplate }}"
-                }]'
-            >
-                <template id="actionTemplate">
-                    <div class="bso-component button-set">
-                        <button class="btn btn-secondary btn-xs">
-                            <semantic-link iri="http://www.metaphacts.com/resource/assets/NamedGraph" 
-                                urlqueryparam-view="graph" 
-                                urlqueryparam-graph="{{proposition.value}}">
-                                [[i18n "view" bundle="bso"]]
-                            </semantic-link>
-                        </button>
-                        <button class="btn btn-secondary btn-xs">
-                            <semantic-link iri="{{ page.value }}"
-                                urlqueryparam-subjectiri="{{subject.value}}"
-                                urlqueryparam-objectiri="[[>thisIri]]"
-                                urlqueryparam-form="{{ form.value }}"
-                            >[[i18n "edit" bundle="bso"]]</semantic-link>
-                        </button>
-                        <button class="btn btn-secondary btn-xs">
-                            <semantic-link iri="page:deleteContainerFromParent" 
-                                urlqueryparam-container="{{container.value}}" 
-                                urlqueryparam-parent="{{parentContainer.value}}" 
-                                urlqueryparam-back="[[>thisIri]]">[[i18n "delete" bundle="bso"]]
-                            </semantic-link>
-                        </button>
-                    </div>
-                </template>
-                <template id="entityTemplate">
-                    {{#if entities.value}}
-                        {{#each (split entities.value ",")}}<semantic-link iri="{{this}}"></semantic-link>{{#unless @last}}, {{/unless}}{{/each}}
+[[#*inline "component-description"]]
+    <semantic-query
+        query="SELECT ?label ?source ?sourceLabel WHERE {
+            {
+                [[> thisForQuery]] crm:P129i_is_subject_of ?value .
+                ?value crm:P2_has_type aat:300435416 ;
+                    rdfs:label ?label .
+            } UNION {
+                [[> thisForQuery]] a search:Person ;
+                    crmdig:L54_is_same-as ?source .
+                ?source gndo:biographicalOrHistoricalInformation ?label .
+                BIND('GND' as ?sourceLabel)
+            } UNION {
+                [[> thisForQuery]] a search:Object ;
+                    crm:P108i_was_produced_by/crm:P9_consists_of ?publication_event .
+                    ?publication_event a frbroo:F30_Publication_Event ;
+                    crm:P3_has_note ?label .
+            } UNION {
+                [[> thisForQuery]] a oa:annotation ;
+                    oa:body/rdfs:label ?label .
+            }
+        }"
+        template="{{>template}}">
+        <template id="template">
+            {{#each bindings}}
+                <p class="bso-component description">
+                    {{label.value}}
+                    {{#if source.value}}
+                        <small>([[i18n "source" bundle="bso"]]: <a href="{{source.value}}">{{sourceLabel.value}})</a></small>
                     {{/if}}
-                    {{#if strings.value}}
-                        {{#each (split strings.value ",")}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}
-                    {{/if}}
-                </template>
-            </semantic-table>
+                </p>
+            {{/each}}
+        </template>
+</semantic-query>
+[[/inline]]
+
+[[#*inline "component-objects-table"]]
+    <semantic-if 
+        query='ASK { BIND([[> thisForQuery]] as $subject) . [[condition]] }'
+        then='{{> template}}'
+        [[#if noResults]]
+            else="<p>[[i18n noResults bundle="bso"]]</p>"
+        [[/if]]
+    >
+        <template id="template">
+            <div class="bso-component field-visualisation">
+                <span class="bso-component label">[[i18n label bundle="bso"]]</span>
+
+                <mp-event-trigger type="Component.Refresh" targets='["object-map"]'>
+                    <bs-tabs default-active-key="grid">
+                        <bs-tab event-key="view" title="[[i18n "view" bundle="bso"]]:"></bs-tab>
+                        <bs-tab event-key="grid" title="[[i18n "grid" bundle="bso"]]">
+                            <div class="bso-component card-container">
+                                <semantic-table
+                                query="SELECT DISTINCT ?subject WHERE {
+                                    [[> @partial-block]]
+                                }"
+                                tuple-template="{{> partial:cardObject}}"
+                                options='{
+                                  "showFilter": true,
+                                  "pageSizeSelection": "[5,10,20,50]"
+                                }'
+                                [[#if noResults]]
+                                no-result-template="<p>[[i18n noResults bundle="bso"]]</p>"
+                                [[/if]]
+                >
+                                </semantic-table>
+                            </div>
+                        </bs-tab>
+                        <bs-tab event-key="map" title="[[i18n "map" bundle="bso"]]">
+                            <div style="height:40rem;width:100%">
+                                <mp-event-target-refresh id="object-map">
+                                    <semantic-map
+                                        id="object-map-[[label]]"
+                                        query="SELECT DISTINCT ?subject ?wkt WHERE {
+                                            [[> @partial-block]] 
+                                            {
+                                                ?subject a search:Place ;
+                                                    crmdig:L54_is_same-as/wdt:P625 ?wkt .
+                                            } UNION {
+                                                ?subject crm:P128_carries?/crm:P138_represents/crmdig:L54_is_same-as/wdt:P625 ?wkt .
+                                            } UNION {
+                                                ?subject a search:Type ;
+                                                    ^crm:P138_represents/crm:P138_represents/crmdig:L54_is_same-as/wdt:P625 ?wkt .
+                                            } 
+                                        }"
+                                        
+                                        tuple-template='{{> template }}'
+                                        no-result-template='<bs-alert variant="info">[[i18n "noResultsWithCoordinates" bundle="bso"]]</bs-alert>'
+                                    >
+                                        <template id='template'>{{> partial:cardObject noFallback="true"}}</template>
+                                    </semantic-map>
+                                </mp-event-target-refresh>
+                            </div>
+                        </bs-tab>
+                </bs-tabs>
+                </mp-event-trigger>
+        </template>
+    </semantic-if>
+
+[[/inline]]
+
+[[#*inline "component-person-network"]]
+    <div class="bso-component graph">
+        <semantic-graph height="[[height]]px"
+            query='CONSTRUCT {
+                ?s ?p ?o .
+            } WHERE {
+                BIND([[> thisForQuery]] as ?s)
+                ?object (crm:P128_carries/crm:P94i_was_created_by|crm:P108i_was_produced_by)/crm:P14_carried_out_by ?s, ?o .
+                OPTIONAL {
+                    ?subEvent crm:P2_has_type ?eventType ;
+                        crm:P14_carried_out_by ?o ;
+                        ^crm:P9_consists_of/(^crm:P94i_was_created_by/^crm:P128_carries|^crm:P108i_was_produced_by) ?object .
+                }
+                BIND(IF(BOUND(?eventType), ?eventType, search:collaborator) as ?p)
+                FILTER(?s != ?o)
+            }'>
+            <semantic-graph-layout-cose-bilkent ideal-edge-length=150></semantic-graph-layout-cose-bilkent>
+        </semantic-graph>
+    </div>
+[[/inline]]
+
+
+[[#*inline "field-visualisation-contained-in"]]
+<semantic-query
+    query="SELECT DISTINCT ?parent ?type ?typeClass WHERE {
+        BIND([[> thisForQuery]] as ?leaf)
+        ?leaf crm:P46i_forms_part_of+ ?parent .
+        OPTIONAL {
+            ?node ^crm:P46i_forms_part_of ?parent .
+        }
+        ?parent a ?type .
+        BIND(STRAFTER(STR(?type), 'search/') as ?typeClass)
+        VALUES(?type) {
+            (search:Object)
+        }
+    }"
+    template="{{> template}}">
+    <template id="template">
+        <div class="bso-component field-visualisation">
+            <span class="bso-component label">[[i18n "containedIn" bundle="bso"]]</span>
+            <ul class="bso-component tags">
+                {{#each bindings}}
+                    <li class="bso-tag {{typeClass.value}}"><semantic-link uri="{{parent.value}}" urlqueryparam-view="page"></semantic-link></li>
+                {{/each}}
+            </ul>
+        </div>
+    </template>
+</semantic-query>
+[[/inline]]
+
+[[#*inline "field-visualisation-dates"]]
+<semantic-query
+    query="SELECT DISTINCT ?subject ?eventType WHERE {
+        [[> thisForQuery]] (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P9_consists_of? ?event .
+        ?event crm:P4_has_time-span ?subject .
+        ?event a ?eventType .
+    }"
+    template="{{> template}}">>
+    <template id="template">
+        <div class="bso-component field-visualisation">
+            <span class="bso-component label">[[i18n "dates" bundle="bso"]]</span>
+            <table>
+                {{#each bindings}}
+                <tr>
+                    <td><semantic-link iri="{{subject.value}}"></semantic-link></td>
+                    <td><mp-label iri="{{eventType.value}}"></mp-label></td>
+                </tr>
+                {{/each}}
+            </table>
+        </div>
+    </template>
+</semantic-query>
+[[/inline]]
+
+[[#*inline "field-visualisation-depicts"]]
+<!-- Depicts -->
+<semantic-query
+    query="SELECT DISTINCT ?subject ?type ?typeClass WHERE {
+        [[> thisForQuery]] crm:P128_carries?/crm:P138_represents ?subject .
+        OPTIONAL {
+            ?subject a ?type .
+            BIND(STRAFTER(STR(?type), 'search/') as ?typeClass)
+            VALUES(?type) {
+                (search:Person)
+                (search:Place)
+                (search:Type)
+            }
+        }
+        FILTER NOT EXISTS {
+            GRAPH <https://resource.swissartresearch.net/graph/smapshot> {
+                ?subject a crm:E53_Place .
+            }
+        }
+    } ORDER BY ?type ?subject"
+    template="{{> template}}">
+    <template id="template">
+        <div class="bso-component field-visualisation">
+            <span class="bso-component label">[[i18n "depicts" bundle="bso"]]</span>
+            <ul class="bso-component tags">
+                {{#each bindings}}
+                    <li class="bso-tag {{typeClass.value}}"><semantic-link uri="{{subject.value}}"></semantic-link></li>
+                {{/each}}
+            </ul>
+        </div>
+    </template>
+</semantic-query>
+[[/inline]]
+
+[[#*inline "field-visualisation-dimensions"]]
+<!-- Dimensions of whole -->
+<semantic-query
+    query="SELECT ?dimension_label ?dimension_type_label ?dimension_unit ?dimension_value WHERE {
+        [[>thisForQuery]] crm:P43_has_dimension ?dimension .     
+        {
+            ?dimension crm:P2_has_type/rdfs:label ?dimension_type_label ;
+                crm:P90_has_value ?dimension_value ;
+                crm:P91_has_unit/rdfs:label ?dimension_unit .
+                FILTER(LANG(?dimension_type_label) = 'en')
+        } UNION {
+            ?dimension rdfs:label ?dimension_label .
+            FILTER NOT EXISTS {?dimension crm:P90_has_value ?dimension_value }
+        }
+
+    } ORDER BY DESC(?dimension_unit)"
+    template="{{> dimensionTemplate}}"
+>
+    <template id="dimensionTemplate">
+        <div class="bso-component field-visualisation">
+            <span class="bso-component label">[[i18n "dimensions" bundle="bso"]]</span>
+
+            <table>
+                {{#each bindings}}
+                    <tr>
+                        {{#if dimension_type_label.value}}
+                            <td>{{dimension_type_label.value}}: {{dimension_value.value}} {{dimension_unit.value}}</td>
+                        {{/if}}
+                        {{#if dimension_label}}
+                            <td>{{dimension_label.value}}</td>
+                        {{/if}}
+                    </tr>
+                {{/each}}
+            </table>
+    </template>
+</semantic-query>
+
+<!-- Dimensions of parts -->
+<semantic-query
+    query="SELECT ?part ?part_note (SAMPLE(?part_type_labels) as ?part_type_label) WHERE {
+        GRAPH ?g {
+            [[> thisForQuery ]] crm:P46_is_composed_of ?part .
+            ?part crm:P2_has_type/rdfs:label ?part_type_labels .
+            OPTIONAL {
+                ?part crm:P3_has_note ?part_note .
+            }
+        }
+    } 
+    GROUP BY ?part ?part_note
+    ORDER BY ?part_type_label"
+    template="{{> partTemplate}}"
+>
+    <template id="partTemplate">
+        <div class="bso-component field-visualisation">
+            <span class="bso-component label">[[i18n "dimensions" bundle="bso"]]</span>
+            <table>
+                {{#each bindings}}
+                <tr>
+                    <td><em>{{part_type_label.value}}</em></span>{{#if part_note.value}} ({{part_note.value}}){{/if}}</td>
+                    <td>
+                        <semantic-query
+                            query="SELECT ?dimension_label ?dimension_type_label ?dimension_unit ?dimension_value WHERE {
+                                <{{part.value}}> crm:P43_has_dimension ?dimension .     
+                                {
+                                    GRAPH ?g {
+                                        ?dimension crm:P2_has_type/rdfs:label ?dimension_type_label ;
+                                            crm:P90_has_value ?dimension_value ;
+                                            crm:P91_has_unit/rdfs:label ?dimension_unit .
+                                    }
+                                } UNION {
+                                    GRAPH ?g {
+                                        ?dimension rdfs:label ?dimension_label .
+                                        FILTER NOT EXISTS {?dimension crm:P90_has_value ?dimension_value }
+                                    }
+                                }
+
+                            } ORDER BY DESC(?dimension_unit)"
+                            template="{{> dimensionTemplate}}"
+                        >
+                            <template id="dimensionTemplate">
+                                <div>
+                                    {{#each bindings}}
+                                        {{#if dimension_type_label.value}}
+                                            {{dimension_type_label.value}}: {{dimension_value.value}} {{dimension_unit.value}}
+                                        {{/if}}
+                                        {{#if dimension_label}}
+                                            {{dimension_label.value}}
+                                        {{/if}}
+                                    {{/each}}
+                                </div>
+                            </template>
+                        </semantic-query>
+                    </td>
+                </tr>
+                {{/each}}
+            </table>
         </div>
 
-        <div class="bso-component button-set">
+    </template>
+</semantic-query>
+[[/inline]]
 
-            <semantic-link
-                iri="page:addEditDataForEntity"
-                urlqueryparam-objectiri="[[> thisIri]]"
-            ><button type="button" class="btn btn-primary btn-s">[[i18n "addData" bundle="bso"]]</button></semantic-link>
+[[#*inline "field-visualisation-external-links"]]
+<semantic-query
+    query="SELECT DISTINCT ?subject ?label WHERE {
 
-            <semantic-if query="ASK { [[> thisForQuery]] a ?type . VALUES (?type) {(search:Object) (crmdig:D35_Area)} .}" then="{{> objectButtonTemplate}}">
-                <template id="objectButtonTemplate">
-                    <span>
+        BIND(<https://d-nb.info/gnd/10171799-4> as ?nb)
+        BIND(<https://d-nb.info/gnd/1012546-2> as ?zbz)
+        {
+            [[> thisForQuery]] crmdig:L54_is_same-as ?subject .
+        } UNION {
+            [[> thisForQuery]] crm:P70i_is_documented_in ?subject .
+            ?attribute_assignment a crm:E13_Attribute_Assignment ; crm:P141_assigned ?subject .
+        } UNION {
+            [[> thisForQuery]] a search:Object ;
+            crm:P109_has_current_or_former_curator ?zbz ;
+            crmdig:L1i_was_digitized_by/crmdig:L11_had_output/crm:P1_is_identified_by ?subject .
+        } UNION {
+            [[> thisForQuery]] a search:Object ;
+                crm:P109_has_current_or_former_curator ?nb .
+            BIND(STRAFTER('[[> thisIri]]', 'nb-') as ?nbId)
+            BIND(URI(CONCAT('https://www.helveticarchives.ch/detail.aspx?ID=', ?nbId)) as ?subject)
+            BIND('HelveticArchives' as ?label)
+        } UNION {
+            [[> thisForQuery]] a search:Object .                            
+            BIND(URI(REPLACE('[[>thisIri]]','artwork','manifest')) as ?subject) .
+            BIND('IIIF Manifest' as ?label)
+            # Temporary filter as IIIF Manifests for SFF data are not yet available
+            FILTER(! REGEX('[[> thisIri ]]', 'SFF', 'i'))
+        } UNION {
+            [[> thisForQuery]] crm:P1_is_identified_by ?smapshot_identifier .
+            ?smapshot_identifier crm:P2_has_type <https://smapshot.heig-vd.ch> ;
+                rdfs:label ?smapshot_id .
+            BIND(URI(CONCAT('https://smapshot.heig-vd.ch/contribute/', ?smapshot_id)) as ?subject) .
+            BIND('sMapshot' as ?label)
+        }
+    }"
+    template="{{> template}}">
+    <template id="template">
+        <div class="bso-component field-visualisation">
+            <span class="bso-component label">[[i18n "externalLinks" bundle="bso"]]</span>
+            <ul class="bso-component tags">
+                {{#each bindings}}
+                    <li class="bso-tag"><a href="{{subject.value}}" target="_blank">{{#if label.value}}{{label.value}}{{else}}<mp-label iri="{{subject.value}}"></mp-label>{{/if}}</a></li>
+                {{/each}}
+            </ul>
+        </div>
+    </template>
+</semantic-query>
+[[/inline]]
 
-                        <semantic-if
-                        query='ASK { 
-                                [[> thisForQuery ]] crm:P1_is_identified_by ?smapshot_id .
-                                ?smapshot_id crm:P2_has_type <https://smapshot.heig-vd.ch> .
-                            }'
-                            then='{{> smapshotRegionTemplate}}'
-                            else='{{> smapshotSubmissionTemplate}}'
-                        >
-                            <template id="smapshotRegionTemplate">
-                                <semantic-link
-                                    iri="page:selectSmapshotRegionForObject"
-                                    urlqueryparam-objectiri="[[> thisIri]]"
-                                ><button type="button" class="btn btn-primary btn-s">[[i18n "editSmapshotRegion" bundle="bso"]]</button></semantic-link>
-                            </template>
-                            <template id="smapshotSubmissionTemplate">
-                                <semantic-link
-                                    iri="page:selectSmapshotRegionForObject"
-                                    urlqueryparam-objectiri="[[> thisIri]]"
-                                ><button type="button" class="btn btn-primary btn-s">[[i18n "submitToSmapshot" bundle="bso"]]</button></semantic-link>
-                            </template>
-                        </semantic-if>
-                    </span>
-                </template>
-            </semantic-if>
+[[#*inline "field-visualisation-inscription"]]
+<semantic-query 
+    query="SELECT ?value_formatted WHERE {
+        [[> thisForQuery]] crm:P128_carries ?inscription .
+        ?inscription a crm:E34_Inscription ;
+        rdfs:label ?value .
+        BIND(REPLACE(?value, '\n','<br>') AS ?value_formatted)
+    }"
+    template="{{> template}}"
+>
+    <template id="template">
+        <div class="bso-component field-visualisation">
+            <span class="bso-component label">[[i18n "inscription" bundle="bso"]]</span>
+            <div class="bso-component values">
+                {{#each bindings}}
+                    <mp-text-truncate lines="3" expand="{{> expand}}" collapse="{{> collapse}}">
+                        <template id="expand"> <a>&hellip;[[i18n "readMore" bundle="bso"]]</a></template>
+                        <template id="collapse"><span><br/><a>[[i18n "showLess" bundle="bso"]]</a></span></template>
+                        {{{value_formatted.value}}}
+                    </mp-text-truncate>    
+                
+                {{/each}}
+            </div>
+        </div>
+    </template>
+</semantic-query>
+[[/inline]]
 
-            <mp-event-target-refresh id="set-image-button">
-                <semantic-if
-                    query="ASK {
-                        [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of $subject .
-                        $subject rso:displayLabel ?label .
-                        FILTER(REGEX(?label, 'image','i'))
-                        GRAPH <https://platform.swissartresearch.net/imageRegions> {
-                            FILTER NOT EXISTS {$subject crm:P2_has_type type:imageRegion}
+[[#*inline "field-visualisation-persons-involved-in-creation"]]
+<semantic-query
+    query="SELECT DISTINCT ?subject (GROUP_CONCAT(DISTINCT ?role; SEPARATOR=' ') as ?roles) (GROUP_CONCAT(DISTINCT ?global_role; SEPARATOR=' ') as ?global_roles) WHERE {
+        BIND(<[[>thisIri]]/meta> as ?meta)
+        {
+            [[> thisForQuery]] crm:P108i_was_produced_by ?event .
+            BIND(crm:E12_Production as ?global_role)
+        } UNION 
+        {
+            [[> thisForQuery]] (crm:P128_carries?/crm:P94i_was_created_by) ?event .
+            BIND(crm:E65_Creation as ?global_role)
+        }
+        {
+            ?event crm:P14_carried_out_by ?subject .
+            OPTIONAL {
+                ?event crm:P9_consists_of ?subevent .
+                ?subevent crm:P14_carried_out_by ?subject .
+                OPTIONAL {
+                    ?subevent crm:P2_has_type ?role .
+                }
+            }
+            OPTIONAL {
+                ?subject crm:P1_is_identified_by ?appellation .
+                ?appellation crm:P70i_is_documented_in ?meta .
+                ?appellation rdfs:label ?appellation_label .
+            }
+        } UNION {
+            ?event crm:P9_consists_of ?subevent .
+            ?subevent crm:P14_carried_out_by ?subject .
+            OPTIONAL {
+                ?subevent crm:P2_has_type ?role .
+            }
+            OPTIONAL {
+                ?subject crm:P1_is_identified_by ?appellation .
+                ?appellation crm:P70i_is_documented_in ?meta .
+                ?appellation rdfs:label ?appellation_label .
+            }
+        }
+    } GROUP BY ?subject"
+    template="{{> template}}">>
+    <template id="template">
+        <div class="bso-component field-visualisation">
+            <span class="bso-component label">[[i18n "persons" bundle="bso"]]</span>
+            <table>
+                {{#each bindings}}
+                <tr>
+                    <td>
+                        <ul class="bso-component tags">
+                                <li class="bso-tag Person"><semantic-link uri="{{subject.value}}"></semantic-link></li>
+                        </ul>
+                    </td>
+                    <td>{{#if roles.value}}{{#each (split roles.value ' ')}}[[> addComma]]<mp-label iri="{{this}}"></mp-label>{{/each}}{{/if}} ({{#each (split global_roles.value ' ')}}[[> addComma]]<mp-label iri="{{this}}"></mp-label>{{/each}})</td>
+                </tr>
+                {{/each}}
+            </table>
+        </div>
+    </template>
+</semantic-query>
+[[/inline]]
+
+[[#*inline "field-visualisation-places"]]
+<semantic-query
+    query="SELECT DISTINCT ?subject ?eventType ?typeClass WHERE {
+        [[> thisForQuery]] (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P9_consists_of? ?event .
+        ?event crm:P7_took_place_at ?subject .
+        ?subject a ?type .
+        ?event a ?eventType .
+        BIND(STRAFTER(STR(?type), 'search/') as ?typeClass)
+        VALUES(?type) {
+            (search:Place)
+        }
+    }"
+    template="{{> template}}">>
+    <template id="template">
+        <div class="bso-component field-visualisation">
+            <span class="bso-component label">[[i18n "places" bundle="bso"]]</span>
+            <table>
+                {{#each bindings}}
+                <tr>
+                    <td class="bso-component tags"><semantic-link class-name="bso-tag {{typeClass.value}}" iri="{{subject.value}}"></semantic-link></td>
+                    <td><mp-label iri="{{eventType.value}}"></mp-label></td>
+                </tr>
+                {{/each}}
+            </table>
+        </div>
+    </template>
+</semantic-query>
+
+[[/inline]]
+
+[[#*inline "field-visualisation-provenience"]]
+<semantic-query 
+    query="SELECT ?acquisition ?acquisition_note ?previous_owner WHERE {
+        [[> thisForQuery]] crm:P24i_changed_ownership_through ?acquisition .
+        OPTIONAL {
+            ?acquisition crm:P23_transferred_title_from ?previous_owner .
+        }
+        OPTIONAL {
+            ?acquisition crm:P3_has_note ?acquisition_note .
+        }
+    }"
+    template="{{> template}}"
+>
+    <template id="template">
+        <div class="bso-component field-visualisation">
+            <span class="bso-component label">[[i18n "provenience" bundle="bso"]]</span>
+            {{#each bindings}}
+                {{#if previous_owner.value}}
+                    <ul class="bso-component tags">
+                        <li class="bso-tag person actor"><semantic-link uri="{{previous_owner.value}}" urlqueryparam-view="page"></semantic-link></li>        
+                    </ul>
+                {{/if}}
+                {{#if acquisition_note.value}}
+                    <div class="bso-component values">{{acquisition_note.value}}</div>
+                {{/if}}
+            {{/each}}
+        </div>
+    </template>
+</semantic-query>
+[[/inline]]
+
+[[#*inline "field-visualisation-technique"]]
+<semantic-query 
+    query="SELECT ?technique WHERE {
+        [[> thisForQuery]] crm:P108i_was_produced_by/crm:P32_used_general_technique ?technique .
+    }"
+    template="{{> template}}"
+>
+    <template id="template">
+        <div class="bso-component field-visualisation">
+            <span class="bso-component label">[[i18n "technique" bundle="bso"]]</span>
+            <ul class="bso-component tags">
+                {{#each bindings}}
+                    <li class="bso-tag type"><semantic-link uri="{{technique.value}}" urlqueryparam-view="page"></semantic-link></li>   
+                {{/each}}     
+            </ul>
+        </div>
+    </template>
+</semantic-query>
+[[/inline]]
+
+[[#*inline "module-discovery"]]
+
+<bs-tab-container default-active-key="visualSimilarity">
+    <bs-row>
+        <bs-col md="3">
+            <bs-nav variant="pills" class="flex-column bso-component">
+
+                <h4>[[i18n "similarity" bundle="bso"]]</h4>
+                <bs-nav-item>
+                    <bs-nav-link event-key="visualSimilarity">[[i18n "visualSimilarities" bundle="bso"]]</bs-nav-link>
+                </bs-nav-item>
+                <bs-nav-item>
+                    <bs-nav-link event-key="titleSimilarity">[[i18n "titleSimilarities" bundle="bso"]]</bs-nav-link>
+                </bs-nav-item>
+            </bs-nav>
+        </bs-col>
+        <bs-col md="9">
+            <bs-tab-content>
+                <bs-tab-pane event-key="visualSimilarity">
+                    [[#> component-objects-table condition='?classification crm:P140_assigned_attribute_to/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries $subject ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> .' label='visually' noResults='noVisualSimilaritiesIdentified']]
+
+                        ?classification crm:P140_assigned_attribute_to/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries [[> thisForQuery]] ;
+                            crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> ;
+                            crm:P141_assigned/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries $subject .
+                    
+                    [[/ component-objects-table]]
+                </bs-tab-pane>
+                <bs-tab-pane event-key="titleSimilarity">
+                    [[#> component-objects-table condition='?classification crm:P140_assigned_attribute_to/^crm:P1_is_identified_by/^crm:P128_carries $subject ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> .' label='byTitle' noResults='noTitleSimilaritiesIdentified']]
+
+                        ?classification crm:P140_assigned_attribute_to/^crm:P1_is_identified_by/^crm:P128_carries [[> thisForQuery]] ;
+                            crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> ;
+                            crm:P141_assigned/^crm:P1_is_identified_by/^crm:P128_carries $subject ;
+                            rdf:value ?score .
+                    
+                    [[/ component-objects-table]]
+                </bs-tab-pane>
+            </bs-tab-content>
+        </bs-col>
+    </bs-row>
+</bs-tab-container>
+[[/inline]]
+
+[[#*inline "module-fields"]]
+<div class="bso-component">
+
+    <semantic-if
+        query="ASK { 
+            GRAPH ?g {
+                [[> thisForQuery]] a ?type . 
+            }
+            BIND(URI(STRBEFORE(STR(?g), '/context')) as ?container)
+            ?parentContainer ldp:contains ?container .
+            VALUES (?type) {(search:Person) }}"
+        then="{{> customEntity}}"
+        else="{{> defaultEntity}}"
+    >
+        <template id="customEntity">
+            [[> fieldsForCustomEntities]]
+        </template>
+        <template id="defaultEntity">
+            [[> partial:fieldsTable iri=entityiri param="entityiri"]]
+        </template>
+    </semantic-if>
+
+</div>
+[[/inline]]
+
+[[#*inline "module-overview"]]
+    <div>
+        [[> field-visualisation-depicts ]]
+        [[> field-visualisation-external-links]]
+        [[> field-visualisation-dates]]
+        [[> field-visualisation-places]]
+        [[> field-visualisation-contained-in]]
+        [[> field-visualisation-persons-involved-in-creation]]
+        [[> field-visualisation-dimensions]]
+        [[> field-visualisation-technique]]
+        [[> field-visualisation-provenience]]
+        [[> field-visualisation-inscription]]
+
+        <!-- Objects created -->
+        [[#> component-objects-table condition='?object a search:Object; (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P9_consists_of?/crm:P14_carried_out_by $subject' label='works']]
+            {
+                ?subject crm:P108i_was_produced_by/crm:P9_consists_of?/crm:P14_carried_out_by [[> thisForQuery]] .
+            } UNION {
+                ?subject crm:P128_carries/crm:P94i_was_created_by/crm:P9_consists_of?/crm:P14_carried_out_by [[> thisForQuery]] .
+            }             
+        [[/ component-objects-table]]
+
+        <!-- Objects acquired from -->
+        [[#> component-objects-table condition='?object a search:Object; crm:P24i_changed_ownership_through/crm:P23_transferred_title_from $subject' label='worksAcquiredFrom']]
+            ?subject crm:P24i_changed_ownership_through/crm:P23_transferred_title_from [[> thisForQuery]]
+        [[/ component-objects-table]]
+
+        <!-- Objects forming part of -->
+        [[#> component-objects-table condition='?object a search:Object; crm:P46i_forms_part_of $subject' label='contains']]
+            ?subject crm:P46i_forms_part_of [[> thisForQuery]]
+        [[/ component-objects-table]]
+
+        <!-- Regions -->
+        <mp-event-target-refresh id="regions-table">
+            [[#> component-objects-table condition='$subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of ?region . FILTER NOT EXISTS {?region crm:P2_has_type type:imageRegion}' label='regions' ]]
+                [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of  $subject.
+                FILTER NOT EXISTS {?subject crm:P2_has_type type:imageRegion}
+            [[/ component-objects-table]]
+        </mp-event-target-refresh>
+
+        <!-- Things Depicted -->
+        [[#> component-objects-table condition='?thing crm:P138_represents $subject' label='depictedBy' ]]
+            ?subject a ?type ; 
+                crm:P128_carries?/crm:P138_represents [[> thisForQuery]] .
+            VALUES ( ?type ) {
+                (search:Object)
+                (crmdig:D35_Area)
+            }         
+        [[/ component-objects-table]]
+
+        <!-- Places depicted -->
+        [[#> component-objects-table condition='$subject crm:P128_carries/crm:P138_represents ?place . ?place a search:Place' label='depictedPlaces']]             
+            [[> thisForQuery]] crm:P128_carries/crm:P138_represents $subject .
+            $subject a search:Place .
+            FILTER NOT EXISTS {
+                GRAPH <https://resource.swissartresearch.net/graph/smapshot> {
+                    ?subject a crm:E53_Place .
+                }
+            }                
+        [[/ component-objects-table]]
+
+        <!-- Objects created/produced at time-->
+        [[#> component-objects-table condition='?object a search:Object; (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P4_has_time-span $subject' label='works']]
+            {
+                ?subject crm:P108i_was_produced_by/crm:P4_has_time-span [[> thisForQuery]] .
+            } UNION {
+                ?subject crm:P128_carries/crm:P94i_was_created_by/crm:P4_has_time-span [[> thisForQuery]] .
+            }
+        [[/ component-objects-table]]
+
+        <!-- Objects created/produced at place-->
+        [[#> component-objects-table condition='?object a search:Object; (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P7_took_place_at $subject' label='worksProducedOrCreatedAtPlace']]
+            {
+                ?subject crm:P108i_was_produced_by/crm:P7_took_place_at [[> thisForQuery]] .
+            } UNION {
+                ?subject crm:P128_carries/crm:P94i_was_created_by/crm:P4_has_time-span [[> thisForQuery]] .
+            }
+        [[/ component-objects-table]]
+
+        <!-- Objects owned -->
+        [[#> component-objects-table condition='?object a search:Object; crm:P109_has_current_or_former_curator $subject' label='worksHeld']]
+            ?subject crm:P109_has_current_or_former_curator [[> thisForQuery]] .
+        [[/ component-objects-table]]
+
+        <!-- Objects of type -->
+        [[#> component-objects-table condition='?thing crm:P2_has_type $subject' label='hasType' ]]
+            ?subject a search:Object ;
+                crm:P2_has_type [[> thisForQuery]] .
+        [[/ component-objects-table]]
+
+        <!-- Objects created using this technique -->
+        [[#> component-objects-table condition='?object a search:Object; crm:P108i_was_produced_by/crm:P32_used_general_technique $subject' label='producedUsingTechnique']]
+            ?subject crm:P108i_was_produced_by/crm:P32_used_general_technique [[> thisForQuery]]
+        [[/ component-objects-table]]
+
+        <!-- Found on -->
+        [[#> component-objects-table condition='?region crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of $subject .' label='foundOn' ]]
+            $subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of  [[> thisForQuery]] .
+        [[/ component-objects-table]]
+
+        <!-- Is About -->
+        [[#> component-objects-table condition='$subject crm:P129_is_about|crm:P140_assigned_attribute_to ?target  .' label='isAbout' ]]
+            {
+                [[> thisForQuery]] crm:P129_is_about|crm:P140_assigned_attribute_to $subject .
+                OPTIONAL {
+                    ?iiif la:access_point $subject .
+                }
+                FILTER(!BOUND(?iiif))
+            } UNION {
+                [[> thisForQuery]] crm:P140_assigned_attribute_to ?iiif_image .
+                $subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?iiif_image .
+            } 
+        [[/ component-objects-table]] 
+    </div>
+[[/inline]]
+
+[[#*inline "module-references"]]
+    <div class="bso-component">
+
+        <!-- References on -->
+        [[#> component-objects-table condition='?attribute_assignment crm:P140_assigned_attribute_to ?object; crm:P141_assigned $subject ; crm:P177_assigned_property_of_type crm:P67_refers_to' label='references' ]]
+
+            ?attribute_assignment crm:P140_assigned_attribute_to $subject; 
+                crm:P141_assigned [[> thisForQuery]] ; 
+                crm:P177_assigned_property_of_type crm:P67_refers_to .
+        
+        [[/ component-objects-table]]
+    </div>
+    <semantic-if
+        query="ASK {
+            ?annotation crm:P140_assigned_attribute_to [[> thisForQuery]] ;
+                    crm:P177_assigned_property_of_type crm:P67_refers_to .
+        }"
+        then="{{> template-referenced-by}}"
+    >
+        <template id="template-referenced-by">
+            <div class="bso-component no-padding">
+                <span class="bso-component label padding-bottom">[[i18n "referencedBy" bundle="bso"]]</span>
+                <semantic-table
+                    query="SELECT ?annotation ?reference ?page WHERE {
+                        ?annotation crm:P140_assigned_attribute_to [[> thisForQuery]] ;
+                            crm:P141_assigned ?reference ;
+                            crm:P177_assigned_property_of_type crm:P67_refers_to .
+                        OPTIONAL {
+                            ?annotation crm:P1_is_identified_by ?page_identifier .
+                            ?page_identifier crm:P2_has_type aat:300445022 ;
+                                rdfs:label ?page .
                         }
                     }"
-                    then="{{> notthere}}"
-                >
-                    <template id="notthere">
-                        <semantic-update
-                            variable-params='["region"]'
-                            post-action='reload'
-                            query="INSERT {
-                                GRAPH <https://platform.swissartresearch.net/imageRegions> {
-                                    ?region crm:P2_has_type type:imageRegion .
+                    options='{
+                        "showFilter": false
+                    }'
+                    column-configuration='[{
+                        "variableName": "reference",
+                        "displayName": "[[i18n "reference" bundle="bso"]]"
+                    },
+                    {
+                        "variableName": "page",
+                        "displayName": "[[i18n "page" bundle="bso"]]"
+                    }]'
+                ></semantic-table>
+            </div>
+        </template>
+    </semantic-if>
+    
+[[/inline]]
+
+[[#*inline "module-sidebar-image"]]
+    <semantic-if 
+        query='ASK { [[> thisForQuery ]] a search:Object}'
+        then='{{> objectTemplate }}'
+        else='{{> template}}'
+    >
+        <template id="objectTemplate">
+            [[#if entityiri]]
+                [[> partial:objectViewImageDisplay objectiri=entityiri]]
+            [[else]]
+                [[> partial:objectViewImageDisplay urlparam="entityiri"]]
+            [[/if]]
+        </template>
+        <template id="template">
+            <bs-panel>
+                <sari-resource-thumbnail iri="[[> thisIri]]" template="{{> template}}">
+                    <template id="template">
+                        <img src="{{thumbnail}}" />
+                        <semantic-query
+                            query="SELECT * WHERE {
+                                BIND(<{{thumbnail}}> as ?thumbnail)
+                                ?thumbnail crmdig:L54_is_same-as?/crm:P104_is_subject_to ?right .
+                                ?right crm:P2_has_type ?license .
+                                OPTIONAL {
+                                    ?right crm:P105_right_held_by ?rightsHolder .
                                 }
-                            } WHERE {
-                                [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of ?region .
-                                ?region rso:displayLabel 'image' .
-                            }"
-                        >
-                            <a class="btn btn-primary">Set image region</a>
-                        </semantic-update>
+                            } LIMIT 1"
+                            template="{{> licenseTemplate}}">
+                            <template id="licenseTemplate">
+                                <div class="bso-component image-license">
+                                    [[i18n "imageLicense" bundle="bso"]]: <mp-label iri="{{ bindings.0.license.value }}"></mp-label>.
+                                    {{#if bindings.0.rightsHolder.value}}
+                                        [[i18n "by" bundle="bso"]] <mp-label iri="{{ bindings.0.rightsHolder.value}}"></mp-label>
+                                    {{/if}}
+                                </div>
+                            </template>
+                        </semantic-query>
                     </template>
-                    
-                </semantic-if>
-            </mp-event-target-refresh>
+                </sari-resource-thumbnail>
+            </bs-panel>
+        </template>
+    </semantic-if>
+[[/inline]]
 
-            <semantic-if query="ASK { 
-                GRAPH ?g {
-                    [[> thisForQuery]] a ?type . 
-                }
-                BIND(URI(STRBEFORE(STR(?g), '/context')) as ?container)
-                ?parentContainer ldp:contains ?container .
-                VALUES (?type) {(search:Person) }}" then="{{> template}}">
-                <template id="template">
-                    <semantic-link
-                        iri="page:editPerson"
-                        urlqueryparam-entityiri="[[> thisIri]]"
+[[#*inline "module-sidebar-map"]]
+    <semantic-if
+        query='ASK { [[> thisForQuery ]] crmdig:L54_is_same-as/wdt:P625 ?coordinates }'
+        then='{{> mapTemplate}}'
+    >
+        <template id="mapTemplate">
+            <div style="height:300px;width:400px;">
+                <semantic-map
+                    query='
+                        SELECT ?wkt WHERE {
+                            [[> thisForQuery ]] crmdig:L54_is_same-as/wdt:P625 ?wkt
+                    }'
+                    tuple-template='{{> tupleTemplate}}'
                     >
-                        <button class="btn btn-primary">[[i18n "editRecord" bundle="bso"]]</button>
-                    </semantic-link>
-                </template>
-            </semantic-if>
+                        <template id="tupleTemplate">
+                            <mp-label iri="[[> thisIri]]"></mp-label>
+                        </template>
+                    </semantic-map>
+            </div>
+        </template>
+    </semantic-if>
+[[/inline]]
 
-            <semantic-query
-                query='SELECT ?container ?parentContainer WHERE {
-                    BIND(URI("[[> thisIri]]/container") AS ?container) 
-                    ?parentContainer ldp:contains ?container .
-                } LIMIT 1'
-                template="{{> deleteButtonTemplate}}"
-            >
-                <template id="deleteButtonTemplate">
-                    {{#each bindings}}
+[[#*inline "module-sidebar-person-network"]]
+<semantic-if
+    query='ASK {
+        BIND([[> thisForQuery]] as ?s)
+        ?s a search:Person .
+    }'
+    then='{{> personNetworkTemplate}}'
+>
+    <template id="personNetworkTemplate">
+        <bs-panel>
+            <div style="width:300px">
+                [[> component-person-network height=300]]
+                <div class="caption">
+                    <mp-overlay-dialog title="[[i18n "networkView" bundle="bso"]]" type="modal" bs-size="xl">
+                        <mp-overlay-dialog-trigger><a>[[i18n "openInViewer" bundle="bso"]]</a></mp-overlay-dialog-trigger>
+                        <mp-overlay-dialog-content id="smapshot-modal">
+                            [[> component-person-network height=600]]
+                        </mp-overlay-dialog-content>
+                    </mp-overlay-dialog>
+                </div>
+            </div>
+        </bs-panel>
+    </template>
+</semantic-if>
+[[/inline]]
+
+[[#*inline "module-sidebar-smapshot"]]
+    <semantic-if
+        query='ASK { 
+            [[> thisForQuery ]] crm:P1_is_identified_by ?smapshot_id .
+            ?smapshot_id crm:P2_has_type <https://smapshot.heig-vd.ch> .
+        }'
+        then='{{> smapshotTemplate}}'
+    >
+        <template id="smapshotTemplate">
+            <bs-panel>
+                <smapshot-embed 
+                    iri="[[> thisIri]]"
+                    width="300"
+                    height="200"
+                ></smapshot-embed>
+                <div class="caption">
+                    <mp-overlay-dialog title="Smapshot View" type="modal" bs-size="xl">
+                        <mp-overlay-dialog-trigger><a>[[i18n "openInViewer" bundle="bso"]]</a></mp-overlay-dialog-trigger>
+                        <mp-overlay-dialog-content id="smapshot-modal">
+                            <mp-page-loader 
+                                iri="[[ resolvePrefix 'page:viewSmapshot']]"
+                                urlqueryparam-iri="[[> thisIri]]"
+                                urlqueryparam-overlay="true"
+                            ></mp-page-loader>
+                    </mp-overlay-dialog-content>
+                    </mp-overlay-dialog>
+                </div>
+            </bs-panel>
+        </template>
+    </semantic-if>
+[[/inline]]
+
+[[#*inline "module-workspace"]]
+    
+<div class="bso-component ">
+    <div>
+        <!-- Display data created-->
+        <semantic-table
+            query='SELECT ?subject ?label ?actor ?dateCreated WHERE {
+                [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
+                {
+                    ?subject a crmsci:S7_Simulation_or_Prediction ;
+                        crm:P32_used_general_technique <https://smapshot.heig-vd.ch/> ;
+                        crm:P16_used_specific_object ?image ;
+                        crm:P14_carried_out_by ?actor ;
+                        rdfs:label ?label .
+                } UNION {
+                    GRAPH <https://resource.swissartresearch.net/graph/smapshot/observations> {
+                        ?subject crm:P129_is_about/crmdig:L49_is_primary_area_of ?image ;
+                            crm:P94i_was_created_by/crm:P14_carried_out_by ?actor ;
+                            crm:P94i_was_created_by/crm:P4_has_time-span/crm:P82_at_some_time_within ?dateCreated ;
+                            rdfs:label ?label .
+                    }
+                }
+            }'
+            options='{
+                "showFilter": false
+            }'
+            column-configuration='[{
+                "variableName": "subject",
+                "displayName": "[[i18n "entity" bundle="bso"]]",
+                "cellTemplate": "{{> subjectTemplate }}"
+            },
+            {
+                "variableName": "actor",
+                "displayName": "[[i18n "user" bundle="bso"]]"
+            },
+            {
+                "displayName": "[[i18n "created" bundle="bso"]]",
+                "cellTemplate": "{{dateTimeFormat dateCreated.value \"DD.MM.YYYY\"}}"
+            }]'
+        >
+            <template id="subjectTemplate">
+                <semantic-link iri="{{subject.value}}"><mp-text-truncate truncate="&hellip;">{{label.value}}</mp-text-truncate></semantic-link>
+            </template>
+        </semantic-table>
+
+        <semantic-table
+            query="SELECT ?proposition ?subject ?type ?container ?dateCreated ?parentContainer ?page ?form (GROUP_CONCAT(?entity;SEPARATOR=',') as ?entities) (GROUP_CONCAT(?string;SEPARATOR=',') as ?strings) WHERE {
+                ?proposition a crminf:I4_Proposition_Set ;
+                    crm:P67_refers_to [[> thisForQuery]] ;
+                    crm:P129_is_about ?subject .
+                ?subject a ?type .
+                BIND(URI(STRBEFORE(STR(?proposition), '/context')) as ?container)
+                ?parentContainer ldp:contains ?container .
+                ?container prov:used ?page_and_form ;
+                    prov:generatedAtTime ?dateCreated .
+                BIND(STRBEFORE(STR(?page_and_form), '#') as ?page)
+                BIND(STRAFTER(STR(?page_and_form), '#') as ?form)
+                OPTIONAL {
+                    ?subject crm:P14_carried_out_by ?entity .
+                    FILTER(isIRI(?entity))
+                } 
+                OPTIONAL {
+                    ?subject crm:P141_assigned ?entity .
+                    FILTER(isIRI(?entity))
+                } 
+                OPTIONAL {
+                    ?subject crm:P141_assigned ?string .
+                    FILTER(!isIRI(?string))
+                }
+            } GROUP BY ?proposition ?subject ?type ?container ?dateCreated ?parentContainer ?page ?form
+            ORDER BY ?dateCreated"
+            options='{
+                "showFilter": false
+            }'
+            column-configuration='[{
+                "displayName": "[[i18n "type" bundle="bso"]]",
+                "cellTemplate": "<mp-label iri=\"{{type.value}}\"></mp-label>"
+            },
+            {
+                "displayName": "[[i18n "entities" bundle="bso"]]",
+                "cellTemplate": "{{> entityTemplate}}"
+            },
+            {
+                "displayName": "[[i18n "created" bundle="bso"]]",
+                "cellTemplate": "{{dateTimeFormat dateCreated.value \"DD.MM.YYYY H:mm\"}}"
+            },
+            {
+                "displayName": "[[i18n "actions" bundle="bso"]]",
+                "cellTemplate": "{{> actionTemplate }}"
+            }]'
+        >
+            <template id="actionTemplate">
+                <div class="bso-component button-set">
+                    <button class="btn btn-secondary btn-xs">
+                        <semantic-link iri="http://www.metaphacts.com/resource/assets/NamedGraph" 
+                            urlqueryparam-view="graph" 
+                            urlqueryparam-graph="{{proposition.value}}">
+                            [[i18n "view" bundle="bso"]]
+                        </semantic-link>
+                    </button>
+                    <button class="btn btn-secondary btn-xs">
+                        <semantic-link iri="{{ page.value }}"
+                            urlqueryparam-subjectiri="{{subject.value}}"
+                            urlqueryparam-objectiri="[[>thisIri]]"
+                            urlqueryparam-form="{{ form.value }}"
+                        >[[i18n "edit" bundle="bso"]]</semantic-link>
+                    </button>
+                    <button class="btn btn-secondary btn-xs">
                         <semantic-link iri="page:deleteContainerFromParent" 
                             urlqueryparam-container="{{container.value}}" 
                             urlqueryparam-parent="{{parentContainer.value}}" 
-                            urlqueryparam-back="[[this]]"
-                            urlqueryparam-redirect="page:listCustomData">
-                            <button class="btn btn-primary btn-s">[[i18n "delete" bundle="bso"]]</button>
+                            urlqueryparam-back="[[>thisIri]]">[[i18n "delete" bundle="bso"]]
                         </semantic-link>
-                    {{/each}}
-                </template>
-            </semantic-query>
-
-            <semantic-query
-                query="SELECT ?image WHERE {
-                    [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
-                } LIMIT 1"
-                template="{{> imageSearchTemplate}}"
-            >
-                <template id="imageSearchTemplate">
-                    <semantic-link
-                        iri="page:searchByImageRegion"
-                        urlqueryparam-imageiri="{{bindings.0.image.value}}"
-                    ><a class="btn btn-primary">Similarity Search</a></semantic-link>
-                </template>
-            </semantic-query>
-            
-        </div>
+                    </button>
+                </div>
+            </template>
+            <template id="entityTemplate">
+                {{#if entities.value}}
+                    {{#each (split entities.value ",")}}<semantic-link iri="{{this}}"></semantic-link>{{#unless @last}}, {{/unless}}{{/each}}
+                {{/if}}
+                {{#if strings.value}}
+                    {{#each (split strings.value ",")}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}
+                {{/if}}
+            </template>
+        </semantic-table>
     </div>
+
+    <div class="bso-component button-set">
+
+        <semantic-link
+            iri="page:addEditDataForEntity"
+            urlqueryparam-objectiri="[[> thisIri]]"
+        ><button type="button" class="btn btn-primary btn-s">[[i18n "addData" bundle="bso"]]</button></semantic-link>
+
+        <semantic-if query="ASK { [[> thisForQuery]] a ?type . VALUES (?type) {(search:Object) (crmdig:D35_Area)} .}" then="{{> objectButtonTemplate}}">
+            <template id="objectButtonTemplate">
+                <span>
+
+                    <semantic-if
+                    query='ASK { 
+                            [[> thisForQuery ]] crm:P1_is_identified_by ?smapshot_id .
+                            ?smapshot_id crm:P2_has_type <https://smapshot.heig-vd.ch> .
+                        }'
+                        then='{{> smapshotRegionTemplate}}'
+                        else='{{> smapshotSubmissionTemplate}}'
+                    >
+                        <template id="smapshotRegionTemplate">
+                            <semantic-link
+                                iri="page:selectSmapshotRegionForObject"
+                                urlqueryparam-objectiri="[[> thisIri]]"
+                            ><button type="button" class="btn btn-primary btn-s">[[i18n "editSmapshotRegion" bundle="bso"]]</button></semantic-link>
+                        </template>
+                        <template id="smapshotSubmissionTemplate">
+                            <semantic-link
+                                iri="page:selectSmapshotRegionForObject"
+                                urlqueryparam-objectiri="[[> thisIri]]"
+                            ><button type="button" class="btn btn-primary btn-s">[[i18n "submitToSmapshot" bundle="bso"]]</button></semantic-link>
+                        </template>
+                    </semantic-if>
+                </span>
+            </template>
+        </semantic-if>
+
+        <mp-event-target-refresh id="set-image-button">
+            <semantic-if
+                query="ASK {
+                    [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of $subject .
+                    $subject rso:displayLabel ?label .
+                    FILTER(REGEX(?label, 'image','i'))
+                    GRAPH <https://platform.swissartresearch.net/imageRegions> {
+                        FILTER NOT EXISTS {$subject crm:P2_has_type type:imageRegion}
+                    }
+                }"
+                then="{{> notthere}}"
+            >
+                <template id="notthere">
+                    <semantic-update
+                        variable-params='["region"]'
+                        post-action='reload'
+                        query="INSERT {
+                            GRAPH <https://platform.swissartresearch.net/imageRegions> {
+                                ?region crm:P2_has_type type:imageRegion .
+                            }
+                        } WHERE {
+                            [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of ?region .
+                            ?region rso:displayLabel 'image' .
+                        }"
+                    >
+                        <a class="btn btn-primary">Set image region</a>
+                    </semantic-update>
+                </template>
+                
+            </semantic-if>
+        </mp-event-target-refresh>
+
+        <semantic-if query="ASK { 
+            GRAPH ?g {
+                [[> thisForQuery]] a ?type . 
+            }
+            BIND(URI(STRBEFORE(STR(?g), '/context')) as ?container)
+            ?parentContainer ldp:contains ?container .
+            VALUES (?type) {(search:Person) }}" then="{{> template}}">
+            <template id="template">
+                <semantic-link
+                    iri="page:editPerson"
+                    urlqueryparam-entityiri="[[> thisIri]]"
+                >
+                    <button class="btn btn-primary">[[i18n "editRecord" bundle="bso"]]</button>
+                </semantic-link>
+            </template>
+        </semantic-if>
+
+        <semantic-query
+            query='SELECT ?container ?parentContainer WHERE {
+                BIND(URI("[[> thisIri]]/container") AS ?container) 
+                ?parentContainer ldp:contains ?container .
+            } LIMIT 1'
+            template="{{> deleteButtonTemplate}}"
+        >
+            <template id="deleteButtonTemplate">
+                {{#each bindings}}
+                    <semantic-link iri="page:deleteContainerFromParent" 
+                        urlqueryparam-container="{{container.value}}" 
+                        urlqueryparam-parent="{{parentContainer.value}}" 
+                        urlqueryparam-back="[[this]]"
+                        urlqueryparam-redirect="page:listCustomData">
+                        <button class="btn btn-primary btn-s">[[i18n "delete" bundle="bso"]]</button>
+                    </semantic-link>
+                {{/each}}
+            </template>
+        </semantic-query>
+
+        <semantic-query
+            query="SELECT ?image WHERE {
+                [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
+            } LIMIT 1"
+            template="{{> imageSearchTemplate}}"
+        >
+            <template id="imageSearchTemplate">
+                <semantic-link
+                    iri="page:searchByImageRegion"
+                    urlqueryparam-imageiri="{{bindings.0.image.value}}"
+                ><a class="btn btn-primary">Similarity Search</a></semantic-link>
+            </template>
+        </semantic-query>
+        
+    </div>
+</div>
 [[/inline]]
 
 [[#*inline "fieldsForCustomEntities"]]
@@ -1152,67 +1287,6 @@
         </dl>
     </template>
     </mp-field-visualization>
-
-[[/inline]]
-
-[[#*inline "objectsTable"]]
-
-    <semantic-if 
-        query='ASK { BIND([[> thisForQuery]] as $subject) . [[condition]] }'
-        then='{{> template}}'
-    >
-        <template id="template">
-            <div class="bso-component field-visualisation">
-                <span class="bso-component label">[[i18n label bundle="bso"]]</span>
-
-                <mp-event-trigger type="Component.Refresh" targets='["object-map"]'>
-                    <bs-tabs default-active-key="grid">
-                        <bs-tab event-key="view" title="[[i18n "view" bundle="bso"]]:"></bs-tab>
-                        <bs-tab event-key="grid" title="[[i18n "grid" bundle="bso"]]">
-                            <div class="bso-component card-container">
-                                <semantic-table
-                                query="SELECT DISTINCT ?subject WHERE {
-                                    [[> @partial-block]]
-                                }"
-                                tuple-template="{{> partial:cardObject}}"
-                                options='{
-                                  "showFilter": true,
-                                  "pageSizeSelection": "[5,10,20,50]"
-                                }'
-                >
-                                </semantic-table>
-                            </div>
-                        </bs-tab>
-                        <bs-tab event-key="map" title="[[i18n "map" bundle="bso"]]">
-                            <div style="height:40rem;width:400px">
-                                <mp-event-target-refresh id="object-map">
-                                    <semantic-map
-                                        id="object-map-[[label]]"
-                                        query="SELECT DISTINCT ?subject ?wkt WHERE {
-                                            [[> @partial-block]] 
-                                            {
-                                                ?subject a search:Place ;
-                                                    crmdig:L54_is_same-as/wdt:P625 ?wkt .
-                                            } UNION {
-                                                ?subject crm:P128_carries?/crm:P138_represents/crmdig:L54_is_same-as/wdt:P625 ?wkt .
-                                            } UNION {
-                                                ?subject a search:Type ;
-                                                    ^crm:P138_represents/crm:P138_represents/crmdig:L54_is_same-as/wdt:P625 ?wkt .
-                                            } 
-                                        }"
-                                        
-                                        tuple-template='{{> template }}'
-                                        no-result-template='<bs-alert variant="info">[[i18n "noResultsWithCoordinates" bundle="bso"]]</bs-alert>'
-                                    >
-                                        <template id='template'>{{> partial:cardObject noFallback="true"}}</template>
-                                    </semantic-map>
-                                </mp-event-target-refresh>
-                            </div>
-                        </bs-tab>
-                </bs-tabs>
-                </mp-event-trigger>
-        </template>
-    </semantic-if>
 
 [[/inline]]
 

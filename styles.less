@@ -413,6 +413,45 @@ ol.page-breadcrumb {
         }
     }
 
+    &.nav {
+
+        &.nav-tabs {
+            margin-left: -2rem;
+            .nav-item {
+                &:first-child {
+                    margin-left:2rem;
+                }
+                .nav-link {
+                    border: none;
+                    background: none;
+                    font-weight: 500;
+                    color: @col-black;
+                }
+                .nav-link.active {
+                    border-radius: 2px 2px 0 0;
+                    border: 1px solid rgba(0,0,0,0.1);
+                    border-bottom: 1px solid @col-white;
+                    font-weight: bold;
+                }
+            }
+        }
+
+        &.nav-pills {
+            .nav-item {
+                margin-left: -2rem;
+                .nav-link {
+
+                }
+                .nav-link.active {
+                    background-color: @col-brand;
+                    border-radius: 0px 5px 5px 0px;
+                    border: none;
+                }
+            }
+        }
+
+    }
+
     &.object {
         .image {
             img {
@@ -436,19 +475,6 @@ ol.page-breadcrumb {
         padding: 2rem 0 2rem 2rem;
         .row {
             margin-right: 0;
-        }
-        .form-selector, .form-selector + .tab-content {
-            margin-left:-2rem;
-        }
-        .form-selector {
-            padding-left: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 0;
-            > .nav-link.active {
-                background-color: @col-button-primary;
-                border: 1px solid @col-brand;
-                color: @col-white;
-            }
         }
         .form-content {
             padding: 2rem;
@@ -554,6 +580,22 @@ ol.page-breadcrumb {
         font-weight: bold;
         font-size: 1.3em;
         padding-top:0.8em;
+    }
+
+    .tab-content {
+        .next-step {
+            margin-left: -2rem;
+        }
+    }
+    
+    .view-selector {
+        padding-bottom: 1rem;
+        border-bottom: 0;
+        > .nav-link.active {
+            background-color: @col-button-primary;
+            border: 1px solid @col-brand;
+            color: @col-white;
+        }
     }
 }
 
