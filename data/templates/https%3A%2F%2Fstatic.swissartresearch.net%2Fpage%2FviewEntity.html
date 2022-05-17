@@ -11,146 +11,10 @@
 <div class="d-flex flex-md-row flex-column">
     <div class="bso-component separator sidebar image-display">
 
-        <!-- map -->
-        <semantic-if
-            query='ASK { [[> thisForQuery ]] crmdig:L54_is_same-as/wdt:P625 ?coordinates }'
-            then='{{> mapTemplate}}'
-        >
-            <template id="mapTemplate">
-                <div style="height:300px;width:400px;">
-                    <semantic-map
-                        query='
-                            SELECT ?wkt WHERE {
-                                [[> thisForQuery ]] crmdig:L54_is_same-as/wdt:P625 ?wkt
-                        }'
-                        tuple-template='{{> tupleTemplate}}'
-                        >
-                            <template id="tupleTemplate">
-                                <mp-label iri="[[> thisIri]]"></mp-label>
-                            </template>
-                        </semantic-map>
-                </div>
-            </template>
-        </semantic-if>
-
-        <!-- image  -->
-        <semantic-if 
-            query='ASK { [[> thisForQuery ]] a search:Object}'
-            then='{{> objectTemplate }}'
-            else='{{> template}}'
-        >
-            <template id="objectTemplate">
-                [[#if entityiri]]
-                    [[> partial:objectViewImageDisplay objectiri=entityiri]]
-                [[else]]
-                    [[> partial:objectViewImageDisplay urlparam="entityiri"]]
-                [[/if]]
-            </template>
-            <template id="template">
-                <bs-panel>
-                    <sari-resource-thumbnail iri="[[> thisIri]]" template="{{> template}}">
-                        <template id="template">
-                            <img src="{{thumbnail}}" />
-                            <semantic-query
-                                query="SELECT * WHERE {
-                                    BIND(<{{thumbnail}}> as ?thumbnail)
-                                    ?thumbnail crmdig:L54_is_same-as?/crm:P104_is_subject_to ?right .
-                                    ?right crm:P2_has_type ?license .
-                                    OPTIONAL {
-                                        ?right crm:P105_right_held_by ?rightsHolder .
-                                    }
-                                } LIMIT 1"
-                                template="{{> licenseTemplate}}">
-                                <template id="licenseTemplate">
-                                    <div class="bso-component image-license">
-                                        [[i18n "imageLicense" bundle="bso"]]: <mp-label iri="{{ bindings.0.license.value }}"></mp-label>.
-                                        {{#if bindings.0.rightsHolder.value}}
-                                            [[i18n "by" bundle="bso"]] <mp-label iri="{{ bindings.0.rightsHolder.value}}"></mp-label>
-                                        {{/if}}
-                                    </div>
-                                </template>
-                            </semantic-query>
-                        </template>
-                    </sari-resource-thumbnail>
-                </bs-panel>
-            </template>
-        </semantic-if>
-
-        <!-- smapshot -->
-        <semantic-if
-            query='ASK { 
-                [[> thisForQuery ]] crm:P1_is_identified_by ?smapshot_id .
-                ?smapshot_id crm:P2_has_type <https://smapshot.heig-vd.ch> .
-            }'
-            then='{{> smapshotTemplate}}'
-        >
-            <template id="smapshotTemplate">
-                <bs-panel>
-                    <smapshot-embed 
-                        iri="[[> thisIri]]"
-                        width="300"
-                        height="200"
-                    ></smapshot-embed>
-                    <div class="caption">
-                        <mp-overlay-dialog title="Smapshot View" type="modal" bs-size="xl">
-                            <mp-overlay-dialog-trigger><a>[[i18n "openInViewer" bundle="bso"]]</a></mp-overlay-dialog-trigger>
-                            <mp-overlay-dialog-content id="smapshot-modal">
-                                <mp-page-loader 
-                                    iri="[[ resolvePrefix 'page:viewSmapshot']]"
-                                    urlqueryparam-iri="[[> thisIri]]"
-                                    urlqueryparam-overlay="true"
-                                ></mp-page-loader>
-                        </mp-overlay-dialog-content>
-                        </mp-overlay-dialog>
-                    </div>
-                </bs-panel>
-            </template>
-        </semantic-if>
-
-        <!-- person -->
-        <semantic-if
-            query='ASK {
-                BIND([[> thisForQuery]] as ?s)
-                ?s a search:Person .
-            }'
-            then='{{> personNetworkTemplate}}'
-        >
-            <template id="personNetworkTemplate">
-                <bs-panel>
-                    <div style="width:300px">
-                        [[#*inline "person-network"]]
-                            <div class="bso-component graph">
-                                <semantic-graph height="[[height]]px"
-                                    query='CONSTRUCT {
-                                        ?s ?p ?o .
-                                    } WHERE {
-                                        BIND([[> thisForQuery]] as ?s)
-                                        ?object (crm:P128_carries/crm:P94i_was_created_by|crm:P108i_was_produced_by)/crm:P14_carried_out_by ?s, ?o .
-                                        OPTIONAL {
-                                            ?subEvent crm:P2_has_type ?eventType ;
-                                                crm:P14_carried_out_by ?o ;
-                                                ^crm:P9_consists_of/(^crm:P94i_was_created_by/^crm:P128_carries|^crm:P108i_was_produced_by) ?object .
-                                        }
-                                        BIND(IF(BOUND(?eventType), ?eventType, search:collaborator) as ?p)
-                                        FILTER(?s != ?o)
-                                    }'>
-                                    <semantic-graph-layout-cose-bilkent ideal-edge-length=150></semantic-graph-layout-cose-bilkent>
-                                </semantic-graph>
-                            </div>
-                        [[/inline]]
-                        [[> person-network height=300]]
-                        <div class="caption">
-                            <mp-overlay-dialog title="[[i18n "networkView" bundle="bso"]]" type="modal" bs-size="xl">
-                                <mp-overlay-dialog-trigger><a>[[i18n "openInViewer" bundle="bso"]]</a></mp-overlay-dialog-trigger>
-                                <mp-overlay-dialog-content id="smapshot-modal">
-                                    [[> person-network height=600]]
-                                </mp-overlay-dialog-content>
-                            </mp-overlay-dialog>
-                        </div>
-                    </div>
-                </bs-panel>
-            </template>
-        </semantic-if>
+        [[> module-sidebar-map]]
+        [[> module-sidebar-image]]
+        [[> module-sidebar-smapshot]]
+        [[> module-sidebar-person-network]]
 
     </div>
     <div class="bso-component main">
@@ -586,7 +450,7 @@
             </semantic-query>
 
             <!-- Objects created -->
-            [[#> objectsTable condition='?object a search:Object; (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P9_consists_of?/crm:P14_carried_out_by $subject' label='works']]
+            [[#> component-objects-table condition='?object a search:Object; (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P9_consists_of?/crm:P14_carried_out_by $subject' label='works']]
 
                 {
                     ?subject crm:P108i_was_produced_by/crm:P9_consists_of?/crm:P14_carried_out_by [[> thisForQuery]] .
@@ -594,34 +458,34 @@
                     ?subject crm:P128_carries/crm:P94i_was_created_by/crm:P9_consists_of?/crm:P14_carried_out_by [[> thisForQuery]] .
                 }
                 
-            [[/ objectsTable]]
+            [[/ component-objects-table]]
 
             <!-- Objects acquired from -->
-            [[#> objectsTable condition='?object a search:Object; crm:P24i_changed_ownership_through/crm:P23_transferred_title_from $subject' label='worksAcquiredFrom']]
+            [[#> component-objects-table condition='?object a search:Object; crm:P24i_changed_ownership_through/crm:P23_transferred_title_from $subject' label='worksAcquiredFrom']]
 
                 ?subject crm:P24i_changed_ownership_through/crm:P23_transferred_title_from [[> thisForQuery]]
                 
-            [[/ objectsTable]]
+            [[/ component-objects-table]]
 
             <!-- Objects forming part of -->
-            [[#> objectsTable condition='?object a search:Object; crm:P46i_forms_part_of $subject' label='contains']]
+            [[#> component-objects-table condition='?object a search:Object; crm:P46i_forms_part_of $subject' label='contains']]
 
                 ?subject crm:P46i_forms_part_of [[> thisForQuery]]
                 
-            [[/ objectsTable]]
+            [[/ component-objects-table]]
 
             <!-- Regions -->
             <mp-event-target-refresh id="regions-table">
-                [[#> objectsTable condition='$subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of ?region . FILTER NOT EXISTS {?region crm:P2_has_type type:imageRegion}' label='regions' ]]
+                [[#> component-objects-table condition='$subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of ?region . FILTER NOT EXISTS {?region crm:P2_has_type type:imageRegion}' label='regions' ]]
 
                     [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of  $subject.
                     FILTER NOT EXISTS {?subject crm:P2_has_type type:imageRegion}
 
-                [[/ objectsTable]]
+                [[/ component-objects-table]]
             </mp-event-target-refresh>
 
             <!-- Things Depicted -->
-            [[#> objectsTable condition='?thing crm:P138_represents $subject' label='depictedBy' ]]
+            [[#> component-objects-table condition='?thing crm:P138_represents $subject' label='depictedBy' ]]
 
                 ?subject a ?type ; 
                     crm:P128_carries?/crm:P138_represents [[> thisForQuery]] .
@@ -630,10 +494,10 @@
                     (crmdig:D35_Area)
                 }
             
-            [[/ objectsTable]]
+            [[/ component-objects-table]]
 
             <!-- Places depicted -->
-            [[#> objectsTable condition='$subject crm:P128_carries/crm:P138_represents ?place . ?place a search:Place' label='depictedPlaces']]
+            [[#> component-objects-table condition='$subject crm:P128_carries/crm:P138_represents ?place . ?place a search:Place' label='depictedPlaces']]
                 
                 [[> thisForQuery]] crm:P128_carries/crm:P138_represents $subject .
                 $subject a search:Place .
@@ -644,10 +508,10 @@
                     }
                 }
                 
-            [[/ objectsTable]]
+            [[/ component-objects-table]]
 
             <!-- Objects created/produced at time-->
-            [[#> objectsTable condition='?object a search:Object; (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P4_has_time-span $subject' label='works']]
+            [[#> component-objects-table condition='?object a search:Object; (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P4_has_time-span $subject' label='works']]
 
                 {
                     ?subject crm:P108i_was_produced_by/crm:P4_has_time-span [[> thisForQuery]] .
@@ -655,10 +519,10 @@
                     ?subject crm:P128_carries/crm:P94i_was_created_by/crm:P4_has_time-span [[> thisForQuery]] .
                 }
                 
-            [[/ objectsTable]]
+            [[/ component-objects-table]]
 
             <!-- Objects created/produced at place-->
-            [[#> objectsTable condition='?object a search:Object; (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P7_took_place_at $subject' label='worksProducedOrCreatedAtPlace']]
+            [[#> component-objects-table condition='?object a search:Object; (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P7_took_place_at $subject' label='worksProducedOrCreatedAtPlace']]
 
                 {
                     ?subject crm:P108i_was_produced_by/crm:P7_took_place_at [[> thisForQuery]] .
@@ -666,39 +530,39 @@
                     ?subject crm:P128_carries/crm:P94i_was_created_by/crm:P4_has_time-span [[> thisForQuery]] .
                 }
                 
-            [[/ objectsTable]]
+            [[/ component-objects-table]]
 
             <!-- Objects owned -->
-            [[#> objectsTable condition='?object a search:Object; crm:P109_has_current_or_former_curator $subject' label='worksHeld']]
+            [[#> component-objects-table condition='?object a search:Object; crm:P109_has_current_or_former_curator $subject' label='worksHeld']]
                 
                 ?subject crm:P109_has_current_or_former_curator [[> thisForQuery]] .
                 
-            [[/ objectsTable]]
+            [[/ component-objects-table]]
 
             <!-- Objects of type -->
-            [[#> objectsTable condition='?thing crm:P2_has_type $subject' label='hasType' ]]
+            [[#> component-objects-table condition='?thing crm:P2_has_type $subject' label='hasType' ]]
 
                 ?subject a search:Object ;
                     crm:P2_has_type [[> thisForQuery]] .
             
-            [[/ objectsTable]]
+            [[/ component-objects-table]]
 
             <!-- Objects created using this technique -->
-            [[#> objectsTable condition='?object a search:Object; crm:P108i_was_produced_by/crm:P32_used_general_technique $subject' label='producedUsingTechnique']]
+            [[#> component-objects-table condition='?object a search:Object; crm:P108i_was_produced_by/crm:P32_used_general_technique $subject' label='producedUsingTechnique']]
 
                 ?subject crm:P108i_was_produced_by/crm:P32_used_general_technique [[> thisForQuery]]
                 
-            [[/ objectsTable]]
+            [[/ component-objects-table]]
 
             <!-- Found on -->
-            [[#> objectsTable condition='?region crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of $subject .' label='foundOn' ]]
+            [[#> component-objects-table condition='?region crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of $subject .' label='foundOn' ]]
 
                 $subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of  [[> thisForQuery]] .
             
-            [[/ objectsTable]]
+            [[/ component-objects-table]]
 
             <!-- Is About -->
-            [[#> objectsTable condition='$subject crm:P129_is_about|crm:P140_assigned_attribute_to ?target  .' label='isAbout' ]]
+            [[#> component-objects-table condition='$subject crm:P129_is_about|crm:P140_assigned_attribute_to ?target  .' label='isAbout' ]]
 
                 {
                     [[> thisForQuery]] crm:P129_is_about|crm:P140_assigned_attribute_to $subject .
@@ -711,7 +575,7 @@
                     $subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?iiif_image .
                 } 
             
-            [[/ objectsTable]]
+            [[/ component-objects-table]]
         </div>
 
         <!-- References -->
@@ -728,13 +592,13 @@
                     <h3>[[i18n "references" bundle="bso"]]</h3>
 
                     <!-- References on -->
-                    [[#> objectsTable condition='?attribute_assignment crm:P140_assigned_attribute_to ?object; crm:P141_assigned $subject ; crm:P177_assigned_property_of_type crm:P67_refers_to' label='references' ]]
+                    [[#> component-objects-table condition='?attribute_assignment crm:P140_assigned_attribute_to ?object; crm:P141_assigned $subject ; crm:P177_assigned_property_of_type crm:P67_refers_to' label='references' ]]
 
                         ?attribute_assignment crm:P140_assigned_attribute_to $subject; 
                             crm:P141_assigned [[> thisForQuery]] ; 
                             crm:P177_assigned_property_of_type crm:P67_refers_to .
                     
-                    [[/ objectsTable]]
+                    [[/ component-objects-table]]
                 </div>
                 <semantic-if
                     query="ASK {
@@ -777,7 +641,7 @@
 
         [[#if (hasPermission "api:ldp:*")]]
         <semantic-if query="ASK { [[> thisForQuery]] a ?type . VALUES (?type) {(search:Object) (search:Person) (search:Place) (search:Type) (crmdig:D35_Area)} .}" then="{{> customDataTemplate}}">
-            <template id="customDataTemplate">[[> customDataTemplate]]</template>
+            <template id="customDataTemplate">[[> module-custom-data]]</template>
         </semantic-if>
         [[/if]]
         
@@ -791,22 +655,22 @@
                         </summary>
 
 
-                        [[#> objectsTable condition='?classification crm:P140_assigned_attribute_to/^crm:P1_is_identified_by/^crm:P128_carries $subject ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> .' label='byTitle' ]]
+                        [[#> component-objects-table condition='?classification crm:P140_assigned_attribute_to/^crm:P1_is_identified_by/^crm:P128_carries $subject ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> .' label='byTitle' ]]
 
                             ?classification crm:P140_assigned_attribute_to/^crm:P1_is_identified_by/^crm:P128_carries [[> thisForQuery]] ;
                                 crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> ;
                                 crm:P141_assigned/^crm:P1_is_identified_by/^crm:P128_carries $subject ;
                                 rdf:value ?score .
                         
-                        [[/ objectsTable]]
+                        [[/ component-objects-table]]
 
-                        [[#> objectsTable condition='?classification crm:P140_assigned_attribute_to/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries $subject ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> .' label='visually' ]]
+                        [[#> component-objects-table condition='?classification crm:P140_assigned_attribute_to/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries $subject ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> .' label='visually' ]]
 
                             ?classification crm:P140_assigned_attribute_to/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries [[> thisForQuery]] ;
                                 crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> ;
                                 crm:P141_assigned/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries $subject .
                         
-                        [[/ objectsTable]]
+                        [[/ component-objects-table]]
                     </details>
                 </div>
             </template>
@@ -839,7 +703,215 @@
     </div>
 </div>
 
-[[#*inline "customDataTemplate"]]
+[[#*inline "component-objects-table"]]
+
+    <semantic-if 
+        query='ASK { BIND([[> thisForQuery]] as $subject) . [[condition]] }'
+        then='{{> template}}'
+    >
+        <template id="template">
+            <div class="bso-component field-visualisation">
+                <span class="bso-component label">[[i18n label bundle="bso"]]</span>
+
+                <mp-event-trigger type="Component.Refresh" targets='["object-map"]'>
+                    <bs-tabs default-active-key="grid">
+                        <bs-tab event-key="view" title="[[i18n "view" bundle="bso"]]:"></bs-tab>
+                        <bs-tab event-key="grid" title="[[i18n "grid" bundle="bso"]]">
+                            <div class="bso-component card-container">
+                                <semantic-table
+                                query="SELECT DISTINCT ?subject WHERE {
+                                    [[> @partial-block]]
+                                }"
+                                tuple-template="{{> partial:cardObject}}"
+                                options='{
+                                  "showFilter": true,
+                                  "pageSizeSelection": "[5,10,20,50]"
+                                }'
+                >
+                                </semantic-table>
+                            </div>
+                        </bs-tab>
+                        <bs-tab event-key="map" title="[[i18n "map" bundle="bso"]]">
+                            <div style="height:40rem;width:100%">
+                                <mp-event-target-refresh id="object-map">
+                                    <semantic-map
+                                        id="object-map-[[label]]"
+                                        query="SELECT DISTINCT ?subject ?wkt WHERE {
+                                            [[> @partial-block]] 
+                                            {
+                                                ?subject a search:Place ;
+                                                    crmdig:L54_is_same-as/wdt:P625 ?wkt .
+                                            } UNION {
+                                                ?subject crm:P128_carries?/crm:P138_represents/crmdig:L54_is_same-as/wdt:P625 ?wkt .
+                                            } UNION {
+                                                ?subject a search:Type ;
+                                                    ^crm:P138_represents/crm:P138_represents/crmdig:L54_is_same-as/wdt:P625 ?wkt .
+                                            } 
+                                        }"
+                                        
+                                        tuple-template='{{> template }}'
+                                        no-result-template='<bs-alert variant="info">[[i18n "noResultsWithCoordinates" bundle="bso"]]</bs-alert>'
+                                    >
+                                        <template id='template'>{{> partial:cardObject noFallback="true"}}</template>
+                                    </semantic-map>
+                                </mp-event-target-refresh>
+                            </div>
+                        </bs-tab>
+                </bs-tabs>
+                </mp-event-trigger>
+        </template>
+    </semantic-if>
+
+[[/inline]]
+
+[[#*inline "component-person-network"]]
+    <div class="bso-component graph">
+        <semantic-graph height="[[height]]px"
+            query='CONSTRUCT {
+                ?s ?p ?o .
+            } WHERE {
+                BIND([[> thisForQuery]] as ?s)
+                ?object (crm:P128_carries/crm:P94i_was_created_by|crm:P108i_was_produced_by)/crm:P14_carried_out_by ?s, ?o .
+                OPTIONAL {
+                    ?subEvent crm:P2_has_type ?eventType ;
+                        crm:P14_carried_out_by ?o ;
+                        ^crm:P9_consists_of/(^crm:P94i_was_created_by/^crm:P128_carries|^crm:P108i_was_produced_by) ?object .
+                }
+                BIND(IF(BOUND(?eventType), ?eventType, search:collaborator) as ?p)
+                FILTER(?s != ?o)
+            }'>
+            <semantic-graph-layout-cose-bilkent ideal-edge-length=150></semantic-graph-layout-cose-bilkent>
+        </semantic-graph>
+    </div>
+[[/inline]]
+
+[[#*inline "module-sidebar-image"]]
+    <semantic-if 
+        query='ASK { [[> thisForQuery ]] a search:Object}'
+        then='{{> objectTemplate }}'
+        else='{{> template}}'
+    >
+        <template id="objectTemplate">
+            [[#if entityiri]]
+                [[> partial:objectViewImageDisplay objectiri=entityiri]]
+            [[else]]
+                [[> partial:objectViewImageDisplay urlparam="entityiri"]]
+            [[/if]]
+        </template>
+        <template id="template">
+            <bs-panel>
+                <sari-resource-thumbnail iri="[[> thisIri]]" template="{{> template}}">
+                    <template id="template">
+                        <img src="{{thumbnail}}" />
+                        <semantic-query
+                            query="SELECT * WHERE {
+                                BIND(<{{thumbnail}}> as ?thumbnail)
+                                ?thumbnail crmdig:L54_is_same-as?/crm:P104_is_subject_to ?right .
+                                ?right crm:P2_has_type ?license .
+                                OPTIONAL {
+                                    ?right crm:P105_right_held_by ?rightsHolder .
+                                }
+                            } LIMIT 1"
+                            template="{{> licenseTemplate}}">
+                            <template id="licenseTemplate">
+                                <div class="bso-component image-license">
+                                    [[i18n "imageLicense" bundle="bso"]]: <mp-label iri="{{ bindings.0.license.value }}"></mp-label>.
+                                    {{#if bindings.0.rightsHolder.value}}
+                                        [[i18n "by" bundle="bso"]] <mp-label iri="{{ bindings.0.rightsHolder.value}}"></mp-label>
+                                    {{/if}}
+                                </div>
+                            </template>
+                        </semantic-query>
+                    </template>
+                </sari-resource-thumbnail>
+            </bs-panel>
+        </template>
+    </semantic-if>
+[[/inline]]
+
+[[#*inline "module-sidebar-map"]]
+    <semantic-if
+        query='ASK { [[> thisForQuery ]] crmdig:L54_is_same-as/wdt:P625 ?coordinates }'
+        then='{{> mapTemplate}}'
+    >
+        <template id="mapTemplate">
+            <div style="height:300px;width:400px;">
+                <semantic-map
+                    query='
+                        SELECT ?wkt WHERE {
+                            [[> thisForQuery ]] crmdig:L54_is_same-as/wdt:P625 ?wkt
+                    }'
+                    tuple-template='{{> tupleTemplate}}'
+                    >
+                        <template id="tupleTemplate">
+                            <mp-label iri="[[> thisIri]]"></mp-label>
+                        </template>
+                    </semantic-map>
+            </div>
+        </template>
+    </semantic-if>
+[[/inline]]
+
+
+[[#*inline "module-sidebar-person-network"]]
+<semantic-if
+    query='ASK {
+        BIND([[> thisForQuery]] as ?s)
+        ?s a search:Person .
+    }'
+    then='{{> personNetworkTemplate}}'
+>
+    <template id="personNetworkTemplate">
+        <bs-panel>
+            <div style="width:300px">
+                [[> component-person-network height=300]]
+                <div class="caption">
+                    <mp-overlay-dialog title="[[i18n "networkView" bundle="bso"]]" type="modal" bs-size="xl">
+                        <mp-overlay-dialog-trigger><a>[[i18n "openInViewer" bundle="bso"]]</a></mp-overlay-dialog-trigger>
+                        <mp-overlay-dialog-content id="smapshot-modal">
+                            [[> component-person-network height=600]]
+                        </mp-overlay-dialog-content>
+                    </mp-overlay-dialog>
+                </div>
+            </div>
+        </bs-panel>
+    </template>
+</semantic-if>
+[[/inline]]
+
+[[#*inline "module-sidebar-smapshot"]]
+    <semantic-if
+        query='ASK { 
+            [[> thisForQuery ]] crm:P1_is_identified_by ?smapshot_id .
+            ?smapshot_id crm:P2_has_type <https://smapshot.heig-vd.ch> .
+        }'
+        then='{{> smapshotTemplate}}'
+    >
+        <template id="smapshotTemplate">
+            <bs-panel>
+                <smapshot-embed 
+                    iri="[[> thisIri]]"
+                    width="300"
+                    height="200"
+                ></smapshot-embed>
+                <div class="caption">
+                    <mp-overlay-dialog title="Smapshot View" type="modal" bs-size="xl">
+                        <mp-overlay-dialog-trigger><a>[[i18n "openInViewer" bundle="bso"]]</a></mp-overlay-dialog-trigger>
+                        <mp-overlay-dialog-content id="smapshot-modal">
+                            <mp-page-loader 
+                                iri="[[ resolvePrefix 'page:viewSmapshot']]"
+                                urlqueryparam-iri="[[> thisIri]]"
+                                urlqueryparam-overlay="true"
+                            ></mp-page-loader>
+                    </mp-overlay-dialog-content>
+                    </mp-overlay-dialog>
+                </div>
+            </bs-panel>
+        </template>
+    </semantic-if>
+[[/inline]]
+
+[[#*inline "module-custom-data"]]
     <div class="bso-component separator panel">
         <h3>[[i18n "workspace" bundle="bso"]]</h3>
 
@@ -1152,67 +1224,6 @@
         </dl>
     </template>
     </mp-field-visualization>
-
-[[/inline]]
-
-[[#*inline "objectsTable"]]
-
-    <semantic-if 
-        query='ASK { BIND([[> thisForQuery]] as $subject) . [[condition]] }'
-        then='{{> template}}'
-    >
-        <template id="template">
-            <div class="bso-component field-visualisation">
-                <span class="bso-component label">[[i18n label bundle="bso"]]</span>
-
-                <mp-event-trigger type="Component.Refresh" targets='["object-map"]'>
-                    <bs-tabs default-active-key="grid">
-                        <bs-tab event-key="view" title="[[i18n "view" bundle="bso"]]:"></bs-tab>
-                        <bs-tab event-key="grid" title="[[i18n "grid" bundle="bso"]]">
-                            <div class="bso-component card-container">
-                                <semantic-table
-                                query="SELECT DISTINCT ?subject WHERE {
-                                    [[> @partial-block]]
-                                }"
-                                tuple-template="{{> partial:cardObject}}"
-                                options='{
-                                  "showFilter": true,
-                                  "pageSizeSelection": "[5,10,20,50]"
-                                }'
-                >
-                                </semantic-table>
-                            </div>
-                        </bs-tab>
-                        <bs-tab event-key="map" title="[[i18n "map" bundle="bso"]]">
-                            <div style="height:40rem;width:100%">
-                                <mp-event-target-refresh id="object-map">
-                                    <semantic-map
-                                        id="object-map-[[label]]"
-                                        query="SELECT DISTINCT ?subject ?wkt WHERE {
-                                            [[> @partial-block]] 
-                                            {
-                                                ?subject a search:Place ;
-                                                    crmdig:L54_is_same-as/wdt:P625 ?wkt .
-                                            } UNION {
-                                                ?subject crm:P128_carries?/crm:P138_represents/crmdig:L54_is_same-as/wdt:P625 ?wkt .
-                                            } UNION {
-                                                ?subject a search:Type ;
-                                                    ^crm:P138_represents/crm:P138_represents/crmdig:L54_is_same-as/wdt:P625 ?wkt .
-                                            } 
-                                        }"
-                                        
-                                        tuple-template='{{> template }}'
-                                        no-result-template='<bs-alert variant="info">[[i18n "noResultsWithCoordinates" bundle="bso"]]</bs-alert>'
-                                    >
-                                        <template id='template'>{{> partial:cardObject noFallback="true"}}</template>
-                                    </semantic-map>
-                                </mp-event-target-refresh>
-                            </div>
-                        </bs-tab>
-                </bs-tabs>
-                </mp-event-trigger>
-        </template>
-    </semantic-if>
 
 [[/inline]]
 
