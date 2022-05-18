@@ -5,7 +5,8 @@
       <div>
         {{#if subject}}
 
-            {{#ifCond subject "!==" "[[subject]]"}}
+            {{#ifCond subject "!==" "[[subject]]"}
+                <h4><mp-label iri="{{subject}}"></mp-label>&nbsp;<semantic-link iri="{{subject}}"><i class="fa fa-arrow-up-right-from-square-solid fa-secondary"></i></semantic-link></h4>
                 <mp-event-trigger type="Component.TemplateUpdate" targets='["statements-table"]' data='{"subject": "[[subject]]"}'>
                     <span>[[i18n "backTo" bundle="bso"]] <a><mp-label iri="[[subject]]"></mp-label></a></span>
                 </mp-event-trigger>
