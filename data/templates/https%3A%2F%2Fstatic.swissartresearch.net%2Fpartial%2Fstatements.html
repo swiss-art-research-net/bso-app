@@ -5,7 +5,8 @@
       <div>
         {{#if subject}}
 
-            <h4><mp-label iri="{{subject}}"></mp-label></h4>
+            <h4><mp-label iri="{{subject}}"></mp-label>&nbsp;<semantic-link iri="{{subject}}"><i class="fa fa-arrow-up-right-from-square-solid fa-secondary"></i></semantic-link></h4>
+
             <mp-event-trigger type="Component.TemplateUpdate" targets='["statements-table"]' data='{"subject": "[[subject]]"}'>
                 <span>[[i18n "backTo" bundle="bso"]] <a><mp-label iri="[[subject]]"></mp-label></a></span>
             </mp-event-trigger>
@@ -55,6 +56,7 @@
     <mp-event-trigger type="Component.TemplateUpdate" targets='["statements-table"]' data='{"subject": "{{iri.value}}"}'>
         <a><mp-label iri="{{iri.value}}"></mp-label></a>
     </mp-event-trigger>
+    &nbsp;<semantic-link iri="{{iri.value}}"><i class="fa fa-arrow-up-right-from-square-solid fa-secondary"></i></semantic-link>
 {{else}}
     {{iri.value}}
 {{/if}}

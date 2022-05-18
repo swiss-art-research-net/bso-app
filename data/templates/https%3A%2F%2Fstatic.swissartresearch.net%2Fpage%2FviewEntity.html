@@ -36,11 +36,14 @@
                 </bs-nav-item>
                 <semantic-if
                     query="ASK { 
-                        [[> thisForQuery]] a ?type .
-                        VALUES (?type) {
-                            (search:Object)
-                            (frbroo:F24_Publication_Expression)
+                        {
+                            ?annotation crm:P140_assigned_attribute_to [[> thisForQuery]] ;
+                                crm:P177_assigned_property_of_type crm:P67_refers_to .
+                        } UNION {
+                            ?attribute_assignment crm:P141_assigned [[> thisForQuery]] ; 
+                                crm:P177_assigned_property_of_type crm:P67_refers_to .
                         }
+                        
                     }"
                     then="{{>template}}"
                 >

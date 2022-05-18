@@ -47,6 +47,18 @@ iframe {
 .btn.btn-primary a {
   color: #fff;
 }
+.fa-arrow-up-right-from-square-solid::before {
+  content: " ";
+  display: block;
+  width: 0.7em;
+  height: 0.7em;
+  background-image: url(/assets/icons/arrow-up-right-from-square-solid.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+.fa-secondary {
+  opacity: 0.6;
+}
 .facet {
   background-color: none;
   margin-bottom: 1rem;
