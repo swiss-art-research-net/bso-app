@@ -12,7 +12,8 @@
             </mp-event-trigger>
         
             <semantic-table
-                query="SELECT ?s ?p ?o WHERE {
+                query="SELECT ?s ?p ?o ?highlight WHERE {
+                    BIND(<{{subject}}> as ?highlight)
                     {
                         BIND(<{{subject}}> AS ?s)
                         ?s ?p ?o .
@@ -30,7 +31,8 @@
         
         {{else}}
             <semantic-table
-                query="SELECT ?s ?p ?o WHERE {
+                query="SELECT ?s ?p ?o ?highlight WHERE {
+                    BIND(<[[subject]]> as ?highlight)
                     {
                         BIND(<[[subject]]> as ?s)
                         ?s ?p ?o .
@@ -54,7 +56,7 @@
 [[#*inline "template-iri"]]
 {{#if (isIri iri)}}
     <mp-event-trigger type="Component.TemplateUpdate" targets='["statements-table"]' data='{"subject": "{{iri.value}}"}'>
-        <a><mp-label iri="{{iri.value}}"></mp-label></a>
+        <a class="{{#ifCond iri.value '==' highlight.value}}bso-component tag{{/ifCond}}"><mp-label iri="{{iri.value}}"></mp-label></a>
     </mp-event-trigger>
     &nbsp;<semantic-link iri="{{iri.value}}"><i class="fa fa-arrow-up-right-from-square-solid fa-secondary"></i></semantic-link>
 {{else}}
@@ -65,13 +67,13 @@
 [[#*inline "column-configuration"]]
 [{
     "variableName": "s",
-    "cellTemplate": "{{> template-iri iri=s}}"
+    "cellTemplate": "{{> template-iri iri=s highlight=highlight}}"
 },{
     "variableName": "p",
-    "cellTemplate": "{{> template-iri iri=p}}"
+    "cellTemplate": "{{> template-iri iri=p highlight=highlight}}"
 },{
     "variableName": "o",
-    "cellTemplate": "{{> template-iri iri=o}}"
+    "cellTemplate": "{{> template-iri iri=o highlight=highlight}}"
 }]
 [[/inline]]
 

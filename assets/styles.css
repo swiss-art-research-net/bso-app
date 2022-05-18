@@ -447,6 +447,11 @@ ol.page-breadcrumb {
   height: 100px;
   width: auto;
 }
+.bso-component.tag {
+  background-color: #e2e2f7;
+  border-radius: 0.5rem;
+  padding: 0.1rem 0.3rem;
+}
 .bso-component.tags {
   list-style: none;
   margin: 0;
