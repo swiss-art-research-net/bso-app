@@ -500,7 +500,7 @@ ol.page-breadcrumb {
 }
 .bso-component .view-selector {
   padding-bottom: 1rem;
-  border-bottom: 0;
+  border-bottom: 0 !important;
 }
 .bso-component .view-selector > .nav-link.active {
   background-color: #8c133a;
@@ -530,7 +530,8 @@ ol.page-breadcrumb {
   font-weight: normal;
   font-size: 0.9rem;
 }
-.tab-pane .bso-component.panel {
+.tab-pane .bso-component.panel,
+.tab-pane .bso-component.next-step {
   margin-top: -0.7rem;
 }
 @font-face {
