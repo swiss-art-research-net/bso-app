@@ -27,13 +27,23 @@
             [[> component-description]]
         </div>
         <bs-tab-container default-active-key="[[#if (urlParam "tab")]][[urlParam "tab"]][[else]]overview[[/if]]">
-            <bs-nav variant="tabs" class="flex-row bso-component gap">
+            <bs-nav variant="tabs" class="flex-column flex-sm-row bso-component gap" >
                 <bs-nav-item>
                     <bs-nav-link event-key="overview">[[i18n "overview" bundle="bso"]]</bs-nav-link>
                 </bs-nav-item>
                 <bs-nav-item>
                     <bs-nav-link event-key="fields">[[i18n "fields" bundle="bso"]]</bs-nav-link>
                 </bs-nav-item>
+                <semantic-if
+                    query="ASK { [[> thisForQuery]] a search:Object}"
+                    then="{{>template}}"
+                >
+                    <template id="template">
+                        <bs-nav-item>
+                            <bs-nav-link event-key="discovery">[[i18n "discovery" bundle="bso"]]</bs-nav-link>
+                        </bs-nav-item>
+                    </template>
+                </semantic-if>
                 <semantic-if
                     query="ASK { 
                         {
@@ -53,21 +63,11 @@
                         </bs-nav-item>
                     </template>
                 </semantic-if>
-                <semantic-if
-                    query="ASK { [[> thisForQuery]] a search:Object}"
-                    then="{{>template}}"
-                >
-                    <template id="template">
-                        <bs-nav-item>
-                            <bs-nav-link event-key="discovery">[[i18n "discovery" bundle="bso"]]</bs-nav-link>
-                        </bs-nav-item>
-                    </template>
-                </semantic-if>
-                <bs-nav-item>
+                <bs-nav-item class="secondary">
                     <bs-nav-link event-key="statements">[[i18n "statements" bundle="bso"]]</bs-nav-link>
                 </bs-nav-item>
                 [[#if (hasPermission "api:ldp:*")]]
-                    <bs-nav-item>
+                    <bs-nav-item class="secondary">
                         <bs-nav-link event-key="workspace">[[i18n "workspace" bundle="bso"]]</bs-nav-link>
                     </bs-nav-item>
                 [[/if]]

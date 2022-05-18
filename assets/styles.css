@@ -341,12 +341,6 @@ ol.page-breadcrumb {
 .bso-component.mini-thumbnail img {
   width: 150%;
 }
-.bso-component.nav.nav-tabs {
-  margin-left: -2rem;
-}
-.bso-component.nav.nav-tabs .nav-item:first-child {
-  margin-left: 2rem;
-}
 .bso-component.nav.nav-tabs .nav-item .nav-link {
   border: none;
   background: none;
@@ -354,10 +348,28 @@ ol.page-breadcrumb {
   color: #111;
 }
 .bso-component.nav.nav-tabs .nav-item .nav-link.active {
-  border-radius: 2px 2px 0 0;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-bottom: 1px solid #fff;
   font-weight: bold;
+}
+@media (min-width: 567px) {
+  .bso-component.nav.nav-tabs {
+    margin-left: -2rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  .bso-component.nav.nav-tabs .nav-item:first-child {
+    margin-left: 2rem;
+  }
+  .bso-component.nav.nav-tabs .nav-item .nav-link.active {
+    border-radius: 2px 2px 0 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid #fff;
+  }
+}
+@media (max-width: 567px) {
+  .bso-component.nav.nav-tabs .nav-item {
+    margin-left: -2rem;
+    padding-left: 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
 }
 .bso-component.nav.nav-pills .nav-item {
   margin-left: -2rem;

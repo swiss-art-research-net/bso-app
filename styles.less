@@ -432,12 +432,8 @@ ol.page-breadcrumb {
 
     &.nav {
 
-        &.nav-tabs {
-            margin-left: -2rem;
+        &.nav-tabs {            
             .nav-item {
-                &:first-child {
-                    margin-left:2rem;
-                }
                 .nav-link {
                     border: none;
                     background: none;
@@ -445,10 +441,29 @@ ol.page-breadcrumb {
                     color: @col-black;
                 }
                 .nav-link.active {
-                    border-radius: 2px 2px 0 0;
-                    border: 1px solid rgba(0,0,0,0.1);
-                    border-bottom: 1px solid @col-white;
                     font-weight: bold;
+                }
+            }
+            @media (min-width: 567px) { 
+                margin-left: -2rem; 
+                border-bottom: 1px solid rgba(0,0,0,0.1);
+                .nav-item {
+                    &:first-child {
+                        margin-left:2rem;
+                    }
+                    .nav-link.active {    
+                        border-radius: 2px 2px 0 0;
+                        border: 1px solid rgba(0,0,0,0.1);
+                        border-bottom: 1px solid @col-white;
+                    }
+
+                }
+            }
+            @media (max-width:567px) {
+                .nav-item {
+                    margin-left: -2rem;
+                    padding-left: 1rem;
+                    border-bottom: 1px solid rgba(0,0,0,0.1);
                 }
             }
         }
@@ -456,9 +471,6 @@ ol.page-breadcrumb {
         &.nav-pills {
             .nav-item {
                 margin-left: -2rem;
-                .nav-link {
-
-                }
                 .nav-link.active {
                     background-color: @col-brand;
                     border-radius: 0px 5px 5px 0px;
