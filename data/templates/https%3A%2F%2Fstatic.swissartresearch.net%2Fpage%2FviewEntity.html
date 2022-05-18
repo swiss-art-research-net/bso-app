@@ -223,6 +223,67 @@
     </div>
 [[/inline]]
 
+[[#*inline "component-semantic-similarity"]]
+<p>[[i18n "semanticVisualSimilarityExplanation" bundle="bso" escapeHTML=false]]</p>
+<semantic-query
+    query='SELECT ?imageUrl WHERE {
+        [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?iiif .
+        OPTIONAL {
+            ?region crmdig:L49_is_primary_area_of ?iiif ;
+                crm:P2_has_type type:imageRegion ;
+                rso:boundingBox ?bbox .
+        }
+        BIND(IF (BOUND(?region), CONCAT(STR(?iiif), "/", STRAFTER(?bbox, "xywh="), "/400,/0/default.jpg"), CONCAT(STR(?iiif),"/full/400,/0/default.jpg")) as ?imageUrl)
+    }'
+    template="{{> clipQueryTemplate}}">
+>
+    <template id="clipQueryTemplate">
+        <semantic-query
+            query='SELECT ?subject ?score WHERE {
+                SERVICE <http://clip-service:5000/sparql> {
+                  ?request a clip:Request ;
+                      clip:queryURL <{{bindings.0.imageUrl.value}}> ;
+                      clip:minScore "0.2" ;
+                      clip:score ?score ;
+                      clip:iiifUrl ?subject .
+                }
+            } LIMIT 100'
+            template="{{> clipResultTemplate}}">
+        >
+            <template id="clipResultTemplate">
+                <semantic-table id='table' 
+                    query='SELECT ?subject WHERE { 
+                        VALUES (?subject ?score) {
+                            {{#each bindings}}
+                                (<{{subject.value}}> "{{score.value}}"^^xsd:float)
+                            {{/each}}
+                        }
+                    } ORDER BY DESC(?score)'
+                    current-page="1"
+                    prefetch-labels="false"
+                    tuple-template='{{> clipTupleTemplate }}'
+                    options='{
+                        "showFilter": false,
+                        "pageSizeSelection": true
+                        }'
+                    >
+                  <template id="clipTupleTemplate">
+                    <semantic-query
+                      query="SELECT ?subject WHERE {
+                        BIND(<{{subject.value}}> as ?iiif)
+                        ?subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?iiif .
+                      } LIMIT 1"
+                      template="{{> partial:cardObject subject=bindings.0.subject}}"></semantic-query>
+                  </template>
+                </semantic-table>
+
+            </template>
+        </semantic-query>
+    </template>
+</semantic-query>
+
+
+[[/inline]]
 
 [[#*inline "field-visualisation-contained-in"]]
 <semantic-query
@@ -644,11 +705,15 @@
                 <bs-nav-item>
                     <bs-nav-link event-key="titleSimilarity">[[i18n "titleSimilarities" bundle="bso"]]</bs-nav-link>
                 </bs-nav-item>
+                <bs-nav-item>
+                    <bs-nav-link event-key="semanticVisualSimilarity">[[i18n "semanticVisualSimilarity" bundle="bso"]]</bs-nav-link>
+                </bs-nav-item>
             </bs-nav>
         </bs-col>
         <bs-col md="9">
             <bs-tab-content>
                 <bs-tab-pane event-key="visualSimilarity">
+                    <p>[[i18n "visualSimilarityExplanation" bundle="bso" escapeHTML=false]]</p>
                     [[#> component-objects-table condition='?classification crm:P140_assigned_attribute_to/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries $subject ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> .' label='visually' noResults='noVisualSimilaritiesIdentified']]
 
                         ?classification crm:P140_assigned_attribute_to/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries [[> thisForQuery]] ;
@@ -658,6 +723,7 @@
                     [[/ component-objects-table]]
                 </bs-tab-pane>
                 <bs-tab-pane event-key="titleSimilarity">
+                    <p>[[i18n "titleSimilarityExplanation" bundle="bso" escapeHTML=false]]</p>
                     [[#> component-objects-table condition='?classification crm:P140_assigned_attribute_to/^crm:P1_is_identified_by/^crm:P128_carries $subject ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> .' label='byTitle' noResults='noTitleSimilaritiesIdentified']]
 
                         ?classification crm:P140_assigned_attribute_to/^crm:P1_is_identified_by/^crm:P128_carries [[> thisForQuery]] ;
@@ -666,6 +732,9 @@
                             rdf:value ?score .
                     
                     [[/ component-objects-table]]
+                </bs-tab-pane>
+                <bs-tab-pane event-key="semanticVisualSimilarity">
+                    [[> component-semantic-similarity]]
                 </bs-tab-pane>
             </bs-tab-content>
         </bs-col>
