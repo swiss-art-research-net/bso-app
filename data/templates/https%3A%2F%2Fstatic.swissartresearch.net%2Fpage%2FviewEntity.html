@@ -25,6 +25,11 @@
             <h2><mp-label iri="[[> thisIri]]"></mp-label></h2>
 
             [[> component-description]]
+            [[#if entityiri]]
+                [[> partial:citationWidget iri=entityiri]]
+            [[else]]
+                [[> partial:citationWidget iri=(urlParam "entityiri")]]
+            [[/if]]
         </div>
         <bs-tab-container default-active-key="[[#if (urlParam "tab")]][[urlParam "tab"]][[else]]overview[[/if]]">
             <bs-nav variant="tabs" class="flex-column flex-sm-row bso-component gap" >
