@@ -9,8 +9,11 @@
         <semantic-query
             query="SELECT * WHERE {
                 BIND(<[[iri]]> as ?subject)
-                ?subject rdfs:label ?subjectLabel .
+                OPTIONAL {
+                    ?subject rdfs:label ?entityLabel .
+                }
                 BIND( REPLACE(STR(?subject), CONCAT(REPLACE( STR(?subject) , '\\/[^/]*$', '' ),'/'), '') AS ?identifier )
+                BIND(IF(BOUND(?entityLabel), ?entityLabel, ?identifier) as ?subjectLabel)
                 OPTIONAL {
                     ?subject crm:P109_has_current_or_former_curator ?owner .
                     ?owner rdfs:label ?ownerLabel .
