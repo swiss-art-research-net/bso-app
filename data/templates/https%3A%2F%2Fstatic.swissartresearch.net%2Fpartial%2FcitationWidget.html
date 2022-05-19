@@ -30,7 +30,7 @@
                 {{> citationHTML owner=bindings.0.owner.value place=bindings.0.place.value link=bindings.0.link.value}}
                 <mp-copy-to-clipboard text="{{> citationText label=bindings.0.subjectLabel.value owner=bindings.0.ownerLabel.value place=bindings.0.placeLabel.value link=bindings.0.link.value}}">
                     <button class="btn btn-secondary"><i class="fa fa-copy"></i></button>
-                  </mp-copy-to-clipboard>
+                  </mp-copy-to-clipboard>&nbsp;
                 <a download="{{bindings.0.identifier.value}}.bib" href="data:text/plain;utf8,{{> citationBibtex label=bindings.0.subjectLabel.value identifier=bindings.0.identifier.value owner=bindings.0.ownerLabel.value place=bindings.0.placeLabel.value link=bindings.0.link.value}}">
                     <button class="btn btn-secondary"><i class="fa fa-download"></i></button>
                 </a>
