@@ -10,14 +10,14 @@
             query="SELECT * WHERE {
                 BIND(<[[iri]]> as ?subject)
                 ?subject rdfs:label ?subjectLabel .
-                BIND(STRAFTER(STR(?subject), '/artwork/') as ?identifier)
+                BIND( REPLACE(STR(?subject), CONCAT(REPLACE( STR(?subject) , '\\/[^/]*$', '' ),'/'), '') AS ?identifier )
                 OPTIONAL {
                     ?subject crm:P109_has_current_or_former_curator ?owner .
                     ?owner rdfs:label ?ownerLabel .
-                }
-                OPTIONAL {
-                    ?owner gndo:placeOfBusiness ?place .
-                    ?place rdfs:label ?placeLabel .
+                    OPTIONAL {
+                        ?owner gndo:placeOfBusiness ?place .
+                        ?place rdfs:label ?placeLabel .
+                    }
                 }
             } LIMIT 1"
             template="{{> citationTemplate}}">
@@ -34,20 +34,18 @@
 
             <template id="citationHTML">
                 SARI, [[currentDateTime format='YYYY']]. <mp-label iri='[[iri]]'></mp-label>. In <em>Bilder der Schweiz Online</em>.                 
-                {{#if place}}<mp-label iri="{{place}}"></mp-label>: {{/if}}
-                <mp-label iri="{{owner}}"></mp-label>.
+                {{#if owner}}{{#if place}}<mp-label iri="{{place}}"></mp-label>: {{/if}}
+                <mp-label iri="{{owner}}"></mp-label>.{{/if}}
                 Available at: <a href="[[iri]]">[[iri]]</a>. Accessed [[currentDateTime format='dd.MM.YYYY']]
             </template>
 
-            <template id="citationText">
-SARI, [[currentDateTime format='YYYY']]. {{label}}. In Bilder der Schweiz Online.{{#if place}} {{place}}: {{/if}}{{owner}}. Available at: [[iri]]. Accessed [[currentDateTime format='dd.MM.YYYY']]
-            </template>
+            <template id="citationText">SARI, [[currentDateTime format='YYYY']]. {{label}}. In Bilder der Schweiz Online. {{#if owner}}{{#if place}} {{place}}: {{/if}}{{owner}}. {{/if}}Available at: [[iri]]. Accessed [[currentDateTime format='dd.MM.YYYY']]</template>
 
             <template id="citationBibtex">
 @misc{ {{identifier}},
     title = { {{label}} },
     url = {[[iri]]},
-    publisher = { {{owner}} },
+    publisher = { {{#if owner}}{{owner}}{{else}}Swiss Art Research Infrastructure{{/if}} },
     author = {SARI},
     year = {[[currentDateTime format='YYYY']]},
 }</template>
