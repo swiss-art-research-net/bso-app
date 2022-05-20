@@ -309,6 +309,9 @@ ol.page-breadcrumb {
                 transition-duration: 0.5s;
                 transition-property: transform;
             }
+            &::-webkit-details-marker {
+                display:none;
+            }
         }
         &[open] {
             > summary {
@@ -683,7 +686,11 @@ ol.page-breadcrumb {
 .modal-xl {
     width: 80vw;
 }
-
+.set-management {
+    &__sets {
+        min-height: 300px;
+    }
+}
 .semantic-form {
     .autocomplete-text-field {
         .Select-value {

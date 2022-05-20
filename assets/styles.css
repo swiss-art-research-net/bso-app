@@ -240,6 +240,9 @@ ol.page-breadcrumb {
   transition-duration: 0.5s;
   transition-property: transform;
 }
+.bso-component.details > summary::-webkit-details-marker {
+  display: none;
+}
 .bso-component.details[open] > summary::before {
   transform: rotate(90deg);
 }
@@ -546,6 +549,9 @@ ol.page-breadcrumb {
 }
 .modal-xl {
   width: 80vw;
+}
+.set-management__sets {
+  min-height: 300px;
 }
 .semantic-form .autocomplete-text-field .Select-value dl {
   margin-top: 14px;
