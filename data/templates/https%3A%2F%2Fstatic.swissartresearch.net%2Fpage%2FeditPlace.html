@@ -65,8 +65,8 @@
             [[> Historical_Parthood]]
         ]'
     >
-        <semantic-form-hidden-input for="Type-hidden" default-value="http://www.cidoc-crm.org/cidoc-crm/E53_Place"></semantic-form-hidden-input>
-        
+        <semantic-form-hidden-input for="Type-hidden" replace-values='["http://www.cidoc-crm.org/cidoc-crm/E53_Place", "[[resolvePrefix 'search:Place']]", "[[resolvePrefix 'rds:Place']]"]'></semantic-form-hidden-input>
+     
         <semantic-form-autocomplete-input
             for="SameAs"
             value-binding-name="subject"
