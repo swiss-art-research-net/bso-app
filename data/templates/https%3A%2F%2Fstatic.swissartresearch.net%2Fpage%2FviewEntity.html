@@ -1261,7 +1261,7 @@
             }
             BIND(URI(STRBEFORE(STR(?g), '/context')) as ?container)
             ?parentContainer ldp:contains ?container .
-            VALUES (?type) {(search:Person) }}" then="{{> template}}">
+            VALUES (?type) {(search:Person) (search:Place) }}" then="{{> template}}">
             <template id="template">
                 <semantic-link
                     iri="page:editPerson"

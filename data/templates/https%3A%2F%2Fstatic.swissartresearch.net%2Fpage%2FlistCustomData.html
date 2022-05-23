@@ -119,6 +119,10 @@
             iri="page:editPerson">
             <button class="btn btn-primary btn-md">[[i18n "addNewPerson" bundle="bso"]]</button>
         </semantic-link>
+        <semantic-link
+            iri="page:editPlace">
+            <button class="btn btn-primary btn-md">[[i18n "addNewPlace" bundle="bso"]]</button>
+        </semantic-link>
     </div>
     <semantic-table
         query="SELECT * WHERE {
@@ -129,6 +133,7 @@
             ?parentContainer ldp:contains ?container .
             VALUES (?type ?editPage) {
                 (search:Person page:editPerson)
+                (search:Place page:editPlace)
             }
         }"
         column-configuration='[{
@@ -148,7 +153,7 @@
             "displayName": "[[i18n "edit" bundle="bso"]]",
             "cellTemplate": "<semantic-link iri=\"{{editPage.value}}\" urlqueryparam-entityiri=\"{{subject.value}}\">[[i18n "edit" bundle="bso"]]</semantic-link>"
         }]'
-        no-result-template="[[i18n "noContributedData" bundle="bso"]]"
+        no-result-template="<p>[[i18n "noContributedData" bundle="bso"]]</p>"
     ></semantic-table>
 </div>
 [[/inline]]
