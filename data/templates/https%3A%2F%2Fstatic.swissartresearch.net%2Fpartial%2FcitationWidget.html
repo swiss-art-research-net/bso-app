@@ -1,0 +1,64 @@
+<details class="bso-component details">
+    <summary>[[i18n "cite" bundle="bso"]]</summary>
+    [[> component-citation-default]]
+</details>
+
+[[#*inline "component-citation-default"]]
+    <div class="bso-component citation">
+
+        <semantic-query
+            query="SELECT * WHERE {
+                BIND(<[[iri]]> as ?subject)
+                OPTIONAL {
+                    ?subject rdfs:label ?entityLabel .
+                }
+                BIND(IF(CONTAINS(STR(?subject), 'swissartresearch'), ?subject, CONCAT('https://bso.swissartresearch.net/resource/?uri=', STR(?subject))) as ?link)
+                BIND( REPLACE(STR(?subject), CONCAT(REPLACE( STR(?subject) , '\\/[^/]*$', '' ),'/'), '') AS ?identifier )
+                BIND(IF(BOUND(?entityLabel), ?entityLabel, ?identifier) as ?subjectLabel)
+                OPTIONAL {
+                    ?subject crm:P109_has_current_or_former_curator ?owner .
+                    ?owner rdfs:label ?ownerLabel .
+                    OPTIONAL {
+                        ?owner gndo:placeOfBusiness ?place .
+                        ?place rdfs:label ?placeLabel .
+                    }
+                }
+            } LIMIT 1"
+            template="{{> citationTemplate}}">
+
+            <template id="citationTemplate">
+                {{> citationHTML owner=bindings.0.owner.value place=bindings.0.place.value link=bindings.0.link.value}}
+                <mp-copy-to-clipboard 
+                    text="{{> citationText label=bindings.0.subjectLabel.value owner=bindings.0.ownerLabel.value place=bindings.0.placeLabel.value link=bindings.0.link.value}}"
+                    message="[[i18n "messageCitationCopied" bundle="bso"]]"
+                >
+                    <button class="btn btn-secondary"><i class="fa fa-copy"></i></button>
+                  </mp-copy-to-clipboard>&nbsp;
+                <a download="{{bindings.0.identifier.value}}.bib" href="data:text/plain;utf8,{{> citationBibtex label=bindings.0.subjectLabel.value identifier=bindings.0.identifier.value owner=bindings.0.ownerLabel.value place=bindings.0.placeLabel.value link=bindings.0.link.value}}">
+                    <button class="btn btn-secondary"><i class="fa fa-download"></i></button>
+                </a>
+            </template>
+
+            <template id="citationHTML">
+                SARI, [[currentDateTime format='YYYY']]. <mp-label iri='[[iri]]'></mp-label>. In <em>Bilder der Schweiz Online</em>.                 
+                {{#if owner}}{{#if place}}<mp-label iri="{{place}}"></mp-label>: {{/if}}
+                <mp-label iri="{{owner}}"></mp-label>.{{/if}}
+                Available at: <a href="{{link}}">{{link}}</a>. Accessed [[currentDateTime format='dd.MM.YYYY']]
+            </template>
+
+            <template id="citationText">SARI, [[currentDateTime format='YYYY']]. {{label}}. In Bilder der Schweiz Online. {{#if owner}}{{#if place}}{{place}}: {{/if}}{{owner}}. {{/if}}Available at: {{link}}. Accessed [[currentDateTime format='dd.MM.YYYY']]</template>
+
+            <template id="citationBibtex">
+@misc{ {{identifier}},
+    title = { {{label}} },
+    url = { {{link}} },
+    publisher = { {{#if owner}}{{owner}}{{else}}Swiss Art Research Infrastructure{{/if}} },
+    author = {SARI},
+    year = {[[currentDateTime format='YYYY']]},
+}</template>
+
+        </semantic-query>
+    </div>
+[[/inline]]
+
+
