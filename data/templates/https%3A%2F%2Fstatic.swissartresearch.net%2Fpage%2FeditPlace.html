@@ -1,0 +1,266 @@
+[[> partial:RDSFieldDefinitions]]
+
+[[#if (urlParam "overlay")]]
+[[else]]
+    [[> partial:pageHeader]]
+[[/if]]
+
+[[#*inline "thisIri"]][[urlParam "entityiri"]][[/inline]]
+
+[[#*inline "thisForQuery"]]
+    <[[> thisIri]]>
+[[/inline]]
+
+<div class="d-flex flex-md-row flex-column">
+    <div class="bso-component separator sidebar image-display">
+
+        <img src="/images/fcs/places.svg" width="200">
+    </div>
+    <div class="bso-component main">
+        <div class="bso-component panel">
+            [[#if (hasPermission "api:ldp:*")]]
+                [[> edit-person-form edit=(urlParam "entityiri")]]
+            [[else]]
+                <bs-alert variant="warning">
+                    [[i18n "noPermissionToAccessPage" bundle="bso"]]
+                </bs-alert>
+            [[/if]]
+        </div>
+    </div>
+</div>
+
+[[#*inline "edit-person-form"]]
+    [[#if edit]]
+        <h2>[[i18n "edit" bundle="bso"]] <mp-label iri="[[> thisIri]]"></mp-label></h2>
+    [[else]]
+        <h2>[[i18n "addNewPlace" bundle="bso"]]</h2>
+    [[/if]]
+
+    <semantic-form
+        id="newPerson"
+        [[#if edit]]
+            subject="[[> newPlace]]"
+        [[else]]
+            new-subject-template="https://resource.swissartresearch.net/place/{{UUID}}"
+        [[/if]]
+        persistence="ldp"
+        form-id="persons"
+        [[#if (urlParam "redirect")]]
+            post-action="[[ urlParam "redirect"]]"
+        [[else]]
+            post-action="redirect"
+        [[/if]]
+        browser-persistence="True"
+        fields='[
+            [[> SameAs]],
+            [[> Type-hidden]],
+            [[> Identifier]],
+            [[> Place_Type]],
+            [[> Person_Name]],
+            [[> Person_Alternate_Name]],
+            [[> Place_Part_of]],
+            [[> Place_Has_Part]],
+            [[> Citation]],
+            [[> Coordinates]],
+            [[> Historical_Parthood]]
+        ]'
+    >
+        <semantic-form-hidden-input for="Type-hidden" default-value="http://www.cidoc-crm.org/cidoc-crm/E53_Place"></semantic-form-hidden-input>
+        
+        <semantic-form-autocomplete-input
+            for="SameAs"
+            value-binding-name="subject"
+            lookup-query='{
+            "type": "lookup",
+            "entityType": "http://schema.swissartresearch.net/ontology/rds#Place",
+            "limit": 20,
+            "lookupServiceName": "federated-lookup"
+            }'
+            template='{{> autocompletionTemplate}}'>
+            [[> autocompletionTemplate]]
+        </semantic-form-autocomplete-input>
+        
+        <semantic-form-composite-input
+            for="Identifier"
+            new-subject-template='/identifier/{{Identifier_Value}}'
+            fields='[
+            [[> Identifier_Source]],
+            [[> Identifier_Type]],
+            [[> Identifier_Provider]],
+            [[> Identifier_Value]]
+        ]'>
+        <semantic-form-text-input for="Identifier_Value"></semantic-form-text-input>
+        <semantic-form-text-input for="Identifier_Provider"></semantic-form-text-input>
+        <semantic-form-text-input for="Identifier_Type"></semantic-form-text-input>
+        <semantic-form-text-input for="Identifier_Source"></semantic-form-text-input>
+        </semantic-form-composite-input>
+
+        <semantic-form-composite-input 
+            for="Person_Name"
+            new-subject-template="/appellation/{{Person_Name-Value}}"
+            fields='[
+            [[> Person_Name-Value]],
+            [[> Person_Name_Part]]
+        ]'>
+        <semantic-form-text-input for="Person_Name-Value"
+                                    languages='["en","de","fr","it","sp","ca","cs","da","nl","fi","gr","hu","no","pt","sv","ru","jp","ko"]'>
+        </semantic-form-text-input>
+
+        <semantic-form-text-input for="Person_Name_Part"></semantic-form-text-input>
+        </semantic-form-composite-input>
+
+        <semantic-form-composite-input 
+            for="Place_Type"
+            new-subject-template="https://resource.swissartresearch.net/type/{{Place_Type_Qualifying_Description}}"
+            fields='[
+            [[> Place_Type_Qualifying_Description]],
+            [[> Place_Type_Start_Date]],
+            [[> Place_Type_End_Date]]
+        ]'>
+        <semantic-form-text-input for="Place_Type_Qualifying_Description"></semantic-form-text-input>
+
+        <semantic-form-datetime-input for="Place_Type_Start_Date"></semantic-form-datetime-input>
+
+        <semantic-form-datetime-input for="Place_Type_End_Date"></semantic-form-datetime-input>
+        
+        </semantic-form-composite-input>
+
+        <semantic-form-composite-input 
+            for="Person_Alternate_Name"
+            new-subject-template="/appellation/{{Person_Alternate_Name_Value}}"
+            fields='[
+            [[> Person_Alternate_Name_Value]],
+            [[> Person_Alternate_Name_Type]],
+            [[> Alternate_Name_Use_Period_earliest]],
+            [[> Alternate_Name_Use_Period_latest]],
+            [[> Alternate_Name_Attributed_by]],
+            [[> Alternative_Name_-_Source]]
+        ]'>
+        <semantic-form-text-input for="Person_Alternate_Name_Value"
+                                    languages='["en","de","fr","it","sp","ca","cs","da","nl","fi","gr","hu","no","pt","sv","ru","jp","ko"]'>
+        </semantic-form-text-input>
+
+        <semantic-form-text-input for="Person_Alternate_Name_Type"'></semantic-form-text-input>
+
+        <semantic-form-datetime-input for="Alternate_Name_Use_Period_earliest"></semantic-form-datetime-input>
+
+        <semantic-form-datetime-input for="Alternate_Name_Use_Period_latest"></semantic-form-datetime-input>
+
+        <semantic-form-text-input for="Alternate_Name_Attributed_by"></semantic-form-text-input>
+
+        <semantic-form-text-input for="Alternative_Name_-_Source"></semantic-form-text-input>
+
+        </semantic-form-composite-input>
+        
+        <semantic-form-autocomplete-input
+        for="Place_Part_of"
+        value-binding-name="subject"
+        lookup-query='{
+            "type": "lookup",
+            "entityType": "http://schema.swissartresearch.net/ontology/rds#Place",
+            "limit": 10,
+            "lookupServiceName": "federated-lookup"
+        }'
+        template='{{> autocompletionTemplate}}'>
+        [[> autocompletionTemplate]]
+        
+        </semantic-form-autocomplete-input>
+
+    <semantic-form-autocomplete-input
+        for="Place_Has_Part"
+        value-binding-name="subject"
+        lookup-query='{
+        "type": "lookup",
+        "entityType": "http://schema.swissartresearch.net/ontology/rds#Place",
+        "limit": 10,
+        "lookupServiceName": "federated-lookup"
+        }'
+        template='{{> autocompletionTemplate}}'>
+        [[> autocompletionTemplate]]
+        
+    </semantic-form-autocomplete-input>
+
+        <semantic-form-composite-input 
+            for="Historical_Parthood"
+            new-subject-template="/historical_parthood/{{UUID}}"
+            fields='[
+            [[> Historical_Parthood_-_Historically_Part_of_Place]],
+            [[> Historical_Parthood_-_Historically_part_of_Place_-_Earliest_Date_Time]],
+            [[> Historical_Parthood_-_Historically_part_of_Place_-_Latest_Date_Time]],
+            [[> Historical_Parthood_-_Name_at_Time_of_Parthood_of_Place]],
+            [[> Historical_Parthood_-_Type_at_Time_of_Parthood_of_Place]],
+            [[> Historical_Parthood_-_Historicall_Coordinates]]
+        ]'>
+        
+        <semantic-form-autocomplete-input
+            for="Historical_Parthood_Part_of_Place"
+            value-binding-name="subject"
+            lookup-query='{
+            "type": "lookup",
+            "entityType": "http://schema.swissartresearch.net/ontology/rds#Place",
+            "limit": 10,
+            "lookupServiceName": "federated-lookup"
+            }'
+            template='{{> autocompletionTemplate}}'>
+            [[> autocompletionTemplate]]
+            
+        </semantic-form-autocomplete-input>
+
+        <semantic-form-datetime-input for="Historical_Parthood_-_Historically_part_of_Place_-_Earliest_Date_Time"></semantic-form-datetime-input>
+
+        <semantic-form-datetime-input for="Historical_Parthood_-_Historically_part_of_Place_-_Latest_Date_Time"></semantic-form-datetime-input>
+
+        <semantic-form-text-input for="Historical_Parthood_-_Name_at_Time_of_Parthood_of_Place"></semantic-form-text-input>
+
+        <semantic-form-text-input for="Historical_Parthood_-_Type_at_Time_of_Parthood_of_Place"></semantic-form-text-input>
+
+        <semantic-form-text-input for="Historical_Parthood_-_Historicall_Coordinates"></semantic-form-text-input>
+        </semantic-form-composite-input>
+        
+        <semantic-form-text-input for="Coordinates"></semantic-form-text-input>
+        
+        <semantic-form-composite-input 
+            for="Citation"
+            new-subject-template="/citation/{{Citation_Value}}"
+            fields='[
+            [[> Citation_Value]],
+            [[> Citation_Source]]
+        ]'>
+        <semantic-form-text-input for="Citation_Value"></semantic-form-text-input>
+
+        <semantic-form-text-input for="Citation_Source"></semantic-form-text-input>
+
+        </semantic-form-composite-input>
+
+        <semantic-form-errors></semantic-form-errors>
+        <div class="bso-component button-set">
+            [[#if edit]]
+                <semantic-link
+                    iri="[[edit]]"
+                >
+                    <button class="btn btn-secondary">[[i18n "cancel" bundle="bso"]]</button>
+                </semantic-link>
+            [[else]]
+                <button name='reset' class='btn btn-secondary'>[[i18n "reset" bundle="bso"]]</button>
+            [[/if]]
+            <button name='submit' class='btn btn-primary'>[[i18n "save" bundle="bso"]]</button>
+        </div>
+    </semantic-form>
+[[/inline]]
+
+
+[[#*inline "autocompletionTemplate"]]
+<template id='autocompletionTemplate'>
+    [[> partial:lookupCandidateTemplate]]
+</template>
+[[/inline]]
+
+[[#*inline "addNewPersonButton"]]
+<semantic-link
+iri="page:editPerson"
+target="_blank">
+    <button class="btn btn-secondary btn-xs">[[i18n "createNewPerson" bundle="bso"]]</button>
+</semantic-link>
+[[/inline]]
+
+[[> partial:pageFooter]]
