@@ -8554,11 +8554,15 @@ WHERE{
       INSERT { 
         $subject <http://www.ics.forth.gr/isl/CRMdig/L54_is_same-as> ?value . 
         ?value wdt:P18 ?image .
+        ?value wdt:P625 ?coordinates .
       } WHERE {
-        OPTIONAL {
           SERVICE <https://query.wikidata.org/sparql> {
-            ?value wdt:P18 ?image .
-          }
+            OPTIONAL {
+              ?value wdt:P18 ?image .
+            }
+            OPTIONAL {
+              ?value wdt:P625 ?coordinates .
+            }
         }
       }"
 }
