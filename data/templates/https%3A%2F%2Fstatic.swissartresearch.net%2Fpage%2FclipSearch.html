@@ -31,22 +31,48 @@ limit="100"
           </mp-text-truncate>
           <bs-row>
             <bs-col sm="12" md="1">
-              <span class="bso-component label">[[i18n "search" bundle="bso"]]</span>
+              <span class="bso-component label">[[i18n "searchWith" bundle="bso"]]</span>
             </bs-col>
             <bs-col sm="12" md="11">
-              <semantic-search-keyword-prefetch
-                query='
-                  PREFIX  clip: <https://service.swissartresearch.net/clip/>
-                  SELECT * WHERE {
-                      SERVICE <http://clip-service:5000/sparql> {
-                        ?request a clip:Request ;
-                          clip:queryString ?__token__ ;
-                          clip:minScore "0.2" ;
-                          clip:score ?score ;
-                          clip:iiifUrl ?subject .
-                      } 
-                  }'
-              ></semantic-search-keyword-prefetch>
+              <bs-tabs>
+                <bs-tab event-key="image" title="[[i18n "image" bundle="bso"]]">
+                  <sari-image-upload 
+                    max-size="640"
+                    template="{{> imageUploadSearch}}"
+                  >
+                    <template id="imageUploadSearch">
+                      <img src="{{file.base64}}" width="200px"/>
+                      <semantic-search-query-constant
+                        query='PREFIX  clip: <https://service.swissartresearch.net/clip/>
+                        SELECT ?subject ?score WHERE {
+                            SERVICE <http://clip-service:5000/sparql> {
+                              ?request a clip:Request ;
+                                clip:queryImage "{{{file.base64}}}";
+                                clip:minScore "0.3" ;
+                                clip:score ?score ;
+                                clip:iiifUrl ?subject .
+                            } 
+                        } ORDER BY DESC(?score)'>
+                      </semantic-search-query-constant>
+                    </template>
+                  </sari-image-upload>
+                </bs-tab>
+                <bs-tab event-key="keyword" title="[[i18n "description" bundle="bso"]]">
+                  <semantic-search-keyword-prefetch
+                    query='
+                      PREFIX  clip: <https://service.swissartresearch.net/clip/>
+                      SELECT ?subject ?score WHERE {
+                          SERVICE <http://clip-service:5000/sparql> {
+                            ?request a clip:Request ;
+                              clip:queryString ?__token__ ;
+                              clip:minScore "0.2" ;
+                              clip:score ?score ;
+                              clip:iiifUrl ?subject .
+                          } 
+                      } ORDER BY DESC(?score)'
+                  ></semantic-search-keyword-prefetch>
+                </bs-tab>
+              </bs-tabs>
             </bs-col>
           </bs-row>
         </bs-col>
@@ -59,7 +85,7 @@ limit="100"
         <semantic-search-result>
           <mp-sparql-result-counts 
             id="search_results_count"
-            query="SELECT DISTINCT ?subject {}"
+            query="SELECT DISTINCT ?subject ?score {}"
             template='<div>{{#if hasLimit}} <bs-alert variant="warning"> Showing {{numberOfResults}} of {{totalNumberOfResults}} matches. <strong>Please, refine your search.</strong> </bs-alert> {{else}} <p>Found <em>{{numberOfResults}}</em> results</p>{{/if}}</div>'>
           </mp-sparql-result-counts>
           
@@ -77,10 +103,11 @@ limit="100"
             >
               <template id="template">
                 <semantic-query
-                  query="SELECT ?subject WHERE {
+                  query='SELECT ?subject ?score WHERE {
+                    BIND("{{score.value}}" as ?score)
                     BIND(<{{subject.value}}> as ?iiif)
                     ?subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?iiif .
-                  } LIMIT 1"
+                  } LIMIT 1'
                   template="{{> partial:cardObject mode='fullImage' subject=bindings.0.subject}}"></semantic-query>
               </template>
             </semantic-table>
