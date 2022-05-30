@@ -36,26 +36,35 @@ limit="100"
             <bs-col sm="12" md="11">
               <bs-tabs>
                 <bs-tab event-key="image" title="[[i18n "image" bundle="bso"]]">
-                  <sari-image-upload 
-                    max-size="640"
+                  <sari-image-upload
+                    id="input-image-upload" 
+                    max-pixels="640"
                     template="{{> imageUploadSearch}}"
                   >
                     <template id="imageUploadSearch">
                       <img src="{{file.base64}}" width="200px"/>
-                      <semantic-search-query-constant
-                        query='PREFIX  clip: <https://service.swissartresearch.net/clip/>
-                        SELECT ?subject ?score WHERE {
-                            SERVICE <http://clip-service:5000/sparql> {
-                              ?request a clip:Request ;
-                                clip:queryImage "{{{file.base64}}}";
-                                clip:minScore "0.3" ;
-                                clip:score ?score ;
-                                clip:iiifUrl ?subject .
-                            } 
-                        } ORDER BY DESC(?score)'>
-                      </semantic-search-query-constant>
+                      <mp-event-target-refresh id="search-constant-image">
+                        <semantic-search-query-constant
+                          query='PREFIX  clip: <https://service.swissartresearch.net/clip/>
+                          SELECT ?subject ?score WHERE {
+                              SERVICE <http://clip-service:5000/sparql> {
+                                ?request a clip:Request ;
+                                  clip:queryImage "{{{file.base64}}}";
+                                  clip:minScore "0.3" ;
+                                  clip:score ?score ;
+                                  clip:iiifUrl ?subject .
+                              } 
+                          } ORDER BY DESC(?score)'>
+                        </semantic-search-query-constant>
+                      </mp-event-target-refresh>
                     </template>
                   </sari-image-upload>
+                  <mp-event-proxy 
+                    on-event-source="input-image-upload" 
+                    on-event-type="Upload.FileUploaded" 
+                    proxy-event-type="Component.Refresh" 
+                    proxy-targets='["search-constant-image"]'>
+                  </mp-event-proxy>
                 </bs-tab>
                 <bs-tab event-key="keyword" title="[[i18n "description" bundle="bso"]]">
                   <semantic-search-keyword-prefetch
