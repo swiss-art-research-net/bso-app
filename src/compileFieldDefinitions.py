@@ -5,6 +5,7 @@ from sariFieldDefinitionsGenerator import generator
 
 inputFile = './fieldDefinitions.yml'
 outputFile = '../data/templates/https%3A%2F%2Fstatic.swissartresearch.net%2Fpartial%2FfieldDefinitions.html'
+outputFileInline = '../data/templates/https%3A%2F%2Fstatic.swissartresearch.net%2Fpartial%2FfieldDefinitionsInline.html'
 
 def addLocalisation(jsonString, bundle="bso"):
     import re
@@ -20,8 +21,13 @@ def addLocalisation(jsonString, bundle="bso"):
 model = generator.loadSourceFromFile(inputFile)
 
 output = generator.generate(model, generator.JSON)
-
 output = addLocalisation(output)
 
 with open(outputFile, 'w') as f:
     f.write(output)
+
+outputInline = generator.generate(model, generator.INLINE)
+outputInline = addLocalisation(outputInline)
+
+with open(outputFileInline, 'w') as f:
+    f.write(outputInline)

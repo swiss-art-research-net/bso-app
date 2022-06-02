@@ -1,3 +1,5 @@
+[[> partial:fieldDefinitionsInline]]
+
 [[> partial:pageHeader]]
 [[> partial:contentHeader]]
 
@@ -175,10 +177,33 @@
             <semantic-form-hidden-input for="P140_assigned_attribute_to" replace-value="[[>thisIri]]"></semantic-form-hidden-input>
             
             <p>[[i18n "externalLinksFormInfo" bundle="bso"]]</p>
-            <semantic-form-text-input for="L54_is_same-as_as_P141_to_proposition_subject"></semantic-form-text-input>
-            
-            <semantic-form-text-input for="P70i_is_documented_in_as_P141_to_proposition_subject"></semantic-form-text-input>
-            
+            <bs-tabs>
+                <bs-tab event-key="documented_in" title="[[i18n "field_is_documented_in" bundle="bso"]]">
+                    <semantic-form-composite-input 
+                        for="P70i_is_documented_in_as_P141_to_proposition_subject"
+                        new-subject-template="{{url_as_subject}}"
+                        new-subject-template-settings='{
+                            "placeholders": {
+                              "url_as_subject": {
+                                "disallowRegex": " ",
+                                "replaceCharacter": ""
+                              }
+                            }
+                         }'
+                        fields='[
+                         [[> url_as_subject]],
+                         [[> rdfs_label]]
+                        ]'
+                    >
+                        <semantic-form-text-input for="url_as_subject"></semantic-form-text-input>
+                        <semantic-form-text-input for="rdfs_label"></semantic-form-text-input> 
+
+                    </semantic-form-composite-input>
+                </bs-tab>
+                <bs-tab event-key="sameAs" title="[[i18n "field_same_as" bundle="bso"]]">
+                    <semantic-form-text-input for="L54_is_same-as_as_P141_to_proposition_subject"></semantic-form-text-input>
+                </bs-tab>
+            </bs-tabs>
             <button name="submit" class="btn btn-primary btn-md">[[i18n "save" bundle="bso"]]</button>
         </semantic-form>
     </div>

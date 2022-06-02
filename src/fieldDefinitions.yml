@@ -278,6 +278,8 @@ fields:
       queries:
         - select: 'SELECT DISTINCT ?value WHERE {
             $subject crm:P141_assigned ?value .
+            BIND(URI(STRBEFORE(STR($subject), "/proposition")) as ?proposition_subject)
+            ?proposition_subject crm:P138_represents ?value .
           }'
         - insert: 'INSERT {
             $subject crm:P141_assigned $value .
@@ -498,6 +500,8 @@ fields:
       queries:
         - select: 'SELECT DISTINCT ?value WHERE {
             $subject crm:P141_assigned ?value .
+            BIND(URI(STRBEFORE(STR($subject), "/proposition")) as ?proposition_subject)
+            ?proposition_subject crm:P70i_is_documented_in ?value .
           }'
         - insert: 'INSERT {
             $subject crm:P141_assigned $value .
@@ -506,6 +510,21 @@ fields:
           } WHERE {
             BIND(URI(STRBEFORE(STR($subject), "/proposition")) as ?proposition_subject)
           }'
+
+    - id: rdfs_label
+      label: Label
+      datatype: xsd:langString
+      description: A human-readable label for the entity
+      queries:
+        - select: 'SELECT ?value WHERE {
+            $subject rdfs:label ?value .
+          }'
+        - insert: 'INSERT {
+            $subject rdfs:label $value .
+          } WHERE {}'
+        - delete: 'DELETE {
+            $subject rdfs:label ?value .
+          } WHERE {}'
 
     - id: rdfs_label_as_P141_to_proposition_subject
       label: Label
@@ -518,6 +537,8 @@ fields:
       queries:
         - select: 'SELECT DISTINCT ?value WHERE {
             $subject crm:P141_assigned ?value .
+            BIND(URI(STRBEFORE(STR($subject), "/proposition")) as ?proposition_subject)
+            ?proposition_subject rdfs:label ?value .
           }'
         - insert: 'INSERT {
             $subject crm:P141_assigned $value .
@@ -588,6 +609,8 @@ fields:
       queries:
         - select: 'SELECT DISTINCT ?value WHERE {
             $subject crm:P141_assigned ?value .
+            BIND(URI(STRBEFORE(STR($subject), "/proposition")) as ?proposition_subject)
+            ?proposition_subject crmdig:L54_is_same-as ?value .
           }'
         - insert: 'INSERT {
             $subject crm:P141_assigned $value .
@@ -632,6 +655,16 @@ fields:
         - select: 'SELECT ?value WHERE {
             $subject a ?value .
           }' 
+    - id: url_as_subject
+      label: URL
+      datatype: xsd:anyURI
+      display: hidden
+      minOccurs: 1
+      maxOccurs: 1
+      queries:
+        - select: 'SELECT ?value WHERE {
+          BIND($subject as ?value)
+        }'
 
     - id: P1_is_identified_by
       label: Identifier
