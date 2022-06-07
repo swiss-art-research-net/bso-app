@@ -7776,29 +7776,34 @@ WHERE{
 {
     "id": "Event_Actor_Value",
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Event_Actor_Value",
-    "label": "Event Actor Value",
+    "label": "Event Actor",
     "description": "This field is used to indicate actors involved in the documented instance of event",
     "domain": "http://www.cidoc-crm.org/cidoc-crm/E5_Event",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#string",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#anyIri",
     "selectPattern": "SELECT distinct ?value 
-WHERE {
- ?subject <http://www.cidoc-crm.org/cidoc-crm/PC02_has_range> ?actor_uri.
- ?actor_uri a <http://www.cidoc-crm.org/cidoc-crm/E39_Actor>.
- ?actor_uri rdfs:label ?value.
-}",
+    WHERE {
+      ?subject <http://www.cidoc-crm.org/cidoc-crm/PC02_has_range> ?actor_uri.
+      ?actor_uri a <http://www.cidoc-crm.org/cidoc-crm/E39_Actor>.
+      ?actor_uri rdfs:label ?value.
+    }",
     "deletePattern": "DELETE {  
-   ?subject <http://www.cidoc-crm.org/cidoc-crm/PC02_has_range> ?actor_uri.
-} WHERE {
-?subject <http://www.cidoc-crm.org/cidoc-crm/PC02_has_range> ?actor_uri.
- ?actor_uri a <http://www.cidoc-crm.org/cidoc-crm/E39_Actor>.
- ?actor_uri rdfs:label ?value.
-}",
+      ?subject <http://www.cidoc-crm.org/cidoc-crm/PC02_has_range> ?actor_uri.
+    } WHERE {
+      ?subject <http://www.cidoc-crm.org/cidoc-crm/PC02_has_range> ?actor_uri.
+      ?actor_uri a <http://www.cidoc-crm.org/cidoc-crm/E39_Actor>.
+      ?actor_uri rdfs:label ?value.
+    }",
     "insertPattern": "INSERT { 
-  ?subject <http://www.cidoc-crm.org/cidoc-crm/PC02_has_range> ?actor_uri.
-  ?actor_uri a <http://www.cidoc-crm.org/cidoc-crm/E39_Actor>.
-  ?actor_uri rdfs:label ?value.
-  
-} WHERE {BIND(IRI(CONCAT(STR($subject),\"/appellation/\", MD5(?value))) as ?actor_uri). }"
+      ?subject <http://www.cidoc-crm.org/cidoc-crm/PC02_has_range> ?actor_uri.
+    } WHERE {}",
+    "autosuggestionPattern": "SELECT ?value ?label WHERE {
+      ?value a search:Person.
+      ?value rdfs:label ?label .
+      ?label bds:search ?__token__  ;
+      bds:minRelevance \"0.2\" ;
+      bds:relevance ?score ;
+      bds:matchAllTerms \"true\" .
+    } LIMIT 10"
 }
 [[/inline]]
 
