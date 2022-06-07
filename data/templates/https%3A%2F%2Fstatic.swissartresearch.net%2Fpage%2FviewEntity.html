@@ -1271,14 +1271,28 @@
             }
             BIND(URI(STRBEFORE(STR(?g), '/context')) as ?container)
             ?parentContainer ldp:contains ?container .
-            VALUES (?type) {(search:Person) (search:Place) }}" then="{{> template}}">
+            VALUES (?type) {(search:Person) (search:Place) (search:Event )}}" then="{{> template}}">
             <template id="template">
-                <semantic-link
-                    iri="page:editPerson"
-                    urlqueryparam-entityiri="[[> thisIri]]"
+                <semantic-query
+                    query="SELECT ?type ?editForm WHERE {
+                        [[> thisForQuery]] a ?type .
+                        VALUES (?type ?editForm) {
+                            (search:Person page:editPerson)
+                            (search:Place page:editPlace)
+                            (search:Event page:editEvent)
+                        }
+                    } LIMIT 1"
+                    template="{{> template-edit-button}}"
                 >
-                    <button class="btn btn-primary">[[i18n "editRecord" bundle="bso"]]</button>
-                </semantic-link>
+                    <template id="template-edit-button">
+                        <semantic-link
+                            iri="{{bindings.0.editForm.value}}"
+                            urlqueryparam-entityiri="[[> thisIri]]"
+                        >
+                            <button class="btn btn-primary">[[i18n "editRecord" bundle="bso"]]</button>
+                        </semantic-link>
+                    </template>
+                </semantic-query>
             </template>
         </semantic-if>
 
