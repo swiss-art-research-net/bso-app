@@ -3191,7 +3191,7 @@ prefix org: <http://example.com/org/>
 prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 SELECT distinct  ?value  WHERE {
 $subject a <http://www.cidoc-crm.org/cidoc-crm/E21_Person>;
-        <http://www.cidoc-crm.org/cidoc-crm/P48_has_prefered_identifier> ?appellation.
+        <http://www.cidoc-crm.org/cidoc-crm/P48_has_Preferred_identifier> ?appellation.
   ?appellation a <http://www.cidoc-crm.org/cidoc-crm/E41_Appellation>;
     rdfs:label ?value.
 }",
@@ -3336,7 +3336,7 @@ WHERE {
   ?appel_uri a <http://www.cidoc-crm.org/cidoc-crm/E41_Appellation>.
  ?appel_uri rdfs:label ?value.
  ?appel_uri <http://www.cidoc-crm.org/cidoc-crm/P2_has_type> ?pref_name_type.
-  ?pref_name_type rdfs:label \"Prefered Name\".
+  ?pref_name_type rdfs:label \"Preferred Name\".
 }",
     "insertPattern": "INSERT { $subject ?predicate $value} WHERE {}"
 }
@@ -3724,7 +3724,7 @@ WHERE {
       ?name_identifier <http://www.cidoc-crm.org/cidoc-crm/P72_has_language> ?lang.
       ?lang rdfs:label ?lang_label.},
       CONCAT(?name,\" (\",?lang_label,\")\"),?name)AS ?value)
-  FILTER EXISTS {?name_identifier <http://www.cidoc-crm.org/cidoc-crm/P2_has_type> <https://resource.swissartresearch.net/type/prefered%20name>.}
+  FILTER EXISTS {?name_identifier <http://www.cidoc-crm.org/cidoc-crm/P2_has_type> <https://resource.swissartresearch.net/type/Preferred%20name>.}
 }",
     "insertPattern": "INSERT { $subject ?predicate $value} WHERE {}"
 }
@@ -4014,7 +4014,7 @@ WHERE {
   ?subject crm:P1_is_identified_by ?appellation_iri . 
   ?appellation_iri a crm:E41_Appellation.
   ?appellation_iri crm:P2_has_type ?appellation_type.
-  ?appellation_type rdfs:label \"Prefered Title\".
+  ?appellation_type rdfs:label \"Preferred Title\".
       ?appellation_iri rdfs:label ?title.
      ?appellation_iri crm:P72_has_language ?lang_uri.
   ?lang_uri rdfs:label ?lang.
@@ -4028,14 +4028,14 @@ WHERE {
     "insertPattern": "INSERT { 
   ?subject rdfs:label ?value.
   ?subject crm:P2_has_type ?appellation_type.
-  ?appellation_type rdfs:label \"Prefered Title\".
+  ?appellation_type rdfs:label \"Preferred Title\".
   ?subject <http://www.cidoc-crm.org/cidoc-crm/P72_has_language> ?language_iri. 
       ?language_iri a <http://www.cidoc-crm.org/cidoc-crm/E56_Language>. 
 }   
 WHERE {
       BIND(lang(?value) as ?lang).
       ?language_iri <http://www.cidoc-crm.org/cidoc-crm/P3_has_note> ?lang.
-      BIND(IRI(CONCAT(STR($subject),\"/type/\", MD5(\"Prefered Title\"))) as ?appellation_type).
+      BIND(IRI(CONCAT(STR($subject),\"/type/\", MD5(\"Preferred Title\"))) as ?appellation_type).
 }"
 }
 [[/inline]]
@@ -5323,7 +5323,7 @@ INSERT {
   ?appel_uri a crm:E41_Appellation.
   ?appel_uri rdfs:label ?label.
   ?appel_uri crm:P2_has_type ?pref_name_type.
-  ?pref_name_type rdfs:label \"Prefered Title\".
+  ?pref_name_type rdfs:label \"Preferred Title\".
   
   ?label bds:search ?__token__ ;
     bds:minRelevance \"0.2\" ;
@@ -5396,7 +5396,7 @@ WHERE {
 WHERE {
   $subject a <http://www.cidoc-crm.org/cidoc-crm/E22_Man-Made_Object>.
   ?subject <http://www.cidoc-crm.org/cidoc-crm/P1_is_identified_by> ?value . 
-  ?subject <http://www.cidoc-crm.org/cidoc-crm/P48_has_prefered_identifier> ?prefvalue .
+  ?subject <http://www.cidoc-crm.org/cidoc-crm/P48_has_preferred_identifier> ?prefvalue .
   ?value a <http://www.cidoc-crm.org/cidoc-crm/E42_Identifier>.
   ?prefvalue a <http://www.cidoc-crm.org/cidoc-crm/E42_Identifier>.
   ?value  rdfs:label ?label1 .
@@ -5651,26 +5651,19 @@ WHERE {
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Event_Type",
     "label": "Event Type",
     "domain": "http://www.cidoc-crm.org/cidoc-crm/E5_Event",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#string",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#anyURI",
     "selectPattern": "SELECT ?value ?label WHERE {
-  $subject crm:P2_has_type ?value.
-  ?value rdfs:label ?label.
-}",
+      $subject crm:P2_has_type ?value.
+      ?value rdfs:label ?label.
+    }",
     "deletePattern": "DELETE { $subject crm:P2_has_type $value} WHERE {
-$subject crm:P2_has_type ?type_uri.
-  ?type_uri a crm:E55_Type.
-}",
+      $subject crm:P2_has_type ?type_uri.
+      ?type_uri a crm:E55_Type.
+    }",
     "insertPattern": "INSERT {
-  $subject crm:P2_has_type ?type_uri.
-  ?type_uri a crm:E55_Type.
-  ?type_uri crm:P71_lists ?document_uri.
-  ?document_uri a crm:E32_Authority_Document.
-  ?type_uri rdfs:label ?value
-} WHERE {
- BIND(IRI(CONCAT(STR($subject),\"/type/\", MD5(?value))) as ?type_uri).
-      BIND(IRI(CONCAT(STR($subject),\"/document/\", MD5(?value))) as ?document_uri).
-      
-}"
+      $subject crm:P2_has_type ?value .
+    } WHERE {
+  }"
 }
 [[/inline]]
 
@@ -5805,7 +5798,7 @@ WHERE {
   ?appel_uri a crm:E41_Appellation.
   ?appel_uri rdfs:label ?label.
   ?appel_uri crm:P2_has_type ?pref_name_type.
-  ?pref_name_type rdfs:label \"Prefered Name\".
+  ?pref_name_type rdfs:label \"Preferred Name\".
   
   ?label bds:search ?__token__ ;
     bds:minRelevance \"0.5\" ;
@@ -8428,7 +8421,7 @@ WHERE {
   ?subject crm:P1_is_identified_by ?appellation_iri . 
   ?appellation_iri a crm:E41_Appellation.
   ?appellation_iri crm:P2_has_type ?appellation_type.
-  ?appellation_type rdfs:label \"Prefered Title\".
+  ?appellation_type rdfs:label \"Preferred Title\".
       ?appellation_iri rdfs:label ?value.   
 }",
     "deletePattern": "DELETE {
@@ -8736,7 +8729,7 @@ INSERT {
   ?appel_uri a crm:E41_Appellation.
   ?appel_uri rdfs:label ?label.
   ?appel_uri crm:P2_has_type ?pref_name_type.
-  ?pref_name_type rdfs:label \"Prefered Name\".
+  ?pref_name_type rdfs:label \"Preferred Name\".
   
   ?label bds:search ?__token__ ;
     bds:minRelevance \"0.5\" ;
@@ -8848,7 +8841,7 @@ WHERE {
   ?alternative_identifier <http://www.cidoc-crm.org/cidoc-crm/P72_has_language> ?language_iri.
   ?language_iri rdfs:label ?lang.
   BIND(CONCAT(?name_value, \" (\",?type_label,\") \") as ?value).
-      FILTER(?type_label!=\"Prefered Name\")
+      FILTER(?type_label!=\"Preferred Name\")
 }",
     "insertPattern": "INSERT { $subject ?predicate $value} WHERE {}"
 }
@@ -9236,39 +9229,24 @@ INSERT {
     "domain": "http://www.cidoc-crm.org/cidoc-crm/E5_Event",
     "xsdDatatype": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString",
     "selectPattern": "SELECT distinct ?value ?label WHERE {
-  $subject a <http://www.cidoc-crm.org/cidoc-crm/E5_Event>.
-  ?subject <http://www.cidoc-crm.org/cidoc-crm/P1_is_identified_by> ?appellation_iri . 
-  ?appellation_iri a <http://www.cidoc-crm.org/cidoc-crm/E41_Appellation>.
-  ?appellation_iri <http://www.cidoc-crm.org/cidoc-crm/P2_has_type> ?appellation_type.
-  ?appellation_type rdfs:label \"Prefered Name\".
-  ?appellation_iri rdfs:label ?value.   
-}",
-    "deletePattern": "DELETE {
-  ?appellation_iri rdfs:label ?value.
-} where { 
-  $subject a <http://www.cidoc-crm.org/cidoc-crm/E5_Event>.
-  ?subject <http://www.cidoc-crm.org/cidoc-crm/P1_is_identified_by> ?appellation_iri .
-  ?appellation_iri a <http://www.cidoc-crm.org/cidoc-crm/E41_Appellation>.
-  ?appellation_iri <http://www.cidoc-crm.org/cidoc-crm/P2_has_type> ?appellation_type.
-  ?appellation_type rdfs:label \"Prefered Name\".
-  ?appellation_iri rdfs:label ?value.
-}",
+        ?subject <http://www.cidoc-crm.org/cidoc-crm/P1_is_identified_by> ?appellation_iri . 
+        ?appellation_iri a <http://www.cidoc-crm.org/cidoc-crm/E41_Appellation>.
+        ?appellation_iri <http://www.cidoc-crm.org/cidoc-crm/P2_has_type> aat:300404670 .
+        ?appellation_iri rdfs:label ?value.   
+      }",
     "insertPattern": "INSERT { 
-  ?subject <http://www.cidoc-crm.org/cidoc-crm/P1_is_identified_by> ?appellation_iri. 
-  ?appellation_iri a <http://www.cidoc-crm.org/cidoc-crm/E41_Appellation>.
-  ?appellation_iri <http://www.cidoc-crm.org/cidoc-crm/P2_has_type> ?pref_name_type.
-  ?pref_name_type rdfs:label \"Prefered Name\".
-  ?appellation_iri rdfs:label ?value.
-  ?appellation_iri <http://www.cidoc-crm.org/cidoc-crm/P72_has_language> ?language_iri. 
-  ?language_iri a <http://www.cidoc-crm.org/cidoc-crm/E56_Language>. 
-}   
-WHERE {
-      BIND(IRI(CONCAT(STR($subject),\"/type/\", MD5(\"Full Name\"))) as ?pref_name_type).
-      BIND(IRI(CONCAT(STR($subject),\"/appellation/\", MD5(str(?value)))) as ?appellation_iri).
-      BIND(lang(?value) as ?lang).
-      ?language_iri <http://www.cidoc-crm.org/cidoc-crm/P3_has_note> ?lang.
-      
-}"
+        ?subject <http://www.cidoc-crm.org/cidoc-crm/P1_is_identified_by> ?appellation_iri. 
+        ?appellation_iri a <http://www.cidoc-crm.org/cidoc-crm/E41_Appellation>.
+        ?appellation_iri <http://www.cidoc-crm.org/cidoc-crm/P2_has_type> aat:300404670 .
+        ?appellation_iri rdfs:label ?value.
+        ?appellation_iri <http://www.cidoc-crm.org/cidoc-crm/P72_has_language> ?language_iri. 
+        ?language_iri a <http://www.cidoc-crm.org/cidoc-crm/E56_Language>. 
+      } WHERE {
+        BIND(IRI(CONCAT(STR($subject),\"/appellation/\", MD5(str(?value)))) as ?appellation_iri).
+        BIND(lang(?value) as ?lang).
+        BIND(IRI(CONCAT(\"https://resource.swissartresearch.net/type/language/\", ?lang)) as ?language_iri).
+        ?language_iri <http://www.cidoc-crm.org/cidoc-crm/P3_has_note> ?lang.
+      }"
 }
 [[/inline]]
 

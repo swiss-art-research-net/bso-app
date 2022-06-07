@@ -123,6 +123,10 @@
             iri="page:editPlace">
             <button class="btn btn-primary btn-md">[[i18n "addNewPlace" bundle="bso"]]</button>
         </semantic-link>
+        <semantic-link
+            iri="page:editEvent">
+            <button class="btn btn-primary btn-md">[[i18n "addNewEvent" bundle="bso"]]</button>
+        </semantic-link>
     </div>
     <semantic-table
         query="SELECT * WHERE {
@@ -134,6 +138,7 @@
             VALUES (?type ?editPage) {
                 (search:Person page:editPerson)
                 (search:Place page:editPlace)
+                (search:Event page:editEvent)
             }
         }"
         column-configuration='[{
