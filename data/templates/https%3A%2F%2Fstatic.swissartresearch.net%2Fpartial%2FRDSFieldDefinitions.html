@@ -5783,27 +5783,22 @@ WHERE {
     "domain": "http://www.cidoc-crm.org/cidoc-crm/E5_Event",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#anyURI",
     "selectPattern": "SELECT ?value ?label WHERE {
-  $subject crm:P10i_contains $value.
-  ?value a crm:E5_Event.
-}",
+        $subject crm:P10i_contains $value.
+        ?value a crm:E5_Event.
+      }",
     "deletePattern": "DELETE { $subject crm:P10i_contains $value.} WHERE {
-  $subject crm:P10i_contains $value.
-  ?value a crm:E5_Event.
-}",
+        $subject crm:P10i_contains $value.
+        ?value a crm:E5_Event.
+      }",
     "insertPattern": "INSERT { $subject crm:P10i_contains $value.
-} WHERE {}",
+      } WHERE {}",
     "autosuggestionPattern": "SELECT ?value ?label WHERE {
-  ?value a crm:E5_Event.
-  ?value crm:P1_is_identified_by ?appel_uri . 
-  ?appel_uri a crm:E41_Appellation.
-  ?appel_uri rdfs:label ?label.
-  ?appel_uri crm:P2_has_type ?pref_name_type.
-  ?pref_name_type rdfs:label \"Preferred Name\".
-  
-  ?label bds:search ?__token__ ;
-    bds:minRelevance \"0.5\" ;
-    bds:relevance ?score ;
-    bds:matchAllTerms \"true\" .
+      ?value a crm:E5_Event.
+      ?value rdfs:label ?label .
+      ?label bds:search ?__token__ ;
+        bds:minRelevance \"0.5\" ;
+        bds:relevance ?score ;
+        bds:matchAllTerms \"true\" .
 }"
 }
 [[/inline]]
