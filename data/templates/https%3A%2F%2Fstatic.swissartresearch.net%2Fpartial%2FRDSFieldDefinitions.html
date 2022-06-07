@@ -137,21 +137,21 @@ WHERE {
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Event_Actor",
     "label": "Event Actor",
     "description": "A field is used to indicate actors involved in the documented instance of event",
-    "domain": "http://www.cidoc-crm.org/cidoc-crm/PC14_Carried_out_by",
+    "domain": "http://www.cidoc-crm.org/cidoc-crm/PC14_carried_out_by",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#anyURI",
     "selectPattern": "SELECT ?value ?label WHERE {
   ?subject <http://www.cidoc-crm.org/cidoc-crm/PC01_is_domain_of> ?value.
-  ?value a <http://www.cidoc-crm.org/cidoc-crm/PC14_Carried_out_by> .
+  ?value a <http://www.cidoc-crm.org/cidoc-crm/PC14_carried_out_by> .
 }",
     "deletePattern": "DELETE { ?subject <http://www.cidoc-crm.org/cidoc-crm/PC01_is_domain_of> ?value.}
 WHERE {
  ?subject <http://www.cidoc-crm.org/cidoc-crm/PC01_is_domain_of> ?value.
-  ?value a <http://www.cidoc-crm.org/cidoc-crm/PC14_Carried_out_by> .
+  ?value a <http://www.cidoc-crm.org/cidoc-crm/PC14_carried_out_by> .
   
 }",
     "insertPattern": "INSERT { 
   ?subject <http://www.cidoc-crm.org/cidoc-crm/PC01_is_domain_of> ?value.
-  ?value a <http://www.cidoc-crm.org/cidoc-crm/PC14_Carried_out_by> .
+  ?value a <http://www.cidoc-crm.org/cidoc-crm/PC14_carried_out_by> .
 } WHERE {}
  "
 }
@@ -770,7 +770,7 @@ WHERE {
   ?subject frbroo:R24_created ?pub_event. 
   ?pub_event a frbroo:F30_Publication_Event. 	
   $pub_event crm:P01_has_domain ?carried_uri.
-    ?carried_uri a crm:PC14_Carried_out_by.
+    ?carried_uri a crm:PC14_carried_out_by.
     ?carried_uri crm:P02_has_range ?actor_uri.
     ?actor_uri a crm:E39_Actor.
     ?actor_uri rdfs:label ?actor. 
@@ -783,7 +783,7 @@ WHERE {
 }",
     "deletePattern": "DELETE { $subject crm:P01_has_domain ?carried_uri.} WHERE {
   $subject crm:P01_has_domain ?carried_uri.
-    ?carried_uri a crm:PC14_Carried_out_by.
+    ?carried_uri a crm:PC14_carried_out_by.
     ?carried_uri crm:P02_has_range ?actor_uri.
     ?actor_uri a crm:E39_Actor.
     ?actor_uri rdfs:label ?value. 
@@ -793,7 +793,7 @@ WHERE {
       FILTER(?role!=\"Publisher\").
 }",
     "insertPattern": "INSERT { $subject crm:P01_has_domain ?carried_uri.
-      ?carried_uri a crm:PC14_Carried_out_by.
+      ?carried_uri a crm:PC14_carried_out_by.
       ?carried_uri crm:P02_has_range ?actor_uri.
       ?actor_uri a crm:E39_Actor.
       ?actor_uri rdfs:label ?value. 
@@ -972,7 +972,7 @@ SELECT ?value ?label WHERE {
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#string",
     "deletePattern": "DELETE { $subject crm:P01_has_domain ?carried_uri.} WHERE {
   $subject crm:P01_has_domain ?carried_uri.
-    ?carried_uri a crm:PC14_Carried_out_by.
+    ?carried_uri a crm:PC14_carried_out_by.
     ?carried_uri crm:P02_has_range ?actor_uri.
     ?actor_uri a crm:E39_Actor.
     ?carried_uri crm:P14.1_in_the_role_of ?role_uri.
@@ -980,7 +980,7 @@ SELECT ?value ?label WHERE {
     ?role_uri rdfs:label ?value.
 }",
     "insertPattern": "INSERT { $subject crm:P01_has_domain ?carried_uri.
-      ?carried_uri a crm:PC14_Carried_out_by.
+      ?carried_uri a crm:PC14_carried_out_by.
       ?carried_uri crm:P14.1_in_the_role_of ?role_uri.
       ?role_uri a crm:E55_Type.
       ?role_uri rdfs:label ?value.
@@ -3093,19 +3093,19 @@ WHERE{
     "selectPattern": "PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
 SELECT ?value ?label WHERE {
   ?subject crm:PC01_is_domain_of ?value.
-  ?value a crm:PC14_Carried_out_by .
+  ?value a crm:PC14_carried_out_by .
 }",
     "deletePattern": "PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
 DELETE {
   ?subject crm:PC01_is_domain_of ?value.
 } WHERE {
   ?subject crm:PC01_is_domain_of ?value.
-  ?value a crm:PC14_Carried_out_by .
+  ?value a crm:PC14_carried_out_by .
 }",
     "insertPattern": "PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
 INSERT { 
   ?subject crm:PC01_is_domain_of ?value.
-  ?value a crm:PC14_Carried_out_by .
+  ?value a crm:PC14_carried_out_by .
 } WHERE {} "
 }
 [[/inline]]
@@ -4649,7 +4649,7 @@ WHERE{
   ?subject frbroo:R24_created ?pub_event. 
   ?pub_event a frbroo:F30_Publication_Event. 	
   $pub_event crm:P01_has_domain ?carried_uri.
-    ?carried_uri a crm:PC14_Carried_out_by.
+    ?carried_uri a crm:PC14_carried_out_by.
     ?carried_uri crm:P02_has_range ?actor_uri.
     ?actor_uri a crm:E39_Actor.
     ?actor_uri rdfs:label ?value. 
@@ -4659,7 +4659,7 @@ WHERE{
 }",
     "deletePattern": "DELETE { $subject crm:P01_has_domain ?carried_uri.} WHERE {
   $subject crm:P01_has_domain ?carried_uri.
-    ?carried_uri a crm:PC14_Carried_out_by.
+    ?carried_uri a crm:PC14_carried_out_by.
     ?carried_uri crm:P02_has_range ?actor_uri.
     ?actor_uri a crm:E39_Actor.
     ?actor_uri rdfs:label ?value. 
@@ -4668,7 +4668,7 @@ WHERE{
     ?role_uri rdfs:label \"Publisher\".
 }",
     "insertPattern": "INSERT { $subject crm:P01_has_domain ?carried_uri.
-      ?carried_uri a crm:PC14_Carried_out_by.
+      ?carried_uri a crm:PC14_carried_out_by.
       ?carried_uri crm:P02_has_range ?actor_uri.
       ?actor_uri a crm:E39_Actor.
       ?actor_uri rdfs:label ?value. 
