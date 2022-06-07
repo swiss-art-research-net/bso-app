@@ -87,15 +87,11 @@
         ]'
     >
 
-    <semantic-form-hidden-input for="Type-hidden" replace-values='["http://www.cidoc-crm.org/cidoc-crm/E5_Event", "[[resolvePrefix 'search:Event']]", "[[resolvePrefix 'rds:Event']]"]'></semantic-form-hidden-input>
-    
-
+    <semantic-form-hidden-input for="Type-hidden" replace-values='["http://www.cidoc-crm.org/cidoc-crm/E5_Event", "[[resolvePrefix 'search:Event']]", "[[resolvePrefix 'rds:Event']]"]'></semantic-form-hidden-input> 
     <semantic-form-text-input for="Event_Name" 
         languages='["en","de","fr","it","sp","ca","cs","da","nl","fi","gr","hu","no","pt","sv","ru","jp","ko"]'>
     </semantic-form-text-input>
-
     <semantic-form-text-input for="Event_Type"></semantic-form-text-input>
-
     <semantic-form-composite-input 
         for="Event_Description"
         new-subject-template="."
@@ -114,26 +110,19 @@
         <semantic-form-datetime-input for="Event_Description_Date_-_Earliest" default-value="[[currentDateTime]]"></semantic-form-datetime-input>
         <semantic-form-datetime-input for="Event_Description_Date_-_Latest" default-value="[[currentDateTime]]"></semantic-form-datetime-input>
     </semantic-form-composite-input>
-        
     <semantic-form-autocomplete-input for="Event_Part_Of"></semantic-form-autocomplete-input>
-
     <semantic-form-autocomplete-input for="Motivating_Event"></semantic-form-autocomplete-input>
-
     <semantic-form-datetime-input for="Event_Earliest_Possible_Start_Date"></semantic-form-datetime-input>
-
     <semantic-form-datetime-input for="Event_Latest_Possible_End_Date"></semantic-form-datetime-input>
-
     <semantic-form-composite-input 
         for="Event_Actor"
         new-subject-template="."
         fields='[ 
-    [[> Event_Actor_Value]],
-    [[> Event_Actor_Type]]
+            [[> Event_Actor_Value]],
+            [[> Event_Actor_Type]]
         ]'>
-        <semantic-form-text-input for="Event_Actor_Value"></semantic-form-text-input>
-
-    <semantic-form-text-input for="Event_Actor_Type"></semantic-form-text-input>
-
+        <semantic-form-autocomplete-input for="Event_Actor_Value"></semantic-form-autocomplete-input>
+        <semantic-form-select-input for="Event_Actor_Type"></semantic-form-select-input>
     </semantic-form-composite-input>
 
     <semantic-form-text-input for="Objects_Employed"></semantic-form-text-input>
