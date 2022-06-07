@@ -607,7 +607,7 @@
                                 <li class="bso-tag Person"><semantic-link uri="{{subject.value}}"></semantic-link></li>
                         </ul>
                     </td>
-                    <td>{{#if roles.value}}{{#each (split roles.value ' ')}}[[> addComma]]<mp-label iri="{{this}}"></mp-label>{{/each}}{{/if}} ({{#each (split global_roles.value ' ')}}[[> addComma]]<mp-label iri="{{this}}"></mp-label>{{/each}})</td>
+                    <td>{{#if roles.value}}{{#each (split roles.value ' ')}}[[> addComma]]<semantic-link class-name="bso-tag Type" iri="{{this}}"></semantic-link>{{/each}}{{/if}} ({{#each (split global_roles.value ' ')}}[[> addComma]]<mp-label iri="{{this}}"></mp-label>{{/each}})</td>
                 </tr>
                 {{/each}}
             </table>
@@ -858,7 +858,7 @@
         [[/ component-objects-table]]
 
         <!-- Objects of type -->
-        [[#> component-objects-table condition='?thing crm:P2_has_type $subject' label='hasType' ]]
+        [[#> component-objects-table condition='?thing a search:Object ; crm:P2_has_type $subject' label='hasType' ]]
             ?subject a search:Object ;
                 crm:P2_has_type [[> thisForQuery]] .
         [[/ component-objects-table]]
@@ -871,6 +871,11 @@
         <!-- Found on -->
         [[#> component-objects-table condition='?region crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of $subject .' label='foundOn' ]]
             $subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of  [[> thisForQuery]] .
+        [[/ component-objects-table]]
+
+        <!-- Persons acting as type -->
+        [[#> component-objects-table condition='?person a search:Person; ^crm:P14_carried_out_by/crm:P2_has_type $subject' label='actedAs']]
+            ?subject ^crm:P14_carried_out_by/crm:P2_has_type [[> thisForQuery]] .
         [[/ component-objects-table]]
 
         <!-- Is About -->
