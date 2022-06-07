@@ -9235,7 +9235,8 @@ INSERT {
         ?appellation_iri rdfs:label ?value.   
       }",
     "insertPattern": "INSERT { 
-        ?subject <http://www.cidoc-crm.org/cidoc-crm/P1_is_identified_by> ?appellation_iri. 
+        ?subject rdfs:label ?value ;
+          <http://www.cidoc-crm.org/cidoc-crm/P1_is_identified_by> ?appellation_iri. 
         ?appellation_iri a <http://www.cidoc-crm.org/cidoc-crm/E41_Appellation>.
         ?appellation_iri <http://www.cidoc-crm.org/cidoc-crm/P2_has_type> aat:300404670 .
         ?appellation_iri rdfs:label ?value.
@@ -9243,9 +9244,11 @@ INSERT {
         ?language_iri a <http://www.cidoc-crm.org/cidoc-crm/E56_Language>. 
       } WHERE {
         BIND(IRI(CONCAT(STR($subject),\"/appellation/\", MD5(str(?value)))) as ?appellation_iri).
-        BIND(lang(?value) as ?lang).
-        BIND(IRI(CONCAT(\"https://resource.swissartresearch.net/type/language/\", ?lang)) as ?language_iri).
-        ?language_iri <http://www.cidoc-crm.org/cidoc-crm/P3_has_note> ?lang.
+        OPTIONAL {
+          BIND(lang(?value) as ?lang).
+          BIND(IRI(CONCAT(\"https://resource.swissartresearch.net/type/language/\", ?lang)) as ?language_iri).
+          ?language_iri <http://www.cidoc-crm.org/cidoc-crm/P3_has_note> ?lang.
+        }
       }"
 }
 [[/inline]]
