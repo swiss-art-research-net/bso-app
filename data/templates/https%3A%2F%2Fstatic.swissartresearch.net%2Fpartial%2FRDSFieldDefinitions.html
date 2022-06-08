@@ -5651,6 +5651,7 @@ WHERE {
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Event_Type",
     "label": "Event Type",
     "domain": "http://www.cidoc-crm.org/cidoc-crm/E5_Event",
+    "minOccurs": 1,
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#anyURI",
     "selectPattern": "SELECT ?value ?label WHERE {
       $subject crm:P2_has_type ?value.
@@ -5661,9 +5662,42 @@ WHERE {
       ?type_uri a crm:E55_Type.
     }",
     "insertPattern": "INSERT {
-      $subject crm:P2_has_type ?value .
-    } WHERE {
-  }"
+        $subject crm:P2_has_type ?value .
+      } WHERE {}",
+    "treePatterns" : {
+      "type": "full",
+      "rootsQuery": "SELECT ?item ?hasChildren WHERE {
+          BIND(aat:300069084 as ?item)
+          OPTIONAL {
+            ?item skos:narrower ?hasChildren .
+          }
+        } LIMIT 1",
+      "childrenQuery": "SELECT ?item ?hasChildren WHERE {
+          ?item skos:broader ?parent.
+          OPTIONAL {
+            ?item skos:narrower ?child .
+          }
+          BIND(BOUND(?child) AS ?hasChildren)
+        }",
+      "parentsQuery": "SELECT ?item ?hasChildren WHERE {
+        ?item skos:narrower ?parent.
+        OPTIONAL {
+          ?item skos:broader ?child .
+        }
+        BIND(BOUND(?child) AS ?hasChildren)
+      }",
+      "searchQuery": "SELECT DISTINCT ?item ?hasChildren WHERE {
+        BIND(aat:300069084 as ?root)
+        ?root skos:narrower* ?item .
+        ?item rdfs:label ?label .
+        ?label bds:search ?__token__ ;
+          bds:matchAllTerms \"true\" .
+        OPTIONAL {
+          ?item skos:broader ?child .
+        }
+        BIND(BOUND(?child) AS ?hasChildren)
+      }"
+    }
 }
 [[/inline]]
 
