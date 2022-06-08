@@ -50,7 +50,7 @@
         [[else]]
             post-action="redirect"
         [[/if]]
-        browser-persistence="True"
+        browser-persistence="false"
         fields='[
             [[> Type-hidden]],
             [[> Identifier_Event]],
@@ -106,6 +106,9 @@
             <semantic-form-autocomplete-input for="Event_Description_Type"></semantic-form-autocomplete-input>
             <semantic-form-hidden-input for="Event_Description_Author" default-value="[[singleValueFromSelect "SELECT ?uri WHERE { BIND(?__useruri__ as ?uri)}"]]"></semantic-form-hidden-input>
         </semantic-form-composite-input>
+        [[#if (urlParam "linkperson")]]
+            <bs-alert variant="light">
+        [[/if]]
         <semantic-form-composite-input 
             for="Event_Actor"
             new-subject-template="actor/{{UUID}}"
@@ -113,12 +116,27 @@
                 [[> Event_Actor_Value]],
                 [[> Event_Actor_Type]]
             ]'>
-            <semantic-form-autocomplete-input for="Event_Actor_Value"></semantic-form-autocomplete-input>
+            <semantic-form-autocomplete-input 
+                [[#if (urlParam "linkperson")]]
+                    default-value="[[urlParam "linkperson"]]"
+                [[/if]]
+                for="Event_Actor_Value"
+            ></semantic-form-autocomplete-input>
             <semantic-form-autocomplete-input for="Event_Actor_Type"></semantic-form-autocomplete-input>
         </semantic-form-composite-input>
+        [[#if (urlParam "linkperson")]]
+            </bs-alert>
+        [[/if]]
         <semantic-form-datetime-input for="Event_Earliest_Possible_Start_Date"></semantic-form-datetime-input>
         <semantic-form-datetime-input for="Event_Latest_Possible_End_Date"></semantic-form-datetime-input>
-        <semantic-form-autocomplete-input for='Event_Place'
+        [[#if (urlParam "linkplace")]]
+            <bs-alert variant="light">
+        [[/if]]
+        <semantic-form-autocomplete-input 
+            [[#if (urlParam "linkplace")]]
+                default-value="[[urlParam "linkplace"]]"
+            [[/if]]
+            for='Event_Place'
             value-binding-name="subject"
             lookup-query='{
                 "type": "lookup",
@@ -129,6 +147,9 @@
             template='{{> autocompletionTemplate}}'>
             [[> autocompletionTemplate]]
         </semantic-form-autocomplete-input>
+        [[#if (urlParam "linkplace")]]
+            </bs-alert>
+        [[/if]]
         <semantic-form-autocomplete-input for="Event_Part_Of"></semantic-form-autocomplete-input>
         <semantic-form-autocomplete-input for="Motivating_Event"></semantic-form-autocomplete-input>
         <semantic-form-text-input for="Objects_Employed"></semantic-form-text-input>

@@ -1204,6 +1204,25 @@
             urlqueryparam-objectiri="[[> thisIri]]"
         ><button type="button" class="btn btn-primary btn-s">[[i18n "addData" bundle="bso"]]</button></semantic-link>
 
+        <semantic-query
+            query='SELECT ?subject ?type ?linkType WHERE {
+                BIND([[> thisForQuery]] as ?subject)
+                ?subject a ?type .
+                VALUES (?type ?linkType) {
+                    (search:Object "object")
+                    (search:Person "person")
+                    (search:Place "place")
+                    (search:Event "event")
+                }
+            } LIMIT 1'
+            template="{{> addEventButtonTemplate}}"
+        >
+            <template id="addEventButtonTemplate">
+                <a href="/resource/page:editEvent?link{{bindings.0.linkType.value}}={{bindings.0.subject.value}}">
+                    <button type="button" class="btn btn-primary btn-s">[[i18n "addNewEvent" bundle="bso"]]</button>
+                </a>
+        </semantic-query>
+
         <semantic-if query="ASK { [[> thisForQuery]] a ?type . VALUES (?type) {(search:Object) (crmdig:D35_Area)} .}" then="{{> objectButtonTemplate}}">
             <template id="objectButtonTemplate">
                 <span>
