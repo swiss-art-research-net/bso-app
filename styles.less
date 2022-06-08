@@ -662,7 +662,7 @@ ol.page-breadcrumb {
             margin-left: -2rem;
         }
     }
-    
+
     .view-selector {
         padding-bottom: 1rem;
         border-bottom: 0 !important;
@@ -717,6 +717,28 @@ ol.page-breadcrumb {
         margin-top: -0.7rem;
     }
 }
+
+// Utilities
+
+.bso-component {
+    &.util- {
+        &parent-is-open {
+            display: none;
+        }
+    }
+}
+
+.is-open {
+    .bso-component {
+        &.util- {
+            &parent-is-open {
+                display: inline-block ;
+            }
+        }
+    }
+}
+
+
 // Fonts
 
 @font-face {

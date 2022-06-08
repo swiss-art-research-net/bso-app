@@ -570,6 +570,12 @@ ol.page-breadcrumb {
 .tab-pane .bso-component.next-step {
   margin-top: -0.7rem;
 }
+.bso-component.util-parent-is-open {
+  display: none;
+}
+.is-open .bso-component.util-parent-is-open {
+  display: inline-block;
+}
 @font-face {
   font-family: 'HK Grotesk';
   font-style: normal;

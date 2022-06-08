@@ -150,9 +150,22 @@
         [[#if (urlParam "linkplace")]]
             </bs-alert>
         [[/if]]
+        <semantic-form-autocomplete-input for="Objects_Employed"
+            template="{{> template}}"
+        >
+            <template id="template">
+                <span class="bso-component util-parent-is-open" style="width:100px;text-align: center;">
+                    <sari-resource-thumbnail iri="{{value.value}}" template="{{> thumbnail-template}}">
+                        <template id="thumbnail-template">
+                            <img src="{{thumbnail}}" height="50px" "/>
+                        </template>
+                    </sari-resource-thumbnail>
+                </span>
+                <mp-label iri="{{value.value}}"></mp-label>
+            </template>
+        </semantic-form-autocomplete-input>
         <semantic-form-autocomplete-input for="Event_Part_Of"></semantic-form-autocomplete-input>
         <semantic-form-autocomplete-input for="Motivating_Event"></semantic-form-autocomplete-input>
-        <semantic-form-text-input for="Objects_Employed"></semantic-form-text-input>
         <semantic-form-errors></semantic-form-errors>
         <div class="bso-component button-set">
             [[#if edit]]

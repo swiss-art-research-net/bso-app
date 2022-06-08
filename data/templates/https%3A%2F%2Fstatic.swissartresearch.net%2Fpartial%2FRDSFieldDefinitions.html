@@ -1354,22 +1354,22 @@ WHERE {
     "label": "Objects Employed",
     "description": "This field is used to indicate objects known to have played a role in the documented event.",
     "domain": "http://www.cidoc-crm.org/cidoc-crm/E5_Event",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#string",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#anyURI",
     "selectPattern": "SELECT ?value ?label WHERE {
-  $subject  crm:P16_used_specific_object $value.
-  ?value a crm:E18_Physical_Thing.
-      ?value rdfs:label ?label.
-}",
-    "deletePattern": "DELETE { $subject crm:P16_used_specific_object $thing}
-WHERE { $subject crm:P16_used_specific_object $thing.
-  ?thing a crm:E18_Physical_Thing. 
-  ?thing rdfs:label ?value}",
+      $subject crm:P16_used_specific_object $value.
+    }",
+    "deletePattern": "DELETE { $subject crm:P16_used_specific_object ?value}
+      WHERE {}",
     "insertPattern": "INSERT {
-  $subject crm:P16_used_specific_object $thing.
-  ?thing a crm:E18_Physical_Thing. 
-  ?thing rdfs:label ?value }
-WHERE {BIND(IRI(CONCAT(STR($subject),\"/object/\", MD5(str($value)))) as ?thing).}"
-}
+        $subject crm:P16_used_specific_object $value.
+      } WHERE {}",
+    "autosuggestionPattern": "SELECT DISTINCT ?value (SAMPLE(?labels) as ?label) WHERE {
+        ?value a search:Object ;
+          crm:P1_is_identified_by|rdfs:label ?labels .
+        ?labels bds:search ?__token__ ;
+          bds:matchAllTerms \"true\" .
+      } GROUP BY ?value"
+    }
 [[/inline]]
 
 
@@ -5664,7 +5664,8 @@ WHERE {
     "treePatterns" : {
       "type": "full",
       "rootsQuery": "SELECT ?item ?hasChildren WHERE {
-          BIND(aat:300069084 as ?item)
+          BIND(aat:300069084 as ?root)
+          ?root skos:narrower ?item .
           OPTIONAL {
             ?item skos:narrower ?hasChildren .
           }
