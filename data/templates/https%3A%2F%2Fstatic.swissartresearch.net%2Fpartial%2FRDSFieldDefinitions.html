@@ -5415,17 +5415,17 @@ WHERE {
     "label": "Event Description Author",
     "description": "This field is used to indicate the author of the description given of the documented instance of event.",
     "domain": "http://www.cidoc-crm.org/cidoc-crm/E5_Event",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#string",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#anyURI",
     "insertPattern": "INSERT { 
-  ?subject crm:P94i_was_created_by ?creation_uri.
-      ?creation_uri a crm:E65_Creation.
-      ?creation_uri crm:P14_carried_out_by ?creator_uri.
-      ?creator_uri a crm:E39_Actor. 
-      ?creator_uri rdfs:label ?value.
-} WHERE {
- BIND(IRI(CONCAT(STR($subject),\"/creation/\", MD5(str($subject)))) as ?creation_uri).
- BIND(IRI(CONCAT(STR($subject),\"/creator/\", MD5(str($subject)))) as ?creator_uri).
-}"
+      ?subject crm:P94i_was_created_by ?creation_uri .
+          ?creation_uri a crm:E65_Creation.
+          ?creation_uri crm:P14_carried_out_by ?value .
+      } WHERE {
+        BIND(IRI(CONCAT(STR($subject),\"/creation/\", MD5(str($subject)))) as ?creation_uri).
+    }",
+    "selectPattern": "SELECT ?value WHERE {
+      $subject crm:P94i_was_created_by/crm:P14_carried_out_by ?value .
+    }"
 }
 [[/inline]]
 
@@ -6195,8 +6195,10 @@ WHERE {
   ?subject rdfs:label ?value.
   ?subject <http://www.cidoc-crm.org/cidoc-crm/P72_has_language> ?language_iri.
 } WHERE {
-   BIND(lang(?value) as ?lang)
-   ?language_iri <http://www.cidoc-crm.org/cidoc-crm/P3_has_note> ?lang.
+  OPTIONAL {
+    BIND(lang(?value) as ?lang)
+    ?language_iri <http://www.cidoc-crm.org/cidoc-crm/P3_has_note> ?lang.
+  }
 }"
 }
 [[/inline]]
@@ -7779,7 +7781,9 @@ WHERE{
     "label": "Event Actor",
     "description": "This field is used to indicate actors involved in the documented instance of event",
     "domain": "http://www.cidoc-crm.org/cidoc-crm/E5_Event",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#anyIri",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#anyURI",
+    "minOccurs": "1",
+    "maxOccurs": "1",
     "selectPattern": "SELECT distinct ?value 
     WHERE {
       ?subject <http://www.cidoc-crm.org/cidoc-crm/PC02_has_range> ?actor_uri.
@@ -8284,7 +8288,7 @@ INSERT {
     "label": "Event Actor Type",
     "description": "This field is used to indicate the role played by the actors involved in the documented instance of event.",
     "domain": "http://www.cidoc-crm.org/cidoc-crm/E5_Event",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#string",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#anyURI",
     "selectPattern": "SELECT distinct ?value 
 WHERE {
  ?subject <http://www.cidoc-crm.org/cidoc-crm/P14.1_in_the_role_of> ?role_uri.
@@ -8303,7 +8307,13 @@ WHERE {
   ?role_uri a <http://www.cidoc-crm.org/cidoc-crm/E55_Type>.
   ?role_uri rdfs:label ?value.
   
-} WHERE {BIND(IRI(CONCAT(STR($subject),\"/type/\", MD5(?value))) as ?role_uri). }"
+} WHERE {BIND(IRI(CONCAT(STR($subject),\"/type/\", MD5(?value))) as ?role_uri). }",
+    "autosuggestionPattern": "SELECT ?value ?label WHERE {
+      ?value a search:Type ;
+        rdfs:label ?label .
+      ?label bds:search ?__token__ ;
+        bds:matchAllTerms \"true\" .
+    } LIMIT 100"
 }
 [[/inline]]
 
@@ -8723,19 +8733,14 @@ INSERT {
     "insertPattern": "INSERT { 
   $subject crm:P20i_was_purpose_of $value.
 } WHERE {}",
-    "autosuggestionPattern": "SELECT ?value ?label WHERE {
-  ?value a crm:E5_Event.
-  ?value crm:P1_is_identified_by ?appel_uri . 
-  ?appel_uri a crm:E41_Appellation.
-  ?appel_uri rdfs:label ?label.
-  ?appel_uri crm:P2_has_type ?pref_name_type.
-  ?pref_name_type rdfs:label \"Preferred Name\".
-  
-  ?label bds:search ?__token__ ;
-    bds:minRelevance \"0.5\" ;
-    bds:relevance ?score ;
-    bds:matchAllTerms \"true\" .
-}"
+  "autosuggestionPattern": "SELECT ?value ?label WHERE {
+    ?value a crm:E5_Event.
+    ?value rdfs:label ?label .
+    ?label bds:search ?__token__ ;
+      bds:minRelevance \"0.5\" ;
+      bds:relevance ?score ;
+      bds:matchAllTerms \"true\" .
+  }"
 }
 [[/inline]]
 
@@ -9228,6 +9233,7 @@ INSERT {
     "description": "This field is used to indicate the main name attributed to the documented instance of an event",
     "domain": "http://www.cidoc-crm.org/cidoc-crm/E5_Event",
     "xsdDatatype": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString",
+    "minOccurs": "1",
     "selectPattern": "SELECT distinct ?value ?label WHERE {
         ?subject <http://www.cidoc-crm.org/cidoc-crm/P1_is_identified_by> ?appellation_iri . 
         ?appellation_iri a <http://www.cidoc-crm.org/cidoc-crm/E41_Appellation>.
@@ -9785,18 +9791,22 @@ WHERE{
     "label": "Event Description",
     "description": "This field is used to indicate a description of the documented instance of event.",
     "domain": "http://www.cidoc-crm.org/cidoc-crm/E5_Event",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#string",
-    "deletePattern": "DELETE { $subject crm:P129i_is_subject_of $value.
-  ?value a crm:E73_Information_Object.} 
-      WHERE {
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#anyURI",
+    "selectPattern": "SELECT ?value WHERE {
       $subject crm:P129i_is_subject_of $value.
-  ?value a crm:E73_Information_Object.
-}",
+      ?value a crm:E73_Information_Object .
+    }",
+    "deletePattern": "DELETE { $subject crm:P129i_is_subject_of $value.
+        ?value a crm:E73_Information_Object.} 
+            WHERE {
+            $subject crm:P129i_is_subject_of $value.
+        ?value a crm:E73_Information_Object.
+      }",
     "insertPattern": "INSERT { 
-  $subject crm:P129i_is_subject_of $value.
-  ?value a crm:E73_Information_Object.
-} WHERE {}"
-}
+      $subject crm:P129i_is_subject_of $value.
+      ?value a crm:E73_Information_Object.
+    } WHERE {}"
+    }
 [[/inline]]
 
 
