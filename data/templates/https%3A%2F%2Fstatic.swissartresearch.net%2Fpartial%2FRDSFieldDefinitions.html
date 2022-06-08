@@ -5653,13 +5653,10 @@ WHERE {
     "domain": "http://www.cidoc-crm.org/cidoc-crm/E5_Event",
     "minOccurs": 1,
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#anyURI",
-    "selectPattern": "SELECT ?value ?label WHERE {
+    "selectPattern": "SELECT ?value WHERE {
       $subject crm:P2_has_type ?value.
-      ?value rdfs:label ?label.
     }",
     "deletePattern": "DELETE { $subject crm:P2_has_type $value} WHERE {
-      $subject crm:P2_has_type ?type_uri.
-      ?type_uri a crm:E55_Type.
     }",
     "insertPattern": "INSERT {
         $subject crm:P2_has_type ?value .
@@ -7820,19 +7817,14 @@ WHERE{
     "maxOccurs": "1",
     "selectPattern": "SELECT distinct ?value 
     WHERE {
-      ?subject <http://www.cidoc-crm.org/cidoc-crm/PC02_has_range> ?actor_uri.
-      ?actor_uri a <http://www.cidoc-crm.org/cidoc-crm/E39_Actor>.
-      ?actor_uri rdfs:label ?value.
+      ?subject <http://www.cidoc-crm.org/cidoc-crm/PC02_has_range> ?value.
     }",
     "deletePattern": "DELETE {  
-      ?subject <http://www.cidoc-crm.org/cidoc-crm/PC02_has_range> ?actor_uri.
+      ?subject <http://www.cidoc-crm.org/cidoc-crm/PC02_has_range> ?value.
     } WHERE {
-      ?subject <http://www.cidoc-crm.org/cidoc-crm/PC02_has_range> ?actor_uri.
-      ?actor_uri a <http://www.cidoc-crm.org/cidoc-crm/E39_Actor>.
-      ?actor_uri rdfs:label ?value.
     }",
     "insertPattern": "INSERT { 
-      ?subject <http://www.cidoc-crm.org/cidoc-crm/PC02_has_range> ?actor_uri.
+      ?subject <http://www.cidoc-crm.org/cidoc-crm/PC02_has_range> ?value.
     } WHERE {}",
     "autosuggestionPattern": "SELECT ?value ?label WHERE {
       ?value a search:Person.
