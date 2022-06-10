@@ -3,20 +3,24 @@
     <mp-workspace-row>
       <mp-workspace-item id='workspace-clipboard' undocked=false default-size=250>
         <div class='grid-demo' style='flex: 1'>
+          
           <mp-set-management
             readonly='false'
             id='clipboard-main'
             reparentable='true'
             item-config='{
-                "<http://www.researchspace.org/resource/system/Set>": {
-                  "isSet": true
-              },
-                "<http://www.researchspace.org/resource/system/SetItem>": {
-                  "isSet": false
+              "<http://www.metaphacts.com/ontologies/platform#SetItem>": {
+                "isSet": false,
+                "listTemplate": "{{> clipboard-list-item}}"
               }
-            }'  
+
+            }'
           >
+            <template id="clipboard-list-item">
+              [[> component-clipboard-list-item ]]
+            </template>
           </mp-set-management>
+
         </div>
       </mp-workspace-item>
       <mp-workspace-item id='workspace-main' undocked=true>
@@ -32,44 +36,26 @@
   </mp-workspace-layout>
 </div>
 
-[[#*inline "setView"]]
-<div style='display: flex; align-items: center; justify-content: space-between;'>
+[[#*inline "component-clipboard-list-item"]]
 
-  <div style='overflow: hidden;'>
-    <span style='display: flex;'>
-      <mp-label 	 iri='{{iri.value}}' highlight='{{highlight}}'
-                highlight-props='{"style": {"color": "#dc8a4b"}}'
-                style='white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'
-      ></mp-label>
-    </span>
-  </div>
+  <semantic-link iri="{{iri.value}}"></semantic-link>
+  {{log this}}
 
-  <div class='set-management__item-actions' style='margin-left: auto;'>
-
-    <bs-dropdown-button pull-right=true bs-style='link' title=''
-                        id='set-actions-{{iri.value}}'>
-      <semantic-link-container uri='http://www.researchspace.org/resource/ThinkingFrames' 
-                                    urlqueryparam-view='knowledge-map' 
-                                    urlqueryparam-resource='{{iri.value}}'>
-          <bs-menu-item class='set-action__km-navigate' event-key=km>Explore set</bs-menu-item>
-      </semantic-link-container>
-      
-      <mp-event-trigger id='set-action__km-add-frame' type='Dashboard.AddFrame' 
-                                         data='{"resourceIri": "{{iri.value}}", "viewId": "knowledge-map"}' 
-                                         targets='["thinking-frames"]'>
-        <bs-menu-item class='set-action__km-add-frame' event-key=km-frame>Explore set</bs-menu-item>
-      </mp-event-trigger>
-
-      [[#if (hasPermission "forms:ldp:*")]]
-        <mp-set-management-action-rename-set>
-          <bs-menu-item event-key='rename'>Rename set</bs-menu-item>
-        </mp-set-management-action-rename-set>
-        <mp-set-management-action-remove-set>
-          <bs-menu-item event-key='remove'>Remove set</bs-menu-item>
-        </mp-set-management-action-remove-set>
-      [[/if]]
-    </bs-dropdown-button>
-    
-  </div>
-</div>
+  <mp-anonymous-hidden>
+    <semantic-context repository="default">
+      <semantic-query
+        query="SELECT ?container WHERE {
+          ?container ldp:contains <{{itemHolder.value}}>
+        } LIMIT 1"
+        template="{{> set-item-delete-button}}">
+        <template id="set-item-delete-button">
+          <mp-ldp-remove-from-container-action container="{{containe.value}}" iri="{{itemHolder.value}}">
+            <button type="button" class="btn btn-primary btn-xs">[[i18n "remove" bundle="bso"]]</button>
+          </mp-ldp-remove-from-container-action>
+      </semantic-query>
+    </semantic-context>
+    <!-- <mp-set-management-action-remove-set-item>
+        <span>Remove</span>
+    </mp-set-management-action-remove-set-item> -->
+  </mp-anonymous-hidden>
 [[/inline]]
