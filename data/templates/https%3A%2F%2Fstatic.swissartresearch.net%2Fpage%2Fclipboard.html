@@ -1,3 +1,18 @@
+<style>
+  .set-management__set, .set-management__footer, .set-management__search-and-filters {
+    display: none;
+  }
+  .DropArea--dropMessage > span {
+    display: none;
+  }
+  .DropArea--dropMessage::before {
+    content: "[[i18n "clipboardDropMessage" bundle="bso"]]";
+    display: block;
+    text-align: center;
+    font-weight: normal;
+  }
+</style>
+
 <div style='height: 500px'>
   <mp-workspace-layout horizontal-collapsed-size=0>
     <mp-workspace-row>
@@ -54,8 +69,5 @@
           </mp-ldp-remove-from-container-action>
       </semantic-query>
     </semantic-context>
-    <!-- <mp-set-management-action-remove-set-item>
-        <span>Remove</span>
-    </mp-set-management-action-remove-set-item> -->
   </mp-anonymous-hidden>
 [[/inline]]
