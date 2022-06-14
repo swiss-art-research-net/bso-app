@@ -6586,9 +6586,14 @@ WHERE {
       ?subject crm:P7_took_place_at ?value.
 ?value a crm:E53_Place }",
     "insertPattern": "INSERT { ?subject crm:P7_took_place_at ?value.
-?value a crm:E53_Place}
-WHERE {}"
-}
+      ?value a crm:E53_Place}
+      WHERE {}",
+      "autosuggestionPattern": "SELECT ?value ?label WHERE {
+        ?value a search:Place ;
+          rdfs:label ?label .
+        ?label bds:search ?__token__ }
+        LIMIT 100"
+  }
 [[/inline]]
 
 
@@ -8594,7 +8599,11 @@ WHERE{
               ?value wdt:P625 ?coordinates .
             }
         }
-      }"
+      }",
+      "autosuggestionPattern": "SELECT ?value WHERE {
+        ?value rdfs:label ?label .
+        ?label bds:search ?__token__ .
+      } LIMIT 100"
 }
 [[/inline]]
 

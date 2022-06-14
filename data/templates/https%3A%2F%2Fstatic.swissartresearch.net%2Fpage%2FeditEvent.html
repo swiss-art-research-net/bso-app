@@ -121,6 +121,9 @@
                     default-value="[[urlParam "linkperson"]]"
                 [[/if]]
                 for="Event_Actor_Value"
+                droppable='{
+                    "query": "ASK { ?subject a/rdfs:subClassOf* crm:E39_Actor}"
+                }'
             ></semantic-form-autocomplete-input>
             <semantic-form-autocomplete-input for="Event_Actor_Type"></semantic-form-autocomplete-input>
         </semantic-form-composite-input>
@@ -132,10 +135,14 @@
         [[#if (urlParam "linkplace")]]
             <bs-alert variant="light">
         [[/if]]
+
         <semantic-form-autocomplete-input 
             [[#if (urlParam "linkplace")]]
                 default-value="[[urlParam "linkplace"]]"
             [[/if]]
+            droppable='{
+                "query": "ASK { ?subject a/rdfs:subClassOf* crm:E53_Place}"
+            }'
             for='Event_Place'
             value-binding-name="subject"
             lookup-query='{
@@ -152,6 +159,9 @@
         [[/if]]
         <semantic-form-autocomplete-input for="Objects_Employed"
             template="{{> template}}"
+            droppable='{
+                "query": "ASK { ?subject a/rdfs:subClassOf* crm:E22_Human-Made_Object}"
+            }'
         >
             <template id="template">
                 <span class="bso-component util-parent-is-open" style="width:100px;text-align: center;">
@@ -164,8 +174,18 @@
                 <mp-label iri="{{value.value}}"></mp-label>
             </template>
         </semantic-form-autocomplete-input>
-        <semantic-form-autocomplete-input for="Event_Part_Of"></semantic-form-autocomplete-input>
-        <semantic-form-autocomplete-input for="Motivating_Event"></semantic-form-autocomplete-input>
+        <semantic-form-autocomplete-input 
+            for="Event_Part_Of"
+            droppable='{
+                "query": "ASK { ?subject a/rdfs:subClassOf* crm:E5_Event}"
+            }'
+        ></semantic-form-autocomplete-input>
+        <semantic-form-autocomplete-input 
+            for="Motivating_Event"
+            droppable='{
+                "query": "ASK { ?subject a/rdfs:subClassOf* crm:E5_Event}"
+            }'
+        ></semantic-form-autocomplete-input>
         <semantic-form-errors></semantic-form-errors>
         <div class="bso-component button-set">
             [[#if edit]]
