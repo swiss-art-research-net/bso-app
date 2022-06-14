@@ -218,6 +218,33 @@ ol.page-breadcrumb {
   font-weight: normal;
   color: #111;
 }
+.bso-component.clipboard-panel {
+  position: fixed;
+  background-color: #fbfbfb;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  z-index: 9999;
+}
+.bso-component.clipboard-panel .card {
+  height: 10rem;
+  min-width: 10rem;
+  width: 10rem;
+  margin-left: 0;
+}
+.bso-component.clipboard-panel .card .card-image {
+  height: 6rem;
+}
+.bso-component.clipboard-panel .set-management__sets {
+  min-height: 11rem;
+}
+.bso-component.clipboard-panel .set-management__set-item:hover {
+  background: none;
+}
+.bso-component.clipboard-panel .set-management__set-items {
+  flex-direction: row;
+  padding-bottom: 0;
+}
 .bso-component.description {
   font-size: 1.2rem;
   margin: 1rem 0;
@@ -549,9 +576,6 @@ ol.page-breadcrumb {
 }
 .modal-xl {
   width: 80vw;
-}
-.set-management__sets {
-  min-height: 300px;
 }
 .semantic-form .autocomplete-text-field .Select-value dl {
   margin-top: 14px;
