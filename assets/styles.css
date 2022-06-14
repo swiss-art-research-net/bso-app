@@ -244,6 +244,14 @@ ol.page-breadcrumb {
 .bso-component.clipboard-panel .set-management__set-items {
   flex-direction: row;
   padding-bottom: 0;
+  overflow-x: scroll;
+}
+.bso-component.clipboard-panel .set-management__set-items > :first-of-type {
+  margin-top: 0;
+}
+.bso-component.clipboard-panel .set-management .DropArea--dropMessage {
+  margin: 0;
+  width: 100%;
 }
 .bso-component.description {
   font-size: 1.2rem;

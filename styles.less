@@ -316,6 +316,14 @@ ol.page-breadcrumb {
             &__set-items {
                 flex-direction: row;
                 padding-bottom: 0;
+                overflow-x: scroll;
+                > :first-of-type {
+                    margin-top: 0;
+                }
+            }
+            .DropArea--dropMessage {
+                margin:0;
+                width: 100%;
             }
         }
     }
