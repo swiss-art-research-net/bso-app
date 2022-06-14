@@ -1,0 +1,71 @@
+<style>
+  .set-management__set, .set-management__footer, .set-management__search-and-filters {
+    display: none;
+  }
+  .DropArea--dropMessage > span {
+    display: none;
+  }
+  .DropArea--dropMessage::before {
+    content: "[[i18n "clipboardDropMessage" bundle="bso"]]";
+    display: block;
+    text-align: center;
+    font-weight: normal;
+  }
+
+</style>
+
+<mp-anonymous-hidden>
+  <div class="bso-component clipboard-panel ">
+    <details>
+      <summary>[[i18n "clipboard" bundle="bso"]]</summary>
+      <div class="bso-component">
+        <mp-set-management
+          readonly='false'
+          id='clipboard-main'
+          reparentable='true'
+          item-config='{
+            "<http://www.metaphacts.com/ontologies/platform#SetItem>": {
+              "isSet": false,
+              "listTemplate": "{{> clipboard-list-item}}"
+            }
+        
+          }'
+        >
+          <template id="clipboard-list-item">
+            [[> component-clipboard-list-item ]]
+          </template>
+        </mp-set-management>
+      </div>
+    </details>
+  </div>
+</mp-anonymous-hidden>
+
+[[#*inline "component-clipboard-list-item"]]
+
+  <div class="bso-component clipboard-item">
+    {{> partial:cardObject subject=iri}}
+  </div>
+
+[[/inline]]
+
+
+[[#*inline "component-clipboard-list-item-depreacted"]]
+
+  <semantic-link iri="{{iri.value}}"></semantic-link>
+    <semantic-context repository="default">
+      <semantic-query
+        query="SELECT ?container WHERE {
+          ?container ldp:contains <{{itemHolder.value}}>
+        } LIMIT 1"
+        template="{{> set-item-delete-button}}">
+        <template id="set-item-delete-button">
+          <mp-ldp-remove-from-container-action 
+            container="{{containe.value}}" 
+            iri="{{itemHolder.value}}"
+            postAction="stay"
+          >
+            <button type="button" class="btn btn-primary btn-xs">[[i18n "remove" bundle="bso"]]</button>
+          </mp-ldp-remove-from-container-action>
+      </semantic-query>
+    </semantic-context>
+[[/inline]]

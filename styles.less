@@ -286,6 +286,40 @@ ol.page-breadcrumb {
         }
     }
 
+    &.clipboard-panel {
+        position: fixed;
+        background-color: @col-lightgrey;
+        bottom: 0;
+        left: 0;
+        width:100vw;
+        z-index: 9999;
+
+        .card {
+            height: 10rem;
+            min-width: 10rem;
+            width: 10rem;
+            margin-left: 0;
+            .card-image {
+                height: 6rem;
+            }
+        }
+
+        .set-management {
+            &__sets {
+                min-height: 11rem;
+            }
+            &__set-item {
+                &:hover {
+                    background: none;
+                }
+            }
+            &__set-items {
+                flex-direction: row;
+                padding-bottom: 0;
+            }
+        }
+    }
+
     &.description {
         font-size: 1.2rem;
         margin: 1rem 0;
@@ -685,11 +719,6 @@ ol.page-breadcrumb {
 
 .modal-xl {
     width: 80vw;
-}
-.set-management {
-    &__sets {
-        min-height: 300px;
-    }
 }
 .semantic-form {
     .autocomplete-text-field {
