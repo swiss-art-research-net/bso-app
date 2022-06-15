@@ -14,6 +14,7 @@
 @col-lightgrey:#fbfbfb;
 @col-lightblue:#e2e2f7;
 
+@col-tag-event: #e2f5f7;
 @col-tag-place: #e3f7e2;
 @col-tag-person: #a0d1f4;
 
@@ -700,6 +701,9 @@ ol.page-breadcrumb {
             font-weight: 500;
             padding: .1rem .3rem;
             margin-right: .5rem;
+            &.Event {
+                background-color: @col-tag-event;
+            }
             &.Person {
                 background-color: @col-tag-person;
             }

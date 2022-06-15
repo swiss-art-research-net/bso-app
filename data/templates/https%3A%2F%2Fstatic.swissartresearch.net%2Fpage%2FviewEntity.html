@@ -483,6 +483,26 @@
 </semantic-query>
 [[/inline]]
 
+[[#*inline "field-visualisation-events-carrying-out"]]
+<semantic-query
+    query="SELECT DISTINCT ?subject WHERE {
+        ?subject a crm:E5_Event ;
+            crm:PC01_is_domain_of/crm:PC02_has_range [[> thisForQuery]] .
+    }"
+    template="{{> template}}">
+    <template id="template">
+        <div class="bso-component field-visualisation">
+            <span class="bso-component label">[[i18n "involvedIn" bundle="bso"]]</span>
+            <ul class="bso-component tags">
+                {{#each bindings}}
+                    <li class="bso-component tag Event"><semantic-link uri="{{subject.value}}"></semantic-link></li>
+                {{/each}}
+            </ul>
+        </div>
+    </template>
+</semantic-query>
+[[/inline]]
+
 [[#*inline "field-visualisation-external-links"]]
 <semantic-query
     query="SELECT DISTINCT ?subject ?label WHERE {
@@ -821,6 +841,7 @@
         [[> field-visualisation-contained-in]]
         [[> field-visualisation-persons-involved-in-creation]]
         [[> field-visualisation-persons-carrying-out-event]]
+        [[> field-visualisation-events-carrying-out]]
         [[> field-visualisation-dimensions]]
         [[> field-visualisation-technique]]
         [[> field-visualisation-provenience]]
@@ -849,7 +870,7 @@
         [[#> component-objects-table condition='$subject crm:P16_used_specific_object ?object' label='objectsEmployed']]
             [[> thisForQuery]] crm:P16_used_specific_object ?subject .
         [[/ component-objects-table]]
-        
+
         <!-- Regions -->
         <mp-event-target-refresh id="regions-table">
             [[#> component-objects-table condition='$subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of ?region . FILTER NOT EXISTS {?region crm:P2_has_type type:imageRegion}' label='regions' ]]
