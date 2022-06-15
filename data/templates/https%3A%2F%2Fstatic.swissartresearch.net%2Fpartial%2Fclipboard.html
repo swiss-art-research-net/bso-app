@@ -16,7 +16,7 @@
 
 <mp-anonymous-hidden>
   <div class="bso-component clipboard-panel ">
-    <details>
+    <details class="bso-component">
       <summary>[[i18n "clipboard" bundle="bso"]]</summary>
       <div class="bso-component">
         <mp-event-proxy
@@ -49,23 +49,11 @@
 
 [[#*inline "component-clipboard-list-item"]]
   <div class="bso-component clipboard-item">
-    [[> component-clipboard-item-delete-button]]
     {{> partial:cardObject subject=iri}}
+    [[> component-clipboard-item-delete-button]]
   </div>
 
 [[/inline]]
-
-[[#*inline "component-clipboard-item-native-delete-button"]]
-
-<mp-set-management-action-remove-set-item item="{{iri}}">
-  <div event-key=remove class="set-management__item-popover-item">
-    <i class="rs-icon rs-icon-delete_round"></i>
-    <span>Remove</span>
-  </div>
-</mp-set-management-action-remove-set-item>
-
-[[/inline]]
-
 [[#*inline "component-clipboard-item-delete-button"]]
 <semantic-context repository="default">
   <semantic-query
@@ -80,9 +68,7 @@
         post-action="event"
         id="delete-clipboard-item-action"
       >
-          <button type="button" class="btn btn-primary btn-xs">
-            [[i18n "remove" bundle="bso"]]
-          </button>
+          <button class="bso-component button-clipboard-remove"></button>
       </mp-ldp-remove-from-container-action>
   </semantic-query>
 </semantic-context>

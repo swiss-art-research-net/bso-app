@@ -226,6 +226,30 @@ ol.page-breadcrumb {
   width: 100vw;
   z-index: 9999;
 }
+.bso-component.clipboard-panel summary {
+  text-align: center;
+}
+.bso-component.clipboard-panel .clipboard-item {
+  position: relative;
+}
+.bso-component.clipboard-panel .clipboard-item .button-clipboard-remove {
+  opacity: 0;
+  background-color: rgba(17, 17, 17, 0.8);
+  padding: 0;
+  border: none;
+  position: absolute;
+  top: 0.2rem;
+  right: 0.2rem;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 1rem;
+  transition: opacity 0.5s;
+}
+.bso-component.clipboard-panel .clipboard-item .button-clipboard-remove::before {
+  display: block;
+  content: 'X';
+  color: white;
+}
 .bso-component.clipboard-panel .card {
   height: 10rem;
   min-width: 10rem;
@@ -241,8 +265,14 @@ ol.page-breadcrumb {
 .bso-component.clipboard-panel .set-management__set-item:hover {
   background: none;
 }
+.bso-component.clipboard-panel .set-management__set-item:hover .button-clipboard-remove {
+  opacity: 1;
+}
 .bso-component.clipboard-panel .set-management__set-items {
+  background-color: #aaa;
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0) 100px, rgba(0, 0, 0, 0) 100%);
   flex-direction: row;
+  min-height: 11rem;
   padding-bottom: 0;
   overflow-x: scroll;
 }
