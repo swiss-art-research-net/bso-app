@@ -50,7 +50,7 @@
         [[else]]
             post-action="redirect"
         [[/if]]
-        browser-persistence="True"
+        browser-persistence="false"
         fields='[
             [[> SameAs]],
             [[> Type-hidden ]],
@@ -87,6 +87,9 @@
         <semantic-form-autocomplete-input
             for="SameAs"
             value-binding-name="subject"
+            droppable='{
+                "query": "ASK { ?subject a/rdfs:subClassOf* crm:E39_Actor . }"
+            }'
             lookup-query='{
                 "type": "lookup",
                 "entityType": "http://schema.swissartresearch.net/ontology/rds#Person",
@@ -130,6 +133,9 @@
         ]'>
             <semantic-form-autocomplete-input for='Birth_Place'
                 value-binding-name="subject"
+                droppable='{
+                    "query": "ASK { ?subject a/rdfs:subClassOf* crm:E53_Place . }"
+                }'
                 lookup-query='{
                     "type": "lookup",
                     "entityType": "http://schema.swissartresearch.net/ontology/rds#Place",
@@ -154,6 +160,9 @@
         
             <semantic-form-autocomplete-input for='Death_Place'
                 value-binding-name="subject"
+                droppable='{
+                    "query": "ASK { ?subject a/rdfs:subClassOf* crm:E53_Place . }"
+                }'
                 lookup-query='{
                     "type": "lookup",
                     "entityType": "http://schema.swissartresearch.net/ontology/rds#Place",
@@ -170,6 +179,9 @@
         <semantic-form-autocomplete-input
             for="Person_Father"
             value-binding-name="subject"
+            droppable='{
+                "query": "ASK { ?subject a/rdfs:subClassOf* crm:E39_Actor . }"
+            }'
             lookup-query='{
             "type": "lookup",
             "entityType": "[[resolvePrefix "search:Person"]]",
@@ -184,6 +196,9 @@
         <semantic-form-autocomplete-input
             for="Person_Mother"
             value-binding-name="subject"
+            droppable='{
+                "query": "ASK { ?subject a/rdfs:subClassOf* crm:E39_Actor . }"
+            }'
             lookup-query='{
             "type": "lookup",
             "entityType": "[[resolvePrefix "search:Person"]]",
