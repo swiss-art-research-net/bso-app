@@ -293,7 +293,30 @@ ol.page-breadcrumb {
         left: 0;
         width:100vw;
         z-index: 9999;
-
+        summary {
+            text-align: center;
+        }
+        .clipboard-item {
+            position: relative;
+            .button-clipboard-remove {
+                opacity: 0;
+                background-color: fade(@col-black, 80%);
+                padding: 0;
+                border: none;
+                position: absolute;
+                top: 0.2rem;
+                right: 0.2rem;
+                width: 2rem;
+                height: 2rem;
+                border-radius: 1rem;
+                transition: opacity 0.5s;
+                &::before {
+                    display: block;
+                    content: 'X';
+                    color:white;
+                }
+            }
+        }
         .card {
             height: 10rem;
             min-width: 10rem;
@@ -311,11 +334,25 @@ ol.page-breadcrumb {
             &__set-item {
                 &:hover {
                     background: none;
+                    .button-clipboard-remove {
+                        opacity: 1;
+                    }
                 }
             }
             &__set-items {
+                background-color: @col-grey;
+                background-image: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0) 100px, rgba(0,0,0,0) 100%);
                 flex-direction: row;
+                min-height: 11rem;
                 padding-bottom: 0;
+                overflow-x: scroll;
+                > :first-of-type {
+                    margin-top: 0;
+                }
+            }
+            .DropArea--dropMessage {
+                margin:0;
+                width: 100%;
             }
         }
     }
