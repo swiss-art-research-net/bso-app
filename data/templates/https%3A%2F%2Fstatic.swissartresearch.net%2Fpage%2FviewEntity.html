@@ -654,10 +654,14 @@
 [[#*inline "field-visualisation-places"]]
 <semantic-query
     query="SELECT DISTINCT ?subject ?eventType ?typeClass WHERE {
-        [[> thisForQuery]] (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P9_consists_of? ?event .
-        ?event crm:P7_took_place_at ?subject .
+        {
+            [[> thisForQuery]] (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P9_consists_of? ?event .
+            ?event crm:P7_took_place_at ?subject .
+            ?event a ?eventType .
+        } UNION {
+            [[> thisForQuery]] crm:P7_took_place_at ?subject .
+        }
         ?subject a ?type .
-        ?event a ?eventType .
         BIND(STRAFTER(STR(?type), 'search/') as ?typeClass)
         VALUES(?type) {
             (search:Place)
@@ -841,6 +845,11 @@
             ?subject crm:P46i_forms_part_of [[> thisForQuery]]
         [[/ component-objects-table]]
 
+        <!-- Objects employed -->
+        [[#> component-objects-table condition='$subject crm:P16_used_specific_object ?object' label='objectsEmployed']]
+            [[> thisForQuery]] crm:P16_used_specific_object ?subject .
+        [[/ component-objects-table]]
+        
         <!-- Regions -->
         <mp-event-target-refresh id="regions-table">
             [[#> component-objects-table condition='$subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point/^crmdig:L49_is_primary_area_of ?region . FILTER NOT EXISTS {?region crm:P2_has_type type:imageRegion}' label='regions' ]]
