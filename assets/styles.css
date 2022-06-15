@@ -229,6 +229,15 @@ ol.page-breadcrumb {
 .bso-component.clipboard-panel summary {
   text-align: center;
 }
+.bso-component.clipboard-panel .button-clipboard-refresh {
+  background: none;
+  border: none;
+  font-weight: bold;
+  color: #a75252;
+  position: absolute;
+  top: 0rem;
+  right: 0.1rem;
+}
 .bso-component.clipboard-panel .clipboard-item {
   position: relative;
 }
@@ -561,6 +570,10 @@ ol.page-breadcrumb {
   padding: 0.1rem 0.3rem;
   margin-right: 0.5rem;
 }
+.bso-component.tags li.Event,
+.bso-component.tags > a.Event {
+  background-color: #e2f5f7;
+}
 .bso-component.tags li.Person,
 .bso-component.tags > a.Person {
   background-color: #a0d1f4;
@@ -631,6 +644,12 @@ ol.page-breadcrumb {
 .tab-pane .bso-component.panel,
 .tab-pane .bso-component.next-step {
   margin-top: -0.7rem;
+}
+.bso-component.util-parent-is-open {
+  display: none;
+}
+.is-open .bso-component.util-parent-is-open {
+  display: inline-block;
 }
 @font-face {
   font-family: 'HK Grotesk';

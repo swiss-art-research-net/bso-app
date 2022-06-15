@@ -19,6 +19,9 @@
     <details class="bso-component">
       <summary>[[i18n "clipboard" bundle="bso"]]</summary>
       <div class="bso-component">
+      
+        [[> component-refresh-button]]
+
         <mp-event-proxy
           on-event-type="Component.Refresh"
           on-event-source="delete-clipboard-item-action"
@@ -54,6 +57,7 @@
   </div>
 
 [[/inline]]
+
 [[#*inline "component-clipboard-item-delete-button"]]
 <semantic-context repository="default">
   <semantic-query
@@ -72,4 +76,12 @@
       </mp-ldp-remove-from-container-action>
   </semantic-query>
 </semantic-context>
+[[/inline]]
+
+[[#*inline "component-refresh-button"]]
+  <mp-event-trigger
+    type="Component.Refresh"
+    targets='["clipboard-refresh"]'>
+    <button class="bso-component button-clipboard-refresh">[[i18n "refresh" bundle="bso"]]</button>
+  </mp-event-trigger>
 [[/inline]]

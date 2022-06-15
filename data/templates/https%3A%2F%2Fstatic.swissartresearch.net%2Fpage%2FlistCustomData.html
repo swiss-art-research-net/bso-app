@@ -123,9 +123,13 @@
             iri="page:editPlace">
             <button class="btn btn-primary btn-md">[[i18n "addNewPlace" bundle="bso"]]</button>
         </semantic-link>
+        <semantic-link
+            iri="page:editEvent">
+            <button class="btn btn-primary btn-md">[[i18n "addNewEvent" bundle="bso"]]</button>
+        </semantic-link>
     </div>
     <semantic-table
-        query="SELECT * WHERE {
+        query="SELECT ?subject ?type ?editPage WHERE {
             GRAPH ?g {
                 ?subject a ?type . 
             }
@@ -134,6 +138,7 @@
             VALUES (?type ?editPage) {
                 (search:Person page:editPerson)
                 (search:Place page:editPlace)
+                (search:Event page:editEvent)
             }
         }"
         column-configuration='[{
@@ -142,8 +147,10 @@
             "cellTemplate": "<semantic-link iri=\"{{subject.value}}\" urlqueryparam-view=\"page\"></semantic-link>"
         },
         {
+            "variableName": "type",
             "displayName": "[[i18n "type" bundle="bso"]]",
-            "cellTemplate": "<mp-label iri=\"{{type.value}}\"></mp-label>"
+            "cellTemplate": "<mp-label iri=\"{{type.value}}\"></mp-label>",
+            "filterType": "multiselect"
         },
         {
             "displayName": "[[i18n "view" bundle="bso"]]",
@@ -153,6 +160,9 @@
             "displayName": "[[i18n "edit" bundle="bso"]]",
             "cellTemplate": "<semantic-link iri=\"{{editPage.value}}\" urlqueryparam-entityiri=\"{{subject.value}}\">[[i18n "edit" bundle="bso"]]</semantic-link>"
         }]'
+        options='{
+            "showColumnFilters": "True"
+          }'
         no-result-template="<p>[[i18n "noContributedData" bundle="bso"]]</p>"
     ></semantic-table>
 </div>

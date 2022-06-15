@@ -1,0 +1,220 @@
+[[> partial:RDSFieldDefinitions]]
+
+[[#if (urlParam "overlay")]]
+[[else]]
+    [[> partial:pageHeader]]
+[[/if]]
+
+[[#*inline "thisIri"]][[urlParam "entityiri"]][[/inline]]
+
+[[#*inline "thisForQuery"]]
+    <[[> thisIri]]>
+[[/inline]]
+
+<div class="d-flex flex-md-row flex-column">
+    <div class="bso-component separator sidebar image-display">
+
+        <img src="/images/fcs/events.svg" width="200">
+    </div>
+    <div class="bso-component main">
+        <div class="bso-component panel">
+            [[#if (hasPermission "api:ldp:*")]]
+                [[> edit-event-form edit=(urlParam "entityiri")]]
+            [[else]]
+                <bs-alert variant="warning">
+                    [[i18n "noPermissionToAccessPage" bundle="bso"]]
+                </bs-alert>
+            [[/if]]
+        </div>
+    </div>
+</div>
+
+[[#*inline "edit-event-form"]]
+    [[#if edit]]
+        <h2>[[i18n "edit" bundle="bso"]] <mp-label iri="[[> thisIri]]"></mp-label></h2>
+    [[else]]
+        <h2>[[i18n "addNewEvent" bundle="bso"]]</h2>
+    [[/if]]
+
+    <semantic-form
+        id="newEvent"
+        [[#if edit]]
+            subject="[[> thisIri]]"
+        [[else]]
+            new-subject-template="https://resource.swissartresearch.net/event/{{UUID}}"
+        [[/if]]
+        persistence="ldp"
+        form-id="events"
+        [[#if (urlParam "redirect")]]
+            post-action="[[ urlParam "redirect"]]"
+        [[else]]
+            post-action="redirect"
+        [[/if]]
+        browser-persistence="true"
+        fields='[
+            [[> Type-hidden]],
+            [[> Identifier_Event]],
+            [[> Identifier_Provider]],
+            [[> Identifier_Source]],
+            [[> Identifier_Type]],
+            [[> Event_Name]],
+            [[> Event_Type]],
+            [[> Event_Alternate_Name]],
+            [[> Event_Alternate_Name_Value]],
+            [[> Event_Alternate_Name_Type]], 
+            [[> Event_Alternate_Name_Use_Period_-_earliest]],
+            [[> Event_Alternate_Name_Use_Period_-_latest]],
+            [[> Event_Description]],
+            [[> Event_Description_Value]],
+            [[> Event_Description_Type]],
+            [[> Event_Description_Author]],
+            [[> Event_Description_Date_-_Earliest]],
+            [[> Event_Description_Date_-_Latest]],
+            [[> Event_Earliest_Possible_Start_Date]],
+            [[> Event_Latest_Possible_End_Date]],
+            [[> Event_Part_Of]],
+            [[> Motivating_Event]],
+            [[> Objects_Employed]],
+            [[> Documents_Employed]],
+            [[> Documents_Created]],
+            [[> Event_Place]],
+            [[> Event_Place_Name_Value]],
+            [[> Event_Place_Type]],
+            [[> Event_Place_Coordinates]],
+            [[> Event_Actor]],
+            [[> Event_Actor_Value]],
+            [[> Event_Actor_Type]]
+        ]'
+    >
+        <semantic-form-recover-notification></semantic-form-recover-notification>
+        <semantic-form-hidden-input for="Type-hidden" replace-values='["http://www.cidoc-crm.org/cidoc-crm/E5_Event", "[[resolvePrefix 'search:Event']]", "[[resolvePrefix 'rds:Event']]"]'></semantic-form-hidden-input> 
+        <semantic-form-text-input for="Event_Name" 
+            languages='["en","de","fr","it","sp","ca","cs","da","nl","fi","gr","hu","no","pt","sv","ru","jp","ko"]'>
+        </semantic-form-text-input>
+        <semantic-form-tree-picker-input for="Event_Type"></semantic-form-tree-picker-input>
+        <semantic-form-composite-input 
+            for="Event_Description"
+            new-subject-template="description/{{UUID}}"
+            fields='[
+                [[> Event_Description_Value]],
+                [[> Event_Description_Type]],
+                [[> Event_Description_Author]]
+            ]'>
+            <semantic-form-text-input for="Event_Description_Value" multiline='true'
+                languages='["en","de","fr","it","sp","ca","cs","da","nl","fi","gr","hu","no","pt","sv","ru","jp","ko"]'>
+            </semantic-form-text-input>
+            <semantic-form-hidden-input for="Event_Description_Type" default-value="http://vocab.getty.edu/aat/300435416"></semantic-form-hidden-input>
+            <semantic-form-hidden-input for="Event_Description_Author" default-value="[[singleValueFromSelect "SELECT ?uri WHERE { BIND(?__useruri__ as ?uri)}"]]"></semantic-form-hidden-input>
+        </semantic-form-composite-input>
+        [[#if (urlParam "linkperson")]]
+            <bs-alert variant="light">
+        [[/if]]
+        <semantic-form-composite-input 
+            for="Event_Actor"
+            new-subject-template="actor/{{UUID}}"
+            fields='[ 
+                [[> Event_Actor_Value]],
+                [[> Event_Actor_Type]]
+            ]'>
+            <semantic-form-autocomplete-input 
+                [[#if (urlParam "linkperson")]]
+                    default-value="[[urlParam "linkperson"]]"
+                [[/if]]
+                for="Event_Actor_Value"
+                droppable='{
+                    "query": "ASK { ?subject a/rdfs:subClassOf* crm:E39_Actor}"
+                }'
+            ></semantic-form-autocomplete-input>
+            <semantic-form-autocomplete-input for="Event_Actor_Type"></semantic-form-autocomplete-input>
+        </semantic-form-composite-input>
+        [[#if (urlParam "linkperson")]]
+            </bs-alert>
+        [[/if]]
+        <semantic-form-datetime-input for="Event_Earliest_Possible_Start_Date"></semantic-form-datetime-input>
+        <semantic-form-datetime-input for="Event_Latest_Possible_End_Date"></semantic-form-datetime-input>
+        [[#if (urlParam "linkplace")]]
+            <bs-alert variant="light">
+        [[/if]]
+
+        <semantic-form-autocomplete-input 
+            [[#if (urlParam "linkplace")]]
+                default-value="[[urlParam "linkplace"]]"
+            [[/if]]
+            droppable='{
+                "query": "ASK { ?subject a/rdfs:subClassOf* crm:E53_Place}"
+            }'
+            for='Event_Place'
+            value-binding-name="subject"
+            lookup-query='{
+                "type": "lookup",
+                "entityType": "http://schema.swissartresearch.net/ontology/rds#Place",
+                "limit": 20,
+                "lookupServiceName": "federated-lookup"
+                }'
+            template='{{> autocompletionTemplate}}'>
+            [[> autocompletionTemplate]]
+        </semantic-form-autocomplete-input>
+        [[#if (urlParam "linkplace")]]
+            </bs-alert>
+        [[/if]]
+        <semantic-form-autocomplete-input for="Objects_Employed"
+            template="{{> template}}"
+            droppable='{
+                "query": "ASK { ?subject a/rdfs:subClassOf* crm:E22_Human-Made_Object}"
+            }'
+        >
+            <template id="template">
+                <span class="bso-component util-parent-is-open" style="width:100px;text-align: center;">
+                    <sari-resource-thumbnail iri="{{value.value}}" template="{{> thumbnail-template}}">
+                        <template id="thumbnail-template">
+                            <img src="{{thumbnail}}" height="50px" "/>
+                        </template>
+                    </sari-resource-thumbnail>
+                </span>
+                <mp-label iri="{{value.value}}"></mp-label>
+            </template>
+        </semantic-form-autocomplete-input>
+        <semantic-form-autocomplete-input 
+            for="Event_Part_Of"
+            droppable='{
+                "query": "ASK { ?subject a/rdfs:subClassOf* crm:E5_Event}"
+            }'
+        ></semantic-form-autocomplete-input>
+        <semantic-form-autocomplete-input 
+            for="Motivating_Event"
+            droppable='{
+                "query": "ASK { ?subject a/rdfs:subClassOf* crm:E5_Event}"
+            }'
+        ></semantic-form-autocomplete-input>
+        <semantic-form-errors></semantic-form-errors>
+        <div class="bso-component button-set">
+            [[#if edit]]
+                <semantic-link
+                    iri="[[edit]]"
+                >
+                    <button class="btn btn-secondary">[[i18n "cancel" bundle="bso"]]</button>
+                </semantic-link>
+            [[else]]
+                <button name='reset' class='btn btn-secondary'>[[i18n "reset" bundle="bso"]]</button>
+            [[/if]]
+            <button name='submit' class='btn btn-primary'>[[i18n "save" bundle="bso"]]</button>
+        </div>
+    </semantic-form>
+[[/inline]]
+
+
+[[#*inline "autocompletionTemplate"]]
+<template id='autocompletionTemplate'>
+    [[> partial:lookupCandidateTemplate]]
+</template>
+[[/inline]]
+
+[[#*inline "addNewPersonButton"]]
+<semantic-link
+iri="page:editPerson"
+target="_blank">
+    <button class="btn btn-secondary btn-xs">[[i18n "createNewPerson" bundle="bso"]]</button>
+</semantic-link>
+[[/inline]]
+
+[[> partial:pageFooter]]
