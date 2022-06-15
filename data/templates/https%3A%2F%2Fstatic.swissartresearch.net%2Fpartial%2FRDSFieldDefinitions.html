@@ -351,31 +351,13 @@ WHERE {
     "domain": "http://www.cidoc-crm.org/cidoc-crm/E5_Event",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#anyURI",
     "minOccurs": "0",
-    "selectPattern": "SELECT distinct ?value ?label
-WHERE {
-?subject <http://www.cidoc-crm.org/cidoc-crm/P2_has_type> ?value.
-  ?value a crm:E55_Type.
-  ?value rdfs:label ?label 
-}",
-    "deletePattern": "DELETE {  
-  ?subject <http://www.cidoc-crm.org/cidoc-crm/P1_is_identified_by> ?alternative_identifier . 
-  ?alternative_identifier a <http://www.cidoc-crm.org/cidoc-crm/E41_Appellation>.
-  ?alternative_identifier <http://www.cidoc-crm.org/cidoc-crm/P2_has_type> <http://grp.swissartresearch.net/onto/type/alternate>.
-  ?alternative_identifier rdfs:label ?value
-} WHERE {
-?subject <http://www.cidoc-crm.org/cidoc-crm/P1_is_identified_by> ?alternative_identifier .
-      ?alternative_identifier rdfs:label ?value
-}",
+    "selectPattern": "SELECT DISTINCT ?value
+    WHERE {
+      ?subject <http://www.cidoc-crm.org/cidoc-crm/P2_has_type> ?value.
+    }",
     "insertPattern": "INSERT { 
-  ?subject <http://www.cidoc-crm.org/cidoc-crm/P2_has_type> ?value.
-  ?value a crm:E55_Type.
-  ?value rdfs:label ?label 
-} WHERE {
-      SERVICE <http://vocab.getty.edu/sparql> {
-      ?value <http://www.w3.org/2004/02/skos/core#prefLabel> ?label.
-  	FILTER (lang(?label)=\"en\") 
-		}
-      }
+      ?subject <http://www.cidoc-crm.org/cidoc-crm/P2_has_type> ?value.
+    } WHERE {}
 ",
     "autosuggestionPattern": "SELECT ?value ?label WHERE {
   SERVICE <http://vocab.getty.edu/sparql> {

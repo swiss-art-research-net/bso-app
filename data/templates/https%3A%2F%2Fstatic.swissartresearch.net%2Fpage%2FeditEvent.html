@@ -103,7 +103,7 @@
             <semantic-form-text-input for="Event_Description_Value" multiline='true'
                 languages='["en","de","fr","it","sp","ca","cs","da","nl","fi","gr","hu","no","pt","sv","ru","jp","ko"]'>
             </semantic-form-text-input>
-            <semantic-form-autocomplete-input for="Event_Description_Type"></semantic-form-autocomplete-input>
+            <semantic-form-hidden-input for="Event_Description_Type" default-value="http://vocab.getty.edu/aat/300435416"></semantic-form-hidden-input>
             <semantic-form-hidden-input for="Event_Description_Author" default-value="[[singleValueFromSelect "SELECT ?uri WHERE { BIND(?__useruri__ as ?uri)}"]]"></semantic-form-hidden-input>
         </semantic-form-composite-input>
         [[#if (urlParam "linkperson")]]
