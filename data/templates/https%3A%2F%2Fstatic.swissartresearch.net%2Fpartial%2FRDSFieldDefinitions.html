@@ -3722,21 +3722,22 @@ WHERE {
     "domain": "http://www.cidoc-crm.org/cidoc-crm/E5_Event",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
     "minOccurs": "0",
+    "maxOccurs": "1",
     "selectPattern": "SELECT ?value ?label WHERE {
-  $subject crm:P4_has_time-span ?timespan_uri.
-  ?timespan_uri a crm:E52_Time-Span.
-  ?timespan_uri crm:P82b_end_of_the_end ?value.
-}",
-    "deletePattern": "DELETE { $subject crm:P4_has_time-span ?timespan_uri.} WHERE {
-  $subject crm:P4_has_time-span ?timespan_uri.
-  ?timespan_uri a crm:E52_Time-Span.
-  ?timespan_uri crm:P82b_end_of_the_end ?value.
-}",
+      $subject crm:P4_has_time-span ?timespan_uri.
+      ?timespan_uri a crm:E52_Time-Span.
+      ?timespan_uri crm:P82b_end_of_the_end ?value.
+    }",
+      "deletePattern": "DELETE { $subject crm:P4_has_time-span ?timespan_uri.} WHERE {
+        $subject crm:P4_has_time-span ?timespan_uri.
+        ?timespan_uri a crm:E52_Time-Span.
+        ?timespan_uri crm:P82b_end_of_the_end ?value.
+      }",
     "insertPattern": "INSERT { $subject crm:P4_has_time-span ?timespan_uri.
       ?timespan_uri a crm:E52_Time-Span.
       ?timespan_uri crm:P82b_end_of_the_end ?value.}
-WHERE {
-	BIND(IRI(CONCAT(STR($subject),\"/timespan/\", MD5(str($value)))) as ?timespan_uri).
+    WHERE {
+      BIND(IRI(CONCAT(STR($subject),\"/date\")) as ?timespan_uri).
 }"
 }
 [[/inline]]
@@ -6944,21 +6945,22 @@ WHERE {
     "domain": "http://www.cidoc-crm.org/cidoc-crm/E5_Event",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
     "minOccurs": "0",
+    "maxOccurs": "1",
     "selectPattern": "SELECT ?value ?label WHERE {
-  $subject crm:P4_has_time-span ?timespan_uri.
-  ?timespan_uri a crm:E52_Time-Span.
-  ?timespan_uri crm:P82a_begin_of_the_begin ?value.
-}",
-    "deletePattern": "DELETE { $subject crm:P4_has_time-span ?timespan_uri.} WHERE {
-  $subject crm:P4_has_time-span ?timespan_uri.
-  ?timespan_uri a crm:E52_Time-Span.
-  ?timespan_uri crm:P82a_begin_of_the_begin ?value.
-}",
-    "insertPattern": "INSERT { $subject crm:P4_has_time-span ?timespan_uri.
+      $subject crm:P4_has_time-span ?timespan_uri.
       ?timespan_uri a crm:E52_Time-Span.
-      ?timespan_uri crm:P82a_begin_of_the_begin ?value.}
-WHERE {
-	BIND(IRI(CONCAT(STR($subject),\"/timespan/\", MD5(str($value)))) as ?timespan_uri).
+      ?timespan_uri crm:P82a_begin_of_the_begin ?value.
+    }",
+    "deletePattern": "DELETE { $subject crm:P4_has_time-span ?timespan_uri.} WHERE {
+      $subject crm:P4_has_time-span ?timespan_uri.
+      ?timespan_uri a crm:E52_Time-Span.
+      ?timespan_uri crm:P82a_begin_of_the_begin ?value.
+    }",
+      "insertPattern": "INSERT { $subject crm:P4_has_time-span ?timespan_uri.
+        ?timespan_uri a crm:E52_Time-Span.
+        ?timespan_uri crm:P82a_begin_of_the_begin ?value.}
+      WHERE {
+      BIND(IRI(CONCAT(STR($subject),\"/date\")) as ?timespan_uri).
 }"
 }
 [[/inline]]

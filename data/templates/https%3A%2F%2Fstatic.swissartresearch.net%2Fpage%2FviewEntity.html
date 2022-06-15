@@ -322,9 +322,13 @@
 [[#*inline "field-visualisation-dates"]]
 <semantic-query
     query="SELECT DISTINCT ?subject ?eventType WHERE {
-        [[> thisForQuery]] (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P9_consists_of? ?event .
-        ?event crm:P4_has_time-span ?subject .
-        ?event a ?eventType .
+        {
+            [[> thisForQuery]] (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P9_consists_of? ?event .
+            ?event crm:P4_has_time-span ?subject .
+            ?event a ?eventType .
+        } UNION {
+            [[> thisForQuery]] crm:P4_has_time-span ?subject .
+        }
     }"
     template="{{> template}}">>
     <template id="template">
@@ -556,6 +560,37 @@
 </semantic-query>
 [[/inline]]
 
+[[#*inline "field-visualisation-persons-carrying-out-event"]]
+<semantic-query
+    query="SELECT DISTINCT ?subject (GROUP_CONCAT(DISTINCT ?role; SEPARATOR=' ') as ?roles) WHERE {
+        [[> thisForQuery]] a crm:E5_Event ;
+            crm:PC01_is_domain_of ?pc14 .
+        ?pc14 crm:PC02_has_range ?subject .
+        OPTIONAL {
+            ?pc14 crm:P2_has_type ?role .
+        }
+    } GROUP BY ?subject"
+    template="{{> template}}">>
+    <template id="template">
+        <div class="bso-component field-visualisation">
+            <span class="bso-component label">[[i18n "persons" bundle="bso"]]</span>
+            <table>
+                {{#each bindings}}
+                <tr>
+                    <td>
+                        <ul class="bso-component tags">
+                                <li class="bso-tag Person"><semantic-link uri="{{subject.value}}"></semantic-link></li>
+                        </ul>
+                    </td>
+                    {{#if roles.value}}<td>{{#each (split roles.value ' ')}}[[> addComma]]<semantic-link class-name="bso-tag Type" iri="{{this}}"></semantic-link>{{/each}}</td>{{/if}} 
+                </tr>
+                {{/each}}
+            </table>
+        </div>
+    </template>
+</semantic-query>
+[[/inline]]
+
 [[#*inline "field-visualisation-persons-involved-in-creation"]]
 <semantic-query
     query="SELECT DISTINCT ?subject (GROUP_CONCAT(DISTINCT ?role; SEPARATOR=' ') as ?roles) (GROUP_CONCAT(DISTINCT ?global_role; SEPARATOR=' ') as ?global_roles) WHERE {
@@ -781,6 +816,7 @@
         [[> field-visualisation-places]]
         [[> field-visualisation-contained-in]]
         [[> field-visualisation-persons-involved-in-creation]]
+        [[> field-visualisation-persons-carrying-out-event]]
         [[> field-visualisation-dimensions]]
         [[> field-visualisation-technique]]
         [[> field-visualisation-provenience]]
