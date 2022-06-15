@@ -229,6 +229,15 @@ ol.page-breadcrumb {
 .bso-component.clipboard-panel summary {
   text-align: center;
 }
+.bso-component.clipboard-panel .button-clipboard-refresh {
+  background: none;
+  border: none;
+  font-weight: bold;
+  color: #a75252;
+  position: absolute;
+  top: 0rem;
+  right: 0.1rem;
+}
 .bso-component.clipboard-panel .clipboard-item {
   position: relative;
 }
