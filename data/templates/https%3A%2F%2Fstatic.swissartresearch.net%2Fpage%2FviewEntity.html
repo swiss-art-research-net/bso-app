@@ -17,6 +17,7 @@
         [[> module-sidebar-image]]
         [[> module-sidebar-smapshot]]
         [[> module-sidebar-person-network]]
+        [[> module-sidebar-event-network]]
 
 </div>
 <div class="bso-component main">
@@ -205,6 +206,34 @@
         </template>
     </semantic-if>
 
+[[/inline]]
+
+[[#*inline "component-event-network"]]
+    <div class="bso-component graph">
+        <semantic-graph height="[[height]]px"
+            query='CONSTRUCT {
+                ?s ?p ?o .
+            } WHERE {
+                BIND([[> thisForQuery]] as ?s)
+                {
+                    ?s crm:PC01_is_domain_of ?pc14 .
+                    ?pc14 crm:PC02_has_range ?o .
+                    OPTIONAL {
+                        ?pc14 crm:P2_has_type ?pc14Type
+                    }
+                    BIND(IF(BOUND(?pc14Type), ?pc14Type, crm:P14_carried_out_by) as ?p)
+                } UNION {
+                    ?s ?p ?o .
+                    VALUES (?p) {
+                        (crm:P16_used_specific_object)
+                        (crm:P7_took_place_at)
+                    }
+                }
+                FILTER(?s != ?o)
+            }'>
+            <semantic-graph-layout-cose-bilkent ideal-edge-length=150></semantic-graph-layout-cose-bilkent>
+        </semantic-graph>
+    </div>
 [[/inline]]
 
 [[#*inline "component-person-network"]]
@@ -1076,6 +1105,32 @@
             </div>
         </template>
     </semantic-if>
+[[/inline]]
+
+[[#*inline "module-sidebar-event-network"]]
+<semantic-if
+    query='ASK {
+        BIND([[> thisForQuery]] as ?s)
+        ?s a crm:E5_Event .
+    }'
+    then='{{> eventNetworkTemplate}}'
+>
+    <template id="eventNetworkTemplate">
+        <bs-panel>
+            <div style="width:300px">
+                [[> component-event-network height=300]]
+                <div class="caption">
+                    <mp-overlay-dialog title="[[i18n "networkView" bundle="bso"]]" type="modal" bs-size="xl">
+                        <mp-overlay-dialog-trigger><a>[[i18n "openInViewer" bundle="bso"]]</a></mp-overlay-dialog-trigger>
+                        <mp-overlay-dialog-content id="smapshot-modal">
+                            [[> component-event-network height=600]]
+                        </mp-overlay-dialog-content>
+                    </mp-overlay-dialog>
+                </div>
+            </div>
+        </bs-panel>
+    </template>
+</semantic-if>
 [[/inline]]
 
 [[#*inline "module-sidebar-person-network"]]
