@@ -19,53 +19,71 @@
     <details>
       <summary>[[i18n "clipboard" bundle="bso"]]</summary>
       <div class="bso-component">
-        <mp-set-management
-          readonly='false'
-          id='clipboard-main'
-          reparentable='true'
-          item-config='{
-            "<http://www.metaphacts.com/ontologies/platform#SetItem>": {
-              "isSet": false,
-              "listTemplate": "{{> clipboard-list-item}}"
-            }
-        
-          }'
-        >
-          <template id="clipboard-list-item">
-            [[> component-clipboard-list-item ]]
-          </template>
-        </mp-set-management>
+        <mp-event-proxy
+          on-event-type="Component.Refresh"
+          on-event-source="delete-clipboard-item-action"
+          proxy-event-type="Component.Refresh"
+          proxy-targets='["clipboard-refresh"]'></mp-event-proxy>
+        <mp-event-target-refresh id="clipboard-refresh"> 
+          <mp-set-management
+            readonly='false'
+            id='clipboard-main'
+            reparentable='true'
+            item-config='{
+              "<http://www.metaphacts.com/ontologies/platform#SetItem>": {
+                "isSet": false,
+                "listTemplate": "{{> clipboard-list-item}}"
+              }
+          
+            }'
+          >
+            <template id="clipboard-list-item">
+              [[> component-clipboard-list-item ]]
+            </template>
+          </mp-set-management>
+        </mp-event-target-refresh>
       </div>
     </details>
   </div>
 </mp-anonymous-hidden>
 
 [[#*inline "component-clipboard-list-item"]]
-
   <div class="bso-component clipboard-item">
+    [[> component-clipboard-item-delete-button]]
     {{> partial:cardObject subject=iri}}
   </div>
 
 [[/inline]]
 
+[[#*inline "component-clipboard-item-native-delete-button"]]
 
-[[#*inline "component-clipboard-list-item-depreacted"]]
+<mp-set-management-action-remove-set-item item="{{iri}}">
+  <div event-key=remove class="set-management__item-popover-item">
+    <i class="rs-icon rs-icon-delete_round"></i>
+    <span>Remove</span>
+  </div>
+</mp-set-management-action-remove-set-item>
 
-  <semantic-link iri="{{iri.value}}"></semantic-link>
-    <semantic-context repository="default">
-      <semantic-query
-        query="SELECT ?container WHERE {
-          ?container ldp:contains <{{itemHolder.value}}>
-        } LIMIT 1"
-        template="{{> set-item-delete-button}}">
-        <template id="set-item-delete-button">
-          <mp-ldp-remove-from-container-action 
-            container="{{containe.value}}" 
-            iri="{{itemHolder.value}}"
-            postAction="stay"
-          >
-            <button type="button" class="btn btn-primary btn-xs">[[i18n "remove" bundle="bso"]]</button>
-          </mp-ldp-remove-from-container-action>
-      </semantic-query>
-    </semantic-context>
+[[/inline]]
+
+[[#*inline "component-clipboard-item-delete-button"]]
+<semantic-context repository="default">
+  <semantic-query
+    query="SELECT ?container WHERE {
+      ?container ldp:contains <{{itemHolder.value}}>
+    } LIMIT 1"
+    template="{{> set-item-delete-button}}">
+    <template id="set-item-delete-button">
+      <mp-ldp-remove-from-container-action 
+        container="{{container.value}}" 
+        iri="{{itemHolder.value}}"
+        post-action="event"
+        id="delete-clipboard-item-action"
+      >
+          <button type="button" class="btn btn-primary btn-xs">
+            [[i18n "remove" bundle="bso"]]
+          </button>
+      </mp-ldp-remove-from-container-action>
+  </semantic-query>
+</semantic-context>
 [[/inline]]
