@@ -748,42 +748,28 @@ WHERE {
     "label": "Bibliographic Item Author",
     "description": "This field is used to indicate the publisher of the bibliographic item.",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#string",
-    "selectPattern": "SELECT ?value ?label WHERE {
-  ?subject frbroo:R24_created ?pub_event. 
-  ?pub_event a frbroo:F30_Publication_Event. 	
-  $pub_event crm:P01_has_domain ?carried_uri.
-    ?carried_uri a crm:PC14_carried_out_by.
-    ?carried_uri crm:P02_has_range ?actor_uri.
-    ?actor_uri a crm:E39_Actor.
-    ?actor_uri rdfs:label ?actor. 
-    ?carried_uri crm:P14.1_in_the_role_of ?role_uri.
-    ?role_uri a crm:E55_Type.
-    ?role_uri rdfs:label ?role.
-      FILTER(?role!=\"Publisher\").
-      BIND(CONCAT(?actor,\"(\",?role,\")\") as ?value).
-      
-}",
-    "deletePattern": "DELETE { $subject crm:P01_has_domain ?carried_uri.} WHERE {
-  $subject crm:P01_has_domain ?carried_uri.
-    ?carried_uri a crm:PC14_carried_out_by.
-    ?carried_uri crm:P02_has_range ?actor_uri.
-    ?actor_uri a crm:E39_Actor.
-    ?actor_uri rdfs:label ?value. 
-    ?carried_uri crm:P14.1_in_the_role_of ?role_uri.
-    ?role_uri a crm:E55_Type.
-    ?role_uri rdfs:label ?role.
-      FILTER(?role!=\"Publisher\").
-}",
-    "insertPattern": "INSERT { $subject crm:P01_has_domain ?carried_uri.
-      ?carried_uri a crm:PC14_carried_out_by.
-      ?carried_uri crm:P02_has_range ?actor_uri.
+    "selectPattern": "SELECT ?value WHERE {
+      $subject crm:P9_consists_of ?carried_uri.
+      ?carried_uri a frbroo:F28_Expression_Creation .
+      ?carried_uri crm:P14_carried_out_by ?actor_uri.
+      ?carried_uri crm:P2_has_type aat:300025492.
       ?actor_uri a crm:E39_Actor.
       ?actor_uri rdfs:label ?value. 
-}
-WHERE {
-	BIND(IRI(CONCAT(STR($subject),\"/carried_uri/\")) as ?carried_uri).
-      BIND(IRI(CONCAT(STR($subject),\"/actor/\",MD5(\"?value\"))) as ?actor_uri).
-}"
+}",
+    "insertPattern": "INSERT { 
+        $subject crm:P14_carried_out_by ?actor_uri .
+        $subject crm:P9_consists_of ?carried_uri.
+        ?carried_uri a frbroo:F28_Expression_Creation .
+        ?carried_uri crm:P14_carried_out_by ?actor_uri.
+        ?carried_uri crm:P2_has_type aat:300025492.
+        ?actor_uri a crm:E39_Actor.
+        ?actor_uri rdfs:label ?value. 
+        aat:300025492 rdfs:label \"Author\" .
+      }
+      WHERE {
+        BIND(IRI(CONCAT(STR($subject),\"/creation/\",MD5(?value))) as ?carried_uri).
+        BIND(IRI(CONCAT(\"https://resource.swissartresearch.net/actor/\",MD5(?value))) as ?actor_uri).
+      }"
 }
 [[/inline]]
 
@@ -3470,7 +3456,7 @@ WHERE {
     "label": "Bibliographic Item Publication Date (latest)",
     "description": "This field is used to indicate the latest known date for the birth of the documented bibliographic item.",
     "domain": "crm:E52_Time-span",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#year",
     "selectPattern": "SELECT ?value ?label WHERE {
   $subject crm:P4_has_time-span ?timespan_uri.
   ?timespan_uri a crm:E52_Time-Span.
@@ -4622,43 +4608,29 @@ WHERE{
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Bibliographic_Item_Publisher",
     "label": "Bibliographic Item Publisher",
     "description": "This field is used to indicate the publisher of the bibliographic item.",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#string",
-    "selectPattern": "SELECT ?value ?label WHERE {
-  ?subject frbroo:R24_created ?pub_event. 
-  ?pub_event a frbroo:F30_Publication_Event. 	
-  $pub_event crm:P01_has_domain ?carried_uri.
-    ?carried_uri a crm:PC14_carried_out_by.
-    ?carried_uri crm:P02_has_range ?actor_uri.
-    ?actor_uri a crm:E39_Actor.
-    ?actor_uri rdfs:label ?value. 
-    ?carried_uri crm:P14.1_in_the_role_of ?role_uri.
-    ?role_uri a crm:E55_Type.
-    ?role_uri rdfs:label \"Publisher\".
-}",
-    "deletePattern": "DELETE { $subject crm:P01_has_domain ?carried_uri.} WHERE {
-  $subject crm:P01_has_domain ?carried_uri.
-    ?carried_uri a crm:PC14_carried_out_by.
-    ?carried_uri crm:P02_has_range ?actor_uri.
-    ?actor_uri a crm:E39_Actor.
-    ?actor_uri rdfs:label ?value. 
-    ?carried_uri crm:P14.1_in_the_role_of ?role_uri.
-    ?role_uri a crm:E55_Type.
-    ?role_uri rdfs:label \"Publisher\".
-}",
-    "insertPattern": "INSERT { $subject crm:P01_has_domain ?carried_uri.
-      ?carried_uri a crm:PC14_carried_out_by.
-      ?carried_uri crm:P02_has_range ?actor_uri.
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#string", 
+    "selectPattern": "SELECT ?value WHERE {
+      $subject crm:P9_consists_of ?carried_uri.
+      ?carried_uri a frbroo:F24_Publication_Event .
+      ?carried_uri crm:P14_carried_out_by ?actor_uri.
+      ?carried_uri crm:P2_has_type aat:300025574.
       ?actor_uri a crm:E39_Actor.
       ?actor_uri rdfs:label ?value. 
-      ?carried_uri crm:P14.1_in_the_role_of ?role_uri.
-      ?role_uri a crm:E55_Type.
-      ?role_uri rdfs:label \"Publisher\".
-}
-WHERE {
-	BIND(IRI(CONCAT(STR($subject),\"/carried_uri/\")) as ?carried_uri).
-      BIND(IRI(CONCAT(STR($subject),\"/actor/\",MD5(\"?value\"))) as ?actor_uri).
-      BIND(IRI(CONCAT(STR($subject),\"/type/publisher\")) as ?role_uri).
-}"
+}",
+    "insertPattern": "INSERT { 
+        $subject crm:P14_carried_out_by ?actor_uri .
+        $subject crm:P9_consists_of ?carried_uri.
+        ?carried_uri a frbroo:F24_Publication_Event .
+        ?carried_uri crm:P14_carried_out_by ?actor_uri.
+        ?carried_uri crm:P2_has_type aat:300025574.
+        ?actor_uri a crm:E39_Actor.
+        ?actor_uri rdfs:label ?value. 
+        aat:300025574 rdfs:label \"Publisher\" .
+      }
+      WHERE {
+        BIND(IRI(CONCAT(STR($subject),\"/creation/\",MD5(?value))) as ?carried_uri).
+        BIND(IRI(CONCAT(\"https://resource.swissartresearch.net/actor/\",MD5(?value))) as ?actor_uri).
+      }"
 }
 [[/inline]]
 
@@ -5902,7 +5874,7 @@ WHERE {
     "label": "Bibliographic Item Publication Date (earliest)",
     "description": "This field is used to indicate the earliest known date for the birth of the documented bibliographic item.",
     "domain": "crm:E52_Time-span",
-    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#date",
+    "xsdDatatype": "http://www.w3.org/2001/XMLSchema#year",
     "selectPattern": "SELECT ?value ?label WHERE {
   $subject crm:P4_has_time-span ?timespan_uri.
   ?timespan_uri a crm:E52_Time-Span.
@@ -6850,7 +6822,7 @@ SELECT ?value ?label WHERE {
 {
     "id": "Bibliographic_Item_Title_Part",
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Bibliographic_Item_Title_Part",
-    "label": "Bilbiographic Item Title Part",
+    "label": "Bibliographic Item Title Part",
     "description": "This field is used to indicate the main name attributed to the documented bibliographic item. No part break down of name is here implied. The full name of an individual is expected here where available.",
     "domain": "http://www.cidoc-crm.org/cidoc-crm/E33_Linguistic_Object",
     "xsdDatatype": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString",
@@ -9178,32 +9150,27 @@ INSERT {
     "label": "Bibliographic Item Publication",
     "description": "This field is used to indicate the place of birth of the documented bibliographic item.",
     "domain": "frbroo:F24_Publication_Expression",
+    "minOccurs": "1",
+    "maxOccurs": "1",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#anyURI",
     "selectPattern": "PREFIX frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/>
-SELECT distinct ?value ?label
-WHERE {
-?subject frbroo:R24_created ?pub_event. 
-  ?pub_event a frbroo:F30_Publication_Event. 
-  ?pub_event crm:P7_took_place_at ?place_uri. 
-  ?place_uri a crm:E53_Place.
-  ?place_uri rdfs:label ?place.
-  ?pub_event crm:P4_has_time-span ?timespan_uri.
-  ?timespan_uri crm:P82a_begin_of_the_begin ?earliest.
-  ?timespan_uri crm:P82b_end_of_the_end ?latest. 
-   BIND(CONCAT(?place, \" from: \",str(?earliest),\" until: \",str(?latest)) as ?value)
-}",
+    SELECT distinct ?value ?label
+    WHERE {
+      ?subject frbroo:R24i_was_created_through ?value
+    }",
     "deletePattern": "DELETE {
-?subject frbroo:R24_created ?value. 
-  } where { 
-?subject frbroo:R24_created ?value. 
-  ?value a frbroo:F30_Publication_Event.
-}",
+      ?subject frbroo:R24i_was_created_through ?value. 
+    } where { 
+      ?subject frbroo:R24i_was_created_through ?value. 
+      ?value a frbroo:F30_Publication_Event.
+    }",
     "insertPattern": "PREFIX frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/>
-INSERT { 
-  ?subject frbroo:R24_created ?value. 
-  ?value a frbroo:F30_Publication_Event.
-} WHERE {}"
-}
+    INSERT { 
+      ?subject frbroo:R24i_was_created_through ?value. 
+      ?subject crm:P94i_was_created_by ?value. 
+      ?value a frbroo:F30_Publication_Event.
+    } WHERE {}"
+    }
 [[/inline]]
 
 

@@ -54,7 +54,8 @@
         fields='[
             [[> Type-hidden]],
             [[> Bibliographic_Item_Title]],
-            [[> Identifier_Bibliographic_Item]]
+            [[> Identifier_Bibliographic_Item]],
+            [[> Bibliographic_Item_Publication]]
         ]'
     >
 
@@ -93,7 +94,40 @@
                 <semantic-form-text-input for="Identifier_Type"></semantic-form-text-input>
                 <semantic-form-text-input for="Identifier_Provider"></semantic-form-text-input>
         </semantic-form-composite-input>
-
+        <semantic-form-composite-input 
+            for="Bibliographic_Item_Publication"
+            new-subject-template="/publication"
+            fields='[
+            [[> Bibliographic_Item_Publication_Place]],
+            [[> Bibliographic_Item_Publication_Date_Earliest]],
+            [[> Bibliographic_Item_Publication_Date_Latest]],
+            [[> Bibliographic_Item_Publisher]],
+            [[> Bibliographic_Item_Author]],
+            [[> Bibliographic_Item_Role]]
+            ]'>
+            <semantic-form-text-input for="Bibliographic_Item_Author"></semantic-form-text-input>
+            <semantic-form-text-input for="Bibliographic_Item_Publisher"></semantic-form-text-input>
+            <semantic-form-autocomplete-input for='Bibliographic_Item_Publication_Place'
+                value-binding-name="subject"
+                droppable='{
+                    "query": "ASK { ?subject a/rdfs:subClassOf* crm:E53_Place . }"
+                }'
+                lookup-query='{
+                    "type": "lookup",
+                    "entityType": "http://schema.swissartresearch.net/ontology/rds#Place",
+                    "limit": 20,
+                    "lookupServiceName": "federated-lookup"
+                    }'
+                template='{{> autocompletionTemplate}}'>
+                [[> autocompletionTemplate]]
+            </semantic-form-autocomplete-input>
+            <semantic-form-text-input 
+                    for="Bibliographic_Item_Publication_Date_Earliest">
+            </semantic-form-text-input>
+            <semantic-form-text-input 
+                    for="Bibliographic_Item_Publication_Date_Latest">
+            </semantic-form-text-input>        
+        </semantic-form-composite-input>
         <semantic-form-errors></semantic-form-errors>
         <div class="bso-component button-set">
             [[#if edit]]
