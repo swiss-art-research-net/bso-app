@@ -766,7 +766,7 @@ fields:
                 skos:broader ?parent ;
                 skos:prefLabel ?label .
               BIND(false AS ?hasChildren)
-              FILTER REGEX(STR(?label), ?__token__, \"i\")
+              FILTER REGEX(STR(?label), ?__token__, "i")
             } ORDER BY DESC (?score) (?label)'
 
     - id: P2_has_type_for_production
@@ -813,7 +813,7 @@ fields:
                 skos:broader ?parent ;
                 skos:prefLabel ?label .
               BIND(false AS ?hasChildren)
-              FILTER REGEX(STR(?label), ?__token__, \"i\")
+              FILTER REGEX(STR(?label), ?__token__, "i")
             } ORDER BY DESC (?score) (?label)'
 
     - id: P9_consists_of-reversed
@@ -871,7 +871,7 @@ fields:
     
     - id: P141_assigned
       label: Assigned
-      description: The entity to which has been assigned
+      description: The entity has been assigned
       datatype: xsd:anyURI
       minOccurs: 0
       maxOccurs: 1
@@ -882,6 +882,62 @@ fields:
         - insert: 'INSERT {
             $subject crm:P141_assigned ?value .
           } WHERE {}'
+    
+    - id: P141_assigned_publication
+      label: Publication
+      description: The publication which has been assigned
+      datatype: xsd:anyURI
+      minOccurs: 0
+      maxOccurs: 1
+      queries:
+        - select: 'SELECT ?value WHERE {
+            $subject crm:P141_assigned ?value .
+          }'
+        - insert: 'INSERT {
+            $subject crm:P141_assigned ?value .
+          } WHERE {}'
+        - autosuggestion: '
+            SELECT DISTINCT ?value ?label WHERE {
+              ?value a search:BibliographicItem ;
+                rdfs:label ?label .
+              ?label bds:search ?__token__ ;
+                bds:relevance ?score ; 
+                bds:matchAllTerms "true"
+            } ORDER BY DESC(?score)
+            LIMIT 10'
+
+    - id: P177_assigned_property_of_type
+      label: Assigned property of type
+      description: The property to which the assigned attribute denotes
+      datatype: xsd:anyURI
+      queries:
+        - select: 'SELECT ?value WHERE {
+            $subject crm:P177_assigned_property_of_type ?value .
+          }'
+        - insert: 'INSERT {
+            $subject crm:P177_assigned_property_of_type ?value .
+          } WHERE {}'
+
+    - id: page_number_for_assigned_reference
+      label: Page Number
+      description: The page number, or other identifier where the reference is found
+      datatype: xsd:string
+      minOccurs: 0
+      maxOccurs: 1
+      queries:
+        - select: 'SELECT ?value WHERE {
+            $subject crm:P1_is_identified_by ?pageNr .
+            ?pageNr crm:P2_has_type aat:300445022 ;
+              rdfs:label ?value
+            }'
+        - insert: 'INSERT {
+            $subject crm:P1_is_identified_by ?pageNr .
+            ?pageNr a crm:E42_Identifier ;
+              crm:P2_has_type aat:300445022 ;
+              rdfs:label ?value
+          } WHERE {
+            BIND(URI(CONCAT(STR(?subject), "/pageNr")) AS ?pageNr)
+          }'
 
     - id: role_for_contributor
       label: role
@@ -928,7 +984,7 @@ fields:
                 skos:broader ?parent ;
                 skos:prefLabel ?label .
               BIND(false AS ?hasChildren)
-              FILTER REGEX(STR(?label), ?__token__, \"i\")
+              FILTER REGEX(STR(?label), ?__token__, "i")
             } ORDER BY DESC (?score) (?label)'
 
     - id : see_also

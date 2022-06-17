@@ -63,6 +63,9 @@
                         <bs-tab event-key="entity_sameas" title="[[i18n "externalLinks" bundle="bso"]]">
                             [[> entity_sameas]]
                         </bs-tab>
+                        <bs-tab event-key="entity_references" title="[[i18n "references" bundle="bso"]]">
+                            [[> entity_references]]
+                        </bs-tab>
                     </bs-tabs>
                 </template>
             </semantic-if>
@@ -88,6 +91,9 @@
                         </bs-tab>
                         <bs-tab event-key="entity_labels" title="[[i18n "labels" bundle="bso"]]">
                             [[> entity_labels]]
+                        </bs-tab>
+                        <bs-tab event-key="entity_references" title="[[i18n "references" bundle="bso"]]">
+                            [[> entity_references]]
                         </bs-tab>
                         <bs-tab event-key="entity_sameas" title="[[i18n "externalLinks" bundle="bso"]]">
                             [[> entity_sameas]]
@@ -155,6 +161,40 @@
             
             <semantic-form-text-input for="rdfs_label_as_P141_to_proposition_subject" languages='["de", "fr", "it", "en"]'></semantic-form-text-input>
             
+            <button name="submit" class="btn btn-primary btn-md">[[i18n "save" bundle="bso"]]</button>
+        </semantic-form>
+    </div>
+</div>
+[[/inline]]
+
+[[#* inline "entity_references"]]
+<div class="bso-component separator next-step">
+    <div class="bso-component form-content">
+        [[i18n "references" bundle="bso"]]
+        <semantic-form
+            subject="[[urlParam "subjectiri"]]"
+            new-subject-template="[[>thisIri]]/proposition/{{UUID}}"
+            fields='[[> partial:fieldDefinitions ]]'
+            post-action='[[> thisIri]]'
+            urlqueryparam-view='page'
+        >
+            <semantic-form-hidden-input for="I4_Proposition_Set_about_Subject" replace-value="/container/context"></semantic-form-hidden-input>
+            <semantic-form-hidden-input for="container_form_id" replace-value="[[ resolvePrefix "page:addEditDataForEntity"]]#entity_references"></semantic-form-hidden-input>
+
+            <semantic-form-hidden-input for="type" replace-value="[[resolvePrefix "crm:E13_Attribute_Assignment"]]"></semantic-form-hidden-input>
+            <semantic-form-hidden-input for="type" replace-value="[[resolvePrefix "oa:Annotation"]]"></semantic-form-hidden-input>
+            <semantic-form-hidden-input for="P140_assigned_attribute_to" replace-value="[[> thisIri]]"></semantic-form-hidden-input>
+            <semantic-form-hidden-input for="P177_assigned_property_of_type" replace-value="[[resolvePrefix "crm:P67_refers_to"]]"></semantic-form-hidden-input>
+
+            
+            <semantic-form-autocomplete-input droppable='{
+                    "query": "ASK { ?subject a frbroo:F24_Publication_Expression }"
+                }'
+                for="P141_assigned_publication">
+            </semantic-form-autocomplete-input>
+            <semantic-form-text-input for="page_number_for_assigned_reference"></semantic-form-text-input>
+            <semantic-form-text-input for="rdfs_label"></semantic-form-text-input>
+        
             <button name="submit" class="btn btn-primary btn-md">[[i18n "save" bundle="bso"]]</button>
         </semantic-form>
     </div>
