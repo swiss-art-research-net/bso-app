@@ -1411,7 +1411,13 @@
             }
             BIND(URI(STRBEFORE(STR(?g), '/context')) as ?container)
             ?parentContainer ldp:contains ?container .
-            VALUES (?type) {(search:Person) (search:Place) (search:Event )}}" then="{{> template}}">
+            VALUES (?type) {
+                (search:Person) 
+                (search:Place) 
+                (search:Event)
+                (search:BibliographicItem)
+                }
+            }" then="{{> template}}">
             <template id="template">
                 <semantic-query
                     query="SELECT ?type ?editForm WHERE {
@@ -1420,6 +1426,7 @@
                             (search:Person page:editPerson)
                             (search:Place page:editPlace)
                             (search:Event page:editEvent)
+                            (search:BibliographicItem page:editBibliographicItem)
                         }
                     } LIMIT 1"
                     template="{{> template-edit-button}}"

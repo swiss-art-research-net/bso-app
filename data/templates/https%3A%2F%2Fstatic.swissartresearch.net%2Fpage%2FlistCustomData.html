@@ -127,6 +127,10 @@
             iri="page:editEvent">
             <button class="btn btn-primary btn-md">[[i18n "addNewEvent" bundle="bso"]]</button>
         </semantic-link>
+        <semantic-link
+            iri="page:editBibliographicItem">
+            <button class="btn btn-primary btn-md">[[i18n "addNewBibliographicItem" bundle="bso"]]</button>
+        </semantic-link>
     </div>
     <semantic-table
         query="SELECT ?subject ?type ?editPage WHERE {
@@ -139,8 +143,9 @@
                 (search:Person page:editPerson)
                 (search:Place page:editPlace)
                 (search:Event page:editEvent)
+                (search:BibliographicItem page:editBibliographicItem)
             }
-        }"
+        } ORDER BY ?subject"
         column-configuration='[{
             "displayName": "[[i18n "entity" bundle="bso"]]",
             "variableName": "subject",

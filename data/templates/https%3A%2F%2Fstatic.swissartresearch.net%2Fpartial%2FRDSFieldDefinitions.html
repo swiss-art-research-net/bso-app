@@ -3991,35 +3991,30 @@ SELECT DISTINCT ?value ?label WHERE {
     "description": "This field is used to indicate the main name attributed to the documented bibliographic item. No part break down of name is here implied. The full name of an individual is expected here where available.",
     "domain": "frbroo:F24_Publication_Expression",
     "xsdDatatype": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString",
-    "selectPattern": "SELECT distinct ?value ?label
-WHERE {
-  $subject a frbroo:F24_Publication_Expression.
-  ?subject crm:P1_is_identified_by ?appellation_iri . 
-  ?appellation_iri a crm:E41_Appellation.
-  ?appellation_iri crm:P2_has_type ?appellation_type.
-  ?appellation_type rdfs:label \"Preferred Title\".
-      ?appellation_iri rdfs:label ?title.
-     ?appellation_iri crm:P72_has_language ?lang_uri.
-  ?lang_uri rdfs:label ?lang.
-  BIND(CONCAT(?title,\" (\",?lang,\")\") as ?value)
-}",
+    "selectPattern": "SELECT ?value
+    WHERE {
+      $subject rdfs:label ?value .
+      ?subject crm:P2_has_type aat:300404670 .
+    }",
     "deletePattern": "DELETE {
   ?subject rdfs:label ?value.
 } where { 
   ?subject rdfs:label ?value.
 }",
     "insertPattern": "INSERT { 
-  ?subject rdfs:label ?value.
-  ?subject crm:P2_has_type ?appellation_type.
-  ?appellation_type rdfs:label \"Preferred Title\".
-  ?subject <http://www.cidoc-crm.org/cidoc-crm/P72_has_language> ?language_iri. 
-      ?language_iri a <http://www.cidoc-crm.org/cidoc-crm/E56_Language>. 
-}   
-WHERE {
-      BIND(lang(?value) as ?lang).
-      ?language_iri <http://www.cidoc-crm.org/cidoc-crm/P3_has_note> ?lang.
-      BIND(IRI(CONCAT(STR($subject),\"/type/\", MD5(\"Preferred Title\"))) as ?appellation_type).
-}"
+      ?parent rdfs:label ?value .
+      ?subject rdfs:label ?value.
+      ?subject crm:P2_has_type aat:300404670 .
+      ?subject crm:P72_has_language ?language_iri. 
+      ?language_iri a crm:E56_Language . 
+    } WHERE {
+      OPTIONAL {
+        BIND(lang(?value) as ?lang).
+        BIND(URI(CONCAT(\"https://resource.swissartresearch.net/type/language/\", ?lang)) as ?language_iri)
+        ?language_iri rdfs:label ?lang.
+      }
+      BIND(URI(STRBEFORE(STR($subject), \"/title\")) as ?parent)
+    }"
 }
 [[/inline]]
 
@@ -6052,7 +6047,7 @@ INSERT {
     "id": "Identifier_Value",
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Identifier_Value",
     "label": "Identifier",
-    "description": "The Organizations/Institutions providing the Identifiers",
+    "description": "This field is used to indicate an identifier attributed to the documented instance",
     "domain": "http://www.cidoc-crm.org/cidoc-crm/E21_Person",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#string",
     "minOccurs": "1",
@@ -6851,50 +6846,34 @@ SELECT ?value ?label WHERE {
 [[/inline]]
 
 
-[[#*inline "Bilbiographic_Item_Title_Part"]]
+[[#*inline "Bibliographic_Item_Title_Part"]]
 {
-    "id": "Bilbiographic_Item_Title_Part",
-    "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Bilbiographic_Item_Title_Part",
+    "id": "Bibliographic_Item_Title_Part",
+    "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Bibliographic_Item_Title_Part",
     "label": "Bilbiographic Item Title Part",
     "description": "This field is used to indicate the main name attributed to the documented bibliographic item. No part break down of name is here implied. The full name of an individual is expected here where available.",
     "domain": "http://www.cidoc-crm.org/cidoc-crm/E33_Linguistic_Object",
     "xsdDatatype": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString",
-    "selectPattern": "SELECT distinct ?value ?label
-WHERE {
-  $subject a crm:E33_Linguistic_Object.
-  ?subject crm:P1_is_identified_by ?appellation_iri . 
-  ?appellation_iri crm:P106_is_composed_of ?part_uri. 
-  ?part_uri a crm:E41_Appellation.
-  ?part_uri crm:P2_has_type ?appellation_type.
-  ?appellation_type rdfs:label \"Part of Title\".
-  ?part_uri rdfs:label ?title.
-  ?part_uri crm:P72_has_language ?lang_uri.
-  ?lang_uri rdfs:label ?lang.
-  BIND(CONCAT(?title,\" (\",?lang,\")\") as ?value)
-}",
-    "deletePattern": "DELETE {
-  ?subject crm:P106_is_composed_of ?part_uri. 
-} where { 
-  ?subject crm:P106_is_composed_of ?part_uri. 
-  ?part_uri a crm:E41_Appellation.
-  ?part_uri crm:P2_has_type ?part_uri_type.
-  ?part_uri_type rdfs:label \"Part of Title\".
-  ?part_uri rdfs:label ?value.
-}",
+    "selectPattern": "SELECT ?value
+      WHERE {
+        ?subject crm:P106_is_composed_of ?part_uri .
+        ?part_uri a crm:E41_Appellation ;
+          rdfs:label ?value .
+      }",
     "insertPattern": "INSERT { 
-  ?subject crm:P106_is_composed_of ?part_uri. 
-  ?part_uri a crm:E41_Appellation.
-  ?part_uri crm:P2_has_type ?part_uri_type.
-  ?part_uri_type rdfs:label \"Part of Title\".
-  ?part_uri rdfs:label ?value.
-  ?part_uri <http://www.cidoc-crm.org/cidoc-crm/P72_has_language> ?language_iri. 
-  ?language_iri a <http://www.cidoc-crm.org/cidoc-crm/E56_Language>. 
-}   
-WHERE {
-      BIND(IRI(CONCAT(STR($subject),\"/type/\", MD5(\"Part of Title\"))) as ?part_uri_type).
+      ?subject crm:P106_is_composed_of ?part_uri. 
+      ?part_uri a crm:E41_Appellation.
+      ?part_uri crm:P2_has_type aat:300312006 .
+      ?part_uri rdfs:label ?value.
+      ?part_uri crm:P72_has_language ?language_iri. 
+      ?language_iri a crm:E56_Language . 
+    } WHERE {
       BIND(IRI(CONCAT(STR($subject),\"/appellation/\", MD5(str(?value)))) as ?part_uri).
-      BIND(lang(?value) as ?lang)
-      ?language_iri <http://www.cidoc-crm.org/cidoc-crm/P3_has_note> ?lang.
+      OPTIONAL {
+        BIND(lang(?value) as ?lang)
+        BIND(URI(CONCAT(\"https://resource.swissartresearch.net/type/language/\", ?lang)) as ?language_iri)
+        ?language_iri rdfs:label ?lang.
+      }
 }"
 }
 [[/inline]]
@@ -8439,27 +8418,25 @@ INSERT {
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Bibliographic_Item_Title",
     "label": "Bibliographic Item Title",
     "description": "This field is used to indicate the main name attributed to the documented bibliographic item. No part break down of name is here implied. The full name of an individual is expected here where available.",
+    "minOccurs": "1",
     "domain": "frbroo:F24_Publication_Expression",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#anyURI",
-    "selectPattern": "SELECT distinct ?value ?label
-WHERE {
-  $subject a frbroo:F24_Publication_Expression.
-  ?subject crm:P1_is_identified_by ?appellation_iri . 
-  ?appellation_iri a crm:E41_Appellation.
-  ?appellation_iri crm:P2_has_type ?appellation_type.
-  ?appellation_type rdfs:label \"Preferred Title\".
-      ?appellation_iri rdfs:label ?value.   
-}",
-    "deletePattern": "DELETE {
-?subject crm:P1_is_identified_by ?value. 
-  } where { 
-?subject crm:P1_is_identified_by ?value. 
-  ?value a crm:E41_Appellation.
-}",
-    "insertPattern": "INSERT { 
-  ?subject crm:P1_is_identified_by ?value. 
-  ?value a crm:E41_Appellation.
-} WHERE {}"
+    "selectPattern": "SELECT ?value 
+      WHERE {
+        ?subject crm:P1_is_identified_by ?value.  
+        ?value a crm:E41_Appellation. 
+      }",
+      "deletePattern": "DELETE {
+        ?subject crm:P1_is_identified_by ?value. 
+        ?value a crm:E41_Appellation.
+      } where { 
+        ?subject crm:P1_is_identified_by ?value. 
+        ?value a crm:E41_Appellation.
+      }",
+      "insertPattern": "INSERT { 
+        ?subject crm:P1_is_identified_by ?value. 
+        ?value a crm:E41_Appellation.
+      } WHERE {}"
 }
 [[/inline]]
 
@@ -9402,7 +9379,7 @@ SELECT ?value ?label WHERE {
     "id": "Identifier_Bibliographic_Item",
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Identifier_Bibliographic_Item",
     "label": "Identifier (Bibliographic Item)",
-    "description": "An identifier for the person",
+    "description": "An identifier for the bibliographic item",
     "domain": "frbroo:F24_Publication_Expression",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#anyURI",
     "selectPattern": "SELECT ?value ?label WHERE {

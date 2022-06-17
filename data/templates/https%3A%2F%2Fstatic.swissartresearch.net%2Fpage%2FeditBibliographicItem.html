@@ -1,0 +1,128 @@
+[[> partial:RDSFieldDefinitions]]
+
+[[#if (urlParam "overlay")]]
+[[else]]
+    [[> partial:pageHeader]]
+[[/if]]
+
+[[#*inline "thisIri"]][[urlParam "entityiri"]][[/inline]]
+
+[[#*inline "thisForQuery"]]
+    <[[> thisIri]]>
+[[/inline]]
+
+<div class="d-flex flex-md-row flex-column">
+    <div class="bso-component separator sidebar image-display">
+
+        <img src="/assets/icons/book-solid.svg" width="200">
+    </div>
+    <div class="bso-component main">
+        <div class="bso-component panel">
+            [[#if (hasPermission "api:ldp:*")]]
+                [[> edit-bibliographic-item-form edit=(urlParam "entityiri")]]
+            [[else]]
+                <bs-alert variant="warning">
+                    [[i18n "noPermissionToAccessPage" bundle="bso"]]
+                </bs-alert>
+            [[/if]]
+        </div>
+    </div>
+</div>
+
+[[#*inline "edit-bibliographic-item-form"]]
+    [[#if edit]]
+        <h2>[[i18n "edit" bundle="bso"]] <mp-label iri="[[> thisIri]]"></mp-label></h2>
+    [[else]]
+        <h2>[[i18n "addNewBibliographicItem" bundle="bso"]]</h2>
+    [[/if]]
+
+    <semantic-form
+        id="addNewBibliographicItem"
+        [[#if edit]]
+            subject="[[> thisIri]]"
+        [[else]]
+            new-subject-template="https://resource.swissartresearch.net/bibliographicItem/{{UUID}}"
+        [[/if]]
+        persistence="ldp"
+        form-id="bibliographicEntity"
+        [[#if (urlParam "redirect")]]
+            post-action="[[ urlParam "redirect"]]"
+        [[else]]
+            post-action="redirect"
+        [[/if]]
+        browser-persistence="True"
+        fields='[
+            [[> Type-hidden]],
+            [[> Bibliographic_Item_Title]],
+            [[> Identifier_Bibliographic_Item]]
+        ]'
+    >
+
+        <semantic-form-recover-notification></semantic-form-recover-notification>
+
+        <semantic-form-hidden-input for="Type-hidden" replace-values='["[[resolvePrefix 'frbroo:F24_Publication_Expression']]", "[[resolvePrefix 'search:BibliographicItem']]", "[[resolvePrefix 'rds:BibliographicItem']]"]'></semantic-form-hidden-input>
+     
+        <semantic-form-composite-input 
+            for="Bibliographic_Item_Title"
+            new-subject-template="/title/{{UUID}}"
+            fields='[
+            [[> Bibliographic_Item_Title_Value]],
+            [[> Bibliographic_Item_Title_Part]]
+            ]'>
+            <semantic-form-text-input 
+                for="Bibliographic_Item_Title_Value"
+                languages='["en","de","fr","it","sp","ca","cs","da","nl","fi","gr","hu","no","pt","sv","ru","jp","ko"]'>
+            </semantic-form-text-input>
+            <semantic-form-text-input 
+                for="Bibliographic_Item_Title_Part"
+                languages='["en","de","fr","it","sp","ca","cs","da","nl","fi","gr","hu","no","pt","sv","ru","jp","ko"]'>
+            </semantic-form-text-input>
+        </semantic-form-composite-input>
+
+        <semantic-form-composite-input 
+            for="Identifier_Bibliographic_Item"
+            new-subject-template="/identifier/{{UUID}}"
+            fields='[
+                [[> Identifier_Source]],
+                [[> Identifier_Type]],
+                [[> Identifier_Provider]],
+                [[> Identifier_Value]]
+            ]'>
+                <semantic-form-text-input for="Identifier_Value"></semantic-form-text-input>
+                <semantic-form-text-input for="Identifier_Source"></semantic-form-text-input>
+                <semantic-form-text-input for="Identifier_Type"></semantic-form-text-input>
+                <semantic-form-text-input for="Identifier_Provider"></semantic-form-text-input>
+        </semantic-form-composite-input>
+
+        <semantic-form-errors></semantic-form-errors>
+        <div class="bso-component button-set">
+            [[#if edit]]
+                <semantic-link
+                    iri="[[edit]]"
+                >
+                    <button class="btn btn-secondary">[[i18n "cancel" bundle="bso"]]</button>
+                </semantic-link>
+            [[else]]
+                <button name='reset' class='btn btn-secondary'>[[i18n "reset" bundle="bso"]]</button>
+            [[/if]]
+            <button name='submit' class='btn btn-primary'>[[i18n "save" bundle="bso"]]</button>
+        </div>
+    </semantic-form>
+[[/inline]]
+
+
+[[#*inline "autocompletionTemplate"]]
+<template id='autocompletionTemplate'>
+    [[> partial:lookupCandidateTemplate]]
+</template>
+[[/inline]]
+
+[[#*inline "addNewPersonButton"]]
+<semantic-link
+iri="page:editPerson"
+target="_blank">
+    <button class="btn btn-secondary btn-xs">[[i18n "createNewPerson" bundle="bso"]]</button>
+</semantic-link>
+[[/inline]]
+
+[[> partial:pageFooter]]
