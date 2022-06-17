@@ -646,11 +646,13 @@
         BIND(<[[>thisIri]]/meta> as ?meta)
         {
             [[> thisForQuery]] crm:P108i_was_produced_by ?event .
-            BIND(crm:E12_Production as ?global_role)
+            ?event a ?global_role .
+            ?global_role rdfs:subClassOf* crm:E12_Production .
         } UNION 
         {
             [[> thisForQuery]] (crm:P128_carries?/crm:P94i_was_created_by) ?event .
-            BIND(crm:E65_Creation as ?global_role)
+            ?event a ?global_role .
+            ?global_role rdfs:subClassOf* crm:E65_Creation .
         }
         {
             ?event crm:P14_carried_out_by ?subject .

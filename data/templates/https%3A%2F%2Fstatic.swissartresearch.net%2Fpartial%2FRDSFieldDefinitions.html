@@ -1165,27 +1165,19 @@ WHERE {
     "domain": "crm:E53_Place",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#anyURI",
     "selectPattern": "PREFIX frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/>
-SELECT distinct ?value ?label
+SELECT ?value ?label
 WHERE {
-  ?subject frbroo:R24_created ?pub_event. 
-  ?pub_event a frbroo:F30_Publication_Event. 
-  ?pub_event crm:P7_took_place_at ?value. 
-  ?value a crm:E53_Place.
-  ?value rdfs:label ?place.
-  ?pub_event crm:P4_has_time-span ?timespan_uri.
-  ?timespan_uri crm:P82a_begin_of_the_begin ?earliest.
-  ?timespan_uri crm:P82b_end_of_the_end ?latest. 
-  BIND(CONCAT(?place, \" from: \",str(?earliest),\" until: \",str(?latest)) as ?label)
+  ?subject crm:P7_took_place_at ?value. 
 }",
     "deletePattern": "DELETE {
-  ?subject crm:P7_took_place_at ?value. 
-  } where { 
-?subject crm:P7_took_place_at ?value. 
+      ?subject crm:P7_took_place_at ?value. 
+    } where { 
+      ?subject crm:P7_took_place_at ?value. 
       ?value a crm:E53_Place.
-}",
+    }",
     "insertPattern": "INSERT { 
-  ?subject crm:P7_took_place_at ?value. 
-} WHERE {}",
+      ?subject crm:P7_took_place_at ?value. 
+    } WHERE {}",
     "autosuggestionPattern": "SELECT ?value ?label WHERE {
   ?value a crm:E53_Place.
   ?value rdfs:label ?label.
