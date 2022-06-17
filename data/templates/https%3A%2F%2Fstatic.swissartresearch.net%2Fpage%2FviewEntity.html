@@ -23,7 +23,9 @@
 <div class="bso-component main">
     <div class="bso-component panel">
         <div class="bso-component gap">
-            <h2><mp-label iri="[[> thisIri]]"></mp-label></h2>
+            <mp-draggable iri="[[> thisIri]]">
+                <h2><mp-label iri="[[> thisIri]]"></mp-label></mp-draggable></h2>
+            </mp-draggable>
 
             [[> component-description]]
             [[#if entityiri]]
