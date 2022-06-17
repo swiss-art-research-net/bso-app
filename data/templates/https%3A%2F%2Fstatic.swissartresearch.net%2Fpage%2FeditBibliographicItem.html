@@ -81,20 +81,6 @@
         </semantic-form-composite-input>
 
         <semantic-form-composite-input 
-            for="Identifier_Bibliographic_Item"
-            new-subject-template="/identifier/{{UUID}}"
-            fields='[
-                [[> Identifier_Source]],
-                [[> Identifier_Type]],
-                [[> Identifier_Provider]],
-                [[> Identifier_Value]]
-            ]'>
-                <semantic-form-text-input for="Identifier_Value"></semantic-form-text-input>
-                <semantic-form-text-input for="Identifier_Source"></semantic-form-text-input>
-                <semantic-form-text-input for="Identifier_Type"></semantic-form-text-input>
-                <semantic-form-text-input for="Identifier_Provider"></semantic-form-text-input>
-        </semantic-form-composite-input>
-        <semantic-form-composite-input 
             for="Bibliographic_Item_Publication"
             new-subject-template="/publication"
             fields='[
@@ -128,6 +114,22 @@
                     for="Bibliographic_Item_Publication_Date_Latest">
             </semantic-form-text-input>        
         </semantic-form-composite-input>
+
+        <semantic-form-composite-input 
+            for="Identifier_Bibliographic_Item"
+            new-subject-template="/identifier/{{UUID}}"
+            fields='[
+                [[> Identifier_Source]],
+                [[> Identifier_Type]],
+                [[> Identifier_Provider]],
+                [[> Identifier_Value]]
+            ]'>
+                <semantic-form-text-input for="Identifier_Value"></semantic-form-text-input>
+                <semantic-form-text-input for="Identifier_Source"></semantic-form-text-input>
+                <semantic-form-text-input for="Identifier_Type"></semantic-form-text-input>
+                <semantic-form-text-input for="Identifier_Provider"></semantic-form-text-input>
+        </semantic-form-composite-input>
+
         <semantic-form-errors></semantic-form-errors>
         <div class="bso-component button-set">
             [[#if edit]]
