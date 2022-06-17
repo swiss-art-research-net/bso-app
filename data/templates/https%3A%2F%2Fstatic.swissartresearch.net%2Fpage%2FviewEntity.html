@@ -706,7 +706,7 @@
 <semantic-query
     query="SELECT DISTINCT ?subject ?eventType ?typeClass WHERE {
         {
-            [[> thisForQuery]] (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P9_consists_of? ?event .
+            [[> thisForQuery]] (crm:P108i_was_produced_by|(crm:P128_carries?/crm:P94i_was_created_by))/crm:P9_consists_of? ?event .
             ?event crm:P7_took_place_at ?subject .
             ?event a ?eventType .
         } UNION {
