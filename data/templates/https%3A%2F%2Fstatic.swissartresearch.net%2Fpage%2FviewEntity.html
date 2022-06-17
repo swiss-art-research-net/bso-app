@@ -515,7 +515,7 @@
 [[#*inline "field-visualisation-events-carrying-out"]]
 <semantic-query
     query="SELECT DISTINCT ?subject WHERE {
-        ?subject a crm:E5_Event ;
+        ?subject a search:Event ;
             crm:PC01_is_domain_of/crm:PC02_has_range [[> thisForQuery]] .
     }"
     template="{{> template}}">
@@ -612,7 +612,7 @@
 [[#*inline "field-visualisation-persons-carrying-out-event"]]
 <semantic-query
     query="SELECT DISTINCT ?subject (GROUP_CONCAT(DISTINCT ?role; SEPARATOR=' ') as ?roles) WHERE {
-        [[> thisForQuery]] a crm:E5_Event ;
+        [[> thisForQuery]] a search:Event ;
             crm:PC01_is_domain_of ?pc14 .
         ?pc14 crm:PC02_has_range ?subject .
         OPTIONAL {
@@ -1111,7 +1111,7 @@
 <semantic-if
     query='ASK {
         BIND([[> thisForQuery]] as ?s)
-        ?s a crm:E5_Event .
+        ?s a search:Event .
     }'
     then='{{> eventNetworkTemplate}}'
 >
