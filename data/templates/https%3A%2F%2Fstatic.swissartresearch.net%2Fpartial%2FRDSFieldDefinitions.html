@@ -106,7 +106,7 @@ WHERE{
 {
     "id": "Bibliographic_Item_Identifier",
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Bibliographic_Item_Identifier",
-    "label": "Bibliographic Item Identifier",
+    "label": "Identifier",
     "description": "This field is used to indicate the identification number for a library item carrying this bibliographic item.",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#string",
     "minOccurs": "0",
@@ -526,7 +526,7 @@ WHERE {
 {
     "id": "Bibliographic_Item_Temporal_Reference",
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Bibliographic_Item_Temporal_Reference",
-    "label": "Bibliographic Item Temporal Reference",
+    "label": "Temporal Reference",
     "description": "This field is used to indicate the temporal coverage associated with the documented bibliographic item. It is meant to capture the temporal area to which this item can be associated as having relevance.",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#string",
     "selectPattern": "SELECT ?value ?label WHERE {
@@ -745,7 +745,7 @@ WHERE {
 {
     "id": "Bibliographic_Item_Author",
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Bibliographic_Item_Author",
-    "label": "Bibliographic Item Author",
+    "label": "Author",
     "description": "This field is used to indicate the publisher of the bibliographic item.",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#string",
     "selectPattern": "SELECT ?value WHERE {
@@ -935,7 +935,7 @@ SELECT ?value ?label WHERE {
 {
     "id": "Bibliographic_Item_Role",
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Bibliographic_Item_Role",
-    "label": "Bibliographic Item Role",
+    "label": "Role",
     "description": "This field is used to indicate the publisher of the bibliographic item.",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#string",
     "deletePattern": "DELETE { $subject crm:P01_has_domain ?carried_uri.} WHERE {
@@ -1160,7 +1160,7 @@ WHERE {
 {
     "id": "Bibliographic_Item_Publication_Place",
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Bibliographic_Item_Publication_Place",
-    "label": "Bibliographic Item Publication Place",
+    "label": "Publication Place",
     "description": "This field is used to indicate the place of birth of the documented bibliographic item.",
     "domain": "crm:E53_Place",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#anyURI",
@@ -1481,7 +1481,7 @@ INSERT {
 {
     "id": "Bibliographic_Item_Type",
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Bibliographic_Item_Type",
-    "label": "Bibliographic Item Type",
+    "label": "Type",
     "domain": "frbroo:F24_Publication_Expression",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#string",
     "selectPattern": "SELECT ?value ?label WHERE {
@@ -1640,7 +1640,7 @@ SELECT DISTINCT ?value ?label WHERE {
 {
     "id": "Bibliographic_Item_Present_Item_Location_-_Institution",
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Bibliographic_Item_Present_Item_Location_-_Institution",
-    "label": "Bibliographic Item Present Item Location - Institution",
+    "label": "Present Item Location - Institution",
     "description": "This field is used to document the institution at which the documented artwork is presently located.",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#string",
     "minOccurs": "0",
@@ -1983,7 +1983,7 @@ SELECT DISTINCT ?value WHERE {
 {
     "id": "Bibliographic_Item_Present_Item_Location_-_Institutional_Address",
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Bibliographic_Item_Present_Item_Location_-_Institutional_Address",
-    "label": "Bibliographic Item Present Item Location - Institutional Address",
+    "label": "Present Item Location - Institutional Address",
     "description": "This field is used to document the address of the institution at which the documented artwork is presently located.",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#string",
     "minOccurs": "0",
@@ -2727,7 +2727,7 @@ INSERT {
 {
     "id": "Bibliographic_Item_ID",
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Bibliographic_Item_ID",
-    "label": "Bibliographic Item ID",
+    "label": "ID",
     "description": "This field is used to indicate the identification number for a library item carrying this bibliographic item.",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#anyURI",
     "minOccurs": "0",
@@ -2788,7 +2788,7 @@ SELECT ?value ?label WHERE {
 {
     "id": "Bibliographic_Item_Subject_Reference",
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Bibliographic_Item_Subject_Reference",
-    "label": "Bibliographic Item Subject Reference",
+    "label": "Subject Reference",
     "description": "This field is used to indicate the subject of representation of the documented archival item. It is meant to capture general subject areas, not particular individual items represented.",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#string",
     "selectPattern": "SELECT ?value ?label WHERE {
@@ -3190,7 +3190,7 @@ WHERE {
 {
     "id": "Bibliographic_Item_Owner",
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Bibliographic_Item_Owner",
-    "label": "Bibliographic Item Owner",
+    "label": "Owner",
     "description": "This field is used to indicate the institution possessing the library item carrying this bibliographic item.",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#string",
     "minOccurs": "0",
@@ -3395,7 +3395,7 @@ WHERE{
 {
     "id": "Bibliographic_Item_Physical_Geographic_Reference",
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Bibliographic_Item_Physical_Geographic_Reference",
-    "label": "Bibliographic Item Physical Geographic Reference",
+    "label": "Physical Geographic Reference",
     "description": "This field is used to indicate the geographic coverage associated with the documented bibliographic item. It is meant to capture the geographic area to which this item can be associated as having relevance.",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#string",
     "selectPattern": "SELECT ?value ?label WHERE {
@@ -3445,7 +3445,7 @@ WHERE {
 {
     "id": "Bibliographic_Item_Publication_Date_Latest",
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Bibliographic_Item_Publication_Date_Latest",
-    "label": "Bibliographic Item Publication Date (latest)",
+    "label": "Publication Date (latest)",
     "description": "This field is used to indicate the latest known date for the birth of the documented bibliographic item.",
     "domain": "crm:E52_Time-span",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#year",
@@ -3647,7 +3647,7 @@ WHERE {
 {
     "id": "Bibliographic_Item_Language",
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Bibliographic_Item_Language",
-    "label": "Bibliographic Item Language",
+    "label": "Language",
     "description": "This field is used to indicate the language of the documented bibliographic item.",
     "selectPattern": "SELECT DISTINCT ?value  WHERE {
   $subject crm:P72_has_language ?value.
@@ -3965,7 +3965,7 @@ SELECT DISTINCT ?value ?label WHERE {
 {
     "id": "Bibliographic_Item_Title_Value",
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Bibliographic_Item_Title_Value",
-    "label": "Bibliographic Item Title",
+    "label": "Title",
     "description": "This field is used to indicate the main name attributed to the documented bibliographic item. No part break down of name is here implied. The full name of an individual is expected here where available.",
     "domain": "frbroo:F24_Publication_Expression",
     "xsdDatatype": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString",
@@ -4598,7 +4598,7 @@ WHERE{
 {
     "id": "Bibliographic_Item_Publisher",
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Bibliographic_Item_Publisher",
-    "label": "Bibliographic Item Publisher",
+    "label": "Publisher",
     "description": "This field is used to indicate the publisher of the bibliographic item.",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#string", 
     "selectPattern": "SELECT ?value WHERE {
@@ -5244,7 +5244,7 @@ INSERT {
 {
     "id": "Bibliographic_Item_Part_Of",
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Bibliographic_Item_Part_Of",
-    "label": "Bibliographic Item Part Of",
+    "label": "Part Of",
     "description": "This field is used to indicate the belonging of the particular bibliographic item to a larger bibliographic unit, such as the relation between a chapter and a book, an article and a journal issue etc.",
     "domain": "frbroo:F24_Publication_Expression",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#anyURI",
@@ -5863,7 +5863,7 @@ WHERE {
 {
     "id": "Bibliographic_Item_Publication_Date_Earliest",
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Bibliographic_Item_Publication_Date_Earliest",
-    "label": "Bibliographic Item Publication Date (earliest)",
+    "label": "Publication Date (earliest)",
     "description": "This field is used to indicate the earliest known date for the birth of the documented bibliographic item.",
     "domain": "crm:E52_Time-span",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#year",
@@ -6814,7 +6814,7 @@ SELECT ?value ?label WHERE {
 {
     "id": "Bibliographic_Item_Title_Part",
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Bibliographic_Item_Title_Part",
-    "label": "Bibliographic Item Title Part",
+    "label": "Title Part",
     "description": "This field is used to indicate the main name attributed to the documented bibliographic item. No part break down of name is here implied. The full name of an individual is expected here where available.",
     "domain": "http://www.cidoc-crm.org/cidoc-crm/E33_Linguistic_Object",
     "xsdDatatype": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString",
@@ -7091,7 +7091,7 @@ INSERT { ?subject  <http://www.cidoc-crm.org/cidoc-crm/P4_has_time-span> ?timesp
 {
     "id": "emxgMWwAjBsmUjgLsHUDyvSoEOMyETPuKAUDvxVy",
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/emxgMWwAjBsmUjgLsHUDyvSoEOMyETPuKAUDvxVy",
-    "label": "Bibliographic Item Language",
+    "label": "Language",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#anyURI",
     "minOccurs": "0",
     "selectPattern": "SELECT distinct ?value ?label
@@ -8101,7 +8101,7 @@ INSERT {
 {
     "id": "Bibliographic_Item_Present_Item_Location_-_Shelf",
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Bibliographic_Item_Present_Item_Location_-_Shelf",
-    "label": "Bibliographic Item Present Item Location - Shelf",
+    "label": "Present Item Location - Shelf",
     "description": "This field is used to indicate the shelf location at which a bibliographic item can be found.",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#string",
     "minOccurs": "0",
@@ -8380,7 +8380,7 @@ INSERT {
 {
     "id": "Bibliographic_Item_Title",
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Bibliographic_Item_Title",
-    "label": "Bibliographic Item Title",
+    "label": "Title",
     "description": "This field is used to indicate the main name attributed to the documented bibliographic item. No part break down of name is here implied. The full name of an individual is expected here where available.",
     "minOccurs": "1",
     "domain": "frbroo:F24_Publication_Expression",
@@ -8409,7 +8409,7 @@ INSERT {
 {
     "id": "Bibliographic_Item_Present_Item_Location_-_coordinates",
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Bibliographic_Item_Present_Item_Location_-_coordinates",
-    "label": "Bibliographic Item Present Item Location - coordinates",
+    "label": "Present Item Location - coordinates",
     "description": "This field is used to indicate the coordinates for the institution at which the documented is presently located.",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#string",
     "minOccurs": "0",
@@ -9015,7 +9015,7 @@ SELECT ?value ?label WHERE {
 {
     "id": "Bibliographic_Item_Number_of_Pages",
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Bibliographic_Item_Number_of_Pages",
-    "label": "Bibliographic Item Number of Pages",
+    "label": "Number of Pages",
     "description": "This field is used to indicate the number of pages in a volume using free text.",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#integer",
     "selectPattern": "SELECT ?value ?label WHERE {
@@ -9139,7 +9139,7 @@ INSERT {
 {
     "id": "Bibliographic_Item_Publication",
     "iri": "https://rds.swissartresearch.net/container/fieldDefinitionContainer/Bibliographic_Item_Publication",
-    "label": "Bibliographic Item Publication",
+    "label": "Publication",
     "description": "This field is used to indicate the place of birth of the documented bibliographic item.",
     "domain": "frbroo:F24_Publication_Expression",
     "minOccurs": "1",
