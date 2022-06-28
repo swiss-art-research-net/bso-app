@@ -46,7 +46,7 @@ class SmapshotEmbed extends HTMLElement {
       let height = this.getAttribute("height") || 400;
       let id = iri.substr(iri.lastIndexOf('/') + 1);
       let host = this.getAttribute("beta")  ? "https://smapshot-beta.heig-vd.ch" : "https://smapshot.heig-vd.ch";
-      this._shadowRoot.innerHTML = `<iframe src="${host}}/embed/owner/sari/original_image/${id}" width="${width}" height="${height}"></iframe>`;
+      this._shadowRoot.innerHTML = `<iframe src="${host}/embed/owner/sari/original_image/${id}" width="${width}" height="${height}"></iframe>`;
     }
   }
 
