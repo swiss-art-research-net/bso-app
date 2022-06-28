@@ -20,6 +20,12 @@
  *  height="100%">
  * </smapshot-embed>
  * 
+ * <!-- point to beta platform -->
+ * <smapshot-embed 
+ *  iri="https://resource.swissartresearch.net/artwork/nb-162431"
+ *  beta="true">
+ * </smapshot-embed>
+ * 
  */
 class SmapshotEmbed extends HTMLElement {
     constructor() {
@@ -27,18 +33,20 @@ class SmapshotEmbed extends HTMLElement {
       this._shadowRoot = this.attachShadow({mode: 'open'});
     }
     static get observedAttributes(){
-      return ["iri", "width", "height"];
+      return ["iri", "width", "height", "beta"];
     }
     attributeChangedCallback(iri, oldValue, newValue) {
       let id = newValue.substr(newValue.lastIndexOf('/') + 1);
-      this._shadowRoot.innerHTML = `<iframe src=https://smapshot.heig-vd.ch/embed/owner/sari/original_image/${id}></iframe>`;
+      let host = this.props.beta ? "https://smapshot-beta.heig-vd.ch" : "https://smapshot.heig-vd.ch";
+      this._shadowRoot.innerHTML = `<iframe src=${host}/embed/owner/sari/original_image/${id}></iframe>`;
     }
     connectedCallback(){
       let iri = this.getAttribute("iri");
       let width = this.getAttribute("width") || 600;
       let height = this.getAttribute("height") || 400;
       let id = iri.substr(iri.lastIndexOf('/') + 1);
-      this._shadowRoot.innerHTML = `<iframe src="https://smapshot.heig-vd.ch/embed/owner/sari/original_image/${id}" width="${width}" height="${height}"></iframe>`;
+      let host = this.props.beta ? "https://smapshot-beta.heig-vd.ch" : "https://smapshot.heig-vd.ch";
+      this._shadowRoot.innerHTML = `<iframe src="${host}}/embed/owner/sari/original_image/${id}" width="${width}" height="${height}"></iframe>`;
     }
   }
 
