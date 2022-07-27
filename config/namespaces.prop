@@ -32,3 +32,4 @@ smapshotapi=https://smapshot.heig-vd.ch/api/v1/
 rds=http://schema.swissartresearch.net/ontology/rds#
 clip=https://service.swissartresearch.net/clip/
 hint=http://www.bigdata.com/queryHints#
+wgs=http://www.w3.org/2003/01/geo/wgs84_pos#
