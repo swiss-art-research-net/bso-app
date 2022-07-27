@@ -67,15 +67,18 @@
                       id="map-result"
                       query="SELECT DISTINCT ?subject ?wkt WHERE {
                           hint:Query hint:optimizer 'Runtime' .
+                          ?subject crm:P128_carries?/crm:P138_represents ?place .
                           {
+                            ?place crm:P168_place_is_defined_by ?lat, ?long .
+                            FILTER(DATATYPE(?lat) = wgs:lat && DATATYPE(?long) = wgs:long) .
+                            BIND(CONCAT('POINT(', ?long, ' ', ?lat, ')') AS ?wkt0) .
+                          } UNION {
                               ?subject a search:Place ;
-                                  crmdig:L54_is_same-as/wdt:P625 ?wkt .
+                                  crmdig:L54_is_same-as/wdt:P625 ?wkt1 .
                           } UNION {
-                              ?subject crm:P128_carries?/crm:P138_represents/crmdig:L54_is_same-as/wdt:P625 ?wkt .
-                          } UNION {
-                              ?subject a search:Type ;
-                                  ^crm:P138_represents/crm:P138_represents/crmdig:L54_is_same-as/wdt:P625 ?wkt .
-                          } 
+                              ?subject crm:P128_carries?/crm:P138_represents/crmdig:L54_is_same-as/wdt:P625 ?wkt2 .
+                          }
+                          BIND(IF(BOUND(?wkt0), ?wkt0, IF(BOUND(?wkt1), ?wkt1, ?wkt2)) AS ?wkt) .
                       }
                       [[#if searchLimit]]LIMIT [[searchLimit]][[/if]]"
                       
