@@ -7,6 +7,12 @@
         $subject ?__relation__ ?date .
         FILTER(?date >= ?__dateBeginValue__ && ?date <= ?__dateEndValue__)
       }"
+    }],
+    "<http://schema.org/AdministrativeArea>": [{
+      "kind": "hierarchy",
+      "queryPattern": "{
+        $subject crm:P89_falls_within ?__value__ .
+      }"
     }]
   }'
   search-profile='{
@@ -18,7 +24,8 @@
         {"iri": "<https://platform.swissartresearch.net/search/Type>", "label": "Concept", "thumbnail": "../images/fcs/concepts.svg"},
         {"iri": "<https://platform.swissartresearch.net/search/Concept>", "label": "Concept", "thumbnail": "../images/fcs/concepts.svg"},
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E52_Time-Span>", "label": "Time", "thumbnail": "../images/fcs/dates.svg"},
-        {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E57_Material>", "label": "Material", "thumbnail": "../images/fcs/things.svg"}
+        {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E57_Material>", "label": "Material", "thumbnail": "../images/fcs/things.svg"},
+        {"iri": "<http://schema.org/AdministrativeArea>", "label": "ST Place", "thumbnail": "../images/fcs/places.svg"}
       ],
     "relations": [
       {
@@ -37,6 +44,12 @@
         "iri": "<https://platform.swissartresearch.net/Thing_depicts_Entity>",
         "hasDomain": "<https://platform.swissartresearch.net/search/Entity>",
         "hasRange": "<https://platform.swissartresearch.net/search/Entity>",
+        "label": "[[i18n "depicts" bundle="bso"]]"
+      },
+      {
+        "iri": "<https://platform.swissartresearch.net/Thing_depicts_ST_Place>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Entity>",
+        "hasRange": "<http://schema.org/AdministrativeArea>",
         "label": "[[i18n "depicts" bundle="bso"]]"
       },
       {
@@ -171,6 +184,14 @@
             hint:Query hint:optimizer \"Runtime\".
             ?subject crm:P128_carries?/crm:P138_represents ?__value__ .
             ?__value__ a/rdfs:subClassOf search:Entity .
+          }"
+      }],
+      "<https://platform.swissartresearch.net/Thing_depicts_ST_Place>": [{
+        "kind": "hierarchy",
+        "queryPattern": "{
+            hint:Query hint:optimizer \"Runtime\".
+            ?subject crm:P128_carries/crm:P138_represents/crmdig:L54_is_same-as ?__value__ .
+            ?__value__ a schema:AdministrativeArea .
           }"
       }],
       "<https://platform.swissartresearch.net/Entity_depicted_together_with_Entity>": [{

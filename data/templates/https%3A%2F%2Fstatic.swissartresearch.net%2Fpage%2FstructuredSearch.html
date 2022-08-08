@@ -20,6 +20,35 @@
                 } ORDER BY DESC(?score)",
                 "suggestionTupleTemplate": "{{> suggestionTemplate}}"
               }'
+              tree-selector='{
+                "rootsQuery": "SELECT ?item ?hasChildren WHERE {
+                  ?item gn:featureCode gn:A.ADM1 .
+                  OPTIONAL {
+                    ?child crm:P89_falls_within ?item .
+                  }
+                  BIND(BOUND(?child) AS ?hasChildren)
+                }",
+                "childrenQuery": "SELECT ?item ?hasChildren WHERE {
+                  ?item crm:P89_falls_within ?parent .
+                  OPTIONAL {
+                    ?child crm:P89_falls_within ?item .
+                  }
+                  BIND(BOUND(?child) AS ?hasChildren)
+                }",
+                "parentsQuery": "SELECT ?item ?parent WHERE {
+                  ?parent crm:P89_falls_within ?parent .
+                }",
+                "searchQuery": "SELECT ?item ?score ?label ?hasChildren WHERE {
+                  ?item a schema:AdministrativeArea ;
+                    rdfs:label ?label .
+                  ?label bds:search ?__token__ ;
+                    bds:relevance ?score .
+                  OPTIONAL {
+                    ?child crm:P89_falls_within ?item .
+                  }
+                  BIND(BOUND(?child) AS ?hasChildren)
+                } LIMIT 100"
+              }'
             >
               <template id="suggestionTemplate">
                 <mp-label iri="{{suggestion.value}}"></mp-label>
