@@ -25,7 +25,7 @@
         {"iri": "<https://platform.swissartresearch.net/search/Concept>", "label": "Concept", "thumbnail": "../images/fcs/concepts.svg"},
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E52_Time-Span>", "label": "Time", "thumbnail": "../images/fcs/dates.svg"},
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E57_Material>", "label": "Material", "thumbnail": "../images/fcs/things.svg"},
-        {"iri": "<http://schema.org/AdministrativeArea>", "label": "ST Place", "thumbnail": "../images/fcs/places.svg"}
+        {"iri": "<http://schema.org/AdministrativeArea>", "label": "Place", "thumbnail": "../images/fcs/places.svg"}
       ],
     "relations": [
       {
@@ -190,7 +190,8 @@
         "kind": "hierarchy",
         "queryPattern": "{
             hint:Query hint:optimizer \"Runtime\".
-            ?subject crm:P128_carries/crm:P138_represents/crmdig:L54_is_same-as ?__value__ .
+            ?subject crm:P128_carries/crm:P138_represents/crmdig:L54_is_same-as ?place .
+            ?place crm:P89_falls_within* ?__value__ .
             ?__value__ a schema:AdministrativeArea .
           }"
       }],
