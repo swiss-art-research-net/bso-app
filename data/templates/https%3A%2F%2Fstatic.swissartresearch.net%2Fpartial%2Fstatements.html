@@ -61,7 +61,7 @@
     </mp-event-trigger>
     &nbsp;<semantic-link iri="{{iri.value}}"><i class="fa fa-arrow-up-right-from-square-solid fa-secondary"></i></semantic-link>
 {{else}}
-    {{iri.value}}
+    {{iri.value}} <small>{{compactIri iri.datatype.value}}</small>
 {{/if}}
 [[/inline]]
 
