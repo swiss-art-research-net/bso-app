@@ -738,6 +738,46 @@
 
 [[/inline]]
 
+[[#*inline "field-visualisation-place-hierarchy"]]
+<semantic-query
+    query="SELECT DISTINCT ?subject ?type ?typeClass WHERE {
+        [[> thisForQuery]] crm:P89_falls_within ?subject .
+        ?subject a search:Place .
+    } ORDER BY ?type ?subject"
+    template="{{> template}}">
+    <template id="template">
+        <div class="bso-component field-visualisation">
+            <span class="bso-component label">[[i18n "partOf" bundle="bso"]]</span>
+            <ul class="bso-component tags">
+                {{#each bindings}}
+                    <li class="bso-tag Place"><semantic-link uri="{{subject.value}}"></semantic-link></li>
+                {{/each}}
+            </ul>
+        </div>
+    </template>
+</semantic-query>
+
+<semantic-query
+    query="SELECT DISTINCT ?subject ?type ?typeClass WHERE {
+        ?subject crm:P89_falls_within [[> thisForQuery]] ;
+            rdfs:label ?label .
+        ?subject a search:Place .
+    } ORDER BY ?label ?type ?subject"
+    template="{{> template}}">
+    <template id="template">
+        <div class="bso-component field-visualisation">
+            <span class="bso-component label">[[i18n "contains" bundle="bso"]]</span>
+            <ul class="bso-component tags">
+                {{#each bindings}}
+                    <li class="bso-tag Place"><semantic-link uri="{{subject.value}}"></semantic-link></li>
+                {{/each}}
+            </ul>
+        </div>
+    </template>
+</semantic-query>
+[[/inline]]
+
+
 [[#*inline "field-visualisation-provenience"]]
 <semantic-query 
     query="SELECT ?acquisition ?acquisition_note ?previous_owner WHERE {
@@ -879,6 +919,7 @@
         [[> field-visualisation-technique]]
         [[> field-visualisation-provenience]]
         [[> field-visualisation-inscription]]
+        [[> field-visualisation-place-hierarchy]]
 
         <!-- Objects created -->
         [[#> component-objects-table condition='?object a search:Object; (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P9_consists_of?/crm:P14_carried_out_by $subject' label='works']]
