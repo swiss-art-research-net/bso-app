@@ -67,9 +67,11 @@
                       id="map-result"
                       query="SELECT DISTINCT ?subject ?wkt WHERE {
                           hint:Query hint:optimizer 'Runtime' .
-                          ?subject crm:P128_carries?/crm:P138_represents ?place .
                           {
-                            ?place crm:P168_place_is_defined_by ?lat, ?long .
+                            ?subject crm:P128_carries?/crm:P138_represents ?place .
+                            GRAPH <https://resource.swissartresearch.net/graph/smapshot> {
+                              ?place crm:P168_place_is_defined_by ?lat, ?long .
+                            }
                             FILTER(DATATYPE(?lat) = wgs:lat && DATATYPE(?long) = wgs:long) .
                             BIND(CONCAT('POINT(', ?long, ' ', ?lat, ')') AS ?wkt0) .
                           } UNION {
