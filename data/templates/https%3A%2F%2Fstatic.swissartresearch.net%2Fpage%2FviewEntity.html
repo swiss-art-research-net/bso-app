@@ -1131,7 +1131,7 @@
 
 [[#*inline "module-sidebar-map"]]
     <semantic-if
-        query='ASK { [[> thisForQuery ]] crmdig:L54_is_same-as/wdt:P625 ?coordinates }'
+        query='ASK { [[> thisForQuery ]] crmdig:L54_is_same-as/(wdt:P625|crm:P168_place_is_defined_by ) ?coordinates }'
         then='{{> mapTemplate}}'
     >
         <template id="mapTemplate">
@@ -1139,7 +1139,11 @@
                 <semantic-map
                     query='
                         SELECT ?wkt WHERE {
-                            [[> thisForQuery ]] crmdig:L54_is_same-as/wdt:P625 ?wkt
+                            {
+                                [[> thisForQuery ]] crmdig:L54_is_same-as/wdt:P625 ?wkt .
+                            } UNION {
+                                [[> thisForQuery ]] crmdig:L54_is_same-as/crm:P168_place_is_defined_by ?wkt .
+                            }
                     }'
                     tuple-template='{{> tupleTemplate}}'
                     >
