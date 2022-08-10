@@ -18,6 +18,7 @@
         [[> module-sidebar-smapshot]]
         [[> module-sidebar-person-network]]
         [[> module-sidebar-event-network]]
+        [[> module-sidebar-object-network]]
 
 </div>
 <div class="bso-component main">
@@ -237,6 +238,29 @@
         </semantic-graph>
     </div>
 [[/inline]]
+
+[[#*inline "component-object-network"]]
+    <div class="bso-component graph">
+        <semantic-graph height="[[height]]px"
+            query='CONSTRUCT {
+                ?s ?p ?o .
+            } WHERE {
+                BIND([[> thisForQuery]] as ?s)
+                {
+                    ?s (crm:P128_carries/crm:P94i_was_created_by|crm:P108i_was_produced_by)/crm:P14_carried_out_by  ?o .
+                    OPTIONAL {
+                        ?subEvent crm:P2_has_type ?eventType ;
+                            crm:P14_carried_out_by ?o ;
+                            ^crm:P9_consists_of/(^crm:P94i_was_created_by/^crm:P128_carries|^crm:P108i_was_produced_by) ?s .
+                    }
+                    BIND(IF(BOUND(?eventType), ?eventType, search:participant) as ?p)
+                }
+            }'>
+            <semantic-graph-layout-cose-bilkent ideal-edge-length=150></semantic-graph-layout-cose-bilkent>
+        </semantic-graph>
+    </div>
+[[/inline]]
+
 
 [[#*inline "component-person-network"]]
     <div class="bso-component graph">
@@ -1199,6 +1223,32 @@
                         <mp-overlay-dialog-trigger><a>[[i18n "openInViewer" bundle="bso"]]</a></mp-overlay-dialog-trigger>
                         <mp-overlay-dialog-content id="smapshot-modal">
                             [[> component-person-network height=600]]
+                        </mp-overlay-dialog-content>
+                    </mp-overlay-dialog>
+                </div>
+            </div>
+        </bs-panel>
+    </template>
+</semantic-if>
+[[/inline]]
+
+[[#*inline "module-sidebar-object-network"]]
+<semantic-if
+    query='ASK {
+        BIND([[> thisForQuery]] as ?s)
+        ?s a search:Object .
+    }'
+    then='{{> objectNetworkTemplate}}'
+>
+    <template id="objectNetworkTemplate">
+        <bs-panel>
+            <div style="width:300px">
+                [[> component-object-network height=300]]
+                <div class="caption">
+                    <mp-overlay-dialog title="[[i18n "networkView" bundle="bso"]]" type="modal" bs-size="xl">
+                        <mp-overlay-dialog-trigger><a>[[i18n "openInViewer" bundle="bso"]]</a></mp-overlay-dialog-trigger>
+                        <mp-overlay-dialog-content id="object-network-modal">
+                            [[> component-object-network height=600]]
                         </mp-overlay-dialog-content>
                     </mp-overlay-dialog>
                 </div>
