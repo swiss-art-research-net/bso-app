@@ -3,8 +3,8 @@
   <div class="bso-component card-container">
     <semantic-table
       id="grid-result"
+      prefetch-labels="false"
       query="SELECT DISTINCT ?subject ?date ?type WHERE {
-        hint:Query hint:optimizer 'Runtime' .
         OPTIONAL {
           ?subject skos:prefLabel ?label .
         }
@@ -66,7 +66,6 @@
                   <semantic-map
                       id="map-result"
                       query="SELECT DISTINCT ?subject ?wkt WHERE {
-                          hint:Query hint:optimizer 'Runtime' .
                           {
                             ?subject crm:P128_carries?/crm:P138_represents ?place .
                             GRAPH <https://resource.swissartresearch.net/graph/smapshot> {
