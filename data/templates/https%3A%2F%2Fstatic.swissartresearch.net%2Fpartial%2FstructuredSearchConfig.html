@@ -242,7 +242,7 @@
         "queryPattern": "{
             ?creation crm:P14_carried_out_by ?subject ;
               crm:P2_has_type ?__value__ .
-          ?subject a search:Person ;
+          ?subject a search:Person .
           ?__value__ a search:Type .
         }"
       }],
@@ -278,8 +278,40 @@
     <div class="bso-component panel dark separator">
   [[/if]]
     <bs-row>
-
-      <bs-col md="12" sm="12">
+      <bs-col md="3" sm="12">
+        <semantic-search-facet
+          open-by-default="true"
+          facet-values-threshold="1000"
+          value-relations='{
+            "<https://platform.swissartresearch.net/Thing_from_Time>": {
+              "kind": "date-range",
+              "valuesQuery":"SELECT ?dateBeginValue ?dateEndValue WHERE {
+                  ?subject (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P4_has_time-span ?date .
+                  ?date crm:P82a_begin_of_the_begin ?dateBeginValue ;
+                    crm:P82b_end_of_the_end ?dateEndValue .
+                } ORDER BY ?dateBeginValue"
+            },
+            "<https://platform.swissartresearch.net/Person_born_at_Date>": {
+              "kind": "date-range",
+              "valuesQuery":"SELECT ?dateBeginValue ?dateEndValue WHERE {
+                  ?subject crm:P98i_was_born/crm:P4_has_time-span ?date .
+                  ?date crm:P82a_begin_of_the_begin ?dateBeginValue ;
+                    crm:P82b_end_of_the_end ?dateEndValue .
+                } ORDER BY ?dateBeginValue"
+            },
+            "<https://platform.swissartresearch.net/Person_died_at_Date>": {
+              "kind": "date-range",
+              "valuesQuery":"SELECT ?dateBeginValue ?dateEndValue WHERE {
+                  ?subject crm:P100i_died_in/crm:P4_has_time-span ?date .
+                  ?date crm:P82a_begin_of_the_begin ?dateBeginValue ;
+                    crm:P82b_end_of_the_end ?dateEndValue .
+                } ORDER BY ?dateBeginValue"
+            }
+          }'
+        >
+        </semantic-search-facet>
+      </bs-col>
+      <bs-col md="9" sm="12">
 
         <semantic-search-facet-breadcrumbs>
         </semantic-search-facet-breadcrumbs>
