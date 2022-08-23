@@ -1,0 +1,307 @@
+<semantic-search
+  limit='1000'
+  categories='{
+    "<http://www.cidoc-crm.org/cidoc-crm/E52_Time-Span>": [{
+      "kind": "date-range",
+      "queryPattern": "{
+        $subject ?__relation__ ?date .
+        FILTER(?date >= ?__dateBeginValue__ && ?date <= ?__dateEndValue__)
+      }"
+    }],
+    "<https://platform.swissartresearch.net/search/Place>": [{
+      "kind": "hierarchy",
+      "queryPattern": "{
+        $subject crmdig:L54_is_same-as/crm:P89_falls_within ?__value__ .
+      }"
+    }]
+  }'
+  search-profile='{
+    "categories": [
+        {"iri": "<https://platform.swissartresearch.net/search/Object>", "label": "Object", "thumbnail": "../images/fcs/things.svg"},
+        {"iri": "<https://platform.swissartresearch.net/search/Person>", "label": "Person", "thumbnail": "../images/fcs/actors.svg"},
+        {"iri": "<https://platform.swissartresearch.net/search/Place>", "label": "Place", "thumbnail": "../images/fcs/places.svg"},
+        {"iri": "<https://platform.swissartresearch.net/search/Type>", "label": "Concept", "thumbnail": "../images/fcs/concepts.svg"},
+        {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E52_Time-Span>", "label": "Time", "thumbnail": "../images/fcs/dates.svg"},
+        {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E57_Material>", "label": "Material", "thumbnail": "../images/fcs/things.svg"}
+      ],
+    "relations": [
+      {
+        "iri": "<https://platform.swissartresearch.net/Object_part_of_Object>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Object>",
+        "hasRange": "<https://platform.swissartresearch.net/search/Object>",
+        "label": "[[i18n "partOf" bundle="bso"]]"
+      },
+      {
+        "iri": "<https://platform.swissartresearch.net/Object_depicts_Person>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Object>",
+        "hasRange": "<https://platform.swissartresearch.net/search/Person>",
+        "label": "[[i18n "depicts" bundle="bso"]]"
+      },
+      {
+        "iri": "<https://platform.swissartresearch.net/Object_depicts_Place>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Object>",
+        "hasRange": "<https://platform.swissartresearch.net/search/Place>",
+        "label": "[[i18n "depicts" bundle="bso"]]"
+      },
+      {
+        "iri": "<https://platform.swissartresearch.net/Object_depicts_Type>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Object>",
+        "hasRange": "<https://platform.swissartresearch.net/search/Type>",
+        "label": "[[i18n "depicts" bundle="bso"]]"
+      },
+      {
+        "iri": "<https://platform.swissartresearch.net/Object_created_by_Person>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Object>",
+        "hasRange": "<https://platform.swissartresearch.net/search/Person>",
+        "label": "[[i18n "madeBy" bundle="bso"]]"
+      },
+      {
+        "iri": "<https://platform.swissartresearch.net/Object_held_by_Actor>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Object>",
+        "hasRange": "<https://platform.swissartresearch.net/search/Person>",
+        "label": "[[i18n "inCollection" bundle="bso"]]"
+      },
+      {
+        "iri": "<https://platform.swissartresearch.ne/tObject_acquired_from_Actor>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Object>",
+        "hasRange": "<https://platform.swissartresearch.net/search/Person>",
+        "label": "[[i18n "acquiredFrom" bundle="bso"]]"
+      },
+      {
+        "iri": "<https://platform.swissartresearch.net/Object_of_Type>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Object>",
+        "hasRange": "<https://platform.swissartresearch.net/search/Type>",
+        "label": "[[i18n "ofType" bundle="bso"]]"
+      },
+      {
+        "iri": "<https://platform.swissartresearch.net/Object_from_Time>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Object>",
+        "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E52_Time-Span>",
+        "label": "[[i18n "from" bundle="bso"]]"
+      },
+      {
+        "iri": "<https://platform.swissartresearch.net/Object_from_Material>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Object>",
+        "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E57_Material>",
+        "label": "[[i18n "madeFrom" bundle="bso"]]"
+      },
+      {
+        "iri": "<https://platform.swissartresearch.net/Person_born_at_Date>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Person>",
+        "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E52_Time-Span>",
+        "label": "[[i18n "dateBorn" bundle="bso"]]"
+      },
+      {
+        "iri": "<https://platform.swissartresearch.net/Person_died_at_Date>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Person>",
+        "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E52_Time-Span>",
+        "label": "[[i18n "dateDied" bundle="bso"]]"
+      },
+      {
+        "iri": "<https://platform.swissartresearch.net/Person_acted_as_Type>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Person>",
+        "hasRange": "<https://platform.swissartresearch.net/search/Type>",
+        "label": "[[i18n "actedAs" bundle="bso"]]"
+      },
+      {
+        "iri": "<https://platform.swissartresearch.net/Person_has_Gender>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Person>",
+        "hasRange": "<https://platform.swissartresearch.net/search/Type>",
+        "label": "[[i18n "hasGender" bundle="bso"]]"
+      },
+      {
+        "iri": "<https://platform.swissartresearch.net/Place_is_part_of_Place>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Place>",
+        "hasRange": "<https://platform.swissartresearch.net/search/Place>",
+        "label": "[[i18n "partOf" bundle="bso"]]"
+      },
+      {
+        "iri": "<https://platform.swissartresearch.net/Place_depicted_by_Object>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Place>",
+        "hasRange": "<https://platform.swissartresearch.net/search/Object>",
+        "label": "[[i18n "depictedBy" bundle="bso"]]"
+      }
+    ]
+  }'
+  relations='{
+      "<https://platform.swissartresearch.net/Object_created_by_Person>": [{
+        "kind": "resource",
+        "queryPattern": "{          
+          {
+            ?subject crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by ?__value__ .
+          } UNION {
+            ?subject crm:P108i_was_produced_by/crm:P14_carried_out_by ?__value__ .
+          }
+          ?subject a search:Object .
+          ?__value__ a search:Person .
+        }"
+      }],
+      "<https://platform.swissartresearch.net/Object_of_Type>": [{
+        "kind": "resource",
+        "queryPattern": "{
+            ?subject a search:Object ;
+              crm:P2_has_type ?__value__ .
+            ?__value__ a search:Type .
+          }"
+      }],
+      "<https://platform.swissartresearch.net/Object_part_of_Object>": [{
+        "kind": "resource",
+        "queryPattern": "{
+            ?subject a search:Object ;
+              crm:P46i_forms_part_of ?__value__ .
+            ?__value__ a search:Object .
+          }"
+      }],
+      "<https://platform.swissartresearch.net/Object_held_by_Actor>": [{
+        "kind": "resource",
+        "queryPattern": "{
+            ?subject a search:Object ;
+              crm:P109_has_current_or_former_curator ?__value__ .
+            ?__value__ a search:Person .
+          }"
+      }],
+      "<https://platform.swissartresearch.net/Object_acquired_from_Actor>": [{
+        "kind": "resource",
+        "queryPattern": "{
+          ?subject a search:Object ;
+            crm:P24i_changed_ownership_through/crm:P23_transferred_title_from ?__value__ .
+          ?__value__ a search:Person .
+        }"
+      }],
+      "<https://platform.swissartresearch.net/Object_from_Time>": [{
+        "kind": "date-range",
+        "queryPattern": "{
+            ?subject a search:Object ;
+              (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P4_has_time-span ?date .
+            ?date crm:P82a_begin_of_the_begin ?begin ;
+              crm:P82b_end_of_the_end ?end .
+            FILTER(STRDT(STR(?begin), xsd:date) <= ?__dateEndValue__) .
+            FILTER(STRDT(STR(?end), xsd:date) >= ?__dateBeginValue__) .
+          }"
+      }],
+      "<https://platform.swissartresearch.net/Object_depicts_Person>": [{
+        "kind": "resource",
+        "queryPattern": "{
+            hint:Query hint:optimizer \"Runtime\".
+            ?subject a search:Object ;
+              crm:P128_carries/crm:P138_represents ?__value__ .
+            ?__value__ a search:Person .
+          }"
+      }],
+      "<https://platform.swissartresearch.net/Object_depicts_Place>": [{
+        "kind": "hierarchy",
+        "queryPattern": "{
+            hint:Query hint:optimizer \"Runtime\".
+            ?subject a search:Object ;
+              crm:P128_carries/crm:P138_represents/crmdig:L54_is_same-as ?place .
+            ?place crm:P89_falls_within* ?__value__ .
+            ?__value__ a schema:AdministrativeArea .
+          }"
+      }],
+      "<https://platform.swissartresearch.net/Object_depicts_Type>": [{
+        "kind": "resource",
+        "queryPattern": "{
+            hint:Query hint:optimizer \"Runtime\".
+            ?subject a search:Object ;
+              crm:P128_carries/crm:P138_represents ?__value__ .
+            ?__value__ a search:Type .
+          }"
+      }],
+      "<https://platform.swissartresearch.net/Object_from_Material>": [{
+        "kind": "resource",
+        "queryPattern": "{
+            ?subject a search:Object ;
+              crm:P45_consists_of ?__value__ .
+            ?__value__ a crm:E57_Material .
+          }"
+      }],
+      "<https://platform.swissartresearch.net/Person_born_at_Date>": [{
+        "kind": "date-range",
+        "queryPattern": "{
+            ?subject a search:Person ;
+              crm:P98i_was_born/crm:P4_has_time-span ?date .
+            ?date crm:P82a_begin_of_the_begin ?begin ;
+              crm:P82b_end_of_the_end ?end .
+            FILTER(STRDT(STR(?begin), xsd:date) <= ?__dateEndValue__) .
+            FILTER(STRDT(STR(?end), xsd:date) >= ?__dateBeginValue__) .
+          }"
+      }],
+      "<https://platform.swissartresearch.net/Person_died_at_Date>": [{
+        "kind": "date-range",
+        "queryPattern": "{
+            ?subject a search:Person ;
+              crm:P100i_died_in/crm:P4_has_time-span ?date .
+            ?date crm:P82a_begin_of_the_begin ?begin ;
+              crm:P82b_end_of_the_end ?end .
+            FILTER(STRDT(STR(?begin), xsd:date) <= ?__dateEndValue__) .
+            FILTER(STRDT(STR(?end), xsd:date) >= ?__dateBeginValue__) .
+          }"
+      }],
+      "<https://platform.swissartresearch.net/Person_acted_as_Type>": [{
+        "kind": "resource",
+        "queryPattern": "{
+            ?creation crm:P14_carried_out_by ?subject ;
+              crm:P2_has_type ?__value__ .
+          ?subject a search:Person ;
+          ?__value__ a search:Type .
+        }"
+      }],
+      "<https://platform.swissartresearch.net/Person_has_Gender>": [{
+        "kind": "resource",
+        "queryPattern": "{
+            ?subject a search:Person ;
+              crmdig:L54_is_same-as/gndo:gender ?__value__ .
+        }"
+      }],
+      "<https://platform.swissartresearch.net/Place_is_part_of_Place>": [{
+        "kind": "resource",
+        "queryPattern": "{
+            ?subject a search:Place ;
+              crm:P89_falls_within* ?__value__ .
+            ?__value__ a search:Place .
+        }" 
+      }],
+      "<https://platform.swissartresearch.net/Place_depicted_by_Object>": [{
+        "kind": "resource",
+        "queryPattern": "{
+            ?subject a search:Place .
+            ?__value__ crm:P128_carries/crm:P138_represents ?subject .
+            ?__value__ a search:Object .
+        }"
+      }]
+    }'
+  >
+
+  [[> @partial-block ]]
+
+  [[#if separator]]
+    <div class="bso-component panel dark separator">
+  [[/if]]
+    <bs-row>
+
+      <bs-col md="12" sm="12">
+
+        <semantic-search-facet-breadcrumbs>
+        </semantic-search-facet-breadcrumbs>
+        
+        <semantic-search-result-holder>
+
+          <semantic-search-result>
+
+            <mp-sparql-result-counts 
+              id="search_results_count"
+              query="SELECT DISTINCT ?subject {}"
+              template='<div>{{#if hasLimit}} <bs-alert variant="warning"> Showing {{numberOfResults}} of {{totalNumberOfResults}} matches. <strong>Please, refine your search.</strong> </bs-alert> {{else}} <p>Found <em>{{numberOfResults}}</em> results</p>{{/if}}</div>'>
+            </mp-sparql-result-counts>
+            
+            [[> partial:searchResultsVisualisation view=view resultsMode=resultsMode ]]
+            
+          </semantic-search-result>
+        </semantic-search-result-holder>
+      
+      </bs-col>
+    </bs-row>
+  [[#if separator]]
+    </div>   
+  [[/if]]
+</semantic-search>

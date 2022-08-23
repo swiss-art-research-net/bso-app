@@ -1,5 +1,5 @@
 [[> partial:pageHeader]]
-[[#> partial:baseSearch separator="True"]]
+[[#> partial:structuredSearchConfig separator="True"]]
 
 <div class="bso-component main">
   <div class="bso-component panel">
@@ -12,12 +12,14 @@
           <bs-col sm="12" md="11">
             <semantic-search-query-builder
               resource-selector='{
-                "query": "SELECT DISTINCT ?suggestion ?label WHERE {
-                  ?suggestion crm:P1_is_identified_by?/rdfs:label ?label .
-                  ?label bds:search ?__token__ ;
+                "query": "SELECT DISTINCT ?suggestion (SAMPLE(?labels) as ?label) WHERE {
+                  ?suggestion crm:P1_is_identified_by?/rdfs:label ?labels ;
+                    a ?__range__ .
+                  ?labels bds:search ?__token__ ;
                     bds:matchAllTerms \"true\" ;
                     bds:relevance ?score .
-                } ORDER BY DESC(?score)",
+                } GROUP BY ?suggestion
+                ORDER BY DESC(?score)",
                 "suggestionTupleTemplate": "{{> suggestionTemplate}}"
               }'
               tree-selector='{
@@ -61,7 +63,7 @@
   </div>
 </div>
 
-[[/ partial:baseSearch]]
+[[/ partial:structuredSearchConfig]]
 
 
 [[> partial:contentFooter]]
