@@ -191,11 +191,16 @@
       "<https://platform.swissartresearch.net/Object_depicts_Place>": [{
         "kind": "hierarchy",
         "queryPattern": "{
-            hint:Query hint:optimizer \"Runtime\".
-            ?subject a search:Object ;
-              crm:P128_carries/crm:P138_represents/crmdig:L54_is_same-as ?place .
-            ?place crm:P89_falls_within* ?__value__ .
-            ?__value__ a schema:AdministrativeArea .
+            {
+              ?subject a search:Object ;
+                crm:P128_carries/crm:P138_represents/crmdig:L54_is_same-as ?place .
+              ?place crm:P89_falls_within* ?__value__ .
+              ?__value__ a schema:AdministrativeArea .
+            } UNION {
+              ?subject a search:Object ;
+                crm:P128_carries/crm:P138_represents ?__value__ .
+              ?__value__ a search:Place .
+            }
           }"
       }],
       "<https://platform.swissartresearch.net/Object_depicts_Type>": [{
@@ -257,8 +262,8 @@
         "kind": "resource",
         "queryPattern": "{
             ?subject a search:Place ;
-              crm:P89_falls_within* ?__value__ .
-            ?__value__ a search:Place .
+              crmdig:L54_is_same-as ?stPlace .
+            ?stPlace crm:P89_falls_within* ?__value__ .
         }" 
       }],
       "<https://platform.swissartresearch.net/Place_depicted_by_Object>": [{
@@ -283,7 +288,7 @@
           open-by-default="true"
           facet-values-threshold="1000"
           value-relations='{
-            "<https://platform.swissartresearch.net/Thing_from_Time>": {
+            "<https://platform.swissartresearch.net/Object_from_Time>": {
               "kind": "date-range",
               "valuesQuery":"SELECT ?dateBeginValue ?dateEndValue WHERE {
                   ?subject (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P4_has_time-span ?date .
