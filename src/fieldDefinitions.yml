@@ -739,13 +739,13 @@ fields:
             $subject crm:P2_has_type $value .
           } WHERE {}'
         - valueSet: 'SELECT DISTINCT ?value  WHERE {
-              BIND(iqvoc:_482eebdb as ?root)
+              BIND(iqvoc:_d4e308db as ?root)
               ?root skos:narrower/skos:narrower* ?value .
           } ORDER BY ?label'
       treePatterns:
         type: full
         rootsQuery: 'SELECT DISTINCT ?item ?hasChildren WHERE {
-            BIND(iqvoc:_482eebdb as ?parent)
+            BIND(iqvoc:_d4e308db as ?parent)
             ?item a skos:Concept ;
               skos:broader ?parent .
             OPTIONAL { ?subItem skos:broader ?item }
@@ -758,10 +758,10 @@ fields:
           }'
         parentsQuery: 'SELECT ?item ?parent WHERE {
             ?item skos:broader ?parent .
-            FILTER(?parent != iqvoc:_482eebdb)
+            FILTER(?parent != iqvoc:_d4e308db)
           }'
         searchQuery: 'SELECT DISTINCT ?item ?label ?score ?hasChildren WHERE {
-              BIND(iqvoc:_482eebdb as ?parent)
+              BIND(iqvoc:_d4e308db as ?parent)
               ?item a skos:Concept ;
                 skos:broader ?parent ;
                 skos:prefLabel ?label .
@@ -792,7 +792,7 @@ fields:
       treePatterns:
         type: full
         rootsQuery: 'SELECT DISTINCT ?item ?hasChildren WHERE {
-            BIND(iqvoc:_482eebdb as ?parent)
+            BIND(iqvoc:_d4e308db as ?parent)
             ?item a skos:Concept ;
               skos:broader ?parent .
             OPTIONAL { ?subItem skos:broader ?item }
@@ -805,10 +805,10 @@ fields:
           }'
         parentsQuery: 'SELECT ?item ?parent WHERE {
             ?item skos:broader ?parent .
-            FILTER(?parent != iqvoc:_482eebdb)
+            FILTER(?parent != iqvoc:_d4e308db)
           }'
         searchQuery: 'SELECT DISTINCT ?item ?label ?score ?hasChildren WHERE {
-              BIND(iqvoc:_482eebdb as ?parent)
+              BIND(iqvoc:_d4e308db as ?parent)
               ?item a skos:Concept ;
                 skos:broader ?parent ;
                 skos:prefLabel ?label .
@@ -963,7 +963,7 @@ fields:
       treePatterns:
         type: full
         rootsQuery: 'SELECT DISTINCT ?item ?hasChildren WHERE {
-            BIND(iqvoc:_482eebdb as ?parent)
+            BIND(iqvoc:_d4e308db as ?parent)
             ?item a skos:Concept ;
               skos:broader ?parent .
             OPTIONAL { ?subItem skos:broader ?item }
@@ -976,10 +976,10 @@ fields:
           }'
         parentsQuery: 'SELECT ?item ?parent WHERE {
             ?item skos:broader ?parent .
-            FILTER(?parent != iqvoc:_482eebdb)
+            FILTER(?parent != iqvoc:_d4e308db)
           }'
         searchQuery: 'SELECT DISTINCT ?item ?label ?score ?hasChildren WHERE {
-              BIND(iqvoc:_482eebdb as ?parent)
+              BIND(iqvoc:_d4e308db as ?parent)
               ?item a skos:Concept ;
                 skos:broader ?parent ;
                 skos:prefLabel ?label .

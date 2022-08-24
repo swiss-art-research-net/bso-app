@@ -520,14 +520,14 @@
             "xsdDatatype" : "xsd:anyURI",
             "treePatterns": {
                 "type": "full",
-                "rootsQuery": "SELECT DISTINCT ?item ?hasChildren WHERE { BIND(iqvoc:_482eebdb as ?parent) ?item a skos:Concept ; skos:broader ?parent . OPTIONAL { ?subItem skos:broader ?item } BIND(BOUND(?subItem) AS ?hasChildren) }",
+                "rootsQuery": "SELECT DISTINCT ?item ?hasChildren WHERE { BIND(iqvoc:_d4e308db as ?parent) ?item a skos:Concept ; skos:broader ?parent . OPTIONAL { ?subItem skos:broader ?item } BIND(BOUND(?subItem) AS ?hasChildren) }",
                 "childrenQuery": "SELECT ?item ?hasChildren WHERE { ?item skos:broader ?parent . OPTIONAL { ?subItem skos:broader ?item } BIND(BOUND(?subItem) AS ?hasChildren) }",
-                "parentsQuery": "SELECT ?item ?parent WHERE { ?item skos:broader ?parent . FILTER(?parent != iqvoc:_482eebdb) }",
-                "searchQuery": "SELECT DISTINCT ?item ?label ?score ?hasChildren WHERE { BIND(iqvoc:_482eebdb as ?parent) ?item a skos:Concept ; skos:broader ?parent ; skos:prefLabel ?label . BIND(false AS ?hasChildren) FILTER REGEX(STR(?label), ?__token__, \"i\") } ORDER BY DESC (?score) (?label)"
+                "parentsQuery": "SELECT ?item ?parent WHERE { ?item skos:broader ?parent . FILTER(?parent != iqvoc:_d4e308db) }",
+                "searchQuery": "SELECT DISTINCT ?item ?label ?score ?hasChildren WHERE { BIND(iqvoc:_d4e308db as ?parent) ?item a skos:Concept ; skos:broader ?parent ; skos:prefLabel ?label . BIND(false AS ?hasChildren) FILTER REGEX(STR(?label), ?__token__, \"i\") } ORDER BY DESC (?score) (?label)"
             },
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P2_has_type ?value . }",
                 "insertPattern" : "INSERT { $subject crm:P2_has_type $value . } WHERE {}",
-                "valueSetPattern" : "SELECT DISTINCT ?value  WHERE { BIND(iqvoc:_482eebdb as ?root) ?root skos:narrower/skos:narrower* ?value . } ORDER BY ?label",
+                "valueSetPattern" : "SELECT DISTINCT ?value  WHERE { BIND(iqvoc:_d4e308db as ?root) ?root skos:narrower/skos:narrower* ?value . } ORDER BY ?label",
         "iri" : "https://platform.swissartresearch.net/instances/fields/P2_has_type_for_person_roles"
     },
 
@@ -540,10 +540,10 @@
             "xsdDatatype" : "xsd:anyURI",
             "treePatterns": {
                 "type": "full",
-                "rootsQuery": "SELECT DISTINCT ?item ?hasChildren WHERE { BIND(iqvoc:_482eebdb as ?parent) ?item a skos:Concept ; skos:broader ?parent . OPTIONAL { ?subItem skos:broader ?item } BIND(BOUND(?subItem) AS ?hasChildren) }",
+                "rootsQuery": "SELECT DISTINCT ?item ?hasChildren WHERE { BIND(iqvoc:_d4e308db as ?parent) ?item a skos:Concept ; skos:broader ?parent . OPTIONAL { ?subItem skos:broader ?item } BIND(BOUND(?subItem) AS ?hasChildren) }",
                 "childrenQuery": "SELECT ?item ?hasChildren WHERE { ?item skos:broader ?parent . OPTIONAL { ?subItem skos:broader ?item } BIND(BOUND(?subItem) AS ?hasChildren) }",
-                "parentsQuery": "SELECT ?item ?parent WHERE { ?item skos:broader ?parent . FILTER(?parent != iqvoc:_482eebdb) }",
-                "searchQuery": "SELECT DISTINCT ?item ?label ?score ?hasChildren WHERE { BIND(iqvoc:_482eebdb as ?parent) ?item a skos:Concept ; skos:broader ?parent ; skos:prefLabel ?label . BIND(false AS ?hasChildren) FILTER REGEX(STR(?label), ?__token__, \"i\") } ORDER BY DESC (?score) (?label)"
+                "parentsQuery": "SELECT ?item ?parent WHERE { ?item skos:broader ?parent . FILTER(?parent != iqvoc:_d4e308db) }",
+                "searchQuery": "SELECT DISTINCT ?item ?label ?score ?hasChildren WHERE { BIND(iqvoc:_d4e308db as ?parent) ?item a skos:Concept ; skos:broader ?parent ; skos:prefLabel ?label . BIND(false AS ?hasChildren) FILTER REGEX(STR(?label), ?__token__, \"i\") } ORDER BY DESC (?score) (?label)"
             },
                 "selectPattern" : "SELECT ?value WHERE { $subject a crm:E12_Production ; crm:P2_has_type ?value . }",
                 "insertPattern" : "INSERT { $subject crm:P2_has_type $value . } WHERE {}",
@@ -645,10 +645,10 @@
             "xsdDatatype" : "xsd:anyURI",
             "treePatterns": {
                 "type": "full",
-                "rootsQuery": "SELECT DISTINCT ?item ?hasChildren WHERE { BIND(iqvoc:_482eebdb as ?parent) ?item a skos:Concept ; skos:broader ?parent . OPTIONAL { ?subItem skos:broader ?item } BIND(BOUND(?subItem) AS ?hasChildren) }",
+                "rootsQuery": "SELECT DISTINCT ?item ?hasChildren WHERE { BIND(iqvoc:_d4e308db as ?parent) ?item a skos:Concept ; skos:broader ?parent . OPTIONAL { ?subItem skos:broader ?item } BIND(BOUND(?subItem) AS ?hasChildren) }",
                 "childrenQuery": "SELECT ?item ?hasChildren WHERE { ?item skos:broader ?parent . OPTIONAL { ?subItem skos:broader ?item } BIND(BOUND(?subItem) AS ?hasChildren) }",
-                "parentsQuery": "SELECT ?item ?parent WHERE { ?item skos:broader ?parent . FILTER(?parent != iqvoc:_482eebdb) }",
-                "searchQuery": "SELECT DISTINCT ?item ?label ?score ?hasChildren WHERE { BIND(iqvoc:_482eebdb as ?parent) ?item a skos:Concept ; skos:broader ?parent ; skos:prefLabel ?label . BIND(false AS ?hasChildren) FILTER REGEX(STR(?label), ?__token__, \"i\") } ORDER BY DESC (?score) (?label)"
+                "parentsQuery": "SELECT ?item ?parent WHERE { ?item skos:broader ?parent . FILTER(?parent != iqvoc:_d4e308db) }",
+                "searchQuery": "SELECT DISTINCT ?item ?label ?score ?hasChildren WHERE { BIND(iqvoc:_d4e308db as ?parent) ?item a skos:Concept ; skos:broader ?parent ; skos:prefLabel ?label . BIND(false AS ?hasChildren) FILTER REGEX(STR(?label), ?__token__, \"i\") } ORDER BY DESC (?score) (?label)"
             },
                 "selectPattern" : "SELECT ?value WHERE { $subject a crm:E12_Production ; crm:P2_has_type ?value . }",
                 "insertPattern" : "INSERT { $subject crm:P2_has_type $value . } WHERE {}",
