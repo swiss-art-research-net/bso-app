@@ -6,6 +6,7 @@ inputDir = "../data/i18n/"
 
 # Get all the files in the input directory
 files = [d for d in listdir(inputDir) if d.endswith('properties')]
+defaultFile = files[0]
 
 # Extract all fields from the files
 allTerms = []
@@ -34,4 +35,4 @@ for file in fields:
             if fields[file][term]:
                 f.write("%s = %s\n" % (term, fields[file][term]))
             else:
-                f.write("#%s = \n" % (term))
+                f.write("#%s = %s\n" % (term, fields[defaultFile][term]))
