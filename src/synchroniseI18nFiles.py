@@ -3,6 +3,7 @@ import re
 import sys
 from os import listdir
 from os.path import join
+from tqdm import tqdm
 
 def synchroniseAndTranslate(*, inputDir, authKey):
     # Get all the files in the input directory
@@ -32,12 +33,13 @@ def synchroniseAndTranslate(*, inputDir, authKey):
     # Write language files, automatically translating out missing fields
     translator = deepl.Translator(authKey)
     for file in fields:
+        print('Translating {}'.format(file))
         try:
             lang = re.findall(r'_(.*)\.properties', file)[0].upper()
         except:
             lang = False
         with open(join(inputDir, file), 'w') as f:
-            for term in allTerms:
+            for term in tqdm(allTerms):
                 if fields[file][term]:
                     f.write("%s = %s\n" % (term, fields[file][term]))
                 else:
