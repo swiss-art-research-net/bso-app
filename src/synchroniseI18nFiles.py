@@ -1,6 +1,10 @@
+import deepl
 import re
 from os import listdir
 from os.path import join
+
+auth_key = ''
+translator = deepl.Translator(auth_key)
 
 inputDir = "../data/i18n/"
 
@@ -30,9 +34,21 @@ for file in fields.keys():
 
 # Write language files, commenting out missing fields
 for file in fields:
+    try:
+        lang = re.findall(r'_(.*)\.properties', file)[0].upper()
+    except:
+        lang = False
     with open(join(inputDir, file), 'w') as f:
         for term in allTerms:
             if fields[file][term]:
                 f.write("%s = %s\n" % (term, fields[file][term]))
             else:
-                f.write("#%s = %s\n" % (term, fields[defaultFile][term]))
+                if lang:
+                    try:
+                        translation = translator.translate_text(fields[defaultFile][term], target_lang=lang, source_lang='EN')
+                    except Exception as e:
+                        print(e)
+                        translation = ""
+                    f.write("#%s = %s # Automatically translated from %s\n" % (term, translation, fields[defaultFile][term]))
+                else:
+                    f.write("#%s = \n # Translate from" % (term, fields[defaultFile][term]))
