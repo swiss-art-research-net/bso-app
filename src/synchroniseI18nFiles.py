@@ -1,3 +1,20 @@
+"""
+Reads i18n properties files used for internationalisation, synchronises the identifiers used in them and proposes translations. 
+
+The file without a language label is treated as the default language. First all identifiers are read from all the files.
+Identifiers that are missing in certain languages are then added and automatically translated using DeepL.
+
+The automatically obtained translations are commented out in the language files so they can be checked manually.
+The label in the default language is included and also commented out.
+
+Usage:
+python synchroniseI18nFiles.py --inputDir <inputDir> --authKey <authKey>
+
+inputDir: The directory containing the i18n properties files
+authKey: The DeepL API authentication key
+"""
+
+
 import deepl
 import re
 import sys
