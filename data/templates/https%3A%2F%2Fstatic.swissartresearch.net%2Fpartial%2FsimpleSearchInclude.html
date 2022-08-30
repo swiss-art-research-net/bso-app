@@ -9,6 +9,7 @@ searchLimit="100"
 <semantic-search limit=[[#if searchLimit]][[searchLimit]][[else]]10[[/if]]>
     <semantic-search-query-keyword
       [[#if searchPlaceholder]]placeholder='[[searchPlaceholder]]'[[/if]]
+      tokenize-lucene-query="false"
       domain='<http://www.w3.org/2000/01/rdf-schema#Resource>'
       query='SELECT ?subject ?type ?score WHERE {
             ?subject a ?type ; 
