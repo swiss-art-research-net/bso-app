@@ -78,6 +78,9 @@
                         <bs-tab event-key="object_persons" title="[[i18n "contributors" bundle="bso"]]">
                             [[> object_contributors]]
                         </bs-tab>
+                        <bs-tab event-key="object_dates" title="[[i18n "dates" bundle="bso"]]">
+                            [[> object_dates]]
+                        </bs-tab>
                         [[#if (urlParam "form")]]
                             <bs-tab event-key="object_subproduction" title="[[i18n "production" bundle="bso"]]">
                                 [[> object_subproduction]]
@@ -385,6 +388,57 @@
         {{/if}}
     </template>
 </mp-event-target-template-render>
+[[/inline]]
+
+[[#* inline "object_dates"]]
+
+<div class="bso-component separator next-step">
+    <div class="bso-component form-content">
+        
+        <bs-tabs class="bso-component view-selector" default-active-key="object_dates_production">                        
+            <bs-tab event-key="context" title="[[i18n "context" bundle="bso"]]"></bs-tab>
+
+            <bs-tab event-key="object_dates_production" title="[[i18n "production" bundle="bso"]]">
+                <semantic-form
+                    new-subject-template="[[>thisIri]]/proposition/{{UUID}}"
+                    fields='[[> partial:fieldDefinitions ]]'
+                    post-action='[[> thisIri]]'
+                    urlqueryparam-view='page'
+                >
+        
+                    <semantic-form-hidden-input for="I4_Proposition_Set_about_Subject" replace-value="/container/context"></semantic-form-hidden-input>
+                    <semantic-form-hidden-input for="container_form_id" replace-value="[[ resolvePrefix "page:addEditDataForEntity"]]#object_dates_production"></semantic-form-hidden-input>
+        
+                    <semantic-form-hidden-input for="P9_consists_of-reversed" replace-value="[[> thisIri]]/production"></semantic-form-hidden-input>
+                    <semantic-form-hidden-input for="type" replace-value="[[resolvePrefix "crm:E12_Production"]]"></semantic-form-hidden-input>
+
+                    <semantic-form-composite-input
+                        for='P4_has_time-span_single'
+                        new-subject-template='/date'
+                        fields='[
+                            [[> label]],
+                            [[> date_from]],
+                            [[> date_to]]
+                        ]'
+                    >
+                        <semantic-form-text-input for="label"></semantic-form-text-input>
+                        <semantic-form-text-input for="date_from"></semantic-form-text-input>
+                        <semantic-form-text-input for="date_to"></semantic-form-text-input>
+                    </semantic-form-composite-input>
+
+                    <semantic-form-tree-picker-input for="P2_has_type_for_date_type"></semantic-form-tree-picker-input>
+        
+                    <button name="submit" class="btn btn-primary btn-md">[[i18n "save" bundle="bso"]]</button>
+                </semantic-form>
+            </bs-tab>
+            <bs-tab event-key="object_dates_creation" title="[[i18n "creation" bundle="bso"]]">
+                
+            </bs-tab>
+        </bs-tabs>
+
+        
+    </div>
+</div>
 [[/inline]]
 
 [[#* inline "object_subproduction"]]

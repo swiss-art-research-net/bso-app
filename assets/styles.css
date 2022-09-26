@@ -618,6 +618,11 @@ ol.page-breadcrumb {
   border: 1px solid #964a4a;
   color: #fff;
 }
+.bso-component .view-selector a[data-rb-event-key="context"] {
+  pointer-events: none;
+  color: #111;
+  margin-left: 1rem;
+}
 .modal-backdrop {
   opacity: 0.8;
 }
