@@ -332,6 +332,22 @@
     },
 
     {
+        "id" : "P4_has_time-span_single",
+
+            "label": "[[i18n "field_time_span" bundle="bso"]]",
+            "description" : "The time-span of the event",
+            "minOccurs" : "1",
+            "maxOccurs" : "1",
+            "xsdDatatype" : "xsd:anyURI",
+            "domain" : "crm:E2_Temporal_Entity",
+            "range" : "crm:E52_Time-Span",
+                "selectPattern" : "SELECT ?value WHERE { $subject crm:P4_has_time-span ?value . }",
+                "insertPattern" : "INSERT { $subject crm:P4_has_time-span $value . } WHERE {}",
+                "deletePattern" : "DELETE { $subject crm:P4_has_time-span ?value . } WHERE {}",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/P4_has_time-span_single"
+    },
+
+    {
         "id" : "P7_took_place_at",
 
             "label": "[[i18n "field_place" bundle="bso"]]",
@@ -509,6 +525,25 @@
                 "insertPattern" : "INSERT { $subject crm:P2_has_type $value . } WHERE {}",
                 "valueSetPattern" : "SELECT DISTINCT ?value  WHERE { { ?creation a crm:E65_Creation ; crm:P2_has_type ?value . ?value a crm:E55_Type ; rdfs:label ?label . } UNION { VALUES (?value) { (type:author) } } } ORDER BY ?label LIMIT 100",
         "iri" : "https://platform.swissartresearch.net/instances/fields/P2_has_type_for_creation"
+    },
+
+    {
+        "id" : "P2_has_type_for_date_type",
+
+            "label": "[[i18n "field_type" bundle="bso"]]",
+            "display" : "hidden",
+            "xsdDatatype" : "xsd:anyURI",
+            "treePatterns": {
+                "type": "full",
+                "rootsQuery": "SELECT DISTINCT ?item ?hasChildren WHERE { BIND(iqvoc:_4c28919d as ?item) OPTIONAL { ?subItem skos:broader ?item } BIND(BOUND(?subItem) AS ?hasChildren) }",
+                "childrenQuery": "SELECT ?item ?hasChildren WHERE { ?item skos:broader ?parent . OPTIONAL { ?subItem skos:broader ?item } BIND(BOUND(?subItem) AS ?hasChildren) }",
+                "parentsQuery": "SELECT ?item ?parent WHERE { ?item skos:broader ?parent . FILTER(?parent != iqvoc:_4c28919d) }",
+                "searchQuery": "SELECT DISTINCT ?item ?label ?score ?hasChildren WHERE { BIND(iqvoc:_4c28919d as ?parent) ?item a skos:Concept ; skos:broader* ?parent ; skos:prefLabel ?label . BIND(false AS ?hasChildren) FILTER REGEX(STR(?label), ?__token__, \"i\") } ORDER BY DESC (?score) (?label)"
+            },
+                "selectPattern" : "SELECT ?value WHERE { $subject crm:P2_has_type ?value . }",
+                "insertPattern" : "INSERT { $subject crm:P2_has_type $value . } WHERE {}",
+                "valueSetPattern" : "SELECT DISTINCT ?value  WHERE { BIND(iqvoc:_4c28919d as ?root) ?root skos:narrower/skos:narrower* ?value . } ORDER BY ?label",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/P2_has_type_for_date_type"
     },
 
     {

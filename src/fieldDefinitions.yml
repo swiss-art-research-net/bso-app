@@ -472,6 +472,25 @@ fields:
             $subject crm:P4_has_time-span ?value .
           } WHERE {}'
 
+    - id: P4_has_time-span_single
+      label: Time-span
+      datatype: xsd:anyURI
+      description: The time-span of the event
+      domain: crm:E2_Temporal_Entity
+      range: crm:E52_Time-Span
+      minOccurs: 1
+      maxOccurs: 1
+      queries:
+        - select: 'SELECT ?value WHERE {
+            $subject crm:P4_has_time-span ?value .
+          }'
+        - insert: 'INSERT {
+            $subject crm:P4_has_time-span $value .
+          } WHERE {}'
+        - delete: 'DELETE {
+            $subject crm:P4_has_time-span ?value .
+          } WHERE {}'
+
     - id: P7_took_place_at
       label: Place
       datatype: xsd:anyURI
@@ -725,6 +744,46 @@ fields:
                 }
             } ORDER BY ?label
             LIMIT 100'
+            
+    - id: P2_has_type_for_date_type
+      label: Type
+      datatype: xsd:anyURI
+      display: hidden
+      queries:
+        - select: 'SELECT ?value WHERE {
+            $subject crm:P2_has_type ?value .
+          }'
+        - insert: 'INSERT {
+            $subject crm:P2_has_type $value .
+          } WHERE {}'
+        - valueSet: 'SELECT DISTINCT ?value  WHERE {
+              BIND(iqvoc:_4c28919d as ?root)
+              ?root skos:narrower/skos:narrower* ?value .
+          } ORDER BY ?label'
+      treePatterns:
+        type: full
+        rootsQuery: 'SELECT DISTINCT ?item ?hasChildren WHERE {
+            BIND(iqvoc:_4c28919d as ?item)
+            OPTIONAL { ?subItem skos:broader ?item }
+            BIND(BOUND(?subItem) AS ?hasChildren)
+          }'
+        childrenQuery: 'SELECT ?item ?hasChildren WHERE {
+            ?item skos:broader ?parent .
+            OPTIONAL { ?subItem skos:broader ?item }
+            BIND(BOUND(?subItem) AS ?hasChildren)
+          }'
+        parentsQuery: 'SELECT ?item ?parent WHERE {
+            ?item skos:broader ?parent .
+            FILTER(?parent != iqvoc:_4c28919d)
+          }'
+        searchQuery: 'SELECT DISTINCT ?item ?label ?score ?hasChildren WHERE {
+              BIND(iqvoc:_4c28919d as ?parent)
+              ?item a skos:Concept ;
+                skos:broader* ?parent ;
+                skos:prefLabel ?label .
+              BIND(false AS ?hasChildren)
+              FILTER REGEX(STR(?label), ?__token__, "i")
+            } ORDER BY DESC (?score) (?label)'
 
     - id: P2_has_type_for_person_roles
       label: Type
