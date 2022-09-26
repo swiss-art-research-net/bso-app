@@ -394,12 +394,44 @@
 
 <div class="bso-component separator next-step">
     <div class="bso-component form-content">
-        
-        <bs-tabs class="bso-component view-selector" default-active-key="object_dates_production">                        
-            <bs-tab event-key="context" title="[[i18n "context" bundle="bso"]]"></bs-tab>
+        [[#if (urlParam "subjectiri")]]
+            <semantic-query query="SELECT ?context ?contextLabel WHERE {
+                    BIND(<[[urlParam 'subjectiri']]> as ?subject)
+                    ?event crm:P9_consists_of ?subject ;
+                        a ?context .
+                    VALUES(?context ?contextLabel) {
+                        (crm:E12_Production 'production')
+                        (crm:E65_Creation 'creation')
+                    }
+                }"
+                template="{{> template}}"    
+            >
+                <template id="template">
+                    {{#ifCond contextLabel.value "==" "production"}}
+                        [[> object_dates_form context="production" type="crm:E12_Production"]]
+                    {{else}}
+                        [[> object_dates_form context="creation" type="crm:E65_Creation"]]
+                    {{/ifCond}}
+                </template>
+            </semantic-query>
+        [[else]]
+            <bs-tabs class="bso-component view-selector" default-active-key="object_dates_production">                        
+                <bs-tab event-key="context" title="[[i18n "context" bundle="bso"]]"></bs-tab>
+                <bs-tab event-key="object_dates_production" title="[[i18n "production" bundle="bso"]]">
+                    [[> object_dates_form context="production" type="crm:E12_Production"]]
+                </bs-tab>
+                <bs-tab event-key="object_dates_creation" title="[[i18n "creation" bundle="bso"]]">
+                    [[> object_dates_form context="creation" type="crm:E65_Creation"]]
+                </bs-tab>
+            </bs-tabs>
+        [[/if]]
+    </div>
+</div>
+[[/inline]]
 
-            <bs-tab event-key="object_dates_production" title="[[i18n "production" bundle="bso"]]">
-                <semantic-form
+[[#*inline "object_dates_form"]]
+<semantic-form
+                    subject="[[urlParam "subjectiri"]]"
                     new-subject-template="[[>thisIri]]/proposition/{{UUID}}"
                     fields='[[> partial:fieldDefinitions ]]'
                     post-action='[[> thisIri]]'
@@ -407,10 +439,10 @@
                 >
         
                     <semantic-form-hidden-input for="I4_Proposition_Set_about_Subject" replace-value="/container/context"></semantic-form-hidden-input>
-                    <semantic-form-hidden-input for="container_form_id" replace-value="[[ resolvePrefix "page:addEditDataForEntity"]]#object_dates_production"></semantic-form-hidden-input>
+                    <semantic-form-hidden-input for="container_form_id" replace-value="[[ resolvePrefix "page:addEditDataForEntity"]]#object_dates"></semantic-form-hidden-input>
         
-                    <semantic-form-hidden-input for="P9_consists_of-reversed" replace-value="[[> thisIri]]/production"></semantic-form-hidden-input>
-                    <semantic-form-hidden-input for="type" replace-value="[[resolvePrefix "crm:E12_Production"]]"></semantic-form-hidden-input>
+                    <semantic-form-hidden-input for="P9_consists_of-reversed" replace-value="[[> thisIri]]/[[context]]"></semantic-form-hidden-input>
+                    <semantic-form-hidden-input for="type" replace-value="[[resolvePrefix type]]"></semantic-form-hidden-input>
 
                     <semantic-form-composite-input
                         for='P4_has_time-span_single'
@@ -430,15 +462,6 @@
         
                     <button name="submit" class="btn btn-primary btn-md">[[i18n "save" bundle="bso"]]</button>
                 </semantic-form>
-            </bs-tab>
-            <bs-tab event-key="object_dates_creation" title="[[i18n "creation" bundle="bso"]]">
-                
-            </bs-tab>
-        </bs-tabs>
-
-        
-    </div>
-</div>
 [[/inline]]
 
 [[#* inline "object_subproduction"]]
