@@ -376,11 +376,14 @@
 
 [[#*inline "field-visualisation-dates"]]
 <semantic-query
-    query="SELECT DISTINCT ?subject ?eventType WHERE {
+    query="SELECT DISTINCT ?subject ?eventType ?type WHERE {
         {
             [[> thisForQuery]] (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P9_consists_of? ?event .
             ?event crm:P4_has_time-span ?subject .
             ?event a ?eventType .
+            OPTIONAL {
+                ?event crm:P2_has_type ?type .
+            }
         } UNION {
             [[> thisForQuery]] crm:P4_has_time-span ?subject .
         }
@@ -394,6 +397,7 @@
                 <tr>
                     <td><semantic-link iri="{{subject.value}}"></semantic-link></td>
                     <td><mp-label iri="{{eventType.value}}"></mp-label></td>
+                    <td>{{#if type.value}}<semantic-link iri="{{type.value}}"></semantic-link>{{/if}}</td>
                 </tr>
                 {{/each}}
             </table>
