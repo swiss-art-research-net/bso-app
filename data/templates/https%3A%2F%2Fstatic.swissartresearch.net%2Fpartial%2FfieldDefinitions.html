@@ -325,9 +325,9 @@
             "xsdDatatype" : "xsd:anyURI",
             "domain" : "crm:E2_Temporal_Entity",
             "range" : "crm:E52_Time-Span",
-                "selectPattern" : "SELECT ?value WHERE { $subject crm:P4_has_time-span ?value . }",
-                "insertPattern" : "INSERT { $subject crm:P4_has_time-span $value . } WHERE {}",
-                "deletePattern" : "DELETE { $subject crm:P4_has_time-span ?value . } WHERE {}",
+                "selectPattern" : "SELECT ?value WHERE { $subject crm:P4_has_time-span ?value . ?value a crm:E52_Time-Span . }",
+                "insertPattern" : "INSERT { $subject crm:P4_has_time-span $value . ?value a crm:E52_Time-Span . } WHERE {}",
+                "deletePattern" : "DELETE { $subject crm:P4_has_time-span ?value . ?value a crm:E52_Time-Span . } WHERE {}",
         "iri" : "https://platform.swissartresearch.net/instances/fields/P4_has_time-span"
     },
 
@@ -341,9 +341,9 @@
             "xsdDatatype" : "xsd:anyURI",
             "domain" : "crm:E2_Temporal_Entity",
             "range" : "crm:E52_Time-Span",
-                "selectPattern" : "SELECT ?value WHERE { $subject crm:P4_has_time-span ?value . }",
-                "insertPattern" : "INSERT { $subject crm:P4_has_time-span $value . } WHERE {}",
-                "deletePattern" : "DELETE { $subject crm:P4_has_time-span ?value . } WHERE {}",
+                "selectPattern" : "SELECT ?value WHERE { $subject crm:P4_has_time-span ?value . ?value a crm:E52_Time-Span . }",
+                "insertPattern" : "INSERT { $subject crm:P4_has_time-span $value . ?value a crm:E52_Time-Span . } WHERE {}",
+                "deletePattern" : "DELETE { $subject crm:P4_has_time-span ?value . ?value a crm:E52_Time-Span . } WHERE {}",
         "iri" : "https://platform.swissartresearch.net/instances/fields/P4_has_time-span_single"
     },
 

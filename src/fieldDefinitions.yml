@@ -464,12 +464,15 @@ fields:
       queries:
         - select: 'SELECT ?value WHERE {
             $subject crm:P4_has_time-span ?value .
+            ?value a crm:E52_Time-Span .
           }'
         - insert: 'INSERT {
             $subject crm:P4_has_time-span $value .
+            ?value a crm:E52_Time-Span .
           } WHERE {}'
         - delete: 'DELETE {
             $subject crm:P4_has_time-span ?value .
+            ?value a crm:E52_Time-Span .
           } WHERE {}'
 
     - id: P4_has_time-span_single
@@ -483,12 +486,15 @@ fields:
       queries:
         - select: 'SELECT ?value WHERE {
             $subject crm:P4_has_time-span ?value .
+            ?value a crm:E52_Time-Span .
           }'
         - insert: 'INSERT {
             $subject crm:P4_has_time-span $value .
+            ?value a crm:E52_Time-Span .
           } WHERE {}'
         - delete: 'DELETE {
             $subject crm:P4_has_time-span ?value .
+            ?value a crm:E52_Time-Span .
           } WHERE {}'
 
     - id: P7_took_place_at
