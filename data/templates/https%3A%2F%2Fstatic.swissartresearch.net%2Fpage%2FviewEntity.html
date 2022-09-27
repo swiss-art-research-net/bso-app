@@ -1367,6 +1367,14 @@
                     ?subject crm:P141_assigned ?string .
                     FILTER(!isIRI(?string))
                 }
+                OPTIONAL {
+                    GRAPH ?proposition {
+                        ?entity a ?crmType ;
+                            rdfs:label ?hasLabel .
+                        FILTER(?entity != ?proposition)
+                    }
+                    ?crmType rdfs:subClassOf* crm:E1_CRM_Entity .
+                }
             } GROUP BY ?proposition ?subject ?type ?container ?dateCreated ?parentContainer ?page ?form
             ORDER BY ?dateCreated"
             options='{
