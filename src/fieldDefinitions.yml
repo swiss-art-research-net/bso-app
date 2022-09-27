@@ -924,6 +924,7 @@ fields:
       label: Assigned attribute to
       description: The entity to which an attribute was assigned
       datatype: xsd:anyURI
+      display: hidden
       minOccurs: 0
       maxOccurs: 1
       queries:
@@ -940,6 +941,7 @@ fields:
       datatype: xsd:anyURI
       minOccurs: 0
       maxOccurs: 1
+      display: hidden
       queries:
         - select: 'SELECT ?value WHERE {
             $subject crm:P141_assigned ?value .
@@ -975,6 +977,7 @@ fields:
       label: Assigned property of type
       description: The property to which the assigned attribute denotes
       datatype: xsd:anyURI
+      display: hidden
       queries:
         - select: 'SELECT ?value WHERE {
             $subject crm:P177_assigned_property_of_type ?value .

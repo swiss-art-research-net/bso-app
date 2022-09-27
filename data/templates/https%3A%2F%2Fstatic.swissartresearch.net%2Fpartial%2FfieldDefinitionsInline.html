@@ -663,6 +663,7 @@
 
             "label": "[[i18n "field_assigned_attribute_to" bundle="bso"]]",
             "description" : "The entity to which an attribute was assigned",
+            "display" : "hidden",
             "maxOccurs" : "1",
             "xsdDatatype" : "xsd:anyURI",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P140_assigned_attribute_to ?value . }",
@@ -676,6 +677,7 @@
 
             "label": "[[i18n "field_assigned" bundle="bso"]]",
             "description" : "The entity has been assigned",
+            "display" : "hidden",
             "maxOccurs" : "1",
             "xsdDatatype" : "xsd:anyURI",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P141_assigned ?value . }",
@@ -703,6 +705,7 @@
 
             "label": "[[i18n "field_assigned_property_of_type" bundle="bso"]]",
             "description" : "The property to which the assigned attribute denotes",
+            "display" : "hidden",
             "xsdDatatype" : "xsd:anyURI",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P177_assigned_property_of_type ?value . }",
                 "insertPattern" : "INSERT { $subject crm:P177_assigned_property_of_type ?value . } WHERE {}",
