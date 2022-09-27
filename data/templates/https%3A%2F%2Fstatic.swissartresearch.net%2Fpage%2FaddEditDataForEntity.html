@@ -398,18 +398,21 @@
             <semantic-query query="SELECT ?context ?contextLabel WHERE {
                     BIND(<[[urlParam 'subjectiri']]> as ?subject)
                     ?event crm:P9_consists_of ?subject ;
-                        a ?context .
-                    VALUES(?context ?contextLabel) {
-                        (crm:E12_Production 'production')
-                        (crm:E65_Creation 'creation')
+                        a ?type .
+                    VALUES(?type ?context ?contextLabel) {
+                        (crm:E12_Production 'production' '[[i18n "production" bundle="bso"]]')
+                        (crm:E65_Creation 'creation' '[[i18n "creation" bundle="bso"]]')
                     }
                 }"
                 template="{{> template}}"    
             >
                 <template id="template">
-                    {{#ifCond contextLabel.value "==" "production"}}
+                    <p>[[i18n "context" bundle="bso"]]: {{bindings.0.contextLabel.value}}</p>
+                    {{#ifCond bindings.0.context.value "==" "production"}}
+                        Production
                         [[> object_dates_form context="production" type="crm:E12_Production"]]
                     {{else}}
+                        Creation
                         [[> object_dates_form context="creation" type="crm:E65_Creation"]]
                     {{/ifCond}}
                 </template>
