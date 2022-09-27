@@ -396,8 +396,12 @@
                 {{#each bindings}}
                 <tr>
                     <td><semantic-link iri="{{subject.value}}"></semantic-link></td>
-                    <td><mp-label iri="{{eventType.value}}"></mp-label></td>
-                    <td>{{#if type.value}}<semantic-link iri="{{type.value}}"></semantic-link>{{/if}}</td>
+                    {{#if type.value}}
+                        <td><semantic-link iri="{{type.value}}"></semantic-link>
+                            (<mp-label iri="{{eventType.value}}"></mp-label>)</td>
+                    {{else}}
+                        <td>(<mp-label iri="{{eventType.value}}"></mp-label>)</td>
+                    {{/if}}
                 </tr>
                 {{/each}}
             </table>
