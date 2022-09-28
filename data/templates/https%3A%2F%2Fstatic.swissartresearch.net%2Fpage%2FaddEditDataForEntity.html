@@ -461,6 +461,18 @@
                         <semantic-form-text-input for="date_to"></semantic-form-text-input>
                     </semantic-form-composite-input>
 
+                    <semantic-form-composite-input
+                        for="P140i_was_attributed_by"
+                        new-subject-template="/annotation"
+                        fields='[
+                            [[> type ]],
+                            [[> notes ]]
+                        ]'>
+                        <semantic-form-hidden-input for="type" replace-values='[ "[[resolvePrefix "oa:Annotation"]]", "[[resolvePrefix "crm:E13_Attribute_Assignment"]]" ]'></semantic-form-hidden-input>
+                    
+                        <semantic-form-text-input for="notes"></semantic-form-text-input>
+                    </semantic-form-composite-input>
+
                     <semantic-form-tree-picker-input for="P2_has_type_for_date_type"></semantic-form-tree-picker-input>
         
                     <button name="submit" class="btn btn-primary btn-md">[[i18n "save" bundle="bso"]]</button>
