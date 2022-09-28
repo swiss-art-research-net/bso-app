@@ -624,6 +624,18 @@
     },
 
     {
+        "id" : "P140i_was_attributed_by",
+
+            "label": "[[i18n "field_was_attributed_by" bundle="bso"]]",
+            "description" : "The entity that assigned an attribute to another entity",
+            "display" : "hidden",
+            "xsdDatatype" : "xsd:anyURI",
+                "selectPattern" : "SELECT ?value WHERE { $subject crm:P140i_was_attributed_by ?value . }",
+                "insertPattern" : "INSERT { $subject crm:P140i_was_attributed_by ?value . ?value crm:P140_assigned_attribute_to $subject . } WHERE {}",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/P140i_was_attributed_by"
+    },
+
+    {
         "id" : "P141_assigned",
 
             "label": "[[i18n "field_assigned" bundle="bso"]]",

@@ -935,6 +935,20 @@ fields:
             $subject crm:P140_assigned_attribute_to ?value .
           } WHERE {}'
     
+    - id: P140i_was_attributed_by
+      label: Was attributed by
+      description: The entity that assigned an attribute to another entity
+      datatype: xsd:anyURI
+      display: hidden
+      queries:
+        - select: 'SELECT ?value WHERE {
+            $subject crm:P140i_was_attributed_by ?value .
+          }'
+        - insert: 'INSERT {
+            $subject crm:P140i_was_attributed_by ?value .
+            ?value crm:P140_assigned_attribute_to $subject .
+          } WHERE {}'
+    
     - id: P141_assigned
       label: Assigned
       description: The entity has been assigned
