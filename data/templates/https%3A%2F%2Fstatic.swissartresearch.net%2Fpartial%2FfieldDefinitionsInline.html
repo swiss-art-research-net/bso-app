@@ -9,8 +9,8 @@
             "minOccurs" : "1",
             "maxOccurs" : "1",
             "xsdDatatype" : "xsd:anyURI",
-                "insertPattern" : "INSERT { ?container prov:used $value . } WHERE { BIND(URI(CONCAT(STR($subject), \\"/container\\")) as ?container) }",
-                "selectPattern" : "SELECT ?value WHERE { BIND(URI(CONCAT(STR($subject), \\"/container\\")) as ?container) ?container prov:used ?value . }",
+                "insertPattern" : "INSERT { ?container prov:used $value . } WHERE { BIND(URI(CONCAT(STR($subject), \"/container\")) as ?container) }",
+                "selectPattern" : "SELECT ?value WHERE { BIND(URI(CONCAT(STR($subject), \"/container\")) as ?container) ?container prov:used ?value . }",
         "iri" : "https://platform.swissartresearch.net/instances/fields/container_form_id"
     }
 [[/inline]]
@@ -60,8 +60,8 @@
             "xsdDatatype" : "xsd:anyURI",
             "domain" : "crm:E22_Human-Made_Object",
             "range" : "crm:E39_Actor",
-                "insertPattern" : "INSERT { ?creation crm:P14_carried_out_by $value . } WHERE { BIND(CONCAT(STR($subject), \\"/creation\\") as ?creation) }",
-                "selectPattern" : "SELECT ?value ?label WHERE { $subject crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by ?value. OPTIONAL { BIND(URI(CONCAT(STR($subject), \\"/meta\\")) as ?subject_meta ) ?value crm:P1_is_identified_by ?appellation . ?appellation rdfs:label ?label ; crm:P70i_is_documented_in ?subject_meta . } }",
+                "insertPattern" : "INSERT { ?creation crm:P14_carried_out_by $value . } WHERE { BIND(CONCAT(STR($subject), \"/creation\") as ?creation) }",
+                "selectPattern" : "SELECT ?value ?label WHERE { $subject crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by ?value. OPTIONAL { BIND(URI(CONCAT(STR($subject), \"/meta\")) as ?subject_meta ) ?value crm:P1_is_identified_by ?appellation . ?appellation rdfs:label ?label ; crm:P70i_is_documented_in ?subject_meta . } }",
         "iri" : "https://platform.swissartresearch.net/instances/fields/creator_of_object"
     }
 [[/inline]]
@@ -132,7 +132,7 @@
             "xsdDatatype" : "xsd:anyURI",
             "domain" : "crm:E39_Actor",
             "range" : "crm:E22_Human-Made_Object",
-                "selectPattern" : "SELECT ?value ?label WHERE { ?value crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by $subject ; rdfs:label ?object_label . OPTIONAL { ?value crm:P128_carries/crm:P94i_was_created_by/crm:P9_consists_of ?subcreation . ?subcreation crm:P14_carried_out_by $subject ; crm:P2_has_type/rdfs:label ?role_label . } BIND(IF(BOUND(?role_label), CONCAT(?object_label, \\" (\\", ?role_label, \\")\\"), ?object_label) as ?label) } ",
+                "selectPattern" : "SELECT ?value ?label WHERE { ?value crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by $subject ; rdfs:label ?object_label . OPTIONAL { ?value crm:P128_carries/crm:P94i_was_created_by/crm:P9_consists_of ?subcreation . ?subcreation crm:P14_carried_out_by $subject ; crm:P2_has_type/rdfs:label ?role_label . } BIND(IF(BOUND(?role_label), CONCAT(?object_label, \" (\", ?role_label, \")\"), ?object_label) as ?label) } ",
         "iri" : "https://platform.swissartresearch.net/instances/fields/objects_created"
     }
 [[/inline]]
@@ -160,8 +160,8 @@
             "range" : "crm:E1_CRM_Entity",
                 "selectPattern" : "SELECT DISTINCT ?value WHERE { $subject crm:P128_carries/crm:P138_represents ?value . }",
                 "insertPattern" : "INSERT { ?work crm:P138_represents $value . } WHERE { $subject crm:P128_carries ?work . }",
-                "autosuggestionPattern" : "PREFIX bds: <http://www.bigdata.com/rdf/search#> SELECT DISTINCT ?value ?label ?type ?typeLabel WHERE { VALUES(?type ?typeLabel) { (search:Person \\"Person\\") (search:Place \\"Place\\") (search:Type \\"Type\\") } ?value a ?type ; rdfs:label ?search_label . OPTIONAL { ?value skos:prefLabel ?prefLabel } BIND(IF(BOUND(?prefLabel), ?prefLabel, ?search_label) as ?label) ?search_label bds:search ?__token__ . } ORDER BY ?label LIMIT 10",
-                "valueSetPattern" : "SELECT ?value ?label ?type ?typeLabel WHERE { VALUES(?type ?typeLabel) { (search:Person \\"Person\\") (search:Place \\"Place\\") (search:Type \\"Type\\") } ?value a ?type ; rdfs:label ?label . } ORDER BY ?label LIMIT 100",
+                "autosuggestionPattern" : "PREFIX bds: <http://www.bigdata.com/rdf/search#> SELECT DISTINCT ?value ?label ?type ?typeLabel WHERE { VALUES(?type ?typeLabel) { (search:Person \"Person\") (search:Place \"Place\") (search:Type \"Type\") } ?value a ?type ; rdfs:label ?search_label . OPTIONAL { ?value skos:prefLabel ?prefLabel } BIND(IF(BOUND(?prefLabel), ?prefLabel, ?search_label) as ?label) ?search_label bds:search ?__token__ . } ORDER BY ?label LIMIT 10",
+                "valueSetPattern" : "SELECT ?value ?label ?type ?typeLabel WHERE { VALUES(?type ?typeLabel) { (search:Person \"Person\") (search:Place \"Place\") (search:Type \"Type\") } ?value a ?type ; rdfs:label ?label . } ORDER BY ?label LIMIT 100",
         "iri" : "https://platform.swissartresearch.net/instances/fields/object_depicts"
     }
 [[/inline]]
@@ -177,8 +177,8 @@
             "domain" : "crm:E13_Attribute_Assignment",
             "range" : "crm:E1_CRM_Entity",
                 "selectPattern" : "SELECT DISTINCT ?value WHERE { $subject crm:P141_assigned ?value . }",
-                "insertPattern" : "INSERT { $subject crm:P141_assigned $value . ?work crm:P138_represents $value . } WHERE { BIND(URI(CONCAT(STRBEFORE(STR($subject), \\"/proposition\\"), \\"/work\\")) as ?work) }",
-                "autosuggestionPattern" : "PREFIX bds: <http://www.bigdata.com/rdf/search#> SELECT DISTINCT ?value ?label ?type ?typeLabel ?score WHERE { VALUES(?type ?typeLabel) { (search:Person \\"Person\\") (search:Place \\"Place\\") (search:Type \\"Type\\") } ?value a ?type ; rdfs:label ?search_label . OPTIONAL { ?value skos:prefLabel ?prefLabel } BIND(IF(BOUND(?prefLabel), ?prefLabel, ?search_label) as ?label) ?search_label bds:search ?__token__ ; bds:matchAllTerms \\"true\\" ; bds:relevance ?score . } ORDER BY DESC(?score) ?label LIMIT 100",
+                "insertPattern" : "INSERT { $subject crm:P141_assigned $value . ?work crm:P138_represents $value . } WHERE { BIND(URI(CONCAT(STRBEFORE(STR($subject), \"/proposition\"), \"/work\")) as ?work) }",
+                "autosuggestionPattern" : "PREFIX bds: <http://www.bigdata.com/rdf/search#> SELECT DISTINCT ?value ?label ?type ?typeLabel ?score WHERE { VALUES(?type ?typeLabel) { (search:Person \"Person\") (search:Place \"Place\") (search:Type \"Type\") } ?value a ?type ; rdfs:label ?search_label . OPTIONAL { ?value skos:prefLabel ?prefLabel } BIND(IF(BOUND(?prefLabel), ?prefLabel, ?search_label) as ?label) ?search_label bds:search ?__token__ ; bds:matchAllTerms \"true\" ; bds:relevance ?score . } ORDER BY DESC(?score) ?label LIMIT 100",
         "iri" : "https://platform.swissartresearch.net/instances/fields/object_depicts_as_P141_to_work"
     }
 [[/inline]]
@@ -193,9 +193,9 @@
             "xsdDatatype" : "xsd:anyURI",
             "domain" : "crm:E13_Attribute_Assignment",
             "range" : "crm:E1_CRM_Entity",
-                "selectPattern" : "SELECT DISTINCT ?value WHERE { $subject crm:P141_assigned ?value . BIND(URI(STRBEFORE(STR($subject), \\"/proposition\\")) as ?proposition_subject) ?proposition_subject crm:P138_represents ?value . }",
-                "insertPattern" : "INSERT { $subject crm:P141_assigned $value . ?proposition_subject crm:P138_represents $value . } WHERE { BIND(URI(STRBEFORE(STR($subject), \\"/proposition\\")) as ?proposition_subject) }",
-                "autosuggestionPattern" : "PREFIX bds: <http://www.bigdata.com/rdf/search#> SELECT DISTINCT ?value ?label ?type ?typeLabel ?score WHERE { VALUES(?type ?typeLabel) { (search:Person \\"Person\\") (search:Place \\"Place\\") (search:Type \\"Type\\") } ?value a ?type ; rdfs:label ?search_label . OPTIONAL { ?value skos:prefLabel ?prefLabel } BIND(IF(BOUND(?prefLabel), ?prefLabel, ?search_label) as ?label) ?search_label bds:search ?__token__ ; bds:matchAllTerms \\"true\\" ; bds:relevance ?score . } ORDER BY DESC(?score) ?label LIMIT 100",
+                "selectPattern" : "SELECT DISTINCT ?value WHERE { $subject crm:P141_assigned ?value . BIND(URI(STRBEFORE(STR($subject), \"/proposition\")) as ?proposition_subject) ?proposition_subject crm:P138_represents ?value . }",
+                "insertPattern" : "INSERT { $subject crm:P141_assigned $value . ?proposition_subject crm:P138_represents $value . } WHERE { BIND(URI(STRBEFORE(STR($subject), \"/proposition\")) as ?proposition_subject) }",
+                "autosuggestionPattern" : "PREFIX bds: <http://www.bigdata.com/rdf/search#> SELECT DISTINCT ?value ?label ?type ?typeLabel ?score WHERE { VALUES(?type ?typeLabel) { (search:Person \"Person\") (search:Place \"Place\") (search:Type \"Type\") } ?value a ?type ; rdfs:label ?search_label . OPTIONAL { ?value skos:prefLabel ?prefLabel } BIND(IF(BOUND(?prefLabel), ?prefLabel, ?search_label) as ?label) ?search_label bds:search ?__token__ ; bds:matchAllTerms \"true\" ; bds:relevance ?score . } ORDER BY DESC(?score) ?label LIMIT 100",
         "iri" : "https://platform.swissartresearch.net/instances/fields/object_depicts_as_P141_to_proposition_subject"
     }
 [[/inline]]
@@ -218,7 +218,7 @@
             "display" : "true",
             "xsdDatatype" : "xsd:anyURI",
             "domain" : "crm:E22_Human-Made_Object",
-                "selectPattern" : "SELECT (?actor as ?value) ?label WHERE { $subject crm:P108i_was_produced_by/crm:P14_carried_out_by ?actor . BIND(URI(CONCAT(STR($subject), \\"/meta\\")) as ?subject_meta ) ?actor crm:P1_is_identified_by ?appellation . ?appellation rdfs:label ?actor_label ; crm:P70i_is_documented_in ?subject_meta . OPTIONAL { $subject crm:P108i_was_produced_by/crm:P9_consists_of ?subProduction . ?subProduction crm:P14_carried_out_by ?actor ; crm:P2_has_type/rdfs:label ?production_type_label . } BIND(CONCAT(?actor_label, IF(BOUND(?production_type_label), CONCAT(\\" (\\", ?production_type_label, \\")\\"), \\"\\")) as ?label) }",
+                "selectPattern" : "SELECT (?actor as ?value) ?label WHERE { $subject crm:P108i_was_produced_by/crm:P14_carried_out_by ?actor . BIND(URI(CONCAT(STR($subject), \"/meta\")) as ?subject_meta ) ?actor crm:P1_is_identified_by ?appellation . ?appellation rdfs:label ?actor_label ; crm:P70i_is_documented_in ?subject_meta . OPTIONAL { $subject crm:P108i_was_produced_by/crm:P9_consists_of ?subProduction . ?subProduction crm:P14_carried_out_by ?actor ; crm:P2_has_type/rdfs:label ?production_type_label . } BIND(CONCAT(?actor_label, IF(BOUND(?production_type_label), CONCAT(\" (\", ?production_type_label, \")\"), \"\")) as ?label) }",
         "iri" : "https://platform.swissartresearch.net/instances/fields/object_production_actors_and_roles"
     }
 [[/inline]]
@@ -232,7 +232,7 @@
             "domain" : "crm:E22_Human-Made_Object",
             "range" : "crm:E65_Creation",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P128_carries/crm:P94i_was_created_by ?creation . ?creation crm:P9_consists_of ?value . }",
-                "insertPattern" : "INSERT { ?creation crm:P9_consists_of ?value . } WHERE { BIND(URI(CONCAT(STR($subject), \\"/creation\\")) as ?creation) }",
+                "insertPattern" : "INSERT { ?creation crm:P9_consists_of ?value . } WHERE { BIND(URI(CONCAT(STR($subject), \"/creation\")) as ?creation) }",
         "iri" : "https://platform.swissartresearch.net/instances/fields/object_subcreations"
     }
 [[/inline]]
@@ -246,7 +246,7 @@
             "domain" : "crm:E22_Human-Made_Object",
             "range" : "E12_Production",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P108i_was_produced_by/crm:P9_consists_of ?value . }",
-                "insertPattern" : "INSERT { ?production crm:P9_consists_of ?value . } WHERE { BIND(URI(CONCAT(STR($subject), \\"/production\\")) as ?production) }",
+                "insertPattern" : "INSERT { ?production crm:P9_consists_of ?value . } WHERE { BIND(URI(CONCAT(STR($subject), \"/production\")) as ?production) }",
         "iri" : "https://platform.swissartresearch.net/instances/fields/object_subproductions"
     }
 [[/inline]]
@@ -399,8 +399,8 @@
             "xsdDatatype" : "xsd:anyURI",
             "domain" : "crm:E13_Attribute_Assignment",
             "range" : "crm:E1_CRM_Entity",
-                "selectPattern" : "SELECT DISTINCT ?value WHERE { $subject crm:P141_assigned ?value . BIND(URI(STRBEFORE(STR($subject), \\"/proposition\\")) as ?proposition_subject) ?proposition_subject crm:P70i_is_documented_in ?value . }",
-                "insertPattern" : "INSERT { $subject crm:P141_assigned $value . ?proposition_subject crm:P70i_is_documented_in $value . $value a crm:E31_Document . } WHERE { BIND(URI(STRBEFORE(STR($subject), \\"/proposition\\")) as ?proposition_subject) }",
+                "selectPattern" : "SELECT DISTINCT ?value WHERE { $subject crm:P141_assigned ?value . BIND(URI(STRBEFORE(STR($subject), \"/proposition\")) as ?proposition_subject) ?proposition_subject crm:P70i_is_documented_in ?value . }",
+                "insertPattern" : "INSERT { $subject crm:P141_assigned $value . ?proposition_subject crm:P70i_is_documented_in $value . $value a crm:E31_Document . } WHERE { BIND(URI(STRBEFORE(STR($subject), \"/proposition\")) as ?proposition_subject) }",
         "iri" : "https://platform.swissartresearch.net/instances/fields/P70i_is_documented_in_as_P141_to_proposition_subject"
     }
 [[/inline]]
@@ -428,8 +428,8 @@
             "xsdDatatype" : "xsd:langString",
             "domain" : "crm:E13_Attribute_Assignment",
             "range" : "crm:E1_CRM_Entity",
-                "selectPattern" : "SELECT DISTINCT ?value WHERE { $subject crm:P141_assigned ?value . BIND(URI(STRBEFORE(STR($subject), \\"/proposition\\")) as ?proposition_subject) ?proposition_subject rdfs:label ?value . }",
-                "insertPattern" : "INSERT { $subject crm:P141_assigned $value . ?proposition_subject rdfs:label $value . } WHERE { BIND(URI(STRBEFORE(STR($subject), \\"/proposition\\")) as ?proposition_subject) }",
+                "selectPattern" : "SELECT DISTINCT ?value WHERE { $subject crm:P141_assigned ?value . BIND(URI(STRBEFORE(STR($subject), \"/proposition\")) as ?proposition_subject) ?proposition_subject rdfs:label ?value . }",
+                "insertPattern" : "INSERT { $subject crm:P141_assigned $value . ?proposition_subject rdfs:label $value . } WHERE { BIND(URI(STRBEFORE(STR($subject), \"/proposition\")) as ?proposition_subject) }",
         "iri" : "https://platform.swissartresearch.net/instances/fields/rdfs_label_as_P141_to_proposition_subject"
     }
 [[/inline]]
@@ -440,7 +440,7 @@
             "label": "[[i18n "field_regions" bundle="bso"]]",
             "display" : "hidden",
             "xsdDatatype" : "xsd:anyURI",
-                "selectPattern" : "SELECT ?value WHERE { BIND(URI(STRBEFORE(STR($subject), \\"/proposition\\")) as ?propositionSubject) ?propositionSubject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?iiif_image . ?value crmdig:L49_is_primary_area_of ?iiif_image . }",
+                "selectPattern" : "SELECT ?value WHERE { BIND(URI(STRBEFORE(STR($subject), \"/proposition\")) as ?propositionSubject) ?propositionSubject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?iiif_image . ?value crmdig:L49_is_primary_area_of ?iiif_image . }",
         "iri" : "https://platform.swissartresearch.net/instances/fields/region_for_proposition_subject"
     }
 [[/inline]]
@@ -463,7 +463,7 @@
             "description" : "Takes a URI or string (which will be attached to the subject to create a URI) and defines it as a I4 Proposition set that is P129 about the subject and P67 refers to the proposition&#x27;s subject",
             "display" : "hidden",
             "xsdDatatype" : "xsd:string",
-                "insertPattern" : "INSERT { ?valueSubject a crminf:I4_Proposition_Set ; crm:P129_is_about $subject ; crm:P67_refers_to ?propositionSubject . } WHERE { BIND((IF(STR(URI(?value)) = ?value, True,False)) as ?isURI) BIND(IF(?isURI, URI(?value), URI(CONCAT(STR($subject), STR(?value)))) as ?valueSubject) BIND(URI(STRBEFORE(STR($subject), \\"/proposition\\")) as ?propositionSubject) }",
+                "insertPattern" : "INSERT { ?valueSubject a crminf:I4_Proposition_Set ; crm:P129_is_about $subject ; crm:P67_refers_to ?propositionSubject . } WHERE { BIND((IF(STR(URI(?value)) = ?value, True,False)) as ?isURI) BIND(IF(?isURI, URI(?value), URI(CONCAT(STR($subject), STR(?value)))) as ?valueSubject) BIND(URI(STRBEFORE(STR($subject), \"/proposition\")) as ?propositionSubject) }",
         "iri" : "https://platform.swissartresearch.net/instances/fields/I4_Proposition_Set_about_Subject"
     }
 [[/inline]]
@@ -488,8 +488,8 @@
             "xsdDatatype" : "xsd:anyURI",
             "domain" : "crm:E13_Attribute_Assignment",
             "range" : "crm:E1_CRM_Entity",
-                "selectPattern" : "SELECT DISTINCT ?value WHERE { $subject crm:P141_assigned ?value . BIND(URI(STRBEFORE(STR($subject), \\"/proposition\\")) as ?proposition_subject) ?proposition_subject crmdig:L54_is_same-as ?value . }",
-                "insertPattern" : "INSERT { $subject crm:P141_assigned $value . ?proposition_subject crmdig:L54_is_same-as $value . } WHERE { BIND(URI(STRBEFORE(STR($subject), \\"/proposition\\")) as ?proposition_subject) }",
+                "selectPattern" : "SELECT DISTINCT ?value WHERE { $subject crm:P141_assigned ?value . BIND(URI(STRBEFORE(STR($subject), \"/proposition\")) as ?proposition_subject) ?proposition_subject crmdig:L54_is_same-as ?value . }",
+                "insertPattern" : "INSERT { $subject crm:P141_assigned $value . ?proposition_subject crmdig:L54_is_same-as $value . } WHERE { BIND(URI(STRBEFORE(STR($subject), \"/proposition\")) as ?proposition_subject) }",
         "iri" : "https://platform.swissartresearch.net/instances/fields/L54_is_same-as_as_P141_to_proposition_subject"
     }
 [[/inline]]
@@ -503,7 +503,7 @@
             "xsdDatatype" : "xsd:anyURI",
                 "insertPattern" : "INSERT { $subject a $value . } WHERE {}",
                 "selectPattern" : "SELECT ?value WHERE { $subject a ?value . VALUES (?value) { (crm:E7_Activity) (crm:E11_Modification) (crm:E12_Production) } }",
-                "valueSetPattern" : "SELECT ?value ?label WHERE { VALUES (?value ?label) { (crm:E12_Production \\"Production (engraving, printing, ...)\\") (crm:E11_Modification \\"Modification (colouring, ...)\\") (crm:E7_Activity \\"Activity (commissioning, publishing, ...)\\") } }",
+                "valueSetPattern" : "SELECT ?value ?label WHERE { VALUES (?value ?label) { (crm:E12_Production \"Production (engraving, printing, ...)\") (crm:E11_Modification \"Modification (colouring, ...)\") (crm:E7_Activity \"Activity (commissioning, publishing, ...)\") } }",
         "iri" : "https://platform.swissartresearch.net/instances/fields/subproduction_type"
     }
 [[/inline]]
@@ -581,7 +581,7 @@
                 "rootsQuery": "SELECT DISTINCT ?item ?hasChildren WHERE { BIND(iqvoc:_4c28919d as ?item) OPTIONAL { ?subItem skos:broader ?item } BIND(BOUND(?subItem) AS ?hasChildren) }",
                 "childrenQuery": "SELECT ?item ?hasChildren WHERE { ?item skos:broader ?parent . OPTIONAL { ?subItem skos:broader ?item } BIND(BOUND(?subItem) AS ?hasChildren) }",
                 "parentsQuery": "SELECT ?item ?parent WHERE { ?item skos:broader ?parent . FILTER(?parent != iqvoc:_4c28919d) }",
-                "searchQuery": "SELECT DISTINCT ?item ?label ?score ?hasChildren WHERE { BIND(iqvoc:_4c28919d as ?parent) ?item a skos:Concept ; skos:broader* ?parent ; skos:prefLabel ?label . BIND(false AS ?hasChildren) FILTER REGEX(STR(?label), ?__token__, \\"i\\") } ORDER BY DESC (?score) (?label)"
+                "searchQuery": "SELECT DISTINCT ?item ?label ?score ?hasChildren WHERE { BIND(iqvoc:_4c28919d as ?parent) ?item a skos:Concept ; skos:broader* ?parent ; skos:prefLabel ?label . BIND(false AS ?hasChildren) FILTER REGEX(STR(?label), ?__token__, \"i\") } ORDER BY DESC (?score) (?label)"
             },
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P2_has_type ?value . }",
                 "insertPattern" : "INSERT { $subject crm:P2_has_type $value . } WHERE {}",
@@ -602,7 +602,7 @@
                 "rootsQuery": "SELECT DISTINCT ?item ?hasChildren WHERE { BIND(iqvoc:_d4e308db as ?parent) ?item a skos:Concept ; skos:broader ?parent . OPTIONAL { ?subItem skos:broader ?item } BIND(BOUND(?subItem) AS ?hasChildren) }",
                 "childrenQuery": "SELECT ?item ?hasChildren WHERE { ?item skos:broader ?parent . OPTIONAL { ?subItem skos:broader ?item } BIND(BOUND(?subItem) AS ?hasChildren) }",
                 "parentsQuery": "SELECT ?item ?parent WHERE { ?item skos:broader ?parent . FILTER(?parent != iqvoc:_d4e308db) }",
-                "searchQuery": "SELECT DISTINCT ?item ?label ?score ?hasChildren WHERE { BIND(iqvoc:_d4e308db as ?parent) ?item a skos:Concept ; skos:broader ?parent ; skos:prefLabel ?label . BIND(false AS ?hasChildren) FILTER REGEX(STR(?label), ?__token__, \\"i\\") } ORDER BY DESC (?score) (?label)"
+                "searchQuery": "SELECT DISTINCT ?item ?label ?score ?hasChildren WHERE { BIND(iqvoc:_d4e308db as ?parent) ?item a skos:Concept ; skos:broader ?parent ; skos:prefLabel ?label . BIND(false AS ?hasChildren) FILTER REGEX(STR(?label), ?__token__, \"i\") } ORDER BY DESC (?score) (?label)"
             },
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P2_has_type ?value . }",
                 "insertPattern" : "INSERT { $subject crm:P2_has_type $value . } WHERE {}",
@@ -623,7 +623,7 @@
                 "rootsQuery": "SELECT DISTINCT ?item ?hasChildren WHERE { BIND(iqvoc:_d4e308db as ?parent) ?item a skos:Concept ; skos:broader ?parent . OPTIONAL { ?subItem skos:broader ?item } BIND(BOUND(?subItem) AS ?hasChildren) }",
                 "childrenQuery": "SELECT ?item ?hasChildren WHERE { ?item skos:broader ?parent . OPTIONAL { ?subItem skos:broader ?item } BIND(BOUND(?subItem) AS ?hasChildren) }",
                 "parentsQuery": "SELECT ?item ?parent WHERE { ?item skos:broader ?parent . FILTER(?parent != iqvoc:_d4e308db) }",
-                "searchQuery": "SELECT DISTINCT ?item ?label ?score ?hasChildren WHERE { BIND(iqvoc:_d4e308db as ?parent) ?item a skos:Concept ; skos:broader ?parent ; skos:prefLabel ?label . BIND(false AS ?hasChildren) FILTER REGEX(STR(?label), ?__token__, \\"i\\") } ORDER BY DESC (?score) (?label)"
+                "searchQuery": "SELECT DISTINCT ?item ?label ?score ?hasChildren WHERE { BIND(iqvoc:_d4e308db as ?parent) ?item a skos:Concept ; skos:broader ?parent ; skos:prefLabel ?label . BIND(false AS ?hasChildren) FILTER REGEX(STR(?label), ?__token__, \"i\") } ORDER BY DESC (?score) (?label)"
             },
                 "selectPattern" : "SELECT ?value WHERE { $subject a crm:E12_Production ; crm:P2_has_type ?value . }",
                 "insertPattern" : "INSERT { $subject crm:P2_has_type $value . } WHERE {}",
@@ -652,7 +652,7 @@
             "xsdDatatype" : "xsd:anyURI",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P14_carried_out_by ?value . }",
                 "insertPattern" : "INSERT { $subject crm:P14_carried_out_by ?value . } WHERE {}",
-                "autosuggestionPattern" : "PREFIX bds: <http://www.bigdata.com/rdf/search#> SELECT DISTINCT ?value ?label WHERE { ?value a search:Person ; rdfs:label ?label . ?label bds:search ?__token__ ; bds:relevance ?score ; bds:matchAllTerms \\"true\\" } ORDER BY DESC(?score) LIMIT 10",
+                "autosuggestionPattern" : "PREFIX bds: <http://www.bigdata.com/rdf/search#> SELECT DISTINCT ?value ?label WHERE { ?value a search:Person ; rdfs:label ?label . ?label bds:search ?__token__ ; bds:relevance ?score ; bds:matchAllTerms \"true\" } ORDER BY DESC(?score) LIMIT 10",
                 "valueSetPattern" : "SELECT ?value ?label  WHERE { ?value a search:Person ; rdfs:label ?label . } ORDER BY ?label LIMIT 100",
         "iri" : "https://platform.swissartresearch.net/instances/fields/P14_carried_out_by"
     }
@@ -707,7 +707,7 @@
             "display" : "hidden",
             "xsdDatatype" : "xsd:string",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P141_assigned ?value . }",
-                "insertPattern" : "INSERT { $subject crm:P141_assigned ?value_derived . } WHERE { BIND(URI(CONCAT(REPLACE(STR($subject), \\"/[^/]*$\\", \\"\\"), \\"/\\", ?value)) AS ?value_derived) }",
+                "insertPattern" : "INSERT { $subject crm:P141_assigned ?value_derived . } WHERE { BIND(URI(CONCAT(REPLACE(STR($subject), \"/[^/]*$\", \"\"), \"/\", ?value)) AS ?value_derived) }",
         "iri" : "https://platform.swissartresearch.net/instances/fields/P141_assigned-value_as_last_term_replaced"
     }
 [[/inline]]
@@ -721,7 +721,7 @@
             "xsdDatatype" : "xsd:anyURI",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P141_assigned ?value . }",
                 "insertPattern" : "INSERT { $subject crm:P141_assigned ?value . } WHERE {}",
-                "autosuggestionPattern" : " SELECT DISTINCT ?value ?label WHERE { ?value a search:BibliographicItem ; rdfs:label ?label . ?label bds:search ?__token__ ; bds:relevance ?score ; bds:matchAllTerms \\"true\\" } ORDER BY DESC(?score) LIMIT 10",
+                "autosuggestionPattern" : " SELECT DISTINCT ?value ?label WHERE { ?value a search:BibliographicItem ; rdfs:label ?label . ?label bds:search ?__token__ ; bds:relevance ?score ; bds:matchAllTerms \"true\" } ORDER BY DESC(?score) LIMIT 10",
         "iri" : "https://platform.swissartresearch.net/instances/fields/P141_assigned_publication"
     }
 [[/inline]]
@@ -747,7 +747,7 @@
             "maxOccurs" : "1",
             "xsdDatatype" : "xsd:string",
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P1_is_identified_by ?pageNr . ?pageNr crm:P2_has_type aat:300445022 ; rdfs:label ?value }",
-                "insertPattern" : "INSERT { $subject crm:P1_is_identified_by ?pageNr . ?pageNr a crm:E42_Identifier ; crm:P2_has_type aat:300445022 ; rdfs:label ?value } WHERE { BIND(URI(CONCAT(STR(?subject), \\"/pageNr\\")) AS ?pageNr) }",
+                "insertPattern" : "INSERT { $subject crm:P1_is_identified_by ?pageNr . ?pageNr a crm:E42_Identifier ; crm:P2_has_type aat:300445022 ; rdfs:label ?value } WHERE { BIND(URI(CONCAT(STR(?subject), \"/pageNr\")) AS ?pageNr) }",
         "iri" : "https://platform.swissartresearch.net/instances/fields/page_number_for_assigned_reference"
     }
 [[/inline]]
@@ -765,7 +765,7 @@
                 "rootsQuery": "SELECT DISTINCT ?item ?hasChildren WHERE { BIND(iqvoc:_d4e308db as ?parent) ?item a skos:Concept ; skos:broader ?parent . OPTIONAL { ?subItem skos:broader ?item } BIND(BOUND(?subItem) AS ?hasChildren) }",
                 "childrenQuery": "SELECT ?item ?hasChildren WHERE { ?item skos:broader ?parent . OPTIONAL { ?subItem skos:broader ?item } BIND(BOUND(?subItem) AS ?hasChildren) }",
                 "parentsQuery": "SELECT ?item ?parent WHERE { ?item skos:broader ?parent . FILTER(?parent != iqvoc:_d4e308db) }",
-                "searchQuery": "SELECT DISTINCT ?item ?label ?score ?hasChildren WHERE { BIND(iqvoc:_d4e308db as ?parent) ?item a skos:Concept ; skos:broader ?parent ; skos:prefLabel ?label . BIND(false AS ?hasChildren) FILTER REGEX(STR(?label), ?__token__, \\"i\\") } ORDER BY DESC (?score) (?label)"
+                "searchQuery": "SELECT DISTINCT ?item ?label ?score ?hasChildren WHERE { BIND(iqvoc:_d4e308db as ?parent) ?item a skos:Concept ; skos:broader ?parent ; skos:prefLabel ?label . BIND(false AS ?hasChildren) FILTER REGEX(STR(?label), ?__token__, \"i\") } ORDER BY DESC (?score) (?label)"
             },
                 "selectPattern" : "SELECT ?value WHERE { $subject a crm:E12_Production ; crm:P2_has_type ?value . }",
                 "insertPattern" : "INSERT { $subject crm:P2_has_type $value . } WHERE {}",
@@ -780,7 +780,7 @@
             "label": "[[i18n "field_see_also" bundle="bso"]]",
             "description" : "Links to this entity in other databases",
             "xsdDatatype" : "schema:URL",
-                "selectPattern" : "SELECT ?value ?label WHERE { BIND(<https://d-nb.info/gnd/10171799-4> as ?nb) BIND(<https://d-nb.info/gnd/1012546-2> as ?zbz) { $subject a search:Object ; crm:P109_has_current_or_former_curator ?zbz ; crmdig:L1i_was_digitized_by/crmdig:L11_had_output/crm:P1_is_identified_by ?value . } UNION { $subject a search:Object ; crm:P109_has_current_or_former_curator ?nb . BIND(STRAFTER(STR($subject), \\"nb-\\") as ?nbId) BIND(URI(CONCAT(\\"https://www.helveticarchives.ch/detail.aspx?ID=\\", ?nbId)) as ?value) BIND(\\"HelveticArchives\\" as ?label) } }",
+                "selectPattern" : "SELECT ?value ?label WHERE { BIND(<https://d-nb.info/gnd/10171799-4> as ?nb) BIND(<https://d-nb.info/gnd/1012546-2> as ?zbz) { $subject a search:Object ; crm:P109_has_current_or_former_curator ?zbz ; crmdig:L1i_was_digitized_by/crmdig:L11_had_output/crm:P1_is_identified_by ?value . } UNION { $subject a search:Object ; crm:P109_has_current_or_former_curator ?nb . BIND(STRAFTER(STR($subject), \"nb-\") as ?nbId) BIND(URI(CONCAT(\"https://www.helveticarchives.ch/detail.aspx?ID=\", ?nbId)) as ?value) BIND(\"HelveticArchives\" as ?label) } }",
         "iri" : "https://platform.swissartresearch.net/instances/fields/see_also"
     }
 [[/inline]]
