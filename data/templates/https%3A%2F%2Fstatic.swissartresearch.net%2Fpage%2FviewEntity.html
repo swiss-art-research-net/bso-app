@@ -1424,11 +1424,27 @@
             </template>
             <template id="entityTemplate">
                 {{#if entities.value}}
-                    {{#each (split entities.value ",")}}<semantic-link iri="{{this}}"></semantic-link>{{#unless @last}}, {{/unless}}{{/each}}
+                    {{#each (split entities.value ",")}}<semantic-link iri="{{this}}"></semantic-link> {{> typeQuery entity=this }}{{#unless @last}}, {{/unless}}{{/each}}
                 {{/if}}
                 {{#if strings.value}}
                     {{#each (split strings.value ",")}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}
                 {{/if}}
+            </template>
+            <template id="typeQuery">
+                <semantic-query
+                    query="SELECT ?type WHERE {
+                        <{{entity}}> a ?type .
+                    }"
+                    template="{{> typeQueryTemplate}}"
+                >
+                    <template id="typeQueryTemplate">
+                        ({{#each bindings}}
+                            {{#if type.value}}
+                                <mp-label iri="{{type.value}}"></mp-label> 
+                            {{/if}}
+                        {{/each}})
+                    </template>
+                </semantic-query>
             </template>
         </semantic-table>
     </div>
