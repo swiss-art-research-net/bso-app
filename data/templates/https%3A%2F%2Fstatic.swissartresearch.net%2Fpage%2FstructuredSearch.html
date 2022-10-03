@@ -41,7 +41,11 @@
                   ?parent crm:P89_falls_within ?parent .
                 }",
                 "searchQuery": "SELECT ?item ?score ?label ?hasChildren WHERE {
-                  ?item a schema:AdministrativeArea ;
+                  VALUES(?type) {
+                    (schema:AdministrativeArea)
+                    (search:Place)
+                  }
+                  ?item a ?type ;
                     rdfs:label ?label .
                   ?label bds:search ?__token__ ;
                     bds:relevance ?score .
