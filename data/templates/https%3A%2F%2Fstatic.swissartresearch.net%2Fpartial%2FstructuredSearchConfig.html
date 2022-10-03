@@ -68,6 +68,12 @@
         "label": "[[i18n "acquiredFrom" bundle="bso"]]"
       },
       {
+        "iri": "<https://platform.swissartresearch.net/Object_made_using_Technique>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Object>",
+        "hasRange": "<https://platform.swissartresearch.net/search/Type>",
+        "label": "[[i18n "madeUsing" bundle="bso"]]"
+      },
+      {
         "iri": "<https://platform.swissartresearch.net/Object_of_Type>",
         "hasDomain": "<https://platform.swissartresearch.net/search/Object>",
         "hasRange": "<https://platform.swissartresearch.net/search/Type>",
@@ -166,6 +172,13 @@
           ?subject a search:Object ;
             crm:P24i_changed_ownership_through/crm:P23_transferred_title_from ?__value__ .
           ?__value__ a search:Person .
+        }"
+      }],
+      "<https://platform.swissartresearch.net/Object_made_using_Technique>": [{
+        "kind": "resource",
+        "queryPattern": "{
+          ?subject a search:Object ;
+            crm:P108i_was_produced_by/crm:P32_used_general_technique ?__value__ .
         }"
       }],
       "<https://platform.swissartresearch.net/Object_from_Time>": [{
