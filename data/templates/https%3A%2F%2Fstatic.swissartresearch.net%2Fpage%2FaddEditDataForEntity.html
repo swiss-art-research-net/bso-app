@@ -467,22 +467,31 @@
                         fields='[
                             [[> type ]],
                             [[> notes ]],
-                            [[> P177_assigned_property_of_type]],
-                            {
-                                "id" : "P141_assigned-value_as_last_term_replaced",
-                                "label": "[[i18n "field_assigned" bundle="bso"]]",
-                                "description" : "The entity that has been assigned derived from the URI of the subject replacing the last string after the last slash with the given value",
-                                "display" : "hidden",
-                                "xsdDatatype" : "xsd:string",
-                                "selectPattern" : "SELECT ?value WHERE { $subject crm:P141_assigned ?value . }",
-                                "insertPattern" : "INSERT { $subject crm:P141_assigned ?value_derived . } WHERE { BIND(URI(CONCAT(REPLACE(STR($subject), \"/[^/]*$\", \"\"), \"/\", ?value)) AS ?value_derived) }",
-                                "iri" : "https://platform.swissartresearch.net/instances/fields/P141_assigned-value_as_last_term_replaced"
-                            }
+                            [[> P15_was_influenced_by ]],
+                            [[> P177_assigned_property_of_type ]],
+                            [[> P141_assigned-value_as_last_term_replaced ]]
                         ]'>
                         <semantic-form-hidden-input for="type" replace-values='[ "[[resolvePrefix "oa:Annotation"]]", "[[resolvePrefix "crm:E13_Attribute_Assignment"]]" ]'></semantic-form-hidden-input>
                         <semantic-form-hidden-input for="P177_assigned_property_of_type" replace-value='[[resolvePrefix "crm:P4_has_time-span"]]'></semantic-form-hidden-input>
                         <semantic-form-hidden-input for="P141_assigned-value_as_last_term_replaced" replace-value='date'></semantic-form-hidden-input>
-                        <!-- Add reference fields -->
+                        
+                        <semantic-form-composite-input
+                            for="P15_was_influenced_by"
+                            new-subject-template="/reference/{{UUID}}"
+                            fields='[
+                                [[> type ]],
+                                [[> P165i_is_incorporated_in]]
+                            ]'
+                        >
+                            <semantic-form-hidden-input for="type" replace-value='[[resolvePrefix "frbroo:F23_Expression_Fragment"]]'></semantic-form-hidden-input>
+
+                            <semantic-form-autocomplete-input droppable='{
+                                "query": "ASK { ?subject a frbroo:F24_Publication_Expression }"
+                            }'
+                            for="P165i_is_incorporated_in">
+                        </semantic-form-autocomplete-input>
+                        </semantic-form-composite-input>
+
                         <semantic-form-text-input for="notes"></semantic-form-text-input>
                         <semantic-form-errors></semantic-form-errors>
 

@@ -919,7 +919,19 @@ fields:
                 rdfs:label ?label .
             } ORDER BY ?label
             LIMIT 100'
-    
+
+    - id: P15_was_influenced_by
+      label: Reference
+      description: The entity that influenced this assignment
+      datatype: xsd:anyURI
+      queries:
+        - select: 'SELECT ?value WHERE {
+              $subject crm:P15_was_influenced_by ?value .
+            }'
+        - insert: 'INSERT {
+              $subject crm:P15_was_influenced_by ?value .
+            } WHERE {}'
+
     - id: P140_assigned_attribute_to
       label: Assigned attribute to
       description: The entity to which an attribute was assigned
@@ -991,6 +1003,30 @@ fields:
           }'
         - insert: 'INSERT {
             $subject crm:P141_assigned ?value .
+          } WHERE {}'
+        - autosuggestion: '
+            SELECT DISTINCT ?value ?label WHERE {
+              ?value a search:BibliographicItem ;
+                rdfs:label ?label .
+              ?label bds:search ?__token__ ;
+                bds:relevance ?score ; 
+                bds:matchAllTerms "true"
+            } ORDER BY DESC(?score)
+            LIMIT 10'
+
+    - id: P165i_is_incorporated_in
+      label: Is incorporated in
+      description: The entity that incorporates another entity
+      datatype: xsd:anyURI
+      display: hidden
+      minOccurs: 1
+      maxOccurs: 1
+      queries:
+        - select: 'SELECT ?value WHERE {
+            $subject crm:P165i_is_incorporated_in ?value .
+          }'
+        - insert: 'INSERT {
+            $subject crm:P165i_is_incorporated_in ?value .
           } WHERE {}'
         - autosuggestion: '
             SELECT DISTINCT ?value ?label WHERE {

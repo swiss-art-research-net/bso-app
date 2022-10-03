@@ -657,6 +657,18 @@
         "iri" : "https://platform.swissartresearch.net/instances/fields/P14_carried_out_by"
     }
 [[/inline]]
+ [[#*inline "P15_was_influenced_by"]]
+    {
+        "id" : "P15_was_influenced_by",
+
+            "label": "[[i18n "field_reference" bundle="bso"]]",
+            "description" : "The entity that influenced this assignment",
+            "xsdDatatype" : "xsd:anyURI",
+                "selectPattern" : "SELECT ?value WHERE { $subject crm:P15_was_influenced_by ?value . }",
+                "insertPattern" : "INSERT { $subject crm:P15_was_influenced_by ?value . } WHERE {}",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/P15_was_influenced_by"
+    }
+[[/inline]]
  [[#*inline "P140_assigned_attribute_to"]]
     {
         "id" : "P140_assigned_attribute_to",
@@ -723,6 +735,22 @@
                 "insertPattern" : "INSERT { $subject crm:P141_assigned ?value . } WHERE {}",
                 "autosuggestionPattern" : " SELECT DISTINCT ?value ?label WHERE { ?value a search:BibliographicItem ; rdfs:label ?label . ?label bds:search ?__token__ ; bds:relevance ?score ; bds:matchAllTerms \"true\" } ORDER BY DESC(?score) LIMIT 10",
         "iri" : "https://platform.swissartresearch.net/instances/fields/P141_assigned_publication"
+    }
+[[/inline]]
+ [[#*inline "P165i_is_incorporated_in"]]
+    {
+        "id" : "P165i_is_incorporated_in",
+
+            "label": "[[i18n "field_is_incorporated_in" bundle="bso"]]",
+            "description" : "The entity that incorporates another entity",
+            "display" : "hidden",
+            "minOccurs" : "1",
+            "maxOccurs" : "1",
+            "xsdDatatype" : "xsd:anyURI",
+                "selectPattern" : "SELECT ?value WHERE { $subject crm:P165i_is_incorporated_in ?value . }",
+                "insertPattern" : "INSERT { $subject crm:P165i_is_incorporated_in ?value . } WHERE {}",
+                "autosuggestionPattern" : " SELECT DISTINCT ?value ?label WHERE { ?value a search:BibliographicItem ; rdfs:label ?label . ?label bds:search ?__token__ ; bds:relevance ?score ; bds:matchAllTerms \"true\" } ORDER BY DESC(?score) LIMIT 10",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/P165i_is_incorporated_in"
     }
 [[/inline]]
  [[#*inline "P177_assigned_property_of_type"]]
