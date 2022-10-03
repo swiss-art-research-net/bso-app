@@ -480,16 +480,20 @@
                             new-subject-template="/reference/{{UUID}}"
                             fields='[
                                 [[> type ]],
-                                [[> P165i_is_incorporated_in]]
+                                [[> rdfs_label]],
+                                [[> P165i_is_incorporated_in]],
+                                [[> page_number_for_assigned_reference]]
                             ]'
                         >
                             <semantic-form-hidden-input for="type" replace-value='[[resolvePrefix "frbroo:F23_Expression_Fragment"]]'></semantic-form-hidden-input>
 
                             <semantic-form-autocomplete-input droppable='{
-                                "query": "ASK { ?subject a frbroo:F24_Publication_Expression }"
-                            }'
-                            for="P165i_is_incorporated_in">
-                        </semantic-form-autocomplete-input>
+                                    "query": "ASK { ?subject a frbroo:F24_Publication_Expression }"
+                                }'
+                                for="P165i_is_incorporated_in">
+                            </semantic-form-autocomplete-input>
+                            <semantic-form-text-input for="page_number_for_assigned_reference"></semantic-form-text-input>
+                            <semantic-form-text-input for="rdfs_label"></semantic-form-text-input>
                         </semantic-form-composite-input>
 
                         <semantic-form-text-input for="notes"></semantic-form-text-input>
