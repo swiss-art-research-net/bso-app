@@ -1,6 +1,4 @@
 import sys
-sys.path.append('/Users/fkraeutli/Sites/sari-field-definitions-generator/src')
-
 from sariFieldDefinitionsGenerator import generator
 
 inputFile = './fieldDefinitions.yml'
