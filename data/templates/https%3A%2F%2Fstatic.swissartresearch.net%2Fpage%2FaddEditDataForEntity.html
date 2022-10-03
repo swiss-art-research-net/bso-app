@@ -466,11 +466,26 @@
                         new-subject-template="/annotation"
                         fields='[
                             [[> type ]],
-                            [[> notes ]]
+                            [[> notes ]],
+                            [[> P177_assigned_property_of_type]],
+                            {
+                                "id" : "P141_assigned-value_as_last_term_replaced",
+                                "label": "[[i18n "field_assigned" bundle="bso"]]",
+                                "description" : "The entity that has been assigned derived from the URI of the subject replacing the last string after the last slash with the given value",
+                                "display" : "hidden",
+                                "xsdDatatype" : "xsd:string",
+                                "selectPattern" : "SELECT ?value WHERE { $subject crm:P141_assigned ?value . }",
+                                "insertPattern" : "INSERT { $subject crm:P141_assigned ?value_derived . } WHERE { BIND(URI(CONCAT(REPLACE(STR($subject), \"/[^/]*$\", \"\"), \"/\", ?value)) AS ?value_derived) }",
+                                "iri" : "https://platform.swissartresearch.net/instances/fields/P141_assigned-value_as_last_term_replaced"
+                            }
                         ]'>
                         <semantic-form-hidden-input for="type" replace-values='[ "[[resolvePrefix "oa:Annotation"]]", "[[resolvePrefix "crm:E13_Attribute_Assignment"]]" ]'></semantic-form-hidden-input>
-                    
+                        <semantic-form-hidden-input for="P177_assigned_property_of_type" replace-value='[[resolvePrefix "crm:P4_has_time-span"]]'></semantic-form-hidden-input>
+                        <semantic-form-hidden-input for="P141_assigned-value_as_last_term_replaced" replace-value='date'></semantic-form-hidden-input>
+                        <!-- Add reference fields -->
                         <semantic-form-text-input for="notes"></semantic-form-text-input>
+                        <semantic-form-errors></semantic-form-errors>
+
                     </semantic-form-composite-input>
 
                     <semantic-form-tree-picker-input for="P2_has_type_for_date_type"></semantic-form-tree-picker-input>

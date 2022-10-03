@@ -963,6 +963,21 @@ fields:
         - insert: 'INSERT {
             $subject crm:P141_assigned ?value .
           } WHERE {}'
+
+    - id: P141_assigned-value_as_last_term_replaced
+      label: Assigned
+      description: The entity that has been assigned derived from the URI of the subject replacing the last string after the last slash with the given value
+      datatype: xsd:string
+      display: hidden
+      queries:
+        - select: 'SELECT ?value WHERE {
+            $subject crm:P141_assigned ?value .
+          }'
+        - insert: 'INSERT {
+            $subject crm:P141_assigned ?value_derived .
+          } WHERE {
+            BIND(URI(CONCAT(REPLACE(STR($subject), "/[^/]*$", ""), "/", ?value)) AS ?value_derived)
+          }'
     
     - id: P141_assigned_publication
       label: Publication

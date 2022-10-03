@@ -649,6 +649,18 @@
     },
 
     {
+        "id" : "P141_assigned-value_as_last_term_replaced",
+
+            "label": "[[i18n "field_assigned" bundle="bso"]]",
+            "description" : "The entity that has been assigned derived from the URI of the subject replacing the last string after the last slash with the given value",
+            "display" : "hidden",
+            "xsdDatatype" : "xsd:string",
+                "selectPattern" : "SELECT ?value WHERE { $subject crm:P141_assigned ?value . }",
+                "insertPattern" : "INSERT { $subject crm:P141_assigned ?value_derived . } WHERE { BIND(URI(CONCAT(REPLACE(STR($subject), \"/[^/]*$\", \"\"), \"/\", ?value)) AS ?value_derived) }",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/P141_assigned-value_as_last_term_replaced"
+    },
+
+    {
         "id" : "P141_assigned_publication",
 
             "label": "[[i18n "field_publication" bundle="bso"]]",
