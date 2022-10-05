@@ -615,6 +615,34 @@
 </semantic-query>
 [[/inline]]
 
+[[#*inline "field-visualisation-narrower-terms"]]
+<semantic-query
+    query="SELECT DISTINCT ?parent ?type ?typeClass WHERE {
+        BIND([[> thisForQuery]] as ?leaf)
+        ?leaf crm:P127i_has_narrower_term+ ?parent .
+        OPTIONAL {
+            ?node ^crm:P127i_has_narrower_term ?parent .
+        }
+        ?parent a ?type .
+        BIND(STRAFTER(STR(?type), 'search/') as ?typeClass)
+        VALUES(?type) {
+            (search:Type)
+        }
+    }"
+    template="{{> template}}">
+    <template id="template">
+        <div class="bso-component field-visualisation">
+            <span class="bso-component label">[[i18n "narrowerTerm" bundle="bso"]]</span>
+            <ul class="bso-component tags">
+                {{#each bindings}}
+                    <li class="bso-tag {{typeClass.value}}"><semantic-link uri="{{parent.value}}" urlqueryparam-view="page"></semantic-link></li>
+                {{/each}}
+            </ul>
+        </div>
+    </template>
+</semantic-query>
+[[/inline]]
+
 [[#*inline "field-visualisation-inscription"]]
 <semantic-query 
     query="SELECT ?value_formatted WHERE {
@@ -944,6 +972,7 @@
         [[> field-visualisation-dates]]
         [[> field-visualisation-places]]
         [[> field-visualisation-contained-in]]
+        [[> field-visualisation-narrower-terms]]
         [[> field-visualisation-persons-involved-in-creation]]
         [[> field-visualisation-persons-carrying-out-event]]
         [[> field-visualisation-events-carrying-out]]
