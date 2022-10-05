@@ -1065,8 +1065,8 @@
         [[/ component-objects-table]]
 
         <!-- Objects created using this technique -->
-        [[#> component-objects-table condition='?object a search:Object; crm:P108i_was_produced_by/crm:P32_used_general_technique $subject' label='producedUsingTechnique']]
-            ?subject crm:P108i_was_produced_by/crm:P32_used_general_technique [[> thisForQuery]]
+        [[#> component-objects-table condition='?object a search:Object; crm:P108i_was_produced_by/crm:P32_used_general_technique/crm:P127i_has_narrower_term* $subject' label='producedUsingTechnique']]
+            ?subject crm:P108i_was_produced_by/crm:P32_used_general_technique/crm:P127i_has_narrower_term* [[> thisForQuery]]
         [[/ component-objects-table]]
 
         <!-- Found on -->
