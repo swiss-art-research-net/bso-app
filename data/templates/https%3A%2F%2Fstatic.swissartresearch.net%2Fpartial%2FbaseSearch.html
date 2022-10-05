@@ -95,6 +95,12 @@
         "label": "[[i18n "madeFrom" bundle="bso"]]"
       },
       {
+        "iri": "<https://platform.swissartresearch.net/Thing_produced_with_Technique>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Entity>",
+        "hasRange": "<https://platform.swissartresearch.net/search/Type>",
+        "label": "[[i18n "producedWith" bundle="bso"]]"
+      },
+      {
         "iri": "<https://platform.swissartresearch.net/Person_born_at_Date>",
         "hasDomain": "<https://platform.swissartresearch.net/search/Entity>",
         "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E52_Time-Span>",
@@ -217,6 +223,18 @@
         "queryPattern": "{
             ?subject crm:P45_consists_of ?__value__ .
             ?__value__ a crm:E57_Material .
+          }"
+      }],
+      "<https://platform.swissartresearch.net/Thing_produced_with_Technique>": [{
+        "kind": "resource",
+        "queryPattern": "{
+            {
+              ?subject crm:P108i_was_produced_by/crm:P32_used_general_technique ?__value__ .
+              FILTER NOT EXISTS { ?__value__ crm:P127i_has_narrower_term ?term }
+            } UNION 
+            {
+              ?subject crm:P108i_was_produced_by/crm:P32_used_general_technique/crm:P127i_has_narrower_term ?__value__ .
+            }
           }"
       }],
       "<https://platform.swissartresearch.net/Person_born_at_Date>": [{
