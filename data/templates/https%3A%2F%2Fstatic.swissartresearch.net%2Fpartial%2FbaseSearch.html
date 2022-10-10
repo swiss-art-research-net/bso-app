@@ -230,10 +230,10 @@
         "queryPattern": "{
             {
               ?subject crm:P108i_was_produced_by/crm:P32_used_general_technique ?__value__ .
-              FILTER NOT EXISTS { ?__value__ crm:P127i_has_narrower_term ?term }
+              FILTER NOT EXISTS { ?__value__ crm:P127_has_broader_term ?term }
             } UNION 
             {
-              ?subject crm:P108i_was_produced_by/crm:P32_used_general_technique/crm:P127i_has_narrower_term ?__value__ .
+              ?subject crm:P108i_was_produced_by/crm:P32_used_general_technique/crm:P127_has_broader_term ?__value__ .
             }
           }"
       }],
