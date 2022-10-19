@@ -316,10 +316,22 @@
                                             <semantic-form-autocomplete-input
                                                 for="P14_carried_out_by"
                                                 default-value="{{lastEntityCreated.value}}"
+                                                value-binding-name="subject"
+                                                lookup-query='{
+                                                "type": "lookup",
+                                                "entityType": "[[resolvePrefix "search:Person"]]",
+                                                "limit": 5
+                                                }'
                                             ></semantic-form-autocomplete-input>
                                         {{else}}
                                             <semantic-form-autocomplete-input
                                                 for="P14_carried_out_by"
+                                                value-binding-name="subject"
+                                                lookup-query='{
+                                                "type": "lookup",
+                                                "entityType": "[[resolvePrefix "search:Person"]]",
+                                                "limit": 5
+                                                }'
                                             ></semantic-form-autocomplete-input>
                                         {{/if}}
                                         [[> add-new-person]]
@@ -546,7 +558,13 @@
             <semantic-form-hidden-input for="P9_consists_of-reversed" replace-value="[[> thisIri]]/production"></semantic-form-hidden-input>
             <semantic-form-select-input for="subproduction_type"></semantic-form-select-input>
             <div>Note: once we have the roles we could determine the subproduction type based on the role (e.g. colouring->E11, engraving->E12)</div>
-            <semantic-form-autocomplete-input for="P14_carried_out_by"></semantic-form-autocomplete-input>
+            <semantic-form-autocomplete-input for="P14_carried_out_by"
+                value-binding-name="subject"
+                lookup-query='{
+                "type": "lookup",
+                "entityType": "[[resolvePrefix "search:Person"]]",
+                "limit": 5
+                }'></semantic-form-autocomplete-input>
             [[> add-new-person]]
             <semantic-form-tree-picker-input for="P2_has_type_for_person_roles"></semantic-form-tree-picker-input>
                                         
@@ -619,7 +637,13 @@
             <semantic-form-hidden-input for="P9_consists_of-reversed" replace-value="[[> thisIri]]/creation"></semantic-form-hidden-input>
             <semantic-form-hidden-input for="type" replace-value="[[resolvePrefix "crm:E65_Creation"]]"></semantic-form-hidden-input>
             
-            <semantic-form-autocomplete-input for="P14_carried_out_by"></semantic-form-autocomplete-input>
+            <semantic-form-autocomplete-input for="P14_carried_out_by"
+                value-binding-name="subject"
+                lookup-query='{
+                "type": "lookup",
+                "entityType": "[[resolvePrefix "search:Person"]]",
+                "limit": 5
+                }'></semantic-form-autocomplete-input>
             [[> add-new-person]]
             <semantic-form-tree-picker-input for="P2_has_type_for_person_roles"></semantic-form-tree-picker-input>
             <semantic-form-composite-input
