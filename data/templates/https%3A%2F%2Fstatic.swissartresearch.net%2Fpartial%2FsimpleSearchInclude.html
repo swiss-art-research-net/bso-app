@@ -13,7 +13,7 @@ searchLimit="100"
       domain='<http://www.w3.org/2000/01/rdf-schema#Resource>'
       query='SELECT ?subject ?type ?score WHERE {
             ?subject a ?type ; 
-              rdfs:label|crm:P1_is_identified_by ?searchTerm . 
+              rdfs:label|dcterms:abstract ?searchTerm . 
             ?type rdfs:label ?typeLabel . 
             VALUES(?type) {
               (search:Person)
