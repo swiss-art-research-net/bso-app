@@ -1403,7 +1403,7 @@
         </semantic-table>
 
         <semantic-table
-            query="SELECT ?proposition ?subject ?type ?container ?dateCreated ?parentContainer ?page ?form (GROUP_CONCAT(?entity;SEPARATOR=',') as ?entities) (GROUP_CONCAT(?string;SEPARATOR=',') as ?strings) WHERE {
+            query="SELECT ?proposition ?subject ?type ?container ?dateCreated ?parentContainer ?page ?form (GROUP_CONCAT(DISTINCT ?entity;SEPARATOR=',') as ?entities) (GROUP_CONCAT(DISTINCT ?string;SEPARATOR=',') as ?strings) WHERE {
                 ?proposition a crminf:I4_Proposition_Set ;
                     crm:P67_refers_to [[> thisForQuery]] ;
                     crm:P129_is_about ?subject .
@@ -1491,8 +1491,9 @@
             </template>
             <template id="typeQuery">
                 <semantic-query
-                    query="SELECT ?type WHERE {
+                    query="SELECT DISTINCT ?type WHERE {
                         <{{entity}}> a ?type .
+                        ?type rdfs:subClassOf* crm:E1_CRM_Entity .
                     }"
                     template="{{> typeQueryTemplate}}"
                 >
@@ -1500,7 +1501,7 @@
                         ({{#each bindings}}
                             {{#if type.value}}
                                 <mp-label iri="{{type.value}}"></mp-label> 
-                            {{/if}}
+                                {{/if}}{{#unless @last}}, {{/unless}}
                         {{/each}})
                     </template>
                 </semantic-query>
