@@ -10,14 +10,11 @@
     <ul class='nav navbar-nav'>
       <bs-nav title='Search'>
         <bs-nav-item>
-          <mp-resource-link-container propagate-link="true" iri='https://static.swissartresearch.net/page/search'>
+          <mp-resource-link-container propagate-link="true" iri='https://static.swissartresearch.net/page/structuredSearch'>
             <bs-nav-link><i class='fa fa-search'></i></bs-nav-link>
           </mp-resource-link-container>
         </bs-nav-item>
       </bs-nav>
-      <bs-nav-item>
-        <mp-link class="nav-link" url='/sparql' title='Sparql Endpoint'>SPARQL</mp-link>
-      </bs-nav-item>
       <bs-nav>
         <bs-nav-dropdown title='Menu' id='assets-bg-nested-dropdown' data-align-right='true'>
           
@@ -87,6 +84,9 @@
         </mp-has-permission>
         <mp-nav-account></mp-nav-account>
       </bs-nav>
+      <bs-nav-item>
+        <mp-link class="nav-link" url='/sparql' title='Sparql Endpoint'>SPARQL</mp-link>
+      </bs-nav-item>
     </ul>
   </bs-navbar-collapse>
     <mp-user-language-switch></mp-user-language-switch>

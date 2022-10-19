@@ -693,6 +693,9 @@ ol.page-breadcrumb {
 .mirador-btn.mirador-icon-window-menu {
   display: none;
 }
+.search-summary {
+  display: none;
+}
 .show-facet-button.show-facet-button__hide {
   display: none;
 }
