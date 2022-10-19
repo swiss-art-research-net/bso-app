@@ -349,6 +349,27 @@
                                             </template>
                                         </semantic-form-autocomplete-input>
 
+                                        <semantic-form-composite-input
+                                            for="P70i_is_documented_in"
+                                            new-subject-template="/reference/{{UUID}}"
+                                            fields='[
+                                                [[> type ]],
+                                                [[> rdfs_label]],
+                                                [[> P165i_is_incorporated_in]],
+                                                [[> page_number_for_assigned_reference]]
+                                            ]'
+                                        >
+                                            <semantic-form-hidden-input for="type" replace-value='[[resolvePrefix "frbroo:F23_Expression_Fragment"]]'></semantic-form-hidden-input>
+                
+                                            <semantic-form-autocomplete-input droppable='{
+                                                    "query": "ASK { ?subject a frbroo:F24_Publication_Expression }"
+                                                }'
+                                                for="P165i_is_incorporated_in">
+                                            </semantic-form-autocomplete-input>
+                                            <semantic-form-text-input for="page_number_for_assigned_reference"></semantic-form-text-input>
+                                            <semantic-form-text-input for="rdfs_label"></semantic-form-text-input>
+                                        </semantic-form-composite-input>
+
                                         <button name="submit" class="btn btn-primary btn-md">[[i18n "save" bundle="bso"]]</button>
                                     </semantic-form>
                                 
@@ -537,6 +558,42 @@
                 <semantic-form-text-input for="label"></semantic-form-text-input>
                 <semantic-form-text-input for="date_from"></semantic-form-text-input>
                 <semantic-form-text-input for="date_to"></semantic-form-text-input>
+            </semantic-form-composite-input>
+                                            
+            <semantic-form-autocomplete-input
+                for="P7_took_place_at"
+                value-binding-name="subject"
+                lookup-query='{
+                    "type": "lookup",
+                    "limit": 20,
+                    "lookupServiceName": "federated-lookup",
+                    "entityType": "[[resolvePrefix "rds:Place"]]"
+                }'
+                template='{{> autocompletionTemplate}}'>
+                <template id='autocompletionTemplate'>
+                    [[> partial:lookupCandidateTemplate]]
+                </template>
+            </semantic-form-autocomplete-input>
+
+            <semantic-form-composite-input
+                for="P70i_is_documented_in"
+                new-subject-template="/reference/{{UUID}}"
+                fields='[
+                    [[> type ]],
+                    [[> rdfs_label]],
+                    [[> P165i_is_incorporated_in]],
+                    [[> page_number_for_assigned_reference]]
+                ]'
+            >
+                <semantic-form-hidden-input for="type" replace-value='[[resolvePrefix "frbroo:F23_Expression_Fragment"]]'></semantic-form-hidden-input>
+
+                <semantic-form-autocomplete-input droppable='{
+                        "query": "ASK { ?subject a frbroo:F24_Publication_Expression }"
+                    }'
+                    for="P165i_is_incorporated_in">
+                </semantic-form-autocomplete-input>
+                <semantic-form-text-input for="page_number_for_assigned_reference"></semantic-form-text-input>
+                <semantic-form-text-input for="rdfs_label"></semantic-form-text-input>
             </semantic-form-composite-input>
 
             <button name="submit" class="btn btn-primary btn-md">[[i18n "save" bundle="bso"]]</button>

@@ -389,6 +389,21 @@
         "iri" : "https://platform.swissartresearch.net/instances/fields/P7_took_place_at"
     }
 [[/inline]]
+ [[#*inline "P70i_is_documented_in"]]
+    {
+        "id" : "P70i_is_documented_in",
+
+            "label": "[[i18n "field_is_documented_in" bundle="bso"]]",
+            "description" : "A document that documents the entity",
+            "xsdDatatype" : "xsd:anyURI",
+            "domain" : "crm:E1_CRM_Entity",
+            "range" : "crm:E31_Document",
+                "selectPattern" : "SELECT ?value WHERE { $subject crm:P70i_is_documented_in ?value . }",
+                "insertPattern" : "INSERT { $subject crm:P70i_is_documented_in $value . } WHERE {}",
+                "deletePattern" : "DELETE { $subject crm:P70i_is_documented_in ?value . } WHERE {}",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/P70i_is_documented_in"
+    }
+[[/inline]]
  [[#*inline "P70i_is_documented_in_as_P141_to_proposition_subject"]]
     {
         "id" : "P70i_is_documented_in_as_P141_to_proposition_subject",
