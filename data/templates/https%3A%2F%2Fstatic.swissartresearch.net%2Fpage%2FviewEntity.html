@@ -376,7 +376,7 @@
 
 [[#*inline "field-visualisation-dates"]]
 <semantic-query
-    query="SELECT DISTINCT ?subject ?eventType ?type WHERE {
+    query="SELECT DISTINCT ?subject ?eventType (GROUP_CONCAT(?event; SEPARATOR=';') as ?events) ?type WHERE {
         {
             [[> thisForQuery]] (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P9_consists_of? ?event .
             ?event crm:P4_has_time-span ?subject .
@@ -387,7 +387,7 @@
         } UNION {
             [[> thisForQuery]] crm:P4_has_time-span ?subject .
         }
-    }"
+    } GROUP BY ?subject ?eventType ?type"
     template="{{> template}}">>
     <template id="template">
         <div class="bso-component field-visualisation">
@@ -395,7 +395,37 @@
             <table>
                 {{#each bindings}}
                 <tr>
-                    <td><semantic-link iri="{{subject.value}}"></semantic-link></td>
+                    <td><semantic-link iri="{{subject.value}}"></semantic-link>
+                    <semantic-query
+                        query="SELECT ?reason WHERE {
+                            BIND(<{{subject.value}}> as ?date)
+                            VALUES (?event) {
+                                {{#each (split events.value ';')}}
+                                    (<{{this}}>)
+                                {{/each}}
+                            }
+                            ?attribute_assignment crm:P140_assigned_attribute_to ?event ;
+                                crm:P141_assigned ?date ;
+                                crm:P3_has_note ?reason .
+
+                        }"
+                        template="{{> template-reason}}">
+                        <template id="template-reason">
+                            &nbsp;
+                            <mp-popover>
+                                <mp-popover-trigger placement="top"  trigger='["hover","focus"]'> 
+                                  <i class="fa fa-question-circle" aria-hidden="true"></i>
+                                </mp-popover-trigger>
+                                <mp-popover-content style="background:white;">
+                                  <div>
+                                    {{#each bindings}}
+                                        {{reason.value}}
+                                    {{/each}}</div>
+                                </mp-popover-content>
+                              </mp-popover>
+                        </template>
+                    </semantic-query>
+                    </td>
                     {{#if type.value}}
                         <td><semantic-link iri="{{type.value}}"></semantic-link>
                             (<mp-label iri="{{eventType.value}}"></mp-label>)</td>
