@@ -18,7 +18,7 @@
   search-profile='{
     "categories": [
         {"iri": "<https://platform.swissartresearch.net/search/Object>", "label": "[[i18n "image" bundle="bso"]]", "thumbnail": "../images/fcs/things.svg"},
-        {"iri": "<https://platform.swissartresearch.net/search/Person>", "label": "[[i18n "person" bundle="bso"]]", "thumbnail": "../images/fcs/actors.svg"},
+        {"iri": "<https://platform.swissartresearch.net/search/Person>", "label": "[[i18n "personOrInstitution" bundle="bso"]]", "thumbnail": "../images/fcs/actors.svg"},
         {"iri": "<https://platform.swissartresearch.net/search/Place>", "label": "[[i18n "place" bundle="bso"]]", "thumbnail": "../images/fcs/places.svg"},
         {"iri": "<https://platform.swissartresearch.net/search/Type>", "label": "[[i18n "concept" bundle="bso"]]", "thumbnail": "../images/fcs/concepts.svg"},
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E52_Time-Span>", "label": "[[i18n "time" bundle="bso"]]", "thumbnail": "../images/fcs/dates.svg"},
@@ -163,7 +163,6 @@
         "queryPattern": "{
             ?subject a search:Object ;
               crm:P109_has_current_or_former_curator ?__value__ .
-            ?__value__ a search:Person .
           }"
       }],
       "<https://platform.swissartresearch.net/Object_acquired_from_Actor>": [{

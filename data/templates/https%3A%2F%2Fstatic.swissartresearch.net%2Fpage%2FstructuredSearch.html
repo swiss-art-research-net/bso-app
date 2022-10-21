@@ -14,7 +14,7 @@
               resource-selector='{
                 "query": "SELECT DISTINCT ?suggestion (SAMPLE(?labels) as ?label) WHERE {
                   ?suggestion crm:P1_is_identified_by?/rdfs:label ?labels ;
-                    a ?__range__ .
+                    a/^rdfs:equivalentClass? ?__range__ .
                   ?labels bds:search ?__token__ ;
                     bds:matchAllTerms \"true\" ;
                     bds:relevance ?score .
