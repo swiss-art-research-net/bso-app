@@ -104,6 +104,12 @@
         "label": "[[i18n "dateDied" bundle="bso"]]"
       },
       {
+        "iri": "<https://platform.swissartresearch.net/Person_depicted_by_Object>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Person>",
+        "hasRange": "<https://platform.swissartresearch.net/search/Object>",
+        "label": "[[i18n "depictedBy" bundle="bso"]]"
+      },
+      {
         "iri": "<https://platform.swissartresearch.net/Person_acted_as_Type>",
         "hasDomain": "<https://platform.swissartresearch.net/search/Person>",
         "hasRange": "<https://platform.swissartresearch.net/search/Type>",
@@ -262,6 +268,16 @@
           ?subject a search:Person .
           ?__value__ a search:Type .
         }"
+      }],
+      "<https://platform.swissartresearch.net/Person_depicted_by_Object>": [{
+        "kind": "resource",
+        "queryPattern": "{
+          hint:Query hint:optimizer \"Runtime\".
+          ?subject a search:Person ;
+            ^crm:P128_carries/^crm:P138_represents ?__value__ .
+          ?__value__ a search:Object .
+
+          }"
       }],
       "<https://platform.swissartresearch.net/Person_has_Gender>": [{
         "kind": "resource",
