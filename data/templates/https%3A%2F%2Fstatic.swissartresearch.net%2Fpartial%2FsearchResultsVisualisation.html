@@ -96,7 +96,14 @@
     </mp-event-trigger>
     <sari-copy-query-to-clipboard id="query-copy" query="SELECT * WHERE { }">            
       <button class="btn btn-secondary">
-        <i class="fa fa-copy"></i> Copy Query
+        <i class="fa fa-copy"></i> [[i18n "copyQuery" bundle="bso"]]
       </button>
     </sari-copy-query-to-clipboard>
+    <mp-sparql-download 
+      id="query-csv-download"
+      query="SELECT * WHERE {}" header="text/csv" filename="result.csv">
+      <button class="btn btn-secondary">
+        <a href="#"> [[i18n "downloadCSV" bundle="bso"]]</a>
+      </button>
+    </mp-sparql-download>
   </div>
