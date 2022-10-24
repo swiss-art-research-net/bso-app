@@ -156,6 +156,12 @@
         "hasDomain": "<https://platform.swissartresearch.net/search/Type>",
         "hasRange": "<https://platform.swissartresearch.net/search/Object>",
         "label": "[[i18n "depictedBy" bundle="bso"]]"
+      },
+      {
+        "iri": "<https://platform.swissartresearch.net/Type_performed_by_Person>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Type>",
+        "hasRange": "<https://platform.swissartresearch.net/search/Person>",
+        "label": "[[i18n "performedBy" bundle="bso"]]"
       }
     ]
   }'
@@ -361,6 +367,15 @@
               crm:P128_carries/crm:P138_represents ?subject .
             ?subject a search:Type .
           }"
+      }],
+      "<https://platform.swissartresearch.net/Type_performed_by_Person>": [{
+        "kind": "resource",
+        "queryPattern": "{
+            ?creation crm:P14_carried_out_by ?__value__ ;
+              crm:P2_has_type ?subject .
+          ?__value__ a search:Person .
+          ?subject a search:Type .
+        }"
       }]
     }'
   >
