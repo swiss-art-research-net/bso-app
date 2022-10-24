@@ -22,6 +22,25 @@
                 ORDER BY DESC(?score)",
                 "suggestionTupleTemplate": "{{> suggestionTemplate}}"
               }'
+              resource-selector-categories='{
+                "<https://platform.swissartresearch.net/search/Type>": {
+                  "query": "SELECT DISTINCT ?suggestion (SAMPLE(?labels) as ?label) WHERE {
+                      ?suggestion crm:P1_is_identified_by?/rdfs:label ?labels ;
+                        a/^rdfs:equivalentClass? ?__range__ .
+                        ?labels bds:search ?__token__ ;
+                        bds:matchAllTerms \"true\" ;
+                        bds:relevance ?score .
+                      {
+                        FILTER (?__relation__ = sari:Object_made_using_Technique)
+                        FILTER NOT EXISTS { ?suggestion crm:P127_has_broader_term ?term }
+                      } UNION {
+                        FILTER (?__relation__ != sari:Object_made_using_Technique)
+                      }
+                    } GROUP BY ?suggestion
+                    ORDER BY DESC(?score)",
+                  "suggestionTupleTemplate": "{{> suggestionTemplate}}"
+                  }
+                }'
               tree-selector='{
                 "rootsQuery": "SELECT ?item ?hasChildren WHERE {
                   ?item gn:featureCode gn:A.ADM1 .
