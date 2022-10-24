@@ -144,6 +144,12 @@
         "hasDomain": "<http://www.cidoc-crm.org/cidoc-crm/E57_Material>",
         "hasRange": "<https://platform.swissartresearch.net/search/Object>",
         "label": "[[i18n "usedFor" bundle="bso"]]"
+      },
+      {
+        "iri": "<https://platform.swissartresearch.net/Type_depicted_by_Object>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Type>",
+        "hasRange": "<https://platform.swissartresearch.net/search/Object>",
+        "label": "[[i18n "depictedBy" bundle="bso"]]"
       }
     ]
   }'
@@ -332,6 +338,15 @@
             ?__value__ a search:Object ;
               crm:P45_consists_of ?subject .
             ?subject a crm:E57_Material .
+          }"
+      }],
+      "<https://platform.swissartresearch.net/Type_depicted_by_Object>": [{
+        "kind": "resource",
+        "queryPattern": "{
+            hint:Query hint:optimizer \"Runtime\".
+            ?__value__ a search:Object ;
+              crm:P128_carries/crm:P138_represents ?subject .
+            ?subject a search:Type .
           }"
       }]
     }'
