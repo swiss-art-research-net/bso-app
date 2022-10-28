@@ -556,7 +556,7 @@
             "minOccurs" : "1",
             "maxOccurs" : "1",
             "xsdDatatype" : "xsd:boolean",
-                "insertPattern" : "INSERT { ?subject crm:P2_has_type ?value } WHERE {}",
+                "insertPattern" : "INSERT { ?subject rdf:value ?value } WHERE {}",
                 "selectPattern" : "SELECT ?value WHERE { ?subject rdf:value ?value . FILTER(DATATYPE(?value) = xsd:boolean) }",
                 "valueSetPattern" : "SELECT ?value ?label WHERE { VALUES (?value ?label) { (\"true\"^^xsd:boolean \"True\") (\"false\"^^xsd:boolean \"False\") } }",
         "iri" : "https://platform.swissartresearch.net/instances/fields/value_boolean"
