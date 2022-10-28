@@ -1,3 +1,12 @@
+<!--
+
+    Usage example:
+
+    {{#> partial:assertStatement assertionSubject=subject.value assertionPredicate="[[resolvePrefix "crm:P4_has_time-span"]]" assertionObject=object.value }}
+        <semantic-link iri="{{subject.value}}"></semantic-link>
+    {{/ partial:assertStatement}}
+    
+-->
 
 <mp-event-proxy on-event-type="Dialog.HideAll" proxy-event-type="Component.Refresh" proxy-targets='["assertion-query"]'></mp-event-proxy>
 
