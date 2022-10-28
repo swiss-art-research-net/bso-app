@@ -1,3 +1,26 @@
+
+<mp-event-proxy on-event-type="Dialog.HideAll" proxy-event-type="Component.Refresh" proxy-targets='["assertion-query"]'></mp-event-proxy>
+
+<mp-event-target-refresh id="assertion-query">
+    <semantic-query
+        query='SELECT ?assertion WHERE {
+            BIND(<{{assertionSubject}}> as ?s)
+            BIND(<{{assertionPredicate}}> as ?p)
+            BIND(<{{assertionObject}}> as ?o)
+    
+            ?assertion a crm:E13_Attribute_Assignment ;
+                crm:P140_assigned_attribute_to ?s ;
+                crm:P141_assigned ?o ;
+                crm:P177_assigned_property_of_type ?p ;
+                rdf:value "false"^^xsd:boolean .
+        }'
+        template="{{> template-ask}}"
+    >
+        <template id="template-ask">
+           <span class="bso-component strikethrough"></span>
+        </template>
+    </semantic-query>
+</mp-event-target-refresh>
 {{> @partial-block }}
 
 [[#if (hasPermission "api:ldp:*")]]
@@ -61,7 +84,6 @@
             <semantic-form-checklist-input for="value_boolean" row=true type="radio"></semantic-form-checklist-input>
             <semantic-form-text-input for="notes" languages='["de", "fr", "it", "en"]'></semantic-form-text-input>
 
-            <button name="cancel" class="btn btn-secondary btn-md">[[i18n "cancel" bundle="bso"]]</button>
             <button name="submit" class="btn btn-primary btn-md">[[i18n "save" bundle="bso"]]</button>
         </semantic-form>
     </template>

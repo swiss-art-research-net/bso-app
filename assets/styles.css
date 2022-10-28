@@ -528,6 +528,9 @@ ol.page-breadcrumb {
 .bso-component.show-on-parent-hover {
   display: none;
 }
+.bso-component.strikethrough + * {
+  text-decoration: line-through !important;
+}
 .bso-component :hover > * > .show-on-parent-hover {
   display: inline;
 }
