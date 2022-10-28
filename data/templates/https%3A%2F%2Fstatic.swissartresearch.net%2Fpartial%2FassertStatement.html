@@ -1,37 +1,69 @@
 [[> partial:fieldDefinitionsInline]]
 
 <mp-overlay-dialog title="[[i18n "contestStatement" bundle="bso"]]" type="modal" bs-size="large">
-    <mp-overlay-dialog-trigger><button>[[i18n "assert" bundle="bso"]]</button></mp-overlay-dialog-trigger>
+    <mp-overlay-dialog-trigger><a href="#"><i class="fa fa-flag" aria-hidden="true"></i></a></mp-overlay-dialog-trigger>
     <mp-overlay-dialog-content>
         [[> component-statement-graph]]
         [[> component-assertion-form]]
     </mp-overlay-dialog-content>
 </mp-overlay-dialog>
 
-[[#*inline "component-assertion-form"]] <semantic-form
-    id="assertionForm"
-    new-subject-template="[[resolvePrefix "sari:"]]/assertion/{{UUID}}"
-    fields='[
-        [[> notes]],
-        [[> P140_assigned_attribute_to ]],
-        [[> P141_assigned ]],
-        [[> P177_assigned_property_of_type ]],
-        [[> type ]],
-        [[> value_boolean]]
-    ]'
-    post-action='event'
+[[#*inline "component-assertion-form"]] 
+
+<mp-event-proxy 
+    on-event-source="assertionForm" 
+    proxy-event-type="Dialog.Hideall"
 >
-    <semantic-form-hidden-input for="type" replace-value="[[resolvePrefix "crm:E13_Attribute_Assignment"]]"></semantic-form-hidden-input>
-    <semantic-form-hidden-input for="P140_assigned_attribute_to" replace-value="{{subject}}"></semantic-form-hidden-input>
-    <semantic-form-hidden-input for="P141_assigned" replace-value="{{object}}"></semantic-form-hidden-input>
-    <semantic-form-hidden-input for="P177_assigned_property_of_type" replace-value="{{predicate}}"></semantic-form-hidden-input>
+</mp-event-proxy>
+<mp-event-proxy on-event-type="Form.ResourceCreated" proxy-event-type="Dialog.HideAll"></mp-event-proxy>
+<mp-event-proxy on-event-type="Form.ResourceUpdated" proxy-event-type="Dialog.HideAll"></mp-event-proxy>
+<semantic-query
+    query="SELECT ?assertion WHERE {
+        BIND(<{{subject}}> as ?s)
+        BIND(<{{predicate}}> as ?p)
+        BIND(<{{object}}> as ?o)
 
-    <semantic-form-checklist-input for="value_boolean" row=true type="radio"></semantic-form-checklist-input>
-    <semantic-form-text-input for="notes" languages='["de", "fr", "it", "en"]'></semantic-form-text-input>
+        ?assertion a crm:E13_Attribute_Assignment ;
+            crm:P140_assigned_attribute_to ?s ;
+            crm:P141_assigned ?o ;
+            crm:P177_assigned_property_of_type ?p .
+    }"
+    no-result-template="{{> template-assertion-form }}"
+    template="{{> template-assertion-form assertion=bindings.0.assertion.value}}"
+>
+    <template id="template-assertion-form">
+        {{#each bindings}}
+            {{assertion.value}}
+        {{/each}}
+        <semantic-form
+            id="assertionForm"
+            {{#if assertion}}
+                subject="{{assertion}}"
+            {{/if}}
+            new-subject-template="[[resolvePrefix "sari:"]]assertion/{{UUID}}"
+            fields='[
+                [[> notes]],
+                [[> P140_assigned_attribute_to ]],
+                [[> P141_assigned ]],
+                [[> P177_assigned_property_of_type ]],
+                [[> type ]],
+                [[> value_boolean]]
+            ]'
+            post-action='event'
+        >
+            <semantic-form-hidden-input for="type" replace-value="[[resolvePrefix "crm:E13_Attribute_Assignment"]]"></semantic-form-hidden-input>
+            <semantic-form-hidden-input for="P140_assigned_attribute_to" replace-value="{{subject}}"></semantic-form-hidden-input>
+            <semantic-form-hidden-input for="P141_assigned" replace-value="{{object}}"></semantic-form-hidden-input>
+            <semantic-form-hidden-input for="P177_assigned_property_of_type" replace-value="{{predicate}}"></semantic-form-hidden-input>
 
-    <button name="cancel" class="btn btn-primary btn-md">[[i18n "cancel" bundle="bso"]]</button>
-    <button name="submit" class="btn btn-secondary btn-md">[[i18n "save" bundle="bso"]]</button>
-</semantic-form>
+            <semantic-form-checklist-input for="value_boolean" row=true type="radio"></semantic-form-checklist-input>
+            <semantic-form-text-input for="notes" languages='["de", "fr", "it", "en"]'></semantic-form-text-input>
+
+            <button name="cancel" class="btn btn-secondary btn-md">[[i18n "cancel" bundle="bso"]]</button>
+            <button name="submit" class="btn btn-primary btn-md">[[i18n "save" bundle="bso"]]</button>
+        </semantic-form>
+    </template>
+</semantic-query>
 [[/inline]]
 
 [[#*inline "component-statement-graph"]]
