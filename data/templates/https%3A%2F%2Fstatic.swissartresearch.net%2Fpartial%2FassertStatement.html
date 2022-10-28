@@ -34,9 +34,6 @@
     template="{{> template-assertion-form assertion=bindings.0.assertion.value}}"
 >
     <template id="template-assertion-form">
-        {{#each bindings}}
-            {{assertion.value}}
-        {{/each}}
         <semantic-form
             id="assertionForm"
             {{#if assertion}}
