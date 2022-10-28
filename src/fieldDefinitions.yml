@@ -708,6 +708,27 @@ fields:
           BIND($subject as ?value)
         }'
 
+    - id: value_boolean
+      label: Agreement
+      description: Type to state agreement or disagreement
+      datatype: xsd:boolean
+      minOccurs: 1
+      maxOccurs: 1
+      queries:
+        - insert: 'INSERT {
+            ?subject crm:P2_has_type ?value
+          } WHERE {}'
+        - select: 'SELECT ?value WHERE {
+            ?subject rdf:value ?value .
+            FILTER(DATATYPE(?value) = xsd:boolean)  
+          }'
+        - valueSet: 'SELECT ?value ?label WHERE {
+            VALUES (?value ?label) {
+              ("true"^^xsd:boolean "True")
+              ("false"^^xsd:boolean "False")
+            }
+          }'
+
     - id: P1_is_identified_by
       label: Identifier
       datatype: xsd:string

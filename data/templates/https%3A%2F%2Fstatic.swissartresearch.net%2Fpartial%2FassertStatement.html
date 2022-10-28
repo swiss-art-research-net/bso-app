@@ -1,0 +1,48 @@
+[[> partial:fieldDefinitionsInline]]
+
+<mp-overlay-dialog title="[[i18n "contestStatement" bundle="bso"]]" type="modal" bs-size="large">
+    <mp-overlay-dialog-trigger><button>[[i18n "contest" bundle="bso"]]</button></mp-overlay-dialog-trigger>
+    <mp-overlay-dialog-content>
+        [[> component-statement-graph]]
+        [[> component-assertion-form]]
+    </mp-overlay-dialog-content>
+</mp-overlay-dialog>
+
+[[#*inline "component-assertion-form"]] <semantic-form
+    id="assertionForm"
+    new-subject-template="[[resolvePrefix "sari:"]]/assertion/{{UUID}}"
+    fields='[
+        [[> notes]],
+        [[> P140_assigned_attribute_to ]],
+        [[> P141_assigned ]],
+        [[> P177_assigned_property_of_type ]],
+        [[> type ]],
+        [[> value_boolean]]
+    ]'
+    post-action='event'
+>
+    <semantic-form-hidden-input for="type" replace-value="[[resolvePrefix "crm:E13_Attribute_Assignment"]]"></semantic-form-hidden-input>
+    <semantic-form-hidden-input for="P140_assigned_attribute_to" replace-value="{{subject}}"></semantic-form-hidden-input>
+    <semantic-form-hidden-input for="P141_assigned" replace-value="{{object}}"></semantic-form-hidden-input>
+    <semantic-form-hidden-input for="P177_assigned_property_of_type" replace-value="{{predicate}}"></semantic-form-hidden-input>
+
+    <semantic-form-checklist-input for="value_boolean" row=true type="radio"></semantic-form-checklist-input>
+    <semantic-form-text-input for="notes" languages='["de", "fr", "it", "en"]'></semantic-form-text-input>
+
+    <button name="cancel" class="btn btn-primary btn-md">[[i18n "cancel" bundle="bso"]]</button>
+    <button name="submit" class="btn btn-secondary btn-md">[[i18n "save" bundle="bso"]]</button>
+</semantic-form>
+[[/inline]]
+
+[[#*inline "component-statement-graph"]]
+<semantic-graph height="100px"
+    query='CONSTRUCT {
+        ?s ?p ?o .
+    } WHERE {
+        BIND(<{{subject}}> as ?s)
+        BIND(<{{predicate}}> as ?p)
+        BIND(<{{object}}> as ?o)
+    } LIMIT 1'>
+    <semantic-graph-layout-cose-bilkent ideal-edge-length=150></semantic-graph-layout-cose-bilkent>
+</semantic-graph>
+[[/inline]]
