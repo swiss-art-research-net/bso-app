@@ -396,35 +396,37 @@
                 {{#each bindings}}
                 <tr>
                     <td><semantic-link iri="{{subject.value}}"></semantic-link>
-                    <semantic-query
-                        query="SELECT ?reason WHERE {
-                            BIND(<{{subject.value}}> as ?date)
-                            VALUES (?event) {
-                                {{#each (split events.value ';')}}
-                                    (<{{this}}>)
-                                {{/each}}
-                            }
-                            ?attribute_assignment crm:P140_assigned_attribute_to ?event ;
-                                crm:P141_assigned ?date ;
-                                crm:P3_has_note ?reason .
+                    {{#if events.value}}
+                        <semantic-query
+                            query="SELECT ?reason WHERE {
+                                BIND(<{{subject.value}}> as ?date)
+                                VALUES (?event) {
+                                    {{#each (split events.value ';')}}
+                                        (<{{this}}>)
+                                    {{/each}}
+                                }
+                                ?attribute_assignment crm:P140_assigned_attribute_to ?event ;
+                                    crm:P141_assigned ?date ;
+                                    crm:P3_has_note ?reason .
 
-                        }"
-                        template="{{> template-reason}}">
-                        <template id="template-reason">
-                            &nbsp;
-                            <mp-popover>
-                                <mp-popover-trigger placement="top"  trigger='["hover","focus"]'> 
-                                  <i class="fa fa-question-circle" aria-hidden="true"></i>
-                                </mp-popover-trigger>
-                                <mp-popover-content style="background:white;">
-                                  <div>
-                                    {{#each bindings}}
-                                        {{reason.value}}
-                                    {{/each}}</div>
-                                </mp-popover-content>
-                              </mp-popover>
-                        </template>
-                    </semantic-query>
+                            }"
+                            template="{{> template-reason}}">
+                            <template id="template-reason">
+                                &nbsp;
+                                <mp-popover>
+                                    <mp-popover-trigger placement="top"  trigger='["hover","focus"]'> 
+                                    <i class="fa fa-question-circle" aria-hidden="true"></i>
+                                    </mp-popover-trigger>
+                                    <mp-popover-content style="background:white;">
+                                    <div>
+                                        {{#each bindings}}
+                                            {{reason.value}}
+                                        {{/each}}</div>
+                                    </mp-popover-content>
+                                </mp-popover>
+                            </template>
+                        </semantic-query>
+                    {{/if}}
                     </td>
                     {{#if type.value}}
                         <td><semantic-link iri="{{type.value}}"></semantic-link>
