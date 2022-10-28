@@ -525,6 +525,12 @@ ol.page-breadcrumb {
   border-right: 40px solid transparent;
   border-top: 20px solid #fff;
 }
+.bso-component.show-on-parent-hover {
+  display: none;
+}
+.bso-component :hover > * > .show-on-parent-hover {
+  display: inline;
+}
 .bso-component.sidebar {
   max-width: 576px;
 }

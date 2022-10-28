@@ -652,6 +652,18 @@ ol.page-breadcrumb {
         }
     }
 
+    &.show-on-parent-hover {
+        display:none;
+    }
+
+    :hover {
+        > * {
+            > .show-on-parent-hover {
+                display: inline;
+            }
+        }
+    }
+
     &.sidebar {
         max-width: @bs-breakpoint-sm;
         .card {
