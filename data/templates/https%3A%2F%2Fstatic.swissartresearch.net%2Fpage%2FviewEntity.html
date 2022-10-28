@@ -790,7 +790,7 @@
                             {{/ partial:assertStatement}}
                         </ul>
                     </td>
-                    <td>{{#if roles.value}}{{#each (split roles.value ' ')}}[[> addComma]]<semantic-link class-name="bso-tag Type" iri="{{this}}"></semantic-link>{{/each}}{{/if}} ({{#each (split global_roles.value ' ')}}[[> addComma]]<mp-label iri="{{this}}"></mp-label>{{/each}})</td>
+                    <td>{{#if roles.value}}{{#each (split roles.value ' ')}}[[> addComma]]{{#> partial:assertStatement assertionSubject=../event.value assertionPredicate="[[resolvePrefix "crm:P2_has_type"]]" assertionObject=this}}<semantic-link class-name="bso-tag Type" iri="{{assertionObject}}"></semantic-link>{{/ partial:assertStatement}}{{/each}}{{/if}} ({{#each (split global_roles.value ' ')}}[[> addComma]]<mp-label iri="{{this}}"></mp-label>{{/each}})</td>
                 </tr>
                 {{/each}}
             </table>
