@@ -716,7 +716,7 @@ fields:
       maxOccurs: 1
       queries:
         - insert: 'INSERT {
-            ?subject crm:P2_has_type ?value
+            ?subject rdf:value ?value
           } WHERE {}'
         - select: 'SELECT ?value WHERE {
             ?subject rdf:value ?value .
