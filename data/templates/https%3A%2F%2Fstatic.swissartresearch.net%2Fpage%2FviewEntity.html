@@ -395,8 +395,10 @@
             <table>
                 {{#each bindings}}
                 <tr>
-                    <td><semantic-link iri="{{subject.value}}"></semantic-link>
-                    {{> partial:assertStatement subject=events.value predicate="[[resolvePrefix "crm:P4_has_time-span"]]" object=subject.value }}
+                    <td>
+                    {{#> partial:assertStatement assertionSubject=events.value assertionPredicate="[[resolvePrefix "crm:P4_has_time-span"]]" assertionObject=subject.value }}
+                        <semantic-link iri="{{subject.value}}"></semantic-link>
+                    {{/ partial:assertStatement}}
                     <semantic-query
                         query="SELECT ?reason WHERE {
                             BIND(<{{subject.value}}> as ?date)

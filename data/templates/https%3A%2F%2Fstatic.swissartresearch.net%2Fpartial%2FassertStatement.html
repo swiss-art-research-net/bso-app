@@ -1,6 +1,9 @@
-[[> partial:fieldDefinitionsInline]]
+{{> @partial-block }}
 
 [[#if (hasPermission "api:ldp:*")]]
+
+[[> partial:fieldDefinitionsInline]]
+
     <mp-overlay-dialog title="[[i18n "contestStatement" bundle="bso"]]" type="modal" bs-size="large">
         <mp-overlay-dialog-trigger><a href="#" class="bso-component show-on-parent-hover"><i class="fa fa-flag" aria-hidden="true"></i></a></mp-overlay-dialog-trigger>
         <mp-overlay-dialog-content>
@@ -21,9 +24,9 @@
 <mp-event-proxy on-event-type="Form.ResourceUpdated" proxy-event-type="Dialog.HideAll"></mp-event-proxy>
 <semantic-query
     query="SELECT ?assertion WHERE {
-        BIND(<{{subject}}> as ?s)
-        BIND(<{{predicate}}> as ?p)
-        BIND(<{{object}}> as ?o)
+        BIND(<{{assertionSubject}}> as ?s)
+        BIND(<{{assertionPredicate}}> as ?p)
+        BIND(<{{assertionObject}}> as ?o)
 
         ?assertion a crm:E13_Attribute_Assignment ;
             crm:P140_assigned_attribute_to ?s ;
@@ -51,9 +54,9 @@
             post-action='event'
         >
             <semantic-form-hidden-input for="type" replace-value="[[resolvePrefix "crm:E13_Attribute_Assignment"]]"></semantic-form-hidden-input>
-            <semantic-form-hidden-input for="P140_assigned_attribute_to" replace-value="{{subject}}"></semantic-form-hidden-input>
-            <semantic-form-hidden-input for="P141_assigned" replace-value="{{object}}"></semantic-form-hidden-input>
-            <semantic-form-hidden-input for="P177_assigned_property_of_type" replace-value="{{predicate}}"></semantic-form-hidden-input>
+            <semantic-form-hidden-input for="P140_assigned_attribute_to" replace-value="{{assertionSubject}}"></semantic-form-hidden-input>
+            <semantic-form-hidden-input for="P141_assigned" replace-value="{{assertionObject}}"></semantic-form-hidden-input>
+            <semantic-form-hidden-input for="P177_assigned_property_of_type" replace-value="{{assertionPredicate}}"></semantic-form-hidden-input>
 
             <semantic-form-checklist-input for="value_boolean" row=true type="radio"></semantic-form-checklist-input>
             <semantic-form-text-input for="notes" languages='["de", "fr", "it", "en"]'></semantic-form-text-input>
@@ -70,9 +73,9 @@
     query='CONSTRUCT {
         ?s ?p ?o .
     } WHERE {
-        BIND(<{{subject}}> as ?s)
-        BIND(<{{predicate}}> as ?p)
-        BIND(<{{object}}> as ?o)
+        BIND(<{{assertionSubject}}> as ?s)
+        BIND(<{{assertionPredicate}}> as ?p)
+        BIND(<{{assertionObject}}> as ?o)
     } LIMIT 1'>
     <semantic-graph-layout-cose-bilkent ideal-edge-length=150></semantic-graph-layout-cose-bilkent>
 </semantic-graph>
