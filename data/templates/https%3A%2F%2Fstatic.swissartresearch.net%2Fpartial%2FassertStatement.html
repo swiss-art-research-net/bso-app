@@ -1,12 +1,14 @@
 [[> partial:fieldDefinitionsInline]]
 
-<mp-overlay-dialog title="[[i18n "contestStatement" bundle="bso"]]" type="modal" bs-size="large">
-    <mp-overlay-dialog-trigger><a href="#"><i class="fa fa-flag" aria-hidden="true"></i></a></mp-overlay-dialog-trigger>
-    <mp-overlay-dialog-content>
-        [[> component-statement-graph]]
-        [[> component-assertion-form]]
-    </mp-overlay-dialog-content>
-</mp-overlay-dialog>
+[[#if (hasPermission "api:ldp:*")]]
+    <mp-overlay-dialog title="[[i18n "contestStatement" bundle="bso"]]" type="modal" bs-size="large">
+        <mp-overlay-dialog-trigger><a href="#" class="bso-component show-on-parent-hover"><i class="fa fa-flag" aria-hidden="true"></i></a></mp-overlay-dialog-trigger>
+        <mp-overlay-dialog-content>
+            [[> component-statement-graph]]
+            [[> component-assertion-form]]
+        </mp-overlay-dialog-content>
+    </mp-overlay-dialog>
+[[/if]]
 
 [[#*inline "component-assertion-form"]] 
 
