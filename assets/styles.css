@@ -525,14 +525,8 @@ ol.page-breadcrumb {
   border-right: 40px solid transparent;
   border-top: 20px solid #fff;
 }
-.bso-component.show-on-parent-hover {
-  display: none;
-}
 .bso-component.strikethrough + * {
   text-decoration: line-through !important;
-}
-.bso-component :hover > * > .show-on-parent-hover {
-  display: inline;
 }
 .bso-component.sidebar {
   max-width: 576px;
@@ -661,6 +655,18 @@ ol.page-breadcrumb {
 }
 .bso-component.util-parent-is-open {
   display: none;
+}
+.bso-component.util-pointer {
+  cursor: pointer;
+}
+.bso-component.util-show-on-parent-hover {
+  display: none;
+}
+.bso-component.util-strikethrough + * {
+  text-decoration: line-through !important;
+}
+.bso-component :hover > * > .util-show-on-parent-hover {
+  display: inline;
 }
 .is-open .bso-component.util-parent-is-open {
   display: inline-block;

@@ -737,7 +737,7 @@
 
 [[#*inline "field-visualisation-persons-involved-in-creation"]]
 <semantic-query
-    query="SELECT DISTINCT ?subject (GROUP_CONCAT(DISTINCT ?role; SEPARATOR=' ') as ?roles) (GROUP_CONCAT(DISTINCT ?global_role; SEPARATOR=' ') as ?global_roles) WHERE {
+    query="SELECT DISTINCT ?subject ?event (GROUP_CONCAT(DISTINCT ?role; SEPARATOR=' ') as ?roles) (GROUP_CONCAT(DISTINCT ?global_role; SEPARATOR=' ') as ?global_roles) WHERE {
         BIND(<[[>thisIri]]/meta> as ?meta)
         {
             [[> thisForQuery]] crm:P108i_was_produced_by ?event .
@@ -775,7 +775,7 @@
                 ?appellation rdfs:label ?appellation_label .
             }
         }
-    } GROUP BY ?subject"
+    } GROUP BY ?subject ?event"
     template="{{> template}}">>
     <template id="template">
         <div class="bso-component field-visualisation">
@@ -785,7 +785,9 @@
                 <tr>
                     <td>
                         <ul class="bso-component tags">
+                            {{#> partial:assertStatement assertionSubject=event.value assertionPredicate="[[resolvePrefix "crm:P14_carried_out_by"]]" assertionObject=subject.value }}
                                 <li class="bso-tag Person"><semantic-link uri="{{subject.value}}"></semantic-link></li>
+                            {{/ partial:assertStatement}}
                         </ul>
                     </td>
                     <td>{{#if roles.value}}{{#each (split roles.value ' ')}}[[> addComma]]<semantic-link class-name="bso-tag Type" iri="{{this}}"></semantic-link>{{/each}}{{/if}} ({{#each (split global_roles.value ' ')}}[[> addComma]]<mp-label iri="{{this}}"></mp-label>{{/each}})</td>

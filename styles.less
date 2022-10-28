@@ -652,20 +652,8 @@ ol.page-breadcrumb {
         }
     }
 
-    &.show-on-parent-hover {
-        display:none;
-    }
-
     &.strikethrough + * {
         text-decoration: line-through !important;
-    }
-
-    :hover {
-        > * {
-            > .show-on-parent-hover {
-                display: inline;
-            }
-        }
     }
 
     &.sidebar {
@@ -824,6 +812,24 @@ ol.page-breadcrumb {
     &.util- {
         &parent-is-open {
             display: none;
+        }
+        &pointer {
+            cursor: pointer;
+        }
+        &show-on-parent-hover {
+            display:none;
+        }
+    
+        &strikethrough + * {
+            text-decoration: line-through !important;
+        }
+    }
+
+    :hover {
+        > * {
+            > .util-show-on-parent-hover {
+                display: inline;
+            }
         }
     }
 }
