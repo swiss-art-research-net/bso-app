@@ -2,6 +2,10 @@
 
     Usage example:
 
+    Wrap element that will receive a flag to add or edit an assertion statement. 
+    The statement requires a subject, predicate and object. This is added via the
+    variables assertionSubject, assertionPredicate and assertionObject.
+
     {{#> partial:assertStatement assertionSubject=subject.value assertionPredicate="[[resolvePrefix "crm:P4_has_time-span"]]" assertionObject=object.value }}
         <semantic-link iri="{{subject.value}}"></semantic-link>
     {{/ partial:assertStatement}}
