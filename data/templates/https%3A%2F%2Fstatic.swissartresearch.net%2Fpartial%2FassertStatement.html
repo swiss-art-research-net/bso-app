@@ -14,31 +14,106 @@
     
 -->
 
-<mp-event-proxy on-event-type="Dialog.HideAll" proxy-event-type="Component.Refresh" proxy-targets='["assertion-query"]'></mp-event-proxy>
-
-<mp-event-target-refresh id="assertion-query">
-    <semantic-query
-        query='SELECT ?assertion WHERE {
-            BIND(<{{assertionSubject}}> as ?s)
-            BIND(<{{assertionPredicate}}> as ?p)
-            BIND(<{{assertionObject}}> as ?o)
-    
-            ?assertion a crm:E13_Attribute_Assignment ;
-                crm:P140_assigned_attribute_to ?s ;
-                crm:P141_assigned ?o ;
-                crm:P177_assigned_property_of_type ?p ;
-                rdf:value "false"^^xsd:boolean .
-        }'
-        template="{{> template-ask}}"
-    >
-        <template id="template-ask">
-           <span class="bso-component strikethrough"></span>
-        </template>
-    </semantic-query>
-</mp-event-target-refresh>
+[[> component-strikethrough-contested-value]]
 {{> @partial-block }}
 [[#if (hasPermission "api:ldp:*")]]
 [[else]]
+    [[> component-popover-if-contested]]
+[[/if]]
+
+[[#if (hasPermission "api:ldp:*")]]
+[[> partial:fieldDefinitionsInline]]
+    <mp-overlay-dialog title="[[i18n "assertStatement" bundle="bso"]]" type="modal" bs-size="large">
+        <mp-overlay-dialog-trigger><span class="bso-component util-show-on-parent-hover"><i class="bso-component util-pointer fa fa-flag" aria-hidden="true"></i></span></mp-overlay-dialog-trigger>
+        <mp-overlay-dialog-content>
+            [[> component-statement-graph]]
+            [[> component-assertion-form]]
+        </mp-overlay-dialog-content>
+    </mp-overlay-dialog>
+[[/if]]
+
+[[#*inline "component-assertion-form"]] 
+    <mp-event-proxy 
+        on-event-source="assertionForm" 
+        proxy-event-type="Dialog.Hideall"
+    >
+    </mp-event-proxy>
+    <mp-event-proxy on-event-type="Form.ResourceCreated" proxy-event-type="Dialog.HideAll"></mp-event-proxy>
+    <mp-event-proxy on-event-type="Form.ResourceUpdated" proxy-event-type="Dialog.HideAll"></mp-event-proxy>
+    <semantic-query
+        query="SELECT ?assertion WHERE {
+            BIND(<{{assertionSubject}}> as ?s)
+            BIND(<{{assertionPredicate}}> as ?p)
+            BIND(<{{assertionObject}}> as ?o)
+            {{#if assertionObjectUsed}}
+                BIND(<{{assertionObjectUsed}}> as ?objectUsed)
+            {{/if}}
+
+            ?assertion a crm:E13_Attribute_Assignment ;
+                crm:P140_assigned_attribute_to ?s ;
+                crm:P141_assigned ?o ;
+                crm:P177_assigned_property_of_type ?p .
+            {{#if assertionObjectUsed}}
+                ?assertion crm:P16_used_specific_object ?objectUsed .
+            {{/if}}
+        }"
+        no-result-template="{{> template-assertion-form }}"
+        template="{{> template-assertion-form assertion=bindings.0.assertion.value}}"
+    >
+        <template id="template-assertion-form">
+            Assertion: {{assertion}} 
+            <semantic-form
+                id="assertionForm"
+                {{#if assertion}}
+                    subject="{{assertion}}"
+                {{/if}}
+                new-subject-template="[[resolvePrefix "sari:"]]assertion/{{UUID}}"
+                fields='[
+                    [[> notes]],
+                    [[> P140_assigned_attribute_to ]],
+                    [[> P141_assigned ]],
+                    [[> P177_assigned_property_of_type ]],
+                    {{#if assertionObjectUsed}}
+                        [[> P16_used_specific_object ]],
+                    {{/if}}
+                    [[> P2_has_type]],
+                    [[> type ]],
+                    [[> value_boolean]]
+                ]'
+                post-action='event'
+            >
+                <semantic-form-hidden-input for="type" replace-value="[[resolvePrefix "crm:E13_Attribute_Assignment"]]"></semantic-form-hidden-input>
+                <semantic-form-hidden-input for="P2_has_type" replace-value="[[resolvePrefix "type:assertion"]]"></semantic-form-hidden-input>
+                <semantic-form-hidden-input for="P140_assigned_attribute_to" replace-value="{{assertionSubject}}"></semantic-form-hidden-input>
+                <semantic-form-hidden-input for="P141_assigned" replace-value="{{assertionObject}}"></semantic-form-hidden-input>
+                <semantic-form-hidden-input for="P177_assigned_property_of_type" replace-value="{{assertionPredicate}}"></semantic-form-hidden-input>
+                {{#if assertionObjectUsed}}
+                    <semantic-form-hidden-input for="P16_used_specific_object" replace-value="{{assertionObjectUsed}}"></semantic-form-hidden-input>
+                {{/if}}
+
+                <semantic-form-checklist-input for="value_boolean" row=true type="radio"></semantic-form-checklist-input>
+                <semantic-form-text-input for="notes" languages='["de", "fr", "it", "en"]'></semantic-form-text-input>
+
+                <button name="submit" class="btn btn-primary btn-md">[[i18n "save" bundle="bso"]]</button>
+            </semantic-form>
+        </template>
+    </semantic-query>
+[[/inline]]
+
+[[#*inline "component-statement-graph"]]
+    <semantic-graph height="100px"
+        query='CONSTRUCT {
+            ?s ?p ?o .
+        } WHERE {
+            BIND(<{{assertionSubject}}> as ?s)
+            BIND(<{{assertionPredicate}}> as ?p)
+            BIND(<{{assertionObject}}> as ?o)
+        } LIMIT 1'>
+        <semantic-graph-layout-cose-bilkent ideal-edge-length=150></semantic-graph-layout-cose-bilkent>
+    </semantic-graph>
+[[/inline]]
+
+[[#*inline "component-popover-if-contested"]]
     <mp-event-target-refresh id="assertion-query">
         <semantic-query
             query='SELECT ?assertion ?comment WHERE {
@@ -70,98 +145,29 @@
             </template>
         </semantic-query>
     </mp-event-target-refresh>
-[[/if]]
-
-[[#if (hasPermission "api:ldp:*")]]
-
-[[> partial:fieldDefinitionsInline]]
-    <mp-overlay-dialog title="[[i18n "assertStatement" bundle="bso"]]" type="modal" bs-size="large">
-        <mp-overlay-dialog-trigger><span class="bso-component util-show-on-parent-hover"><i class="bso-component util-pointer fa fa-flag" aria-hidden="true"></i></span></mp-overlay-dialog-trigger>
-        <mp-overlay-dialog-content>
-            [[> component-statement-graph]]
-            [[> component-assertion-form]]
-        </mp-overlay-dialog-content>
-    </mp-overlay-dialog>
-[[/if]]
-
-[[#*inline "component-assertion-form"]] 
-
-<mp-event-proxy 
-    on-event-source="assertionForm" 
-    proxy-event-type="Dialog.Hideall"
->
-</mp-event-proxy>
-<mp-event-proxy on-event-type="Form.ResourceCreated" proxy-event-type="Dialog.HideAll"></mp-event-proxy>
-<mp-event-proxy on-event-type="Form.ResourceUpdated" proxy-event-type="Dialog.HideAll"></mp-event-proxy>
-<semantic-query
-    query="SELECT ?assertion WHERE {
-        BIND(<{{assertionSubject}}> as ?s)
-        BIND(<{{assertionPredicate}}> as ?p)
-        BIND(<{{assertionObject}}> as ?o)
-        {{#if assertionObjectUsed}}
-            BIND(<{{assertionObjectUsed}}> as ?objectUsed)
-        {{/if}}
-
-        ?assertion a crm:E13_Attribute_Assignment ;
-            crm:P140_assigned_attribute_to ?s ;
-            crm:P141_assigned ?o ;
-            crm:P177_assigned_property_of_type ?p .
-        {{#if assertionObjectUsed}}
-            ?assertion crm:P16_used_specific_object ?objectUsed .
-        {{/if}}
-    }"
-    no-result-template="{{> template-assertion-form }}"
-    template="{{> template-assertion-form assertion=bindings.0.assertion.value}}"
->
-    <template id="template-assertion-form">
-        Assertion: {{assertion}} 
-        <semantic-form
-            id="assertionForm"
-            {{#if assertion}}
-                subject="{{assertion}}"
-            {{/if}}
-            new-subject-template="[[resolvePrefix "sari:"]]assertion/{{UUID}}"
-            fields='[
-                [[> notes]],
-                [[> P140_assigned_attribute_to ]],
-                [[> P141_assigned ]],
-                [[> P177_assigned_property_of_type ]],
-                {{#if assertionObjectUsed}}
-                    [[> P16_used_specific_object ]],
-                {{/if}}
-                [[> P2_has_type]],
-                [[> type ]],
-                [[> value_boolean]]
-            ]'
-            post-action='event'
-        >
-            <semantic-form-hidden-input for="type" replace-value="[[resolvePrefix "crm:E13_Attribute_Assignment"]]"></semantic-form-hidden-input>
-            <semantic-form-hidden-input for="P2_has_type" replace-value="[[resolvePrefix "type:assertion"]]"></semantic-form-hidden-input>
-            <semantic-form-hidden-input for="P140_assigned_attribute_to" replace-value="{{assertionSubject}}"></semantic-form-hidden-input>
-            <semantic-form-hidden-input for="P141_assigned" replace-value="{{assertionObject}}"></semantic-form-hidden-input>
-            <semantic-form-hidden-input for="P177_assigned_property_of_type" replace-value="{{assertionPredicate}}"></semantic-form-hidden-input>
-            {{#if assertionObjectUsed}}
-                <semantic-form-hidden-input for="P16_used_specific_object" replace-value="{{assertionObjectUsed}}"></semantic-form-hidden-input>
-            {{/if}}
-
-            <semantic-form-checklist-input for="value_boolean" row=true type="radio"></semantic-form-checklist-input>
-            <semantic-form-text-input for="notes" languages='["de", "fr", "it", "en"]'></semantic-form-text-input>
-
-            <button name="submit" class="btn btn-primary btn-md">[[i18n "save" bundle="bso"]]</button>
-        </semantic-form>
-    </template>
-</semantic-query>
 [[/inline]]
 
-[[#*inline "component-statement-graph"]]
-<semantic-graph height="100px"
-    query='CONSTRUCT {
-        ?s ?p ?o .
-    } WHERE {
-        BIND(<{{assertionSubject}}> as ?s)
-        BIND(<{{assertionPredicate}}> as ?p)
-        BIND(<{{assertionObject}}> as ?o)
-    } LIMIT 1'>
-    <semantic-graph-layout-cose-bilkent ideal-edge-length=150></semantic-graph-layout-cose-bilkent>
-</semantic-graph>
+[[#*inline "component-strikethrough-contested-value"]]
+    <mp-event-proxy on-event-type="Dialog.HideAll" proxy-event-type="Component.Refresh" proxy-targets='["assertion-query"]'></mp-event-proxy>
+
+    <mp-event-target-refresh id="assertion-query">
+        <semantic-query
+            query='SELECT ?assertion WHERE {
+                BIND(<{{assertionSubject}}> as ?s)
+                BIND(<{{assertionPredicate}}> as ?p)
+                BIND(<{{assertionObject}}> as ?o)
+        
+                ?assertion a crm:E13_Attribute_Assignment ;
+                    crm:P140_assigned_attribute_to ?s ;
+                    crm:P141_assigned ?o ;
+                    crm:P177_assigned_property_of_type ?p ;
+                    rdf:value "false"^^xsd:boolean .
+            }'
+            template="{{> template-ask}}"
+        >
+            <template id="template-ask">
+            <span class="bso-component strikethrough"></span>
+            </template>
+        </semantic-query>
+    </mp-event-target-refresh>
 [[/inline]]
