@@ -94,9 +94,26 @@
       </bs-tabs>
       [[/if]]
     </mp-event-trigger>
-    <sari-copy-query-to-clipboard id="query-copy" query="SELECT * WHERE { }">            
-      <button class="btn btn-secondary">
-        <i class="fa fa-copy"></i> Copy Query
-      </button>
-    </sari-copy-query-to-clipboard>
+    <div class="bso-component button-set">
+      <sari-copy-query-to-clipboard id="query-copy" query="SELECT * WHERE { }">            
+        <button class="btn btn-secondary">
+          <i class="fa fa-copy"></i> [[i18n "copyQuery" bundle="bso"]]
+        </button>
+      </sari-copy-query-to-clipboard>
+      <mp-sparql-download 
+        id="query-csv-download"
+        query="SELECT * WHERE {
+          ?subject rdfs:label ?label .
+          OPTIONAL {
+            ?subject a search:Object ;
+              crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?iiif .
+          }
+        }" 
+        header="text/csv" 
+        filename="bso-data-[[currentDateTime format="yyyy-MM-dd HH:mm"]].csv">
+        <button class="btn btn-secondary">
+          [[i18n "downloadCSV" bundle="bso"]]
+        </button>
+      </mp-sparql-download>
+    </div>
   </div>

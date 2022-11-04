@@ -98,10 +98,22 @@
         "label": "[[i18n "dateBorn" bundle="bso"]]"
       },
       {
+        "iri": "<https://platform.swissartresearch.net/Person_created_Object>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Person>",
+        "hasRange": "<https://platform.swissartresearch.net/search/Object>",
+        "label": "[[i18n "created" bundle="bso"]]"
+      },
+      {
         "iri": "<https://platform.swissartresearch.net/Person_died_at_Date>",
         "hasDomain": "<https://platform.swissartresearch.net/search/Person>",
         "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E52_Time-Span>",
         "label": "[[i18n "dateDied" bundle="bso"]]"
+      },
+      {
+        "iri": "<https://platform.swissartresearch.net/Person_depicted_by_Object>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Person>",
+        "hasRange": "<https://platform.swissartresearch.net/search/Object>",
+        "label": "[[i18n "depictedBy" bundle="bso"]]"
       },
       {
         "iri": "<https://platform.swissartresearch.net/Person_acted_as_Type>",
@@ -126,6 +138,30 @@
         "hasDomain": "<https://platform.swissartresearch.net/search/Place>",
         "hasRange": "<https://platform.swissartresearch.net/search/Object>",
         "label": "[[i18n "depictedBy" bundle="bso"]]"
+      },
+      {
+        "iri": "<https://platform.swissartresearch.net/Material_used_for_Object>",
+        "hasDomain": "<http://www.cidoc-crm.org/cidoc-crm/E57_Material>",
+        "hasRange": "<https://platform.swissartresearch.net/search/Object>",
+        "label": "[[i18n "usedFor" bundle="bso"]]"
+      },
+      {
+        "iri": "<https://platform.swissartresearch.net/Technique_used_for_Object>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Type>",
+        "hasRange": "<https://platform.swissartresearch.net/search/Object>",
+        "label": "[[i18n "usedForAsTechnique" bundle="bso"]]"
+      },
+      {
+        "iri": "<https://platform.swissartresearch.net/Type_depicted_by_Object>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Type>",
+        "hasRange": "<https://platform.swissartresearch.net/search/Object>",
+        "label": "[[i18n "depictedBy" bundle="bso"]]"
+      },
+      {
+        "iri": "<https://platform.swissartresearch.net/Type_performed_by_Person>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Type>",
+        "hasRange": "<https://platform.swissartresearch.net/search/Person>",
+        "label": "[[i18n "performedBy" bundle="bso"]]"
       }
     ]
   }'
@@ -263,6 +299,28 @@
           ?__value__ a search:Type .
         }"
       }],
+      "<https://platform.swissartresearch.net/Person_created_Object>": [{
+        "kind": "resource",
+        "queryPattern": "{          
+          {
+            ?__value__ crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by ?subject .
+          } UNION {
+            ?__value__ crm:P108i_was_produced_by/crm:P14_carried_out_by ?subject .
+          }
+          ?__value__ a search:Object .
+          ?subject a search:Person .
+        }"
+      }],
+      "<https://platform.swissartresearch.net/Person_depicted_by_Object>": [{
+        "kind": "resource",
+        "queryPattern": "{
+          hint:Query hint:optimizer \"Runtime\".
+          ?subject a search:Person ;
+            ^crm:P138_represents/^crm:P128_carries ?__value__ .
+          ?__value__ a search:Object .
+
+          }"
+      }],
       "<https://platform.swissartresearch.net/Person_has_Gender>": [{
         "kind": "resource",
         "queryPattern": "{
@@ -284,6 +342,39 @@
             ?subject a search:Place .
             ?__value__ crm:P128_carries/crm:P138_represents ?subject .
             ?__value__ a search:Object .
+        }"
+      }],
+      "<https://platform.swissartresearch.net/Material_used_for_Object>": [{
+        "kind": "resource",
+        "queryPattern": "{
+            ?__value__ a search:Object ;
+              crm:P45_consists_of ?subject .
+            ?subject a crm:E57_Material .
+          }"
+      }],
+      "<https://platform.swissartresearch.net/Technique_used_for_Object>": [{
+        "kind": "resource",
+        "queryPattern": "{
+          ?__value__ a search:Object ;
+            crm:P108i_was_produced_by/crm:P32_used_general_technique ?subject .
+        }"
+      }],
+      "<https://platform.swissartresearch.net/Type_depicted_by_Object>": [{
+        "kind": "resource",
+        "queryPattern": "{
+            hint:Query hint:optimizer \"Runtime\".
+            ?__value__ a search:Object ;
+              crm:P128_carries/crm:P138_represents ?subject .
+            ?subject a search:Type .
+          }"
+      }],
+      "<https://platform.swissartresearch.net/Type_performed_by_Person>": [{
+        "kind": "resource",
+        "queryPattern": "{
+            ?creation crm:P14_carried_out_by ?__value__ ;
+              crm:P2_has_type ?subject .
+          ?__value__ a search:Person .
+          ?subject a search:Type .
         }"
       }]
     }'
