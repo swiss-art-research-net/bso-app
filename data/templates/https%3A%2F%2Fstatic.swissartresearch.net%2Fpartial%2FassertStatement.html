@@ -4,9 +4,11 @@
 
     Wrap element that will receive a flag to add or edit an assertion statement. 
     The statement requires a subject, predicate and object. This is added via the
-    variables assertionSubject, assertionPredicate and assertionObject.
+    variables assertionSubject, assertionPredicate and assertionObject. 
+    assertionObjectUsed is optional and allows to add a specific CRM Entity that has
+    been used to make the Assertion.
 
-    {{#> partial:assertStatement assertionSubject=subject.value assertionPredicate="[[resolvePrefix "crm:P4_has_time-span"]]" assertionObject=object.value }}
+    {{#> partial:assertStatement assertionSubject=subject.value assertionPredicate="[[resolvePrefix "crm:P4_has_time-span"]]" assertionObject=object.value assertionObjectUsed=this}}
         <semantic-link iri="{{subject.value}}"></semantic-link>
     {{/ partial:assertStatement}}
     
@@ -73,8 +75,7 @@
 [[#if (hasPermission "api:ldp:*")]]
 
 [[> partial:fieldDefinitionsInline]]
-
-    <mp-overlay-dialog title="[[i18n "contestStatement" bundle="bso"]]" type="modal" bs-size="large">
+    <mp-overlay-dialog title="[[i18n "assertStatement" bundle="bso"]]" type="modal" bs-size="large">
         <mp-overlay-dialog-trigger><span class="bso-component util-show-on-parent-hover"><i class="bso-component util-pointer fa fa-flag" aria-hidden="true"></i></span></mp-overlay-dialog-trigger>
         <mp-overlay-dialog-content>
             [[> component-statement-graph]]
@@ -97,16 +98,23 @@
         BIND(<{{assertionSubject}}> as ?s)
         BIND(<{{assertionPredicate}}> as ?p)
         BIND(<{{assertionObject}}> as ?o)
+        {{#if assertionObjectUsed}}
+            BIND(<{{assertionObjectUsed}}> as ?objectUsed)
+        {{/if}}
 
         ?assertion a crm:E13_Attribute_Assignment ;
             crm:P140_assigned_attribute_to ?s ;
             crm:P141_assigned ?o ;
             crm:P177_assigned_property_of_type ?p .
+        {{#if assertionObjectUsed}}
+            ?assertion crm:P16_used_specific_object ?objectUsed .
+        {{/if}}
     }"
     no-result-template="{{> template-assertion-form }}"
     template="{{> template-assertion-form assertion=bindings.0.assertion.value}}"
 >
     <template id="template-assertion-form">
+        Assertion: {{assertion}} 
         <semantic-form
             id="assertionForm"
             {{#if assertion}}
@@ -118,15 +126,23 @@
                 [[> P140_assigned_attribute_to ]],
                 [[> P141_assigned ]],
                 [[> P177_assigned_property_of_type ]],
+                {{#if assertionObjectUsed}}
+                    [[> P16_used_specific_object ]],
+                {{/if}}
+                [[> P2_has_type]],
                 [[> type ]],
                 [[> value_boolean]]
             ]'
             post-action='event'
         >
             <semantic-form-hidden-input for="type" replace-value="[[resolvePrefix "crm:E13_Attribute_Assignment"]]"></semantic-form-hidden-input>
+            <semantic-form-hidden-input for="P2_has_type" replace-value="[[resolvePrefix "type:assertion"]]"></semantic-form-hidden-input>
             <semantic-form-hidden-input for="P140_assigned_attribute_to" replace-value="{{assertionSubject}}"></semantic-form-hidden-input>
             <semantic-form-hidden-input for="P141_assigned" replace-value="{{assertionObject}}"></semantic-form-hidden-input>
             <semantic-form-hidden-input for="P177_assigned_property_of_type" replace-value="{{assertionPredicate}}"></semantic-form-hidden-input>
+            {{#if assertionObjectUsed}}
+                <semantic-form-hidden-input for="P16_used_specific_object" replace-value="{{assertionObjectUsed}}"></semantic-form-hidden-input>
+            {{/if}}
 
             <semantic-form-checklist-input for="value_boolean" row=true type="radio"></semantic-form-checklist-input>
             <semantic-form-text-input for="notes" languages='["de", "fr", "it", "en"]'></semantic-form-text-input>

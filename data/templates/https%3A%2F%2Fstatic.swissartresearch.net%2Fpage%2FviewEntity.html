@@ -396,7 +396,7 @@
                 {{#each bindings}}
                 <tr>
                     <td>
-                    {{#> partial:assertStatement assertionSubject=events.value assertionPredicate="[[resolvePrefix "crm:P4_has_time-span"]]" assertionObject=subject.value }}
+                    {{#> partial:assertStatement assertionSubject=events.value assertionPredicate="[[resolvePrefix "crm:P4_has_time-span"]]" assertionObject=subject.value  assertionObjectUsed="[[>thisIri]]"}}
                         <semantic-link iri="{{subject.value}}"></semantic-link>
                     {{/ partial:assertStatement}}
                     <semantic-query
@@ -410,6 +410,9 @@
                             ?attribute_assignment crm:P140_assigned_attribute_to ?event ;
                                 crm:P141_assigned ?date ;
                                 crm:P3_has_note ?reason .
+                            FILTER NOT EXISTS {
+                                ?attribute_assignment crm:P2_has_type type:assertion .
+                            }
 
                         }"
                         template="{{> template-reason}}">
@@ -785,12 +788,12 @@
                 <tr>
                     <td>
                         <ul class="bso-component tags">
-                            {{#> partial:assertStatement assertionSubject=event.value assertionPredicate="[[resolvePrefix "crm:P14_carried_out_by"]]" assertionObject=subject.value }}
+                            {{#> partial:assertStatement assertionSubject=event.value assertionPredicate="[[resolvePrefix "crm:P14_carried_out_by"]]" assertionObject=subject.value assertionObjectUsed="[[>thisIri]]"}}
                                 <li class="bso-tag Person"><semantic-link uri="{{subject.value}}"></semantic-link></li>
                             {{/ partial:assertStatement}}
                         </ul>
                     </td>
-                    <td>{{#if roles.value}}{{#each (split roles.value ' ')}}[[> addComma]]{{#> partial:assertStatement assertionSubject=../event.value assertionPredicate="[[resolvePrefix "crm:P2_has_type"]]" assertionObject=this}}<semantic-link class-name="bso-tag Type" iri="{{assertionObject}}"></semantic-link>{{/ partial:assertStatement}}{{/each}}{{/if}} ({{#each (split global_roles.value ' ')}}[[> addComma]]<mp-label iri="{{this}}"></mp-label>{{/each}})</td>
+                    <td>{{#if roles.value}}{{#each (split roles.value ' ')}}[[> addComma]]{{#> partial:assertStatement assertionSubject=../event.value assertionPredicate="[[resolvePrefix "crm:P2_has_type"]]" assertionObject=this  assertionObjectUsed="[[>thisIri]]"}}<semantic-link class-name="bso-tag Type" iri="{{assertionObject}}"></semantic-link>{{/ partial:assertStatement}}{{/each}}{{/if}} ({{#each (split global_roles.value ' ')}}[[> addComma]]<mp-label iri="{{this}}"></mp-label>{{/each}})</td>
                 </tr>
                 {{/each}}
             </table>
