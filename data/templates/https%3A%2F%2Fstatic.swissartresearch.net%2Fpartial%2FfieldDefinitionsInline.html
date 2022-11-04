@@ -699,6 +699,18 @@
         "iri" : "https://platform.swissartresearch.net/instances/fields/P15_was_influenced_by"
     }
 [[/inline]]
+ [[#*inline "P16_used_specific_object"]]
+    {
+        "id" : "P16_used_specific_object",
+
+            "label": "[[i18n "field_object_used" bundle="bso"]]",
+            "description" : "The object used in this event",
+            "xsdDatatype" : "xsd:anyURI",
+                "selectPattern" : "SELECT ?value WHERE { $subject crm:P16_used_specific_object ?value . }",
+                "insertPattern" : "INSERT { $subject crm:P16_used_specific_object ?value . } WHERE {}",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/P16_used_specific_object"
+    }
+[[/inline]]
  [[#*inline "P140_assigned_attribute_to"]]
     {
         "id" : "P140_assigned_attribute_to",
