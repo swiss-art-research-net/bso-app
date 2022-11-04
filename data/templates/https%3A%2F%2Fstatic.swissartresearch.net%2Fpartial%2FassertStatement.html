@@ -28,6 +28,7 @@
         <mp-overlay-dialog-content>
             [[> component-statement-graph]]
             [[> component-assertion-form]]
+            [[> component-delete-button]]
         </mp-overlay-dialog-content>
     </mp-overlay-dialog>
 [[/if]]
@@ -61,7 +62,6 @@
         template="{{> template-assertion-form assertion=bindings.0.assertion.value}}"
     >
         <template id="template-assertion-form">
-            Assertion: {{assertion}} 
             <semantic-form
                 id="assertionForm"
                 {{#if assertion}}
@@ -96,6 +96,40 @@
 
                 <button name="submit" class="btn btn-primary btn-md">[[i18n "save" bundle="bso"]]</button>
             </semantic-form>
+        </template>
+    </semantic-query>
+[[/inline]]
+
+[[#*inline "component-delete-button"]]
+    <semantic-query
+        query='SELECT ?entityParentContainer ?entityContainer WHERE {
+            BIND(<{{assertionSubject}}> as ?s)
+            BIND(<{{assertionPredicate}}> as ?p)
+            BIND(<{{assertionObject}}> as ?o)
+            {{#if assertionObjectUsed}}
+                BIND(<{{assertionObjectUsed}}> as ?objectUsed)
+            {{/if}}
+
+            GRAPH ?entityGraph {
+                ?assertion a crm:E13_Attribute_Assignment ;
+                    crm:P140_assigned_attribute_to ?s ;
+                    crm:P141_assigned ?o ;
+                    crm:P177_assigned_property_of_type ?p ;
+                    rdf:value "false"^^xsd:boolean .
+                {{#if assertionObjectUsed}}
+                    ?assertion crm:P16_used_specific_object ?objectUsed .
+                {{/if}}
+            }
+
+            BIND(URI(STRBEFORE(STR(?entityGraph), "/context")) as ?entityContainer)
+            ?entityParentContainer ldp:contains ?entityContainer .
+        }'
+        template="{{> template-delete-button}}"
+    >
+        <template id="template-delete-button">
+            <mp-ldp-remove-from-container-action container="{{bindings.0.entityParentContainer.value}}" iri="{{bindings.0.entityContainer.value}}">
+                <button style="float:right;" type="button" class="btn btn-secondary btn-xs">[[i18n "delete" bundle="bso"]]</button>
+            </mp-ldp-remove-from-container-action>
         </template>
     </semantic-query>
 [[/inline]]
