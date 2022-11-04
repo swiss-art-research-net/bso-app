@@ -650,6 +650,17 @@
     },
 
     {
+        "id" : "P16_used_specific_object",
+
+            "label": "[[i18n "field_object_used" bundle="bso"]]",
+            "description" : "The object used in this event",
+            "xsdDatatype" : "xsd:anyURI",
+                "selectPattern" : "SELECT ?value WHERE { $subject crm:P16_used_specific_object ?value . }",
+                "insertPattern" : "INSERT { $subject crm:P16_used_specific_object ?value . } WHERE {}",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/P16_used_specific_object"
+    },
+
+    {
         "id" : "P140_assigned_attribute_to",
 
             "label": "[[i18n "field_assigned_attribute_to" bundle="bso"]]",
