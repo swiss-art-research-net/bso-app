@@ -869,6 +869,28 @@
 </semantic-query>
 [[/inline]]
 
+[[#*inline "field-visualisation-processing"]]
+<semantic-query 
+    query="SELECT ?processing WHERE {
+        [[> thisForQuery]] crm:P108i_was_produced_by/crm:P9_consists_of ?modification .
+        ?modification a crm:E11_Modification ;
+            crm:P2_has_type ?processing .
+    }"
+    template="{{> template}}"
+>
+    <template id="template">
+        <div class="bso-component field-visualisation">
+            <span class="bso-component label">[[i18n "processing" bundle="bso"]]</span>
+            <ul class="bso-component tags">
+                {{#each bindings}}
+                    <li class="bso-tag type"><semantic-link uri="{{processing.value}}" urlqueryparam-view="page"></semantic-link></li>   
+                {{/each}}     
+            </ul>
+        </div>
+    </template>
+</semantic-query>
+[[/inline]]
+
 
 [[#*inline "field-visualisation-provenience"]]
 <semantic-query 
@@ -1010,6 +1032,7 @@
         [[> field-visualisation-events-carrying-out]]
         [[> field-visualisation-dimensions]]
         [[> field-visualisation-technique]]
+        [[> field-visualisation-processing]]
         [[> field-visualisation-provenience]]
         [[> field-visualisation-inscription]]
         [[> field-visualisation-place-hierarchy]]
@@ -1099,6 +1122,13 @@
         <!-- Objects created using this technique -->
         [[#> component-objects-table condition='?object a search:Object; crm:P108i_was_produced_by/crm:P32_used_general_technique/crm:P127_has_broader_term* $subject' label='producedUsingTechnique']]
             ?subject crm:P108i_was_produced_by/crm:P32_used_general_technique/crm:P127_has_broader_term* [[> thisForQuery]]
+        [[/ component-objects-table]]
+
+        <!-- Objects processed using this technique -->
+        [[#> component-objects-table condition='?object a search:Object; crm:P108i_was_produced_by/crm:P9_consists_of ?modification . ?modification a crm:E11_Modification ; crm:P2_has_type/crm:P127_has_broader_term* $subject' label='processedUsingTechnique']]
+            ?subject crm:P108i_was_produced_by/crm:P9_consists_of ?modification .
+            ?modification a crm:E11_Modification ;
+                crm:P2_has_type/crm:P127_has_broader_term* [[> thisForQuery]]
         [[/ component-objects-table]]
 
         <!-- Found on -->
