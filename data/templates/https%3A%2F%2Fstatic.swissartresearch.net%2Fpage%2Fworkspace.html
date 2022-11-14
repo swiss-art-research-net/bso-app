@@ -38,184 +38,185 @@
 
 [[#*inline "module-collaborator-networks"]]
 
-<semantic-search
-    limit="250"
-    optimizer="blazegraph"
-    search-profile='{
-      "categories": [
-        {"iri": "<https://platform.swissartresearch.net/search/Person>", "label": "Person", "thumbnail": "../images/fcs/actors.svg"},
-        {"iri": "<https://platform.swissartresearch.net/search/Type>", "label": "Concept", "thumbnail": "../images/fcs/concepts.svg"},
-        {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E55_Type>", "label": "Type", "thumbnail": "../images/fcs/concepts.svg"}
+  <semantic-search
+      limit="250"
+      optimizer="blazegraph"
+      search-profile='{
+        "categories": [
+          {"iri": "<https://platform.swissartresearch.net/search/Person>", "label": "Person", "thumbnail": "../images/fcs/actors.svg"},
+          {"iri": "<https://platform.swissartresearch.net/search/Type>", "label": "Concept", "thumbnail": "../images/fcs/concepts.svg"},
+          {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E55_Type>", "label": "Type", "thumbnail": "../images/fcs/concepts.svg"}
 
-      ],
-      "relations": [
-        {
-          "iri": "<https://platform.swissartresearch.net/Person_acted_as_Type>",
-          "hasDomain": "<https://platform.swissartresearch.net/search/Person>",
-          "hasRange": "<https://platform.swissartresearch.net/search/Type>",
-          "label": "[[i18n "actedAs" bundle="bso"]]"
-        },
-        {
-          "iri": "<https://platform.swissartresearch.net/Person_collaborated_with_Person>",
-          "hasDomain": "<https://platform.swissartresearch.net/search/Person>",
-          "hasRange": "<https://platform.swissartresearch.net/search/Person>",
-          "label": "[[i18n "collaboratedWith" bundle="bso"]]"
-        }
-      ]
-    }'
-    relations='{
-      "<https://platform.swissartresearch.net/Person_acted_as_Type>": [{
-        "kind": "resource",
-        "queryPattern": "{
-            ?creation crm:P14_carried_out_by ?subject ;
-              crm:P2_has_type ?__value__ .
-        }"
-      }],
-      "<https://platform.swissartresearch.net/Person_collaborated_with_Person>": [{
-        "kind": "resource",
-        "queryPattern": "{
-            ?creation crm:P14_carried_out_by ?subject, ?__value__ . 
-            FILTER(?subject != ?__value__)
-        }"
-      }]
-    }'
-  >
-  <semantic-search-query-constant
-    domain="<https://platform.swissartresearch.net/search/Person>"
-    query="SELECT DISTINCT ?subject  WHERE {
-        ?subject a search:Person .
-    }">
-  </semantic-search-query-constant>
-
-  <semantic-search-facet
-    open-by-default="true"
-    facet-values-threshold="1000"></semantic-search-facet>
-
-
-  <semantic-search-facet-breadcrumbs>
-  </semantic-search-facet-breadcrumbs>
-
-  <semantic-search-result-holder>
-    <semantic-search-result>
-      <mp-sparql-result-counts 
-        id="search_results_count"
-        query="SELECT DISTINCT ?subject {}"
-        template='<div>{{#if hasLimit}} <bs-alert variant="warning"> Showing {{numberOfResults}} of {{totalNumberOfResults}} matches. <strong>Please, refine your search.</strong> </bs-alert> {{else}} <p>Found <em>{{numberOfResults}}</em> results</p>{{/if}}</div>'>
-      </mp-sparql-result-counts>
-      <semantic-table id="network-result"
-        query="SELECT DISTINCT ?subject ?collaborator WHERE {
-          ?object (crm:P128_carries/crm:P94i_was_created_by)|crm:P108i_was_produced_by ?event.
-          ?event crm:P14_carried_out_by ?subject .
+        ],
+        "relations": [
           {
-              ?object crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by ?collaborator .
-          } UNION {
-              ?object crm:P108i_was_produced_by/crm:P14_carried_out_by ?collaborator
-          }
-          FILTER(?subject != ?collaborator)
-        }
-        GROUP BY ?subject ?collaborator 
-        ORDER BY ?subject ?collaborator"
-        options='{
-          "enableGrouping": true,
-          "groupingOptions": {"groupedBy": ["subject"]}
-        }'
-        column-configuration='[{
-            "variableName": "subject",
-            "displayName": "main"
+            "iri": "<https://platform.swissartresearch.net/Person_acted_as_Type>",
+            "hasDomain": "<https://platform.swissartresearch.net/search/Person>",
+            "hasRange": "<https://platform.swissartresearch.net/search/Type>",
+            "label": "[[i18n "actedAs" bundle="bso"]]"
           },
           {
-            "variableName": "collaborator",
-            "displayName": "collaborators",
-            "aggregation": "count",
-            "aggregationCellTemplate": "{{value}}"
+            "iri": "<https://platform.swissartresearch.net/Person_collaborated_with_Person>",
+            "hasDomain": "<https://platform.swissartresearch.net/search/Person>",
+            "hasRange": "<https://platform.swissartresearch.net/search/Person>",
+            "label": "[[i18n "collaboratedWith" bundle="bso"]]"
           }
-        ]'
-        number-of-displayed-rows="250"
-      ></semantic-table>
-    </semantic-search-result>
-  </semantic-search-result-holder>
-</semantic-search>
+        ]
+      }'
+      relations='{
+        "<https://platform.swissartresearch.net/Person_acted_as_Type>": [{
+          "kind": "resource",
+          "queryPattern": "{
+              ?creation crm:P14_carried_out_by ?subject ;
+                crm:P2_has_type ?__value__ .
+          }"
+        }],
+        "<https://platform.swissartresearch.net/Person_collaborated_with_Person>": [{
+          "kind": "resource",
+          "queryPattern": "{
+              ?creation crm:P14_carried_out_by ?subject, ?__value__ . 
+              FILTER(?subject != ?__value__)
+          }"
+        }]
+      }'
+    >
+    <semantic-search-query-constant
+      domain="<https://platform.swissartresearch.net/search/Person>"
+      query="SELECT DISTINCT ?subject  WHERE {
+          ?subject a search:Person .
+      }">
+    </semantic-search-query-constant>
+
+    <semantic-search-facet
+      open-by-default="true"
+      facet-values-threshold="1000"></semantic-search-facet>
+
+
+    <semantic-search-facet-breadcrumbs>
+    </semantic-search-facet-breadcrumbs>
+
+    <semantic-search-result-holder>
+      <semantic-search-result>
+        <mp-sparql-result-counts 
+          id="search_results_count"
+          query="SELECT DISTINCT ?subject {}"
+          template='<div>{{#if hasLimit}} <bs-alert variant="warning"> Showing {{numberOfResults}} of {{totalNumberOfResults}} matches. <strong>Please, refine your search.</strong> </bs-alert> {{else}} <p>Found <em>{{numberOfResults}}</em> results</p>{{/if}}</div>'>
+        </mp-sparql-result-counts>
+        <semantic-table id="network-result"
+          query="SELECT DISTINCT ?subject ?collaborator WHERE {
+            ?object (crm:P128_carries/crm:P94i_was_created_by)|crm:P108i_was_produced_by ?event.
+            ?event crm:P14_carried_out_by ?subject .
+            {
+                ?object crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by ?collaborator .
+            } UNION {
+                ?object crm:P108i_was_produced_by/crm:P14_carried_out_by ?collaborator
+            }
+            FILTER(?subject != ?collaborator)
+          }
+          GROUP BY ?subject ?collaborator 
+          ORDER BY ?subject ?collaborator"
+          options='{
+            "enableGrouping": true,
+            "groupingOptions": {"groupedBy": ["subject"]}
+          }'
+          column-configuration='[{
+              "variableName": "subject",
+              "displayName": "main"
+            },
+            {
+              "variableName": "collaborator",
+              "displayName": "collaborators",
+              "aggregation": "count",
+              "aggregationCellTemplate": "{{value}}"
+            }
+          ]'
+          number-of-displayed-rows="250"
+        ></semantic-table>
+      </semantic-search-result>
+    </semantic-search-result-holder>
+  </semantic-search>
 
 [[/inline]]
 
 [[#*inline "module-preferred-labels"]]
 
-<semantic-table options='{
-  "showColumnFilters": "True"
-}' query='SELECT ?subject ?type (GROUP_CONCAT(?label; SEPARATOR=" / ") as ?labels) (COUNT(DISTINCT ?label) as ?num_labels) ?pref_label WHERE {
-  ?subject a ?type ;
-    rdfs:label|(crmdig:L54_is_same-as/gndo:preferredName) ?label .
-  OPTIONAL {
-    ?subject skos:prefLabel ?pref_label .
-  }
-  VALUES (?type) {
-    (search:Person)
-    (search:Place)
-    (search:Type)
-  }
-} GROUP BY ?subject ?type ?pref_label
-ORDER BY DESC(?num_labels)' column-configuration='[
-  {"displayName": "Entity", "variableName": "subject", "showFilter": false, "filterType": "multiselect"},
-  {"displayName": "Type", "variableName": "type", "showFilter": true},
-  {"displayName": "Number of Labels", "variableName": "num_labels", "showFilter": true},
-  {"displayName": "Preferred Label", "cellTemplate": "{{> currentLabel}}"},
-  {"displayName": "Edit", "cellTemplate": "{{> editForm}}"}
-]'>
-<template id="currentLabel">
-  <mp-event-proxy on-event-source="form-preflabel-{{subject.value}}" proxy-event-type="Component.Refresh"
-    proxy-targets='["form-updated-{{subject.value}}"]' data='{"id": "xy"}'>
-  </mp-event-proxy>
-
-  <mp-event-target-refresh id="form-updated-{{subject.value}}">
-    <semantic-query query="SELECT ?value WHERE {
-      GRAPH sari:prefLabels {
-        BIND(<{{subject.value}}> as $subject)
-        $subject skos:prefLabel ?value .
+    <semantic-table options='{
+      "showColumnFilters": "True"
+    }' query='SELECT ?subject ?type (GROUP_CONCAT(?label; SEPARATOR=" / ") as ?labels) (COUNT(DISTINCT ?label) as ?num_labels) ?pref_label WHERE {
+      ?subject a ?type ;
+        rdfs:label|(crmdig:L54_is_same-as/gndo:preferredName) ?label .
+      OPTIONAL {
+        ?subject skos:prefLabel ?pref_label .
       }
-    }"></semantic-query>
-  </mp-event-target-refresh>
-</template>
-<template id="editForm">
-  <div style="min-width:20rem">
-    <semantic-form id='form-preflabel-{{subject.value}}' persistence='sparql' post-action='event'
-      subject='{{subject.value}}' fields='[
-        {
-          "id": "inline_prefLabel",
-          "label": "Preferred Label",
-          "xsdDatatype": "xsd:string",
-          "maxOccurs": "1",
-          "selectPattern": "SELECT ?value WHERE {
-            GRAPH sari:prefLabels {
-              $subject skos:prefLabel ?value .
-            }
-          }",
-          "insertPattern": "INSERT {
-              GRAPH sari:prefLabels {
-                $subject skos:prefLabel $value .
-              }
-            } WHERE {}",
-          "deletePattern": "DELETE { 
-              GRAPH sari:prefLabels {
-                $subject skos:prefLabel $value .
-              }
-            } WHERE { 
-              GRAPH sari:prefLabels {
-                $subject skos:prefLabel $value  .
-              }
-            }",
-          "valueSetPattern": "SELECT DISTINCT ?value WHERE {
+      VALUES (?type) {
+        (search:Person)
+        (search:Place)
+        (search:Type)
+      }
+    } GROUP BY ?subject ?type ?pref_label
+    ORDER BY DESC(?num_labels)' column-configuration='[
+      {"displayName": "Entity", "variableName": "subject", "showFilter": false, "filterType": "multiselect"},
+      {"displayName": "Type", "variableName": "type", "showFilter": true},
+      {"displayName": "Number of Labels", "variableName": "num_labels", "showFilter": true},
+      {"displayName": "Preferred Label", "cellTemplate": "{{> currentLabel}}"},
+      {"displayName": "Edit", "cellTemplate": "{{> editForm}}"}
+    ]'>
+    <template id="currentLabel">
+      <mp-event-proxy on-event-source="form-preflabel-{{subject.value}}" proxy-event-type="Component.Refresh"
+        proxy-targets='["form-updated-{{subject.value}}"]' data='{"id": "xy"}'>
+      </mp-event-proxy>
+
+      <mp-event-target-refresh id="form-updated-{{subject.value}}">
+        <semantic-query query="SELECT ?value WHERE {
+          GRAPH sari:prefLabels {
             BIND(<{{subject.value}}> as $subject)
-            $subject rdfs:label|(crmdig:L54_is_same-as/gndo:preferredName) ?value .
-          }"
-        }]'>
-      <semantic-form-select-input for="inline_prefLabel"></semantic-form-select-input>
-      <button name="submit" class="btn btn-primary btn-xs">[[i18n "save" bundle="bso"]]</button>
-      <button name="reset" class="btn btn-secondary btn-xs">[[i18n "reset" bundle="bso"]]</button>
-    </semantic-form>
-  </div>
-</template>
-</semantic-table>
-[[/inline]]
+            $subject skos:prefLabel ?value .
+          }
+        }"></semantic-query>
+      </mp-event-target-refresh>
+    </template>
+    <template id="editForm">
+      <div style="min-width:20rem">
+        <semantic-form id='form-preflabel-{{subject.value}}' persistence='sparql' post-action='event'
+          subject='{{subject.value}}' fields='[
+            {
+              "id": "inline_prefLabel",
+              "label": "Preferred Label",
+              "xsdDatatype": "xsd:string",
+              "maxOccurs": "1",
+              "selectPattern": "SELECT ?value WHERE {
+                GRAPH sari:prefLabels {
+                  $subject skos:prefLabel ?value .
+                }
+              }",
+              "insertPattern": "INSERT {
+                  GRAPH sari:prefLabels {
+                    $subject skos:prefLabel $value .
+                  }
+                } WHERE {}",
+              "deletePattern": "DELETE { 
+                  GRAPH sari:prefLabels {
+                    $subject skos:prefLabel $value .
+                  }
+                } WHERE { 
+                  GRAPH sari:prefLabels {
+                    $subject skos:prefLabel $value  .
+                  }
+                }",
+              "valueSetPattern": "SELECT DISTINCT ?value WHERE {
+                BIND(<{{subject.value}}> as $subject)
+                $subject rdfs:label|(crmdig:L54_is_same-as/gndo:preferredName) ?value .
+              }"
+            }]'>
+          <semantic-form-select-input for="inline_prefLabel"></semantic-form-select-input>
+          <button name="submit" class="btn btn-primary btn-xs">[[i18n "save" bundle="bso"]]</button>
+          <button name="reset" class="btn btn-secondary btn-xs">[[i18n "reset" bundle="bso"]]</button>
+        </semantic-form>
+      </div>
+    </template>
+    </semantic-table>
+
+    [[/inline]]
 
 [[#*inline "module-image-rotations"]]
 
@@ -223,72 +224,72 @@ ORDER BY DESC(?num_labels)' column-configuration='[
 
 [[#*inline "module-visual-similarities"]]
 
-<mp-event-trigger type="Component.Refresh" targets='["edit-cell"]'>
-  <a>Refresh</a>
-</mp-event-trigger>
+  <mp-event-trigger type="Component.Refresh" targets='["edit-cell"]'>
+    <a>Refresh</a>
+  </mp-event-trigger>
 
-<mp-selection-group>
-  <div>
-    <mp-selection-action-choice id='demo' selection='demo' title='With selected ...'>
-      <!-- Possible actions -->
-      <mp-create-set-action></mp-create-set-action>
+  <mp-selection-group>
+    <div>
+      <mp-selection-action-choice id='demo' selection='demo' title='With selected ...'>
+        <!-- Possible actions -->
+        <mp-create-set-action></mp-create-set-action>
 
-    </mp-selection-action-choice>
-    <semantic-table query="SELECT ?subject ?image ?crop ?ratio ?num_classification WHERE {
+      </mp-selection-action-choice>
+      <semantic-table query="SELECT ?subject ?image ?crop ?ratio ?num_classification WHERE {
+          {
+              SELECT DISTINCT ?image ?subject (COUNT(?classification) as ?num_classification) WHERE {
+                  ?subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
+                  ?classification crm:P140_assigned_attribute_to ?image ;
+                      crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> .
+              } 
+              GROUP BY ?image ?subject
+          }
+          ?region crmdig:L49_is_primary_area_of ?image ;
+            rso:boundingBox ?boundingBox ;
+            crm:P2_has_type <https://resource.swissartresearch.net/type/imageRegion> ;
+            crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-segmentation> .
+          FILTER(?num_classification > 4)  
+          BIND(REPLACE(?boundingBox, 'xywh=', '') AS ?crop)
+          BIND(REPLACE(?boundingBox, 'xywh=\\d*,\\d*,', '') as ?wh)
+          BIND(xsd:float(STRBEFORE(?wh, ',')) as ?width)
+          BIND(xsd:float(STRAFTER(?wh, ',')) as ?height)
+          BIND(?width/?height as ?ratio)
+
+          
+      } ORDER BY DESC(?num_classification) ?subject" column-configuration='[
         {
-            SELECT DISTINCT ?image ?subject (COUNT(?classification) as ?num_classification) WHERE {
-                ?subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
-                ?classification crm:P140_assigned_attribute_to ?image ;
-                    crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> .
-            } 
-            GROUP BY ?image ?subject
-        }
-        ?region crmdig:L49_is_primary_area_of ?image ;
-          rso:boundingBox ?boundingBox ;
-          crm:P2_has_type <https://resource.swissartresearch.net/type/imageRegion> ;
-          crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-segmentation> .
-        FILTER(?num_classification > 4)  
-        BIND(REPLACE(?boundingBox, 'xywh=', '') AS ?crop)
-        BIND(REPLACE(?boundingBox, 'xywh=\\d*,\\d*,', '') as ?wh)
-        BIND(xsd:float(STRBEFORE(?wh, ',')) as ?width)
-        BIND(xsd:float(STRAFTER(?wh, ',')) as ?height)
-        BIND(?width/?height as ?ratio)
+          "variableName": "subject",
+          "displayName": "Subject",
+          "cellTemplate": "{{> subjectTemplate}}"
+        }, 
+        {"displayName": " ", "cellTemplate": "{{> editCell}}"},
+        {"displayName": "Entity", "variableName": "subject"},
+        {"displayName": "Image", "variableName": "image"},
+        {"displayName": "Region ratio", "variableName": "ratio", "showFilter": true, "filterType": "number"},
+        {"displayName": "Number of Classifications", "variableName": "num_classification", "showFilter": true, "filterType": "number"}  
+      ]' options='{
+        "showFilter":false
+      }' number-of-displayed-rows=20>
+        <template id='subjectTemplate'>
+          <div>
+            <mp-selection-toggle selection='demo' tag='{{subject.value}}'></mp-selection-toggle>
+          </div>
+        </template>
+        <template id="editCell">
 
-        
-    } ORDER BY DESC(?num_classification) ?subject" column-configuration='[
-      {
-        "variableName": "subject",
-        "displayName": "Subject",
-        "cellTemplate": "{{> subjectTemplate}}"
-      }, 
-      {"displayName": " ", "cellTemplate": "{{> editCell}}"},
-      {"displayName": "Entity", "variableName": "subject"},
-      {"displayName": "Image", "variableName": "image"},
-      {"displayName": "Region ratio", "variableName": "ratio", "showFilter": true, "filterType": "number"},
-      {"displayName": "Number of Classifications", "variableName": "num_classification", "showFilter": true, "filterType": "number"}  
-    ]' options='{
-      "showFilter":false
-    }' number-of-displayed-rows=20>
-      <template id='subjectTemplate'>
-        <div>
-          <mp-selection-toggle selection='demo' tag='{{subject.value}}'></mp-selection-toggle>
-        </div>
-      </template>
-      <template id="editCell">
-
-        <mp-overlay-dialog title="Image Viewer" type="modal" bs-size="xl">
-          <mp-overlay-dialog-trigger><button>
-              <mp-event-target-refresh id="edit-cell">
-                <img src="{{image.value}}/{{crop.value}}/300,/0/default.jpg">
-              </mp-event-target-refresh>
-            </button></mp-overlay-dialog-trigger>
-          <mp-overlay-dialog-content id="image-modal">
-            <mp-page-loader iri="[[ resolvePrefix 'page:viewImage']]" urlqueryparam-imageiri="{{image.value}}"
-              urlqueryparam-overlay="true"></mp-page-loader>
-          </mp-overlay-dialog-content>
-        </mp-overlay-dialog>
-      </template>
-    </semantic-table>
-  </div>
-</mp-selection-group>
+          <mp-overlay-dialog title="Image Viewer" type="modal" bs-size="xl">
+            <mp-overlay-dialog-trigger><button>
+                <mp-event-target-refresh id="edit-cell">
+                  <img src="{{image.value}}/{{crop.value}}/300,/0/default.jpg">
+                </mp-event-target-refresh>
+              </button></mp-overlay-dialog-trigger>
+            <mp-overlay-dialog-content id="image-modal">
+              <mp-page-loader iri="[[ resolvePrefix 'page:viewImage']]" urlqueryparam-imageiri="{{image.value}}"
+                urlqueryparam-overlay="true"></mp-page-loader>
+            </mp-overlay-dialog-content>
+          </mp-overlay-dialog>
+        </template>
+      </semantic-table>
+    </div>
+  </mp-selection-group>
 [[/inline]]
