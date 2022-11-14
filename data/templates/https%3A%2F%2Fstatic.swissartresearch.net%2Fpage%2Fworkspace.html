@@ -238,7 +238,9 @@
       BIND(BOUND(?imageTopPosition) as ?hasRotationInfo)
     } ORDER BY ?image"
     options='{
-      "enableGrouping": true,
+      "enableGrouping": false,
+      "pageSizeSelection": true,
+      "showColumnToggle": true,
       "groupingOptions": {"showOnlyAggregatedValue": true, "groupedBy": ["image"]}
     }' 
     column-configuration='[{
