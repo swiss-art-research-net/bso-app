@@ -261,7 +261,8 @@
     }, {
       "variableName": "contributor",
       "showFilter": true,
-      "displayName": "[[i18n "contributor" bundle="bso"]]"
+      "displayName": "[[i18n "contributor" bundle="bso"]]",
+      "aggregationCellTemplate": "{{#each value}}{{#if @last}}{{#if @first}}{{else}}, {{/if}}{{/if}}<semantic-link iri=\"{{this.value}}\"></semantic-link>{{/each}}"
     }, {
       "variableName": "hasRotationInfo",
       "showFilter": true,
