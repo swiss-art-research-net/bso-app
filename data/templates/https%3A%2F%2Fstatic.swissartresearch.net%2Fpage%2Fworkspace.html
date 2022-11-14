@@ -220,6 +220,43 @@
 
 [[#*inline "module-image-rotations"]]
 
+  <semantic-table
+    query="SELECT DISTINCT ?image ?collection ?artist ?contributor WHERE {
+      ?object a search:Object ;
+        crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
+      ?object crm:P109_has_current_or_former_curator ?collection .
+      OPTIONAL {
+        ?object crm:P128_carries/crm:P94i_was_created_by/crm:P14_carried_out_by ?artist .
+      }
+      OPTIONAL {
+        ?object crm:P108i_was_produced_by/crm:P14_carried_out_by ?contributor .
+      }
+    }"
+    options='{
+      "enableGrouping": true,
+      "groupingOptions": {"showOnlyAggregatedValue": true, "groupedBy": ["image"]},
+      "showColumnFilters": true
+    }' 
+    column-configuration='[{
+        "variableName": "image",
+        "displayName": "[[i18n "image" bundle="bso"]]",
+        "cellTemplate": "{{> cell-template-image}}"
+    }, {
+        "variableName": "collection",
+        "displayName": "[[i18n "collection" bundle="bso"]]"
+    }, {
+        "variableName": "artist",
+        "displayName": "[[i18n "artist" bundle="bso"]]"
+    }, {
+      "variableName": "contributor",
+      "displayName": "[[i18n "contributor" bundle="bso"]]"
+  }]'
+  >
+    <template id="cell-template-image">
+      <img src="{{image.value}}/full/200,/0/default.jpg" style="max-width: 200px; max-height: 200px;" />
+    </template>
+  </semantic-table>
+
 [[/inline]]
 
 [[#*inline "module-visual-similarities"]]
