@@ -14,6 +14,11 @@
 <h2 class="gap">[[i18n "workspace" bundle="bso"]]</h2>
 
 <bs-tabs>
+  <bs-tab event-key="imageRotations" title="[[i18n "imageRotations" bundle="bso"]]">
+
+    [[> module-image-rotations]]
+
+  </bs-tab>
   <bs-tab event-key="collaboratorNetworks" title="[[i18n "collaboratorNetworks" bundle="bso"]]">
 
     [[> module-collaborator-networks]]
@@ -210,6 +215,10 @@ ORDER BY DESC(?num_labels)' column-configuration='[
   </div>
 </template>
 </semantic-table>
+[[/inline]]
+
+[[#*inline "module-image-rotations"]]
+
 [[/inline]]
 
 [[#*inline "module-visual-similarities"]]
