@@ -221,7 +221,7 @@
 [[#*inline "module-image-rotations"]]
 
   <semantic-table
-    query="SELECT DISTINCT ?image ?collection ?artist ?contributor WHERE {
+    query="SELECT DISTINCT ?image ?collection ?artist ?contributor ?hasRotationInfo WHERE {
       ?object a search:Object ;
         crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
       ?object crm:P109_has_current_or_former_curator ?collection .
@@ -231,11 +231,14 @@
       OPTIONAL {
         ?object crm:P108i_was_produced_by/crm:P14_carried_out_by ?contributor .
       }
-    }"
+      OPTIONAL {
+        ?image sari:imageTopPosition ?imageTopPosition 
+      }
+      BIND(BOUND(?imageTopPosition) as ?hasRotationInfo)
+    } ORDER BY ?image"
     options='{
       "enableGrouping": true,
-      "groupingOptions": {"showOnlyAggregatedValue": true, "groupedBy": ["image"]},
-      "showColumnFilters": true
+      "groupingOptions": {"showOnlyAggregatedValue": true, "groupedBy": ["image"]}
     }' 
     column-configuration='[{
         "variableName": "image",
@@ -243,17 +246,93 @@
         "cellTemplate": "{{> cell-template-image}}"
     }, {
         "variableName": "collection",
+        "showFilter": true,
         "displayName": "[[i18n "collection" bundle="bso"]]"
     }, {
         "variableName": "artist",
+        "showFilter": true,
         "displayName": "[[i18n "artist" bundle="bso"]]"
     }, {
       "variableName": "contributor",
+      "showFilter": true,
       "displayName": "[[i18n "contributor" bundle="bso"]]"
-  }]'
+    }, {
+      "variableName": "hasRotationInfo",
+      "showFilter": true,
+      "displayName": "[[i18n "edited" bundle="bso"]]"
+    },{
+      "variableName": "image",
+      "displayName": "",
+      "cellTemplate": "{{> cell-template-rotation-info}}",
+      "aggregationCellTemplate": "{{> cell-template-rotation-info image=value.0.value}}"
+    }, {
+      "variableName": "image",
+      "displayName": "[[i18n "edit" bundle="bso"]]", 
+      "cellTemplate": "{{> cell-template-edit-form}}",
+      "aggregationCellTemplate": "{{> cell-template-edit-form image=value.0.value}}"
+    }]'
   >
     <template id="cell-template-image">
       <img src="{{image.value}}/full/200,/0/default.jpg" style="max-width: 200px; max-height: 200px;" />
+    </template>
+    <template id="cell-template-edit-form">
+      <div style="min-width:20rem">
+        <semantic-form 
+          id='form-rotation-{{image}}' 
+          persistence='sparql' 
+          post-action='event'
+          subject='{{image}}' 
+          fields='[
+            {
+              "id": "rotation",
+              "label": "[[i18n "positionOfTop" bundle="bso"]]",
+              "xsdDatatype": "xsd:anyURI",
+              "maxOccurs": "1",
+              "selectPattern": "SELECT ?value WHERE {
+                GRAPH sari:imageRotations {
+                  $subject sari:imageTopPosition ?value .
+                }
+              }",
+              "insertPattern": "INSERT {
+                  GRAPH sari:imageRotations {
+                    $subject sari:imageTopPosition ?value .
+                  }
+                } WHERE {}",
+              "deletePattern": "DELETE { 
+                  GRAPH sari:imageRotations {
+                    $subject sari:imageTopPosition ?value .
+                  }
+                } WHERE { 
+                  GRAPH sari:imageRotations {
+                    $subject sari:imageTopPosition ?value .
+                  }
+                }",
+              "valueSetPattern": "SELECT DISTINCT ?value WHERE {
+                VALUES (?value ?label) {
+                  (sari:top \"[[i18n "top" bundle="bso"]]\")
+                  (sari:bottom \"[[i18n "bottom" bundle="bso"]]\")
+                  (sari:left \"[[i18n "left" bundle="bso"]]\")
+                  (sari:right \"[[i18n "right" bundle="bso"]]\")
+                }
+              }"
+            }]'>
+          <semantic-form-select-input for="rotation"></semantic-form-select-input>
+          <button name="submit" class="btn btn-primary btn-xs">[[i18n "save" bundle="bso"]]</button>
+          <button name="reset" class="btn btn-secondary btn-xs">[[i18n "reset" bundle="bso"]]</button>
+        </semantic-form>
+      </div>
+    </template>
+    <template id="cell-template-rotation-info">
+      <mp-event-proxy on-event-source="form-rotation-{{image}}" proxy-event-type="Component.Refresh"
+        proxy-targets='["form-updated-{{image}}"]' data='{"id": "xy"}'>
+      </mp-event-proxy>
+
+      <mp-event-target-refresh id="form-updated-{{image}}">
+        <semantic-query query="SELECT ?value WHERE {
+            BIND(<{{image}}> as $subject)
+            $subject sari:imageTopPosition ?value 
+        }"></semantic-query>
+      </mp-event-target-refresh>
     </template>
   </semantic-table>
 
