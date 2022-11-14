@@ -221,8 +221,9 @@
 [[#*inline "module-image-rotations"]]
 
   <semantic-table
-    query="SELECT DISTINCT ?image ?collection ?artist ?contributor ?hasRotationInfo WHERE {
+    query="SELECT DISTINCT ?image ?title ?collection ?artist ?contributor ?hasRotationInfo WHERE {
       ?object a search:Object ;
+        rdfs:label ?title ;
         crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
       ?object crm:P109_has_current_or_former_curator ?collection .
       OPTIONAL {
@@ -244,6 +245,9 @@
         "variableName": "image",
         "displayName": "[[i18n "image" bundle="bso"]]",
         "cellTemplate": "{{> cell-template-image}}"
+    }, {
+      "variableName": "title",
+      "displayName": "[[i18n "title" bundle="bso"]]"
     }, {
         "variableName": "collection",
         "showFilter": true,
@@ -274,6 +278,15 @@
   >
     <template id="cell-template-image">
       <img src="{{image.value}}/full/200,/0/default.jpg" style="max-width: 200px; max-height: 200px;" />
+      <semantic-query query="SELECT ?object WHERE {
+        BIND(<{{image.value}}> as $image)
+        ?object crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image
+      }"
+      template="{{> object-link-template}}">
+        <template id="object-link-template">
+          <p><semantic-link iri="{{bindings.0.object.value}}" target="_blank">[[i18n "open" bundle="bso"]]</semantic-link></p>
+        </template>
+      </semantic-query>
     </template>
     <template id="cell-template-edit-form">
       <div style="min-width:20rem">
