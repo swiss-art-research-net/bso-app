@@ -952,11 +952,6 @@ fields:
                 bds:matchAllTerms "true"
             } ORDER BY DESC(?score)
             LIMIT 10'
-        - valueSet: 'SELECT ?value ?label  WHERE {
-              ?value a search:Person ;
-                rdfs:label ?label .
-            } ORDER BY ?label
-            LIMIT 100'
 
     - id: P15_was_influenced_by
       label: Reference
