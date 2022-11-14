@@ -547,6 +547,21 @@
         "iri" : "https://platform.swissartresearch.net/instances/fields/url_as_subject"
     }
 [[/inline]]
+ [[#*inline "value_boolean"]]
+    {
+        "id" : "value_boolean",
+
+            "label": "[[i18n "field_agreement" bundle="bso"]]",
+            "description" : "Type to state agreement or disagreement",
+            "minOccurs" : "1",
+            "maxOccurs" : "1",
+            "xsdDatatype" : "xsd:boolean",
+                "insertPattern" : "INSERT { ?subject rdf:value ?value } WHERE {}",
+                "selectPattern" : "SELECT ?value WHERE { ?subject rdf:value ?value . FILTER(DATATYPE(?value) = xsd:boolean) }",
+                "valueSetPattern" : "SELECT ?value ?label WHERE { VALUES (?value ?label) { (\"true\"^^xsd:boolean \"True\") (\"false\"^^xsd:boolean \"False\") } }",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/value_boolean"
+    }
+[[/inline]]
  [[#*inline "P1_is_identified_by"]]
     {
         "id" : "P1_is_identified_by",
@@ -681,6 +696,18 @@
                 "selectPattern" : "SELECT ?value WHERE { $subject crm:P15_was_influenced_by ?value . }",
                 "insertPattern" : "INSERT { $subject crm:P15_was_influenced_by ?value . } WHERE {}",
         "iri" : "https://platform.swissartresearch.net/instances/fields/P15_was_influenced_by"
+    }
+[[/inline]]
+ [[#*inline "P16_used_specific_object"]]
+    {
+        "id" : "P16_used_specific_object",
+
+            "label": "[[i18n "field_object_used" bundle="bso"]]",
+            "description" : "The object used in this event",
+            "xsdDatatype" : "xsd:anyURI",
+                "selectPattern" : "SELECT ?value WHERE { $subject crm:P16_used_specific_object ?value . }",
+                "insertPattern" : "INSERT { $subject crm:P16_used_specific_object ?value . } WHERE {}",
+        "iri" : "https://platform.swissartresearch.net/instances/fields/P16_used_specific_object"
     }
 [[/inline]]
  [[#*inline "P140_assigned_attribute_to"]]

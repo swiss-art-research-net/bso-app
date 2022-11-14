@@ -652,6 +652,10 @@ ol.page-breadcrumb {
         }
     }
 
+    &.strikethrough + * {
+        text-decoration: line-through !important;
+    }
+
     &.sidebar {
         max-width: @bs-breakpoint-sm;
         .card {
@@ -808,6 +812,24 @@ ol.page-breadcrumb {
     &.util- {
         &parent-is-open {
             display: none;
+        }
+        &pointer {
+            cursor: pointer;
+        }
+        &show-on-parent-hover {
+            display:none;
+        }
+    
+        &strikethrough + * {
+            text-decoration: line-through !important;
+        }
+    }
+
+    :hover {
+        > * {
+            > .util-show-on-parent-hover {
+                display: inline;
+            }
         }
     }
 }
