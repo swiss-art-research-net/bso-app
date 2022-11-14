@@ -708,6 +708,27 @@ fields:
           BIND($subject as ?value)
         }'
 
+    - id: value_boolean
+      label: Agreement
+      description: Type to state agreement or disagreement
+      datatype: xsd:boolean
+      minOccurs: 1
+      maxOccurs: 1
+      queries:
+        - insert: 'INSERT {
+            ?subject rdf:value ?value
+          } WHERE {}'
+        - select: 'SELECT ?value WHERE {
+            ?subject rdf:value ?value .
+            FILTER(DATATYPE(?value) = xsd:boolean)  
+          }'
+        - valueSet: 'SELECT ?value ?label WHERE {
+            VALUES (?value ?label) {
+              ("true"^^xsd:boolean "True")
+              ("false"^^xsd:boolean "False")
+            }
+          }'
+
     - id: P1_is_identified_by
       label: Identifier
       datatype: xsd:string
@@ -942,6 +963,18 @@ fields:
             }'
         - insert: 'INSERT {
               $subject crm:P15_was_influenced_by ?value .
+            } WHERE {}'
+
+    - id: P16_used_specific_object
+      label: Object used
+      description: The object used in this event
+      datatype: xsd:anyURI
+      queries:
+        - select: 'SELECT ?value WHERE {
+              $subject crm:P16_used_specific_object ?value .
+            }'
+        - insert: 'INSERT {
+              $subject crm:P16_used_specific_object ?value .
             } WHERE {}'
 
     - id: P140_assigned_attribute_to
