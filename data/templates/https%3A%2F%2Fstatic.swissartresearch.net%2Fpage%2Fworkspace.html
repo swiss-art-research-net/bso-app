@@ -320,7 +320,7 @@
                     $subject sari:imageTopPosition ?value .
                   }
                 }",
-              "valueSetPattern": "SELECT DISTINCT ?value WHERE {
+              "valueSetPattern": "SELECT DISTINCT ?value ?label WHERE {
                 VALUES (?value ?label) {
                   (sari:top \"[[i18n "top" bundle="bso"]]\")
                   (sari:bottom \"[[i18n "bottom" bundle="bso"]]\")
