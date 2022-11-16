@@ -273,23 +273,16 @@ BIND(IF(BOUND(?creator), ?creator, IF(BOUND(?producer), ?producer, ?anonymous)) 
                     
                     <p><img src="{{iiif_url.value}}/{{regionByPx.value}}/300,/0/default.jpg"></p>
                     
-                    <semantic-context repository="smapshot">
-                            <semantic-update 
-                                query='PREFIX : <http://www.metaphacts.com/resource/>
-                                    PREFIX smapshot: <https://smapshot.heig-vd.ch/vocab>
-                                    INSERT  {
-                                    :s :p :o .
-                                    } WHERE {
-                                        VALUES(?type ?photographer_ids ?iiif_url ?is_published  ?original_id  ?title ?collection_id ?view_type ?license ?observation_enabled  ?correction_enabled ?height ?width ?name ?date_shot {{#if date_min.value}}?date_min{{/if}} {{#if date_max.value}}?date_max{{/if}} ?longitude ?latitude ?regionByPx) {
-                                            ("submitImage" "{{photographer_ids.value}}" <{{iiif_url.value}}> "true" "{{original_id.value}}" "{{title_clean.value}}" "36" "terrestrial" "{{license.value}}" "true" "false" "{{height.value}}" "{{width.value}}" "{{name.value}}" "{{date_shot.value}}" {{#if date_min.value}}"{{date_min.value}}"{{/if}} {{#if date_max.value}}"{{date_max.value}}"{{/if}} "{{longitude.value}}" "{{latitude.value}}" "{{regionByPx.value}}")
-                                        }
-                                }'
-                                variable-params='["type", "photographer_ids", "iiif_url", "is_published", "original_id", "title", "collection_id", "view_type", "license", "observation_enabled", "correction_enabled", "height", "width", "name", "date_shot", "date_min", "date_max", "longitude", "latitude", "regionByPx"]'
-                                post-action="[[> thisIri]]">
-                                <button class='btn btn-primary'>[[i18n "submit" bundle="bso"]]</button>
-                            </semantic-update>
+                    <bs-tabs class="bso-component view-selector" default-active-key="single_image">                        
+                        <bs-tab event-key="context" title="[[i18n "type" bundle="bso"]]"></bs-tab>
+                        <bs-tab event-key="single_image" title="[[i18n "singleImage" bundle="bso"]]">
+                            [[> component-submit-image]]
+                        </bs-tab>
+                        <bs-tab event-key="panorama_image" title="[[i18n "panorama" bundle="bso"]]">
+                            [[> component-submit-image panorama="True"]]
+                        </bs-tab>
+                    </bs-tabs>
                     
-                    </semantic-context>
                 </div>
             {{/each}}
 
@@ -300,4 +293,24 @@ BIND(IF(BOUND(?creator), ?creator, IF(BOUND(?producer), ?producer, ?anonymous)) 
 </div>
 
 
+[[/inline]]
+
+[[#* inline "component-submit-image"]]
+<semantic-context repository="smapshot">
+    <semantic-update 
+        query='PREFIX : <http://www.metaphacts.com/resource/>
+            PREFIX smapshot: <https://smapshot.heig-vd.ch/vocab>
+            INSERT  {
+            :s :p :o .
+            } WHERE {
+                VALUES(?type ?photographer_ids ?iiif_url ?is_published  ?original_id  ?title ?collection_id ?view_type ?license ?observation_enabled  ?correction_enabled ?height ?width ?name ?date_shot {{#if date_min.value}}?date_min{{/if}} {{#if date_max.value}}?date_max{{/if}} ?longitude ?latitude ?regionByPx ?framing_mode) {
+                    ("submitImage" "{{photographer_ids.value}}" <{{iiif_url.value}}> "true" "{{original_id.value}}" "{{title_clean.value}}" "36" "terrestrial" "{{license.value}}" "true" "false" "{{height.value}}" "{{width.value}}" "{{name.value}}" "{{date_shot.value}}" {{#if date_min.value}}"{{date_min.value}}"{{/if}} {{#if date_max.value}}"{{date_max.value}}"{{/if}} "{{longitude.value}}" "{{latitude.value}}" "{{regionByPx.value}}" [[#if panorama]]"composite_image"[[else]]"single_image"[[/if]])
+                }
+        }'
+        variable-params='["type", "photographer_ids", "iiif_url", "is_published", "original_id", "title", "collection_id", "view_type", "license", "observation_enabled", "correction_enabled", "height", "width", "name", "date_shot", "date_min", "date_max", "longitude", "latitude", "regionByPx", "framing_mode"]'
+        post-action="[[> thisIri]]">
+        <button class='btn btn-primary'>[[i18n "submit" bundle="bso"]]</button>
+    </semantic-update>
+
+</semantic-context>
 [[/inline]]
