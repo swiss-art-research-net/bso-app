@@ -949,6 +949,35 @@
 </semantic-query>
 [[/inline]]
 
+[[#*inline "field-visualisation-titles"]]
+<semantic-query
+    query="SELECT DISTINCT ?subject ?type WHERE {
+        [[> thisForQuery]] crm:P102_has_title ?subject .
+        OPTIONAL {
+            ?subject crm:P2_has_type ?type .
+        }
+    }"
+    template="{{> template}}">>
+    <template id="template">
+        <div class="bso-component field-visualisation">
+            <span class="bso-component label">[[i18n "titles" bundle="bso"]]</span>
+            <table>
+                {{#each bindings}}
+                <tr>
+                    <td>
+                        <mp-label iri="{{subject.value}}"></mp-label>
+                    </td>
+                    {{#if type.value}}
+                        <td><semantic-link iri="{{type.value}}"></semantic-link></td>
+                    {{/if}}
+                </tr>
+                {{/each}}
+            </table>
+        </div>
+    </template>
+</semantic-query>
+[[/inline]]
+
 [[#*inline "module-discovery"]]
 
 <bs-tab-container default-active-key="visualSimilarity">
@@ -1030,6 +1059,7 @@
         [[> field-visualisation-depicts ]]
         [[> field-visualisation-external-links]]
         [[> field-visualisation-dates]]
+        [[> field-visualisation-titles]]
         [[> field-visualisation-places]]
         [[> field-visualisation-contained-in]]
         [[> field-visualisation-narrower-terms]]
