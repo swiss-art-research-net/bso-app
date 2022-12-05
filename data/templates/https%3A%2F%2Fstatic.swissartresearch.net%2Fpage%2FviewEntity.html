@@ -374,6 +374,56 @@
 </semantic-query>
 [[/inline]]
 
+
+[[#*inline "field-visualisation-birth"]]
+    <semantic-query
+        query='SELECT ?birth ?birthDateString ?birthDateBegin ?birthDateEnd ?birthPlace WHERE {
+            [[> thisForQuery]] crm:P98i_was_born ?birth .
+            OPTIONAL {
+                ?birth crm:P4_has_time-span ?birthDate .
+                OPTIONAL {
+                    ?birthDate rdfs:label ?birthDateLabel .
+                }
+                OPTIONAL {
+                    ?birthDate crm:P82a_begin_of_the_begin ?birthDateBegin .
+                }
+                OPTIONAL {
+                    ?birthDate crm:P82b_end_of_the_end ?birthDateEnd .
+                }
+                BIND(
+                    IF( ?birthDateBegin = ?birthDateEnd, 
+                        CONCAT(STR(DAY(?birthDateEnd)), ".", STR(MONTH(?birthDateEnd)), ".", STR(YEAR(?birthDateEnd))), 
+                        CONCAT(STR(DAY(?birthDateBegin)), ".", STR(MONTH(?birthDateBegin)), ".", STR(YEAR(?birthDateBegin)), "/", STR(DAY(?birthDateEnd)), ".", STR(MONTH(?birthDateEnd)), ".", STR(YEAR(?birthDateEnd)))
+                    ) as ?birthDateString
+                )
+            }
+            OPTIONAL {
+                ?birth crm:P7_took_place_at ?birthPlace .
+            }
+        }'
+        template="{{> template}}">
+        <template id="template">
+            <div class="bso-component field-visualisation">
+                <span class="bso-component label">[[i18n "born" bundle="bso"]]</span>
+    
+                <table>
+                    {{#each bindings}}
+                        <tr>
+                            <td>{{birthDateString.value}}</td>
+                            {{#if birthPlace.value}}
+                                <td>
+                                    <ul class="bso-component tags">
+                                        <li class="bso-component tag Place"><semantic-link uri="{{birthPlace.value}}"></semantic-link></li>
+                                    </ul>
+                                </td>
+                            {{/if}}
+                        </tr>
+                    {{/each}}
+                </table>
+        </template>
+    </semantic-query>
+[[/inline]]
+
 [[#*inline "field-visualisation-dates"]]
 <semantic-query
     query="SELECT DISTINCT ?subject ?eventType (GROUP_CONCAT(?event; SEPARATOR=';') as ?events) ?type WHERE {
@@ -444,6 +494,55 @@
         </div>
     </template>
 </semantic-query>
+[[/inline]]
+
+[[#*inline "field-visualisation-death"]]
+    <semantic-query
+    query='SELECT ?death ?deathDateString ?deathDateBegin ?deathDateEnd ?deathPlace WHERE {
+        [[> thisForQuery]] crm:P100i_died_in ?death .
+        OPTIONAL {
+            ?death crm:P4_has_time-span ?deathDate .
+            OPTIONAL {
+                ?deathDate rdfs:label ?deathDateLabel .
+            }
+            OPTIONAL {
+                ?deathDate crm:P82a_begin_of_the_begin ?deathDateBegin .
+            }
+            OPTIONAL {
+                ?deathDate crm:P82b_end_of_the_end ?deathDateEnd .
+            }
+            BIND(
+                IF( ?deathDateBegin = ?deathDateEnd, 
+                    CONCAT(STR(DAY(?deathDateEnd)), ".", STR(MONTH(?deathDateEnd)), ".", STR(YEAR(?deathDateEnd))), 
+                    CONCAT(STR(DAY(?deathDateBegin)), ".", STR(MONTH(?deathDateBegin)), ".", STR(YEAR(?deathDateBegin)), "/", STR(DAY(?deathDateEnd)), ".", STR(MONTH(?deathDateEnd)), ".", STR(YEAR(?deathDateEnd)))
+                ) as ?deathDateString
+            )
+        }
+        OPTIONAL {
+            ?death crm:P7_took_place_at ?deathPlace .
+        }
+    }'
+    template="{{> template}}">
+    <template id="template">
+        <div class="bso-component field-visualisation">
+            <span class="bso-component label">[[i18n "died" bundle="bso"]]</span>
+
+            <table>
+                {{#each bindings}}
+                    <tr>
+                        <td>{{deathDateString.value}}</td>
+                        {{#if deathPlace.value}}
+                            <td>
+                                <ul class="bso-component tags">
+                                    <li class="bso-component tag Place"><semantic-link uri="{{deathPlace.value}}"></semantic-link></li>
+                                </ul>
+                            </td>
+                        {{/if}}
+                    </tr>
+                {{/each}}
+            </table>
+    </template>
+    </semantic-query>
 [[/inline]]
 
 [[#*inline "field-visualisation-depicts"]]
@@ -1064,6 +1163,8 @@
         [[> field-visualisation-narrower-terms]]
         [[> field-visualisation-persons-involved-in-creation]]
         [[> field-visualisation-persons-carrying-out-event]]
+        [[> field-visualisation-birth]]
+        [[> field-visualisation-death]]
         [[> field-visualisation-events-carrying-out]]
         [[> field-visualisation-titles]]
         [[> field-visualisation-dimensions]]
