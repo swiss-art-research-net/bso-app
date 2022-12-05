@@ -881,7 +881,7 @@
 
 [[#*inline "field-visualisation-persons-involved-in-creation"]]
 <semantic-query
-    query="SELECT DISTINCT ?subject ?event (GROUP_CONCAT(DISTINCT ?role; SEPARATOR=' ') as ?roles) (GROUP_CONCAT(DISTINCT ?global_role; SEPARATOR=' ') as ?global_roles) WHERE {
+    query="SELECT DISTINCT ?subject ?event ?subevent (GROUP_CONCAT(DISTINCT ?role; SEPARATOR=' ') as ?roles) (GROUP_CONCAT(DISTINCT ?global_role; SEPARATOR=' ') as ?global_roles) WHERE {
         BIND(<[[>thisIri]]/meta> as ?meta)
         {
             [[> thisForQuery]] crm:P108i_was_produced_by ?event .
@@ -919,7 +919,7 @@
                 ?appellation rdfs:label ?appellation_label .
             }
         }
-    } GROUP BY ?subject ?event"
+    } GROUP BY ?subject ?event ?subevent"
     template="{{> template}}">>
     <template id="template">
         <div class="bso-component field-visualisation">
@@ -934,7 +934,7 @@
                             {{/ partial:assertStatement}}
                         </ul>
                     </td>
-                    <td>{{#if roles.value}}{{#each (split roles.value ' ')}}[[> addComma]]{{#> partial:assertStatement assertionSubject=../event.value assertionPredicate="[[resolvePrefix "crm:P2_has_type"]]" assertionObject=this  assertionObjectUsed="[[>thisIri]]"}}<semantic-link class-name="bso-tag Type" iri="{{assertionObject}}"></semantic-link>{{/ partial:assertStatement}}{{/each}}{{/if}} ({{#each (split global_roles.value ' ')}}[[> addComma]]<mp-label iri="{{this}}"></mp-label>{{/each}})</td>
+                    <td>{{#if roles.value}}{{#each (split roles.value ' ')}}[[> addComma]]{{#> partial:assertStatement assertionSubject=../subevent.value assertionPredicate="[[resolvePrefix "crm:P2_has_type"]]" assertionObject=this  assertionObjectUsed="[[>thisIri]]"}}<semantic-link class-name="bso-tag Type" iri="{{assertionObject}}"></semantic-link>{{/ partial:assertStatement}}{{/each}}{{/if}} ({{#each (split global_roles.value ' ')}}[[> addComma]]<mp-label iri="{{this}}"></mp-label>{{/each}})</td>
                 </tr>
                 {{/each}}
             </table>
