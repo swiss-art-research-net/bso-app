@@ -1665,18 +1665,21 @@
         </mp-event-target-refresh>
 
         <semantic-if query="ASK { 
-            GRAPH ?g {
-                [[> thisForQuery]] a ?type . 
-            }
-            BIND(URI(STRBEFORE(STR(?g), '/context')) as ?container)
-            ?parentContainer ldp:contains ?container .
-            VALUES (?type) {
-                (search:Person) 
-                (search:Place) 
-                (search:Event)
-                (search:BibliographicItem)
+            {
+                GRAPH ?g {
+                    [[> thisForQuery]] a ?type . 
                 }
-            }" then="{{> template}}">
+                BIND(URI(STRBEFORE(STR(?g), '/context')) as ?container)
+                ?parentContainer ldp:contains ?container .
+                VALUES (?type) {
+                    (search:Place) 
+                    (search:Event)
+                    (search:BibliographicItem)
+                    }
+            } UNION {
+                [[> thisForQuery]] a search:Person.
+            }
+        }" then="{{> template}}">
             <template id="template">
                 <semantic-query
                     query="SELECT ?type ?editForm WHERE {
