@@ -377,7 +377,7 @@
 
 [[#*inline "field-visualisation-birth"]]
     <semantic-query
-        query='SELECT ?birth ?birthDateString ?birthDatePeriod ?birthDateBegin ?birthDateEnd ?birthPlace ?source WHERE {
+        query='SELECT ?birth ?birthDateString ?birthDatePeriod ?birthDateBegin ?birthDateEnd ?birthPlace ?source ?isContext WHERE {
             {
                 GRAPH ?source {
                     [[> thisForQuery]] crm:P98i_was_born ?birth .
@@ -413,7 +413,8 @@
                     BIND(<https://d-nb.info/gnd/10140798-1> as ?source)
                 }
             }
-        }'
+            BIND(STRENDS(STR(?source), "/context") as ?isContext)
+        } ORDER BY DESC(?isContext)'
         template="{{> template}}">
         <template id="template">
             <div class="bso-component field-visualisation">
@@ -432,7 +433,11 @@
                             {{else}}
                                 <td></td>
                             {{/if}}
-                            <td><small>[[i18n "source" bundle="bso"]]: <mp-label iri="{{source.value}}"></mp-label></small></td>
+                            <td>
+                                {{#ifCond isContext.value "==" "false"}}
+                                    <small>[[i18n "source" bundle="bso"]]: <mp-label iri="{{source.value}}"></mp-label></small>
+                                {{/ifCond}}
+                            </td>
                         </tr>
                     {{/each}}
                 </table>
@@ -514,7 +519,7 @@
 
 [[#*inline "field-visualisation-death"]]
     <semantic-query
-    query='SELECT ?death ?deathDateString ?deathDateBegin ?deathDateEnd ?deathPlace ?source WHERE {
+    query='SELECT ?death ?deathDateString ?deathDateBegin ?deathDateEnd ?deathPlace ?source ?isContext WHERE {
         {
             GRAPH ?source {
                 [[> thisForQuery]] crm:P100i_died_in ?death .
@@ -550,7 +555,8 @@
                 BIND(<https://d-nb.info/gnd/10140798-1> as ?source)
             }
         }
-    }'
+        BIND(STRENDS(STR(?source), "/context") as ?isContext)
+    } ORDER BY DESC(?isContext)'
     template="{{> template}}">
     <template id="template">
         <div class="bso-component field-visualisation">
@@ -569,7 +575,11 @@
                         {{else}}
                             <td></td>
                         {{/if}}
-                        <td><small>[[i18n "source" bundle="bso"]]: <mp-label iri="{{source.value}}"></mp-label></small></td>
+                        <td>
+                            {{#ifCond isContext.value "==" "false"}}
+                                <small>[[i18n "source" bundle="bso"]]: <mp-label iri="{{source.value}}"></mp-label></small>
+                            {{/ifCond}}
+                        </td>
                     </tr>
                 {{/each}}
             </table>
