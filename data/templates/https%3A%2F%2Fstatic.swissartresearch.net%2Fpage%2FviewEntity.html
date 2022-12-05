@@ -377,7 +377,7 @@
 
 [[#*inline "field-visualisation-birth"]]
     <semantic-query
-        query='SELECT ?birth ?birthDateString ?birthDateBegin ?birthDateEnd ?birthPlace ?source WHERE {
+        query='SELECT ?birth ?birthDateString ?birthDatePeriod ?birthDateBegin ?birthDateEnd ?birthPlace ?source WHERE {
             {
                 GRAPH ?source {
                     [[> thisForQuery]] crm:P98i_was_born ?birth .
@@ -394,7 +394,7 @@
                         }
                         BIND(
                             IF( ?birthDateBegin = ?birthDateEnd, 
-                                CONCAT(STR(DAY(?birthDateEnd)), ".", STR(MONTH(?birthDateEnd)), ".", STR(YEAR(?birthDateEnd))), 
+                                STR(?birthDateBegin), 
                                 CONCAT(STR(DAY(?birthDateBegin)), ".", STR(MONTH(?birthDateBegin)), ".", STR(YEAR(?birthDateBegin)), "/", STR(DAY(?birthDateEnd)), ".", STR(MONTH(?birthDateEnd)), ".", STR(YEAR(?birthDateEnd)))
                             ) as ?birthDateString
                         )
@@ -422,7 +422,7 @@
                 <table>
                     {{#each bindings}}
                         <tr>
-                            <td>{{dateTimeFormat birthDateString.value "DD.MM.YYYY"}}</td>
+                            <td>{{#ifCond (dateTimeFormat birthDateString.value "DD.MM.YYYY") "!=" "Invalid date"}}{{dateTimeFormat birthDateString.value "DD.MM.YYYY"}}{{else}}{{birthDateString.value}}{{/ifCond}}</td>
                             {{#if birthPlace.value}}
                                 <td>
                                     <ul class="bso-component tags">
@@ -530,8 +530,8 @@
                         ?deathDate crm:P82b_end_of_the_end ?deathDateEnd .
                     }
                     BIND(
-                        IF( ?deathDateBegin = ?deathDateEnd, 
-                            CONCAT(STR(DAY(?deathDateEnd)), ".", STR(MONTH(?deathDateEnd)), ".", STR(YEAR(?deathDateEnd))), 
+                        IF( ?deathDateBegin = ?deathDateEnd,
+                            STR(?deathDateBegin),
                             CONCAT(STR(DAY(?deathDateBegin)), ".", STR(MONTH(?deathDateBegin)), ".", STR(YEAR(?deathDateBegin)), "/", STR(DAY(?deathDateEnd)), ".", STR(MONTH(?deathDateEnd)), ".", STR(YEAR(?deathDateEnd)))
                         ) as ?deathDateString
                     )
@@ -559,7 +559,7 @@
             <table>
                 {{#each bindings}}
                     <tr>
-                        <td>{{dateTimeFormat deathDateString.value "DD.MM.YYYY"}}</td>
+                        <td>{{#ifCond (dateTimeFormat deathDateString.value "DD.MM.YYYY") "!=" "Invalid date"}}{{dateTimeFormat deathDateString.value "DD.MM.YYYY"}}{{else}}{{deathDateString.value}}{{/ifCond}}</td>
                         {{#if deathPlace.value}}
                             <td>
                                 <ul class="bso-component tags">
