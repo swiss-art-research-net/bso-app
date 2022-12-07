@@ -377,7 +377,7 @@
 
 [[#*inline "field-visualisation-birth"]]
     <semantic-query
-        query='SELECT ?birth ?birthDateString ?birthDatePeriod ?birthDateBegin ?birthDateEnd ?birthPlace ?source ?isContext WHERE {
+        query='SELECT DISTINCT ?birth ?birthDateString ?birthDatePeriod ?birthDateBegin ?birthDateEnd ?birthPlace ?source ?isContext WHERE {
             {
                 GRAPH ?source {
                     [[> thisForQuery]] crm:P98i_was_born ?birth .
@@ -520,7 +520,7 @@
 
 [[#*inline "field-visualisation-death"]]
     <semantic-query
-    query='SELECT ?death ?deathDateString ?deathDateBegin ?deathDateEnd ?deathPlace ?source ?isContext WHERE {
+    query='SELECT DISTINCT ?death ?deathDateString ?deathDateBegin ?deathDateEnd ?deathPlace ?source ?isContext WHERE {
         {
             GRAPH ?source {
                 [[> thisForQuery]] crm:P100i_died_in ?death .
