@@ -395,7 +395,8 @@
                         BIND(
                             IF( ?birthDateBegin = ?birthDateEnd, 
                                 STR(?birthDateBegin), 
-                                CONCAT(STR(DAY(?birthDateBegin)), ".", STR(MONTH(?birthDateBegin)), ".", STR(YEAR(?birthDateBegin)), "/", STR(DAY(?birthDateEnd)), ".", STR(MONTH(?birthDateEnd)), ".", STR(YEAR(?birthDateEnd)))
+                                IF (YEAR(?birthDateBegin) = YEAR(?birthDateEnd), YEAR (?birthDateBegin),
+                                    CONCAT(STR(DAY(?birthDateBegin)), ".", STR(MONTH(?birthDateBegin)), ".", STR(YEAR(?birthDateBegin)), "/", STR(DAY(?birthDateEnd)), ".", STR(MONTH(?birthDateEnd)), ".", STR(YEAR(?birthDateEnd))))
                             ) as ?birthDateString
                         )
                     }
@@ -537,7 +538,8 @@
                     BIND(
                         IF( ?deathDateBegin = ?deathDateEnd,
                             STR(?deathDateBegin),
-                            CONCAT(STR(DAY(?deathDateBegin)), ".", STR(MONTH(?deathDateBegin)), ".", STR(YEAR(?deathDateBegin)), "/", STR(DAY(?deathDateEnd)), ".", STR(MONTH(?deathDateEnd)), ".", STR(YEAR(?deathDateEnd)))
+                            IF (YEAR(?deathDateBegin) = YEAR(?deathDateEnd), YEAR (?deathDateBegin),
+                                CONCAT(STR(DAY(?deathDateBegin)), ".", STR(MONTH(?deathDateBegin)), ".", STR(YEAR(?deathDateBegin)), "/", STR(DAY(?deathDateEnd)), ".", STR(MONTH(?deathDateEnd)), ".", STR(YEAR(?deathDateEnd))))
                         ) as ?deathDateString
                     )
                 }
