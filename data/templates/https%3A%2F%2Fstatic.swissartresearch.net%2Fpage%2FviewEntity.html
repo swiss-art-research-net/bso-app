@@ -424,7 +424,7 @@
                 <table>
                     {{#each bindings}}
                         <tr>
-                            <td>{{#ifCond (dateTimeFormat birthDateString.value "DD.MM.YYYY") "!=" "Invalid date"}}{{dateTimeFormat birthDateString.value "DD.MM.YYYY"}}{{else}}{{birthDateString.value}}{{/ifCond}}</td>
+                            <td>{{#ifCond (dateTimeFormat birthDateString.value "DD.MM.YYYY") "!==" "Invalid date"}}{{dateTimeFormat birthDateString.value "DD.MM.YYYY"}}{{else}}{{birthDateString.value}}{{/ifCond}}</td>
                             {{#if birthPlace.value}}
                                 <td>
                                     <ul class="bso-component tags">
@@ -567,7 +567,7 @@
             <table>
                 {{#each bindings}}
                     <tr>
-                        <td>{{#ifCond (dateTimeFormat deathDateString.value "DD.MM.YYYY") "!=" "Invalid date"}}{{dateTimeFormat deathDateString.value "DD.MM.YYYY"}}{{else}}{{deathDateString.value}}{{/ifCond}}</td>
+                        <td>{{#ifCond (dateTimeFormat deathDateString.value "DD.MM.YYYY") "!==" "Invalid date"}}{{dateTimeFormat deathDateString.value "DD.MM.YYYY"}}{{else}}{{deathDateString.value}}{{/ifCond}}</td>
                         {{#if deathPlace.value}}
                             <td>
                                 <ul class="bso-component tags">
