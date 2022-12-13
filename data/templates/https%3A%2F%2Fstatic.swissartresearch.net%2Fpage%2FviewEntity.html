@@ -770,8 +770,6 @@
             [[> thisForQuery]] a search:Object .                            
             BIND(URI(REPLACE('[[>thisIri]]','artwork','manifest')) as ?subject) .
             BIND('IIIF Manifest' as ?label)
-            # Temporary filter as IIIF Manifests for SFF data are not yet available
-            FILTER(! REGEX('[[> thisIri ]]', 'SFF', 'i'))
         } UNION {
             [[> thisForQuery]] crm:P1_is_identified_by ?smapshot_identifier .
             ?smapshot_identifier crm:P2_has_type <https://smapshot.heig-vd.ch> ;
