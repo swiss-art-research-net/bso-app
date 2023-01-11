@@ -751,6 +751,27 @@
 </semantic-query>
 [[/inline]]
 
+[[#*inline "field-visualisation-events-employed-in"]]
+<semantic-query
+    query="SELECT DISTINCT ?subject WHERE {
+        ?subject a search:Event ;
+            crm:P16_used_specific_object [[> thisForQuery]] .
+    }"
+    template="{{> template}}">
+    <template id="template">
+        <div class="bso-component field-visualisation">
+            <span class="bso-component label">[[i18n "usedIn" bundle="bso"]]</span>
+            <ul class="bso-component tags">
+                {{#each bindings}}
+                    <li class="bso-component tag Event"><semantic-link uri="{{subject.value}}"></semantic-link></li>
+                {{/each}}
+            </ul>
+        </div>
+    </template>
+</semantic-query>
+[[/inline]]
+
+
 [[#*inline "field-visualisation-external-links"]]
 <semantic-query
     query="SELECT DISTINCT ?subject ?label WHERE {
@@ -1293,6 +1314,7 @@
         [[> field-visualisation-birth]]
         [[> field-visualisation-death]]
         [[> field-visualisation-events-carrying-out]]
+        [[> field-visualisation-events-employed-in]]
         [[> field-visualisation-titles]]
         [[> field-visualisation-dimensions]]
         [[> field-visualisation-technique]]
