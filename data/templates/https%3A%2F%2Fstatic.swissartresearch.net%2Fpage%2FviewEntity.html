@@ -15,6 +15,7 @@
 
         [[> module-sidebar-map]]
         [[> module-sidebar-image]]
+        [[> module-sidebar-colors]]
         [[> module-sidebar-smapshot]]
         [[> module-sidebar-person-network]]
         [[> module-sidebar-event-network]]
@@ -1584,6 +1585,62 @@
         </template>
     </semantic-if>
 [[/inline]]
+
+
+[[#*inline "module-sidebar-colors"]]
+    <semantic-if
+    query='
+    PREFIX linkedart: <https://linked.art/ns/terms/>
+    ASK { 
+        [[> thisForQuery ]]  crm:P128_carries/linkedart:digitally_shown_by/linkedart:digitally_available_via/linkedart:access_point ?a .
+        ?class <http://www.cidoc-crm.org/cidoc-crm/P140_assigned_attribute_to> ?a .
+        ?class rdf:value ?val .
+        ?class rdfs:label "Color Scheme" .  
+      } '
+    then='{{> globalColorTemplate}}'
+    >
+        <template id="globalColorTemplate">
+            <bs-panel>
+                    <semantic-query
+                            query="
+                            PREFIX linkedart: <https://linked.art/ns/terms/>
+                            SELECT ?colors WHERE {
+                                [[> thisForQuery ]] crm:P128_carries/linkedart:digitally_shown_by/linkedart:digitally_available_via/linkedart:access_point ?access .
+                                ?classif <http://www.cidoc-crm.org/cidoc-crm/P140_assigned_attribute_to> ?access .
+                                ?classif rdf:value ?val .
+                                ?classif rdfs:label ?label .
+                                FILTER( ?label = 'Color Scheme') .
+                                BIND(REPLACE(?val, '\\),\\(', '\\) \\(') AS ?colors) .
+                                } LIMIT 1
+                            "
+                            template="{{> colorTemplate}}">
+                            <template id="colorTemplate">
+                                <div class="bso-component color_scheme">
+                                    <div>
+                                        <b>Color Scheme:</b>
+                                          {{#each bindings}}
+                                                {{#each (split colors.value ' ')}}
+                                                  <div style='height:4vh;width:30vh;background:rgb{{this}};text-align: center;vertical-align: middle;line-height: 4vh;'>
+                                                    <p role='textbox' aria-multiline='true' style='
+                                                    color:rgb{{this}};
+                                                    -webkit-filter: invert(100%);
+                                                    filter:invert(100%);
+                                                    text-shadow: white 0px 0px 10px;'
+                                                    >
+                                                    <b>RGB{{this}}</b>
+                                                    </p>
+                                                </div>
+                                                {{/each}}
+                                          {{/each}}
+                                      </div>
+                                </div>
+                            </template>
+                        </semantic-query>
+            </bs-panel>
+        </template>
+    </semantic-if>
+[[/inline]]
+
 
 [[#*inline "module-sidebar-event-network"]]
 <semantic-if
