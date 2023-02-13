@@ -1599,7 +1599,7 @@
     then='{{> globalColorTemplate}}'
     >
         <template id="globalColorTemplate">
-            <bs-panel>
+            <bs-panel style='padding-bottom:4vh;'>
                     <semantic-query
                             query="
                             SELECT ?colorsval_split WHERE {
@@ -1616,24 +1616,44 @@
                             <template id="colorTemplate">
                                 <div class="bso-component color_scheme">
                                     <div>
-                                        <b style='font-size:1.2em;'>Color Scheme:</b>
+                                        <b style='font-size:1.1em;'>Color Scheme</b>
                                           {{#each bindings}}
                                                 {{#each (split colorsval_split.value ' ')}}
-                                                  <div style='height:4vh;width:30vh;background:rgb{{this}};text-align: center;vertical-align: middle;line-height: 4vh;'>
-                                                    <p role='textbox' aria-multiline='true' style='
-                                                    color: inherit;
-                                                    filter:invert(200%);
-                                                    z-index: 2;
-                                                    mix-blend-mode: difference;
-                                                    text-shadow: 3px 0 #fff, -3px 0 #fff, 0 3px #fff, 0 -3px #fff,
-             2px 2px #fff, -2px -2px #fff, 2px -2px #fff, -2px 2px #fff;
-             font-weight:900;
-             font-size:1.1em;
-                                                    '
-                                                    >
-                                                    RGB{{this}}
-                                                    </p>
+                                                <style>
+                                                    .bubble {
+                                                        display: none;
+                                                        height:4vh;
+                                                        width:17vh;
+                                                        text-align: center;
+                                                        vertical-align: middle;
+                                                        line-height: 4vh;
+                                                        background: #CDC2B1;
+                                                        color: #964a4a;
+                                                        position: absolute;
+                                                        left:17vh;
+                                                        -moz-border-radius: 1vh; 
+                                                        -webkit-border-radius: 1vh; 
+                                                        border-radius: 1vh;
+                                                    }
+                                                        
+                                                    .color-background:hover + .bubble {
+                                                        display: block;
+                                                    }
+                                                    .bubble:before {
+                                                        content:"";
+                                                        position: absolute;
+                                                        width: 0;
+                                                        height: 0;
+                                                        border-left: 1vh solid #CDC2B1;
+                                                        border-top: 1vh solid transparent;
+                                                        border-bottom: 2vh solid transparent;
+                                                        margin: -1vh 0 0 -1vh;
+                                                        }
+                                                </style>
+                                                
+                                                  <div class='color-background' id='{{this}}-color' style='height:4vh;width:35vh;background:rgb{{this}};text-align: center;vertical-align: middle;line-height: 4vh;'>
                                                 </div>
+                                                <div class='bubble' id='{{this}}-bubble'><b>RGB{{this}}</b></div>
                                                 {{/each}}
                                           {{/each}}
                                       </div>
