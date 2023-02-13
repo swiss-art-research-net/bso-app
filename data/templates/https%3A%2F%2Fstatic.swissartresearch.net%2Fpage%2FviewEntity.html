@@ -1590,12 +1590,11 @@
 [[#*inline "module-sidebar-colors"]]
     <semantic-if
     query='
-    PREFIX linkedart: <https://linked.art/ns/terms/>
     ASK { 
-        [[> thisForQuery ]]  crm:P128_carries/linkedart:digitally_shown_by/linkedart:digitally_available_via/linkedart:access_point ?a .
-        ?class <http://www.cidoc-crm.org/cidoc-crm/P140_assigned_attribute_to> ?a .
+        [[> thisForQuery ]]  crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?a .
+        ?class crm:P140_assigned_attribute_to ?a .
         ?class rdf:value ?val .
-        ?class rdfs:label "Color Scheme" .  
+        ?class crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/ColorSchemes/blob/main/Color%20Schemes.ipynb> .  
       } '
     then='{{> globalColorTemplate}}'
     >
@@ -1603,31 +1602,36 @@
             <bs-panel>
                     <semantic-query
                             query="
-                            PREFIX linkedart: <https://linked.art/ns/terms/>
-                            SELECT ?colors WHERE {
-                                [[> thisForQuery ]] crm:P128_carries/linkedart:digitally_shown_by/linkedart:digitally_available_via/linkedart:access_point ?access .
-                                ?classif <http://www.cidoc-crm.org/cidoc-crm/P140_assigned_attribute_to> ?access .
-                                ?classif rdf:value ?val .
-                                ?classif rdfs:label ?label .
-                                FILTER( ?label = 'Color Scheme') .
-                                BIND(REPLACE(?val, '\\),\\(', '\\) \\(') AS ?colors) .
-                                } LIMIT 1
+                            SELECT ?colorsval_split WHERE {
+                                [[> thisForQuery ]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?access .
+                                  ?access crm:P43_has_dimension ?colors .
+                                    ?colors crm:P2_has_type <http://vocab.getty.edu/aat/300080438> .
+                                    ?colors crm:P91_has_unit ?unit .
+                                    ?colors crm:P90_has_value ?colorsval .
+                                    FILTER(?unit = <http://vocab.getty.edu/aat/300266239>) .
+                                  BIND(REPLACE(?colorsval, '\\),\\(', '\\) \\(') AS ?colorsval_split) .
+                              } LIMIT 1
                             "
                             template="{{> colorTemplate}}">
                             <template id="colorTemplate">
                                 <div class="bso-component color_scheme">
                                     <div>
-                                        <b>Color Scheme:</b>
+                                        <b style='font-size:1.2em;'>Color Scheme:</b>
                                           {{#each bindings}}
-                                                {{#each (split colors.value ' ')}}
+                                                {{#each (split colorsval_split.value ' ')}}
                                                   <div style='height:4vh;width:30vh;background:rgb{{this}};text-align: center;vertical-align: middle;line-height: 4vh;'>
                                                     <p role='textbox' aria-multiline='true' style='
-                                                    color:rgb{{this}};
-                                                    -webkit-filter: invert(100%);
-                                                    filter:invert(100%);
-                                                    text-shadow: white 0px 0px 10px;'
+                                                    color: inherit;
+                                                    filter:invert(200%);
+                                                    z-index: 2;
+                                                    mix-blend-mode: difference;
+                                                    text-shadow: 3px 0 #fff, -3px 0 #fff, 0 3px #fff, 0 -3px #fff,
+             2px 2px #fff, -2px -2px #fff, 2px -2px #fff, -2px 2px #fff;
+             font-weight:900;
+             font-size:1.1em;
+                                                    '
                                                     >
-                                                    <b>RGB{{this}}</b>
+                                                    RGB{{this}}
                                                     </p>
                                                 </div>
                                                 {{/each}}
