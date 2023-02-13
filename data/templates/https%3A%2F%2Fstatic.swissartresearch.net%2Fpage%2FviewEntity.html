@@ -1639,21 +1639,22 @@
                                                     .color-background:hover + .bubble {
                                                         display: block;
                                                     }
-                                                    .bubble:before {
-                                                        content:"";
-                                                        position: absolute;
+                                                    .bubble-point{
                                                         width: 0;
                                                         height: 0;
-                                                        border-left: 1vh solid #CDC2B1;
-                                                        border-top: 1vh solid transparent;
-                                                        border-bottom: 2vh solid transparent;
-                                                        margin: -1vh 0 0 -1vh;
-                                                        }
+                                                        border-left: 1vh solid transparent;
+                                                        border-right: 1vh solid transparent;
+                                                        border-top: 5vh solid #CDC2B1;
+                                                        position: absolute;
+                                                        top: -50%;
+                                                        left: -15%;
+                                                        transform: rotate(120deg);
+                                                    }
                                                 </style>
                                                 
                                                   <div class='color-background' id='{{this}}-color' style='height:4vh;width:35vh;background:rgb{{this}};text-align: center;vertical-align: middle;line-height: 4vh;'>
                                                 </div>
-                                                <div class='bubble' id='{{this}}-bubble'><b>RGB{{this}}</b></div>
+                                                <div class='bubble' id='{{this}}-bubble'><div class="bubble-point"></div><b>RGB{{this}}</b></div>
                                                 {{/each}}
                                           {{/each}}
                                       </div>
