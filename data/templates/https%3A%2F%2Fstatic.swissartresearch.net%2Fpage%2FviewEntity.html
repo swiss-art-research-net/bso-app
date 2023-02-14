@@ -45,7 +45,7 @@
                     <bs-nav-link event-key="fields">[[i18n "fields" bundle="bso"]]</bs-nav-link>
                 </bs-nav-item>
                 <semantic-if
-                    query="ASK { [[> thisForQuery]] a search:Object}"
+                    query="ASK { { [[> thisForQuery]] a search:Object } UNION { [[> thisForQuery]] a search:Person } }"
                     then="{{>template}}"
                 >
                     <template id="template">
@@ -93,7 +93,22 @@
                     [[> module-references]]
                 </bs-tab-pane>
                 <bs-tab-pane event-key="discovery">
-                    [[> module-discovery]]
+                    <semantic-if
+                    query="ASK { [[> thisForQuery]] a search:Object }"
+                    then="{{>template}}"
+                >
+                        <template id="template">
+                            [[> module-discovery-images]]
+                        </template>
+                    </semantic-if>
+                    <semantic-if
+                    query="ASK { [[> thisForQuery]] a search:Person } "
+                    then="{{>template}}"
+                >
+                        <template id="template">
+                            [[> module-discovery-persons]]
+                        </template>
+                    </semantic-if>
                 </bs-tab-pane>
                 <bs-tab-pane event-key="statements">
                     [[#if entityiri]]
@@ -1277,7 +1292,7 @@
 </semantic-query>
 [[/inline]]
 
-[[#*inline "module-discovery"]]
+[[#*inline "module-discovery-images"]]
 
 <bs-tab-container default-active-key="visualSimilarity">
     <bs-row>
@@ -1296,6 +1311,7 @@
                 </bs-nav-item>
             </bs-nav>
         </bs-col>
+
         <bs-col md="9">
             <bs-tab-content>
                 <bs-tab-pane event-key="visualSimilarity">
@@ -1321,6 +1337,38 @@
                 </bs-tab-pane>
                 <bs-tab-pane event-key="semanticVisualSimilarity">
                     [[> component-semantic-similarity]]
+                </bs-tab-pane>
+            </bs-tab-content>
+        </bs-col>
+    </bs-row>
+</bs-tab-container>
+[[/inline]]
+
+
+[[#*inline "module-discovery-persons"]]
+
+<bs-tab-container default-active-key="birthYearSimilarity">
+    <bs-row>
+        <bs-col md="3">
+            <bs-nav variant="pills" class="flex-column bso-component">
+                <h4>[[i18n "similarity" bundle="bso"]]</h4>
+                <bs-nav-item>
+                    <bs-nav-link event-key="birthYearSimilarity">Birth Year Similarity</bs-nav-link>
+                </bs-nav-item>
+            </bs-nav>
+        </bs-col>
+
+        <bs-col md="9">
+            <bs-tab-content>
+                <bs-tab-pane event-key="birthYearSimilarity">
+                    [[#> component-objects-table-limited condition='?classification crm:P140_assigned_attribute_to $subject . ?classification rdfs:label "Birth Year Distance" .' label='By Birth Year' noResults='No Similar Actors Found']]
+ 
+                        ?classification crm:P140_assigned_attribute_to [[> thisForQuery]]  .
+                        ?classification rdfs:label "Birth Year Distance" .
+                        ?classification rdf:value ?val .
+                        ?classification crm:P141_assigned $subject .
+                  
+                    [[/ component-objects-table-limited]]
                 </bs-tab-pane>
             </bs-tab-content>
         </bs-col>
@@ -1375,7 +1423,7 @@
         [[> field-visualisation-provenience]]
         [[> field-visualisation-inscription]]
         [[> field-visualisation-place-hierarchy]]
-        
+
             [[#> component-objects-table-limited condition='?classification crm:P140_assigned_attribute_to $subject . ?classification rdfs:label "Birth Year Distance" .' label='byBirthYear' noResults='noSimilarActors']]
  
               ?classification crm:P140_assigned_attribute_to [[> thisForQuery]]  .
