@@ -146,6 +146,38 @@
 </semantic-query>
 [[/inline]]
 
+[[#*inline "component-objects-table-limited"]]
+    <semantic-if 
+        query='ASK { BIND([[> thisForQuery]] as $subject) . [[condition]] }'
+        then='{{> template}}'
+        [[#if noResults]]
+            else="<p>[[i18n noResults bundle="bso"]]</p>"
+        [[/if]]
+    >
+        <template id="template">
+            <div class="bso-component field-visualisation">
+                <span class="bso-component label">[[i18n label bundle="bso"]]</span>
+                            <div class="bso-component card-container">
+                                <semantic-table
+                                query='SELECT DISTINCT ?subject WHERE {
+                                    [[> @partial-block]]
+                                } ORDER BY ASC(?val) LIMIT 20'
+                                tuple-template="{{> partial:cardObject}}"
+                                options='{
+                                  "showFilter": true,
+                                  "pageSizeSelection": "[5,10,20,50]"
+                                }'
+                                [[#if noResults]]
+                                no-result-template="<p>[[i18n noResults bundle="bso"]]</p>"
+                                [[/if]]
+                >
+                                </semantic-table>
+                            </div>
+            </div>
+        </template>
+    </semantic-if>
+[[/inline]]
+
 [[#*inline "component-objects-table"]]
     <semantic-if 
         query='ASK { BIND([[> thisForQuery]] as $subject) . [[condition]] }'
@@ -164,9 +196,9 @@
                         <bs-tab event-key="grid" title="[[i18n "grid" bundle="bso"]]">
                             <div class="bso-component card-container">
                                 <semantic-table
-                                query="SELECT DISTINCT ?subject WHERE {
+                                query='SELECT DISTINCT ?subject WHERE {
                                     [[> @partial-block]]
-                                }"
+                                }'
                                 tuple-template="{{> partial:cardObject}}"
                                 options='{
                                   "showFilter": true,
@@ -1343,6 +1375,15 @@
         [[> field-visualisation-provenience]]
         [[> field-visualisation-inscription]]
         [[> field-visualisation-place-hierarchy]]
+        
+            [[#> component-objects-table-limited condition='?classification crm:P140_assigned_attribute_to $subject . ?classification rdfs:label "Birth Year Distance" .' label='byBirthYear' noResults='noSimilarActors']]
+ 
+              ?classification crm:P140_assigned_attribute_to [[> thisForQuery]]  .
+              ?classification rdfs:label "Birth Year Distance" .
+              ?classification rdf:value ?val .
+              ?classification crm:P141_assigned $subject .
+            
+            [[/ component-objects-table-limited]]
 
         <!-- Objects created -->
         [[#> component-objects-table condition='?object a search:Object; (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P9_consists_of?/crm:P14_carried_out_by $subject' label='works']]
