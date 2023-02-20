@@ -189,7 +189,11 @@
         "queryPattern": "{
             hint:Query hint:optimizer \"Runtime\".
             ?subject crm:P128_carries?/crm:P138_represents ?__value__ .
-            ?__value__ a/rdfs:subClassOf search:Entity .
+            ?__value__ a/rdfs:subClassOf* ?type .
+            VALUES (?type) {
+              (search:Entity) 
+              (schema:AdministrativeArea)
+            }
           }"
       }],
       "<https://platform.swissartresearch.net/Thing_depicts_ST_Place>": [{
