@@ -136,6 +136,35 @@ ol.page-breadcrumb {
 .QueryBuilder--searchClause {
   background-color: #fff;
 }
+.bso-component.bubble {
+  display: none;
+  height: 4vh;
+  width: 17vh;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 4vh;
+  background: #CDC2B1;
+  color: #964a4a;
+  position: absolute;
+  left: 17vh;
+  -moz-border-radius: 1vh;
+  -webkit-border-radius: 1vh;
+  border-radius: 1vh;
+}
+.bso-component.bubble-point {
+  width: 0;
+  height: 0;
+  border-left: 1vh solid transparent;
+  border-right: 1vh solid transparent;
+  border-top: 5vh solid #CDC2B1;
+  position: absolute;
+  top: -50%;
+  left: -15%;
+  transform: rotate(120deg);
+}
+.bso-component.color-scheme-background:hover + .bso-component.bubble {
+  display: block;
+}
 .bso-component.article-text {
   max-width: 55rem;
   margin-bottom: 0.5rem;

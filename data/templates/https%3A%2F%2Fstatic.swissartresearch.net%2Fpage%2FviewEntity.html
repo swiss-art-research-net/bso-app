@@ -1817,63 +1817,24 @@
                                             <bs-tab-pane event-key="rgb">
                                                 {{#each bindings}}
                                                     {{#each (split colors_rgb_val_split.value ' ')}} 
-                                                        <div class='color-background' id='{{this}}-color' style='height:4vh;width:35vh;background:rgb{{this}};text-align: center;vertical-align: middle;line-height: 4vh;'>
+                                                        <div class='bso-component color-scheme-background' id='{{this}}-color' style='height:4vh;width:35vh;background:rgb{{this}};text-align: center;vertical-align: middle;line-height: 4vh;'>
                                                         </div>
-                                                        <div class='bubble' id='{{this}}-bubble'><div class="bubble-point"></div><b>RGB{{this}}</b></div>
+                                                        <div class='bso-component bubble' id='{{this}}-bubble'><div class="bso-component bubble-point"></div><b>RGB{{this}}</b></div>
                                                     {{/each}}
                                                 {{/each}}
                                             </bs-tab-pane>
                                             <bs-tab-pane event-key="hex">
                                                 {{#each bindings}}
                                                 {{#each (split colors_hex_val_split.value ' ')}} 
-                                                    <div class='color-background' id='{{this}}-color' style='height:4vh;width:35vh;background:{{this}};text-align: center;vertical-align: middle;line-height: 4vh;'></div>
-                                                    <div class='bubble' id='{{this}}-bubble'><div class="bubble-point"></div><b>{{this}}</b></div>
+                                                    <div class='bso-component color-scheme-background' id='{{this}}-color' style='height:4vh;width:35vh;background:{{this}};text-align: center;vertical-align: middle;line-height: 4vh;'></div>
+                                                    <div class='bso-component bubble' id='{{this}}-bubble'><div class="bso-component bubble-point"></div><b>{{this}}</b></div>
                                                 {{/each}}
                                             
                                             {{/each}}
                                             </bs-tab-pane>
                                         </bs-tab-content>
                                     </bs-tab-container>
-                                        <style>
-                                            .bubble {
-                                                display: none;
-                                                height:4vh;
-                                                width:17vh;
-                                                text-align: center;
-                                                vertical-align: middle;
-                                                line-height: 4vh;
-                                                background: #CDC2B1;
-                                                color: #964a4a;
-                                                position: absolute;
-                                                left:17vh;
-                                                -moz-border-radius: 1vh; 
-                                                -webkit-border-radius: 1vh; 
-                                                border-radius: 1vh;
-                                            }
-                                                
-                                            .color-background:hover + .bubble {
-                                                display: block;
-                                            }
-                                            .bubble-point{
-                                                width: 0;
-                                                height: 0;
-                                                border-left: 1vh solid transparent;
-                                                border-right: 1vh solid transparent;
-                                                border-top: 5vh solid #CDC2B1;
-                                                position: absolute;
-                                                top: -50%;
-                                                left: -15%;
-                                                transform: rotate(120deg);
-                                            }
-                                        </style>
-                                        {{#each bindings}}
-                                                    {{#each (split colorsval_split.value ' ')}}
-                                                        
-                                                        <div class='color-background' id='{{this}}-color' style='height:4vh;width:35vh;background:rgb{{this}};text-align: center;vertical-align: middle;line-height: 4vh;'>
-                                                        </div>
-                                                        <div class='bubble' id='{{this}}-bubble'><div class="bubble-point"></div><b>RGB{{this}}</b></div>
-                                                    {{/each}}
-                                                {{/each}}
+
                                       </div>
                                 </div>
                             </template>
