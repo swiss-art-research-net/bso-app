@@ -15,6 +15,7 @@
 
         [[> module-sidebar-map]]
         [[> module-sidebar-image]]
+        [[> module-sidebar-colors]]
         [[> module-sidebar-smapshot]]
         [[> module-sidebar-person-network]]
         [[> module-sidebar-event-network]]
@@ -44,7 +45,7 @@
                     <bs-nav-link event-key="fields">[[i18n "fields" bundle="bso"]]</bs-nav-link>
                 </bs-nav-item>
                 <semantic-if
-                    query="ASK { [[> thisForQuery]] a search:Object}"
+                    query="ASK { { [[> thisForQuery]] a search:Object } UNION { [[> thisForQuery]] a search:Person } }"
                     then="{{>template}}"
                 >
                     <template id="template">
@@ -92,7 +93,22 @@
                     [[> module-references]]
                 </bs-tab-pane>
                 <bs-tab-pane event-key="discovery">
-                    [[> module-discovery]]
+                    <semantic-if
+                    query="ASK { [[> thisForQuery]] a search:Object }"
+                    then="{{>template}}"
+                >
+                        <template id="template">
+                            [[> module-discovery-images]]
+                        </template>
+                    </semantic-if>
+                    <semantic-if
+                    query="ASK { [[> thisForQuery]] a search:Person } "
+                    then="{{>template}}"
+                >
+                        <template id="template">
+                            [[> module-discovery-persons]]
+                        </template>
+                    </semantic-if>
                 </bs-tab-pane>
                 <bs-tab-pane event-key="statements">
                     [[#if entityiri]]
@@ -145,6 +161,75 @@
 </semantic-query>
 [[/inline]]
 
+
+[[#*inline "component-objects-table-limited"]]
+    <semantic-if 
+        query='ASK { BIND([[> thisForQuery]] as $subject) . [[condition]] }'
+        then='{{> template}}'
+        [[#if noResults]]
+            else="<p>[[i18n noResults bundle="bso"]]</p>"
+        [[/if]]
+    >
+        <template id="template">
+            <div class="bso-component field-visualisation">
+                <span class="bso-component label">[[i18n label bundle="bso"]]</span>
+                            <div class="bso-component card-container">
+                                <semantic-table
+                                query='SELECT DISTINCT ?subject WHERE {
+                                    [[> @partial-block]]
+                                } ORDER BY ASC(?val) LIMIT 20'
+                                tuple-template="{{> partial:cardObject}}"
+                                options='{
+                                  "showFilter": true,
+                                  "pageSizeSelection": "[5,10,20,50]"
+                                }'
+                                [[#if noResults]]
+                                no-result-template="<p>[[i18n noResults bundle="bso"]]</p>"
+                                [[/if]]
+                >
+                                </semantic-table>
+                            </div>
+            </div>
+        </template>
+    </semantic-if>
+[[/inline]]
+
+[[#*inline "component-objects-table-actor-similarity"]]
+    <semantic-if 
+        query='ASK { BIND([[> thisForQuery]] as $subject) . ?classification crm:P140_assigned_attribute_to $subject . ?classification rdfs:label "[[classlabel]]" . }'
+        then='{{> template}}'
+        [[#if noResults]]
+            else="<p>[[i18n noResults bundle="bso"]]</p>"
+        [[/if]]
+    >
+        <template id="template">
+            <div class="bso-component field-visualisation">
+                <span class="bso-component label">[[i18n label bundle="bso"]]</span>
+                            <div class="bso-component card-container">
+                                <semantic-table
+                                query='SELECT DISTINCT ?subject WHERE {
+                                            ?classification crm:P140_assigned_attribute_to [[> thisForQuery]]  .
+                                            ?classification rdfs:label "[[classlabel]]" .
+                                            ?classification rdf:value ?val .
+                                            ?classification crm:P141_assigned $subject .
+                                        } ORDER BY ASC(?val) LIMIT 20'
+                                tuple-template="{{> partial:cardObject}}"
+                                options='{
+                                  "showFilter": true,
+                                  "pageSizeSelection": "[5,10,20,50]"
+                                }'
+                                [[#if noResults]]
+                                no-result-template="<p>[[i18n noResults bundle="bso"]]</p>"
+                                [[/if]]
+                >
+                                </semantic-table>
+                            </div>
+            </div>
+        </template>
+    </semantic-if>
+[[/inline]]
+
+
 [[#*inline "component-objects-table"]]
     <semantic-if 
         query='ASK { BIND([[> thisForQuery]] as $subject) . [[condition]] }'
@@ -163,9 +248,9 @@
                         <bs-tab event-key="grid" title="[[i18n "grid" bundle="bso"]]">
                             <div class="bso-component card-container">
                                 <semantic-table
-                                query="SELECT DISTINCT ?subject WHERE {
+                                query='SELECT DISTINCT ?subject WHERE {
                                     [[> @partial-block]]
-                                }"
+                                }'
                                 tuple-template="{{> partial:cardObject}}"
                                 options='{
                                   "showFilter": true,
@@ -1244,7 +1329,7 @@
 </semantic-query>
 [[/inline]]
 
-[[#*inline "module-discovery"]]
+[[#*inline "module-discovery-images"]]
 
 <bs-tab-container default-active-key="visualSimilarity">
     <bs-row>
@@ -1263,6 +1348,7 @@
                 </bs-nav-item>
             </bs-nav>
         </bs-col>
+
         <bs-col md="9">
             <bs-tab-content>
                 <bs-tab-pane event-key="visualSimilarity">
@@ -1288,6 +1374,97 @@
                 </bs-tab-pane>
                 <bs-tab-pane event-key="semanticVisualSimilarity">
                     [[> component-semantic-similarity]]
+                </bs-tab-pane>
+            </bs-tab-content>
+        </bs-col>
+    </bs-row>
+</bs-tab-container>
+[[/inline]]
+
+
+[[#*inline "module-discovery-persons"]]
+
+<bs-tab-container default-active-key="birthDateSimilarity">
+    <bs-row>
+        <bs-col md="3">
+            <bs-nav variant="pills" class="flex-column bso-component">
+                <h4>[[i18n "similarity" bundle="bso"]]</h4>
+                <bs-nav-item>
+                    <bs-nav-link event-key="labelSimilarity">Label Similarity</bs-nav-link>
+                </bs-nav-item>
+                <bs-nav-item>
+                    <bs-nav-link event-key="roleSimilarity">Actor Role Similarity</bs-nav-link>
+                </bs-nav-item>
+                <bs-nav-item>
+                    <bs-nav-link event-key="birthDateSimilarity">Birth Date Similarity</bs-nav-link>
+                </bs-nav-item>
+                <bs-nav-item>
+                    <bs-nav-link event-key="birthYearSimilarity">Birth Year Similarity</bs-nav-link>
+                </bs-nav-item>
+                <bs-nav-item>
+                    <bs-nav-link event-key="deathDateSimilarity">Death Date Similarity</bs-nav-link>
+                </bs-nav-item>
+                <bs-nav-item>
+                    <bs-nav-link event-key="deathYearSimilarity">Death Year Similarity</bs-nav-link>
+                </bs-nav-item>
+                <bs-nav-item>
+                    <bs-nav-link event-key="visualItemSimilarity">Visual Item Similarity</bs-nav-link>
+                </bs-nav-item>
+                <bs-nav-item>
+                    <bs-nav-link event-key="creationSimilarity">Creation Similarity</bs-nav-link>
+                </bs-nav-item>
+                <bs-nav-item>
+                    <bs-nav-link event-key="creationRoleSimilarity">Creation Role Similarity</bs-nav-link>
+                </bs-nav-item>
+                <bs-nav-item>
+                    <bs-nav-link event-key="productionSimilarity">Production Similarity</bs-nav-link>
+                </bs-nav-item>   
+                <bs-nav-item>
+                    <bs-nav-link event-key="productionRoleSimilarity">Production Roles Similarity</bs-nav-link>
+                </bs-nav-item>  
+                <bs-nav-item>
+                    <bs-nav-link event-key="productionObjectsSimilarity">Production Objects Similarity</bs-nav-link>
+                </bs-nav-item>                
+            </bs-nav>
+        </bs-col>
+
+        <bs-col md="9">
+            <bs-tab-content>
+                <bs-tab-pane event-key="labelSimilarity">
+                    [[#> component-objects-table-actor-similarity label='byLabels' noResults='noSimilarActors' classlabel="Label Distance"]][[/ component-objects-table-actor-similarity]]
+                </bs-tab-pane>
+                <bs-tab-pane event-key="roleSimilarity">
+                    [[#> component-objects-table-actor-similarity label='byRoles' noResults='noSimilarActors' classlabel="Actor Role Distance"]][[/ component-objects-table-actor-similarity]]
+                </bs-tab-pane>
+                <bs-tab-pane event-key="birthDateSimilarity">
+                    [[#> component-objects-table-actor-similarity label='byBirthDates' noResults='noSimilarActors' classlabel="Birth Date Distance"]][[/ component-objects-table-actor-similarity]]
+                </bs-tab-pane>
+                <bs-tab-pane event-key="birthYearSimilarity">
+                    [[#> component-objects-table-actor-similarity label='byBirthYear' noResults='noSimilarActors' classlabel="Birth Year Distance"]][[/ component-objects-table-actor-similarity]]
+                </bs-tab-pane>
+                <bs-tab-pane event-key="deathDateSimilarity">
+                    [[#> component-objects-table-actor-similarity label='byDeathDates' noResults='noSimilarActors' classlabel="Death Date Distance"]][[/ component-objects-table-actor-similarity]]
+                </bs-tab-pane>
+                <bs-tab-pane event-key="deathYearSimilarity">
+                    [[#> component-objects-table-actor-similarity label='byDeathYears' noResults='noSimilarActors' classlabel="Death Years Distance"]][[/ component-objects-table-actor-similarity]]
+                </bs-tab-pane>
+                <bs-tab-pane event-key="visualItemSimilarity">
+                    [[#> component-objects-table-actor-similarity label='byVisualItems' noResults='noSimilarActors' classlabel="Visual Item Distance"]][[/ component-objects-table-actor-similarity]]
+                </bs-tab-pane>
+                <bs-tab-pane event-key="creationSimilarity">
+                    [[#> component-objects-table-actor-similarity label='byCreations' noResults='noSimilarActors' classlabel="Creation Distance"]][[/ component-objects-table-actor-similarity]]
+                </bs-tab-pane>
+                <bs-tab-pane event-key="creationRoleSimilarity">
+                    [[#> component-objects-table-actor-similarity label='byCreationRoles' noResults='noSimilarActors' classlabel="Creation Roles Distance"]][[/ component-objects-table-actor-similarity]]
+                </bs-tab-pane>
+                <bs-tab-pane event-key="productionSimilarity">
+                    [[#> component-objects-table-actor-similarity label='byProductions' noResults='noSimilarActors' classlabel="Production Distance"]][[/ component-objects-table-actor-similarity]]
+                </bs-tab-pane>
+                <bs-tab-pane event-key="productionRoleSimilarity">
+                    [[#> component-objects-table-actor-similarity label='byProductionRoles' noResults='noSimilarActors' classlabel="Production Roles Distance"]][[/ component-objects-table-actor-similarity]]
+                </bs-tab-pane>
+                <bs-tab-pane event-key="productionObjectsSimilarity">
+                    [[#> component-objects-table-actor-similarity label='byProductionObjects' noResults='noSimilarActors' classlabel="Production Objects Distance"]][[/ component-objects-table-actor-similarity]]
                 </bs-tab-pane>
             </bs-tab-content>
         </bs-col>
@@ -1342,6 +1519,7 @@
         [[> field-visualisation-provenience]]
         [[> field-visualisation-inscription]]
         [[> field-visualisation-place-hierarchy]]
+        
 
         <!-- Objects created -->
         [[#> component-objects-table condition='?object a search:Object; (crm:P108i_was_produced_by|(crm:P128_carries/crm:P94i_was_created_by))/crm:P9_consists_of?/crm:P14_carried_out_by $subject' label='works']]
@@ -1584,6 +1762,127 @@
         </template>
     </semantic-if>
 [[/inline]]
+
+
+[[#*inline "module-sidebar-colors"]]
+    <semantic-if
+    query='
+    ASK { 
+        [[> thisForQuery ]]  crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
+        ?attributeAssignment crm:P140_assigned_attribute_to ?image ;
+            crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/ColorSchemes/blob/main/Color%20Schemes.ipynb> .  
+      } '
+    then='{{> globalColorTemplate}}'
+    >
+        <template id="globalColorTemplate">
+            <bs-panel style='padding-bottom:4vh;'>
+                    <semantic-query
+                            query='
+                            SELECT ?colors_rgb_val_split ?colors_hsv_val_split ?colors_hex_val_split WHERE {
+                                [[> thisForQuery ]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?access .
+                                  ?access crm:P43_has_dimension ?colors_rgb .
+                                  ?colors_rgb crm:P2_has_type <http://vocab.getty.edu/aat/300080438> .
+                                  ?colors_rgb crm:P91_has_unit ?unit .
+                                  ?colors_rgb crm:P90_has_value ?colors_rgb_val .
+                                  FILTER(?unit = <http://vocab.getty.edu/aat/300266239>) .
+                                  BIND(REPLACE(?colors_rgb_val, "\\),\\(", "\\) \\(") AS ?colors_rgb_val_split) .
+                                    ?access crm:P43_has_dimension ?colors_hsv .
+                                    ?colors_hsv crm:P91_has_unit ?hsv_unit .
+                                    FILTER(?hsv_unit = "HSV") .
+                                  ?colors_hsv crm:P90_has_value ?colors_hsv_val .
+                                   BIND(REPLACE(?colors_hsv_val, "\\),\\(", "\\) \\(") AS ?colors_hsv_val_split) .
+                                  ?access crm:P43_has_dimension ?colors_hex .
+                                    ?colors_hex crm:P91_has_unit "RGB Hexadecimal" .
+                                  ?colors_hex crm:P90_has_value ?colors_hex_val .
+                                   BIND(REPLACE(?colors_hex_val, ",", " ") AS ?colors_hex_val_split) .
+                            } LIMIT 1
+                            '
+                            template="{{> colorTemplate}}">
+                            <template id="colorTemplate">
+                                <div class="bso-component color_scheme">
+                                    <div>
+                                        <div style='padding-bottom:1vh;'>
+                                        <b style='font-size:1.1em'>[[i18n "colorScheme" bundle="bso"]]</b>
+                                        </div>
+                                    <bs-tab-container default-active-key="rgb">
+                                        <bs-nav variant="tabs" class="flex-column flex-sm-row bso-component" style='margin: 0 auto;'>
+                                            <bs-nav-item>
+                                                <bs-nav-link event-key="rgb">RGB</bs-nav-link>
+                                            </bs-nav-item>
+                                            <bs-nav-item>
+                                                <bs-nav-link event-key="hex">Hexadecimal</bs-nav-link>
+                                            </bs-nav-item>
+                                        </bs-nav>
+                                        <bs-tab-content>
+                                            <bs-tab-pane event-key="rgb">
+                                                {{#each bindings}}
+                                                    {{#each (split colors_rgb_val_split.value ' ')}} 
+                                                        <div class='color-background' id='{{this}}-color' style='height:4vh;width:35vh;background:rgb{{this}};text-align: center;vertical-align: middle;line-height: 4vh;'>
+                                                        </div>
+                                                        <div class='bubble' id='{{this}}-bubble'><div class="bubble-point"></div><b>RGB{{this}}</b></div>
+                                                    {{/each}}
+                                                {{/each}}
+                                            </bs-tab-pane>
+                                            <bs-tab-pane event-key="hex">
+                                                {{#each bindings}}
+                                                {{#each (split colors_hex_val_split.value ' ')}} 
+                                                    <div class='color-background' id='{{this}}-color' style='height:4vh;width:35vh;background:{{this}};text-align: center;vertical-align: middle;line-height: 4vh;'></div>
+                                                    <div class='bubble' id='{{this}}-bubble'><div class="bubble-point"></div><b>{{this}}</b></div>
+                                                {{/each}}
+                                            
+                                            {{/each}}
+                                            </bs-tab-pane>
+                                        </bs-tab-content>
+                                    </bs-tab-container>
+                                        <style>
+                                            .bubble {
+                                                display: none;
+                                                height:4vh;
+                                                width:17vh;
+                                                text-align: center;
+                                                vertical-align: middle;
+                                                line-height: 4vh;
+                                                background: #CDC2B1;
+                                                color: #964a4a;
+                                                position: absolute;
+                                                left:17vh;
+                                                -moz-border-radius: 1vh; 
+                                                -webkit-border-radius: 1vh; 
+                                                border-radius: 1vh;
+                                            }
+                                                
+                                            .color-background:hover + .bubble {
+                                                display: block;
+                                            }
+                                            .bubble-point{
+                                                width: 0;
+                                                height: 0;
+                                                border-left: 1vh solid transparent;
+                                                border-right: 1vh solid transparent;
+                                                border-top: 5vh solid #CDC2B1;
+                                                position: absolute;
+                                                top: -50%;
+                                                left: -15%;
+                                                transform: rotate(120deg);
+                                            }
+                                        </style>
+                                        {{#each bindings}}
+                                                    {{#each (split colorsval_split.value ' ')}}
+                                                        
+                                                        <div class='color-background' id='{{this}}-color' style='height:4vh;width:35vh;background:rgb{{this}};text-align: center;vertical-align: middle;line-height: 4vh;'>
+                                                        </div>
+                                                        <div class='bubble' id='{{this}}-bubble'><div class="bubble-point"></div><b>RGB{{this}}</b></div>
+                                                    {{/each}}
+                                                {{/each}}
+                                      </div>
+                                </div>
+                            </template>
+                        </semantic-query>
+            </bs-panel>
+        </template>
+    </semantic-if>
+[[/inline]]
+
 
 [[#*inline "module-sidebar-event-network"]]
 <semantic-if
