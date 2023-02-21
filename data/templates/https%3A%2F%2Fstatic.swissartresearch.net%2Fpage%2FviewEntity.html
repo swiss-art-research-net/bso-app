@@ -1768,9 +1768,9 @@
     <semantic-if
     query='
     ASK { 
-        [[> thisForQuery ]]  crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?a .
-        ?class crm:P140_assigned_attribute_to ?a .
-        ?class crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/ColorSchemes/blob/main/Color%20Schemes.ipynb> .  
+        [[> thisForQuery ]]  crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
+        ?attributeAssignment crm:P140_assigned_attribute_to ?image ;
+            crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/ColorSchemes/blob/main/Color%20Schemes.ipynb> .  
       } '
     then='{{> globalColorTemplate}}'
     >
