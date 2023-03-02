@@ -13,6 +13,13 @@
       "queryPattern": "{
         $subject crm:P89_falls_within ?__value__ .
       }"
+    }],
+    "<http://www.cidoc-crm.org/cidoc-crm/E54_Dimension>": [{
+      "kind": "numeric-range",
+      "queryPattern": "{
+        $subject ?__relation__ ?hue_val .
+        FILTER(?hue_val >= ?__numericRangeBeginValue__ && ?hue_val <= ?__numericRangeBeginValue__)
+      }"
     }]
   }'
   search-profile='{
@@ -24,6 +31,7 @@
         {"iri": "<https://platform.swissartresearch.net/search/Type>", "label": "Concept", "thumbnail": "../images/fcs/concepts.svg"},
         {"iri": "<https://platform.swissartresearch.net/search/Concept>", "label": "Concept", "thumbnail": "../images/fcs/concepts.svg"},
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E52_Time-Span>", "label": "Time", "thumbnail": "../images/fcs/dates.svg"},
+        {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E54_Dimension>", "label": "Dimension", "thumbnail": "../images/fcs/dates.svg"},
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E57_Material>", "label": "Material", "thumbnail": "../images/fcs/things.svg"},
         {"iri": "<http://schema.org/AdministrativeArea>", "label": "Place", "thumbnail": "../images/fcs/places.svg"}
       ],
@@ -45,6 +53,12 @@
         "hasDomain": "<https://platform.swissartresearch.net/search/Entity>",
         "hasRange": "<https://platform.swissartresearch.net/search/Entity>",
         "label": "[[i18n "depicts" bundle="bso"]]"
+      },
+      {
+        "iri": "<https://platform.swissartresearch.net/Thing_has_color>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Entity>",
+        "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E54_Dimension>",
+        "label": "Has Color"
       },
       {
         "iri": "<https://platform.swissartresearch.net/Thing_depicts_ST_Place>",
@@ -273,6 +287,18 @@
         "queryPattern": "{
             ?subject crmdig:L54_is_same-as/gndo:gender ?__value__ .
         }"
+      }],
+      "<https://platform.swissartresearch.net/Thing_has_color>": [{
+        "kind": "numeric-range",
+        "queryPattern": "{
+          ?subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?access .
+          ?access crm:P43_has_dimension ?hue .
+          ?hue crm:P91_has_unit ?color_unit .
+          FILTER(?color_unit = \"HSV Hue\") .
+          ?hue crm:P90_has_value ?hue_val .
+          FILTER(?hue_val <= ?__numericRangeEndValue__) .
+          FILTER(?hue_val >= ?__numericRangeBeginValue__) .
+        }"
       }]
     }'
   >
@@ -311,6 +337,19 @@
                   ?date crm:P82a_begin_of_the_begin ?dateBeginValue ;
                     crm:P82b_end_of_the_end ?dateEndValue .
                 } ORDER BY ?dateBeginValue"
+            },
+            "<https://platform.swissartresearch.net/Thing_has_color>": {
+              "kind": "numeric-range",
+              "valuesQuery":"SELECT ?numericRangeBeginValue ?numericRangeEndValue  WHERE { 
+                ?subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?access .
+                ?access crm:P43_has_dimension ?hue .
+                ?hue crm:P91_has_unit ?color_unit .
+                FILTER(?color_unit = \"HSV Hue\") .
+                ?hue crm:P90_has_value ?hue_val .
+                FILTER(?hue_val <= 370) .
+                BIND (?hue_val + 0 AS ?numericRangeEndValue) .
+                BIND (?hue_val - 0 AS ?numericRangeBeginValue) .
+                }"
             }
           }'
         >

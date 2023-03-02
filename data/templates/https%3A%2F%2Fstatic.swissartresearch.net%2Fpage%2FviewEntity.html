@@ -1786,11 +1786,6 @@
                                   ?colors_rgb crm:P90_has_value ?colors_rgb_val .
                                   FILTER(?unit = <http://vocab.getty.edu/aat/300266239>) .
                                   BIND(REPLACE(?colors_rgb_val, "\\),\\(", "\\) \\(") AS ?colors_rgb_val_split) .
-                                    ?access crm:P43_has_dimension ?colors_hsv .
-                                    ?colors_hsv crm:P91_has_unit ?hsv_unit .
-                                    FILTER(?hsv_unit = "HSV") .
-                                  ?colors_hsv crm:P90_has_value ?colors_hsv_val .
-                                   BIND(REPLACE(?colors_hsv_val, "\\),\\(", "\\) \\(") AS ?colors_hsv_val_split) .
                                   ?access crm:P43_has_dimension ?colors_hex .
                                     ?colors_hex crm:P91_has_unit "RGB Hexadecimal" .
                                   ?colors_hex crm:P90_has_value ?colors_hex_val .
