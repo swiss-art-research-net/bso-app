@@ -58,7 +58,7 @@
         "iri": "<https://platform.swissartresearch.net/Thing_has_color>",
         "hasDomain": "<https://platform.swissartresearch.net/search/Entity>",
         "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E54_Dimension>",
-        "label": "Has Color"
+        "label": "[[i18n "hasColor" bundle="bso"]]"
       },
       {
         "iri": "<https://platform.swissartresearch.net/Thing_depicts_ST_Place>",
@@ -292,12 +292,30 @@
         "kind": "numeric-range",
         "queryPattern": "{
           ?subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?access .
-          ?access crm:P43_has_dimension ?hue .
-          ?hue crm:P91_has_unit ?color_unit .
-          FILTER(?color_unit = \"HSV Hue\") .
+          ?access crm:P43_has_dimension ?hue ;
+                  crm:P43_has_dimension ?saturation ;
+                  crm:P43_has_dimension ?value .
+          ?classification crm:P140_assigned_attribute_to  ?access .
+
+          ?saturation crm:P91_has_unit \"HSV Saturation\" .
+          ?saturation crm:P90_has_value ?saturation_val .
+          FILTER(?saturation_val >= 40) .
+          
+          ?value crm:P91_has_unit \"HSV Value\" .
+          ?value crm:P90_has_value ?value_val .
+          FILTER(?value_val <= 80) .
+          FILTER(?value_val >= 20) .
+
+          ?hue crm:P91_has_unit \"HSV Hue\" .
           ?hue crm:P90_has_value ?hue_val .
           FILTER(?hue_val <= ?__numericRangeEndValue__) .
           FILTER(?hue_val >= ?__numericRangeBeginValue__) .
+
+          ?classification crm:P141_assigned  ?hue .
+          ?classification crm:P141_assigned  ?saturation .
+          ?classification crm:P141_assigned  ?value .
+        
+          
         }"
       }]
     }'
