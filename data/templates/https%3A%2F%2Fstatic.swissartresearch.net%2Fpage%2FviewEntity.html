@@ -1833,7 +1833,7 @@
                                             <bs-tab-pane event-key="hex">
                                                 {{#each bindings}}
                                                 {{#each (split colors_hex_val_split.value ' ')}} 
-                                                    <div class='bso-component color-scheme-background' id='{{this}}-color' style='height:4rem;width:35rem;background:{{this}};text-align: center;vertical-align: middle;line-height: 4rem;'></div>
+                                                    <div class='bso-component color-scheme-background' id='{{this}}-color' style='height:4rem;width:100%;background:{{this}};text-align: center;vertical-align: middle;line-height: 4rem;'></div>
                                                     <div class='bso-component bubble' id='{{this}}-bubble'><div class="bso-component bubble-point"></div><b>{{this}}</b></div>
                                                 {{/each}}
                                             {{/each}}
