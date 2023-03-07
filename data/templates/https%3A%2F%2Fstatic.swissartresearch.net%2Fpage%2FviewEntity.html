@@ -1787,7 +1787,7 @@
     then='{{> globalColorTemplate}}'
     >
         <template id="globalColorTemplate">
-            <bs-panel style='padding-bottom:4vh;'>
+            <bs-panel style='padding-bottom:4rem;'>
                     <semantic-query
                             query='
                             SELECT ?colors_rgb_val_split ?colors_hsv_val_split ?colors_hex_val_split WHERE {
@@ -1808,7 +1808,7 @@
                             <template id="colorTemplate">
                                 <div class="bso-component color_scheme">
                                     <div>
-                                        <div style='padding-bottom:1vh;'>
+                                        <div style='padding-bottom:1rem;'>
                                         <b style='font-size:1.1em'>[[i18n "colorScheme" bundle="bso"]]</b>
                                         </div>
                                     <bs-tab-container default-active-key="rgb">
@@ -1824,7 +1824,7 @@
                                             <bs-tab-pane event-key="rgb">
                                                 {{#each bindings}}
                                                     {{#each (split colors_rgb_val_split.value ' ')}} 
-                                                        <div class='bso-component color-scheme-background' id='{{this}}-color' style='height:4vh;width:35vh;background:rgb{{this}};text-align: center;vertical-align: middle;line-height: 4vh;'>
+                                                        <div class='bso-component color-scheme-background' id='{{this}}-color' style='height:4rem;width:100%;background:rgb{{this}};text-align: center;vertical-align: middle;line-height: 4rem;'>
                                                         </div>
                                                         <div class='bso-component bubble' id='{{this}}-bubble'><div class="bso-component bubble-point"></div><b>RGB{{this}}</b></div>
                                                     {{/each}}
@@ -1833,10 +1833,9 @@
                                             <bs-tab-pane event-key="hex">
                                                 {{#each bindings}}
                                                 {{#each (split colors_hex_val_split.value ' ')}} 
-                                                    <div class='bso-component color-scheme-background' id='{{this}}-color' style='height:4vh;width:35vh;background:{{this}};text-align: center;vertical-align: middle;line-height: 4vh;'></div>
+                                                    <div class='bso-component color-scheme-background' id='{{this}}-color' style='height:4rem;width:35rem;background:{{this}};text-align: center;vertical-align: middle;line-height: 4rem;'></div>
                                                     <div class='bso-component bubble' id='{{this}}-bubble'><div class="bso-component bubble-point"></div><b>{{this}}</b></div>
                                                 {{/each}}
-                                            
                                             {{/each}}
                                             </bs-tab-pane>
                                         </bs-tab-content>
