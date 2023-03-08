@@ -1448,39 +1448,51 @@
         <bs-col md="9">
             <bs-tab-content>
                 <bs-tab-pane event-key="labelSimilarity">
+                    <p>[[i18n "actorSimilarityByLabelExplanation" bundle="bso" escapeHTML=false]]</p>
                     [[#> component-objects-table-actor-similarity label='byLabels' noResults='noSimilarActors' classlabel="Label Distance"]][[/ component-objects-table-actor-similarity]]
                 </bs-tab-pane>
                 <bs-tab-pane event-key="roleSimilarity">
+                    <p>[[i18n "actorSimilarityByRoleExplanation" bundle="bso" escapeHTML=false]]</p>
                     [[#> component-objects-table-actor-similarity label='byRoles' noResults='noSimilarActors' classlabel="Actor Role Distance"]][[/ component-objects-table-actor-similarity]]
                 </bs-tab-pane>
                 <bs-tab-pane event-key="birthDateSimilarity">
+                    <p>[[i18n "actorSimilarityByBirthDateExplanation" bundle="bso" escapeHTML=false]]</p>
                     [[#> component-objects-table-actor-similarity label='byBirthDates' noResults='noSimilarActors' classlabel="Birth Date Distance"]][[/ component-objects-table-actor-similarity]]
                 </bs-tab-pane>
                 <bs-tab-pane event-key="birthYearSimilarity">
+                    <p>[[i18n "actorSimilarityByBirthYearExplanation" bundle="bso" escapeHTML=false]]</p>
                     [[#> component-objects-table-actor-similarity label='byBirthYear' noResults='noSimilarActors' classlabel="Birth Year Distance"]][[/ component-objects-table-actor-similarity]]
                 </bs-tab-pane>
                 <bs-tab-pane event-key="deathDateSimilarity">
+                    <p>[[i18n "actorSimilarityByDeathDateExplanation" bundle="bso" escapeHTML=false]]</p>
                     [[#> component-objects-table-actor-similarity label='byDeathDates' noResults='noSimilarActors' classlabel="Death Date Distance"]][[/ component-objects-table-actor-similarity]]
                 </bs-tab-pane>
                 <bs-tab-pane event-key="deathYearSimilarity">
+                    <p>[[i18n "actorSimilarityByDeathYearExplanation" bundle="bso" escapeHTML=false]]</p>
                     [[#> component-objects-table-actor-similarity label='byDeathYears' noResults='noSimilarActors' classlabel="Death Years Distance"]][[/ component-objects-table-actor-similarity]]
                 </bs-tab-pane>
                 <bs-tab-pane event-key="visualItemSimilarity">
+                    <p>[[i18n "actorSimilarityByVisualItemExplanation" bundle="bso" escapeHTML=false]]</p>
                     [[#> component-objects-table-actor-similarity label='byVisualItems' noResults='noSimilarActors' classlabel="Visual Item Distance"]][[/ component-objects-table-actor-similarity]]
                 </bs-tab-pane>
                 <bs-tab-pane event-key="creationSimilarity">
+                    <p>[[i18n "actorSimilarityByCreationExplanation" bundle="bso" escapeHTML=false]]</p>
                     [[#> component-objects-table-actor-similarity label='byCreations' noResults='noSimilarActors' classlabel="Creation Distance"]][[/ component-objects-table-actor-similarity]]
                 </bs-tab-pane>
                 <bs-tab-pane event-key="creationRoleSimilarity">
+                    <p>[[i18n "actorSimilarityByCreationRoleExplanation" bundle="bso" escapeHTML=false]]</p>
                     [[#> component-objects-table-actor-similarity label='byCreationRoles' noResults='noSimilarActors' classlabel="Creation Roles Distance"]][[/ component-objects-table-actor-similarity]]
                 </bs-tab-pane>
                 <bs-tab-pane event-key="productionSimilarity">
+                    <p>[[i18n "actorSimilarityByProductionExplanation" bundle="bso" escapeHTML=false]]</p>
                     [[#> component-objects-table-actor-similarity label='byProductions' noResults='noSimilarActors' classlabel="Production Distance"]][[/ component-objects-table-actor-similarity]]
                 </bs-tab-pane>
                 <bs-tab-pane event-key="productionRoleSimilarity">
+                    <p>[[i18n "actorSimilarityByProductionRoleExplanation" bundle="bso" escapeHTML=false]]</p>
                     [[#> component-objects-table-actor-similarity label='byProductionRoles' noResults='noSimilarActors' classlabel="Production Roles Distance"]][[/ component-objects-table-actor-similarity]]
                 </bs-tab-pane>
                 <bs-tab-pane event-key="productionObjectsSimilarity">
+                    <p>[[i18n "actorSimilarityByProductionObjectsExplanation" bundle="bso" escapeHTML=false]]</p>
                     [[#> component-objects-table-actor-similarity label='byProductionObjects' noResults='noSimilarActors' classlabel="Production Objects Distance"]][[/ component-objects-table-actor-similarity]]
                 </bs-tab-pane>
             </bs-tab-content>
@@ -1792,7 +1804,7 @@
     then='{{> globalColorTemplate}}'
     >
         <template id="globalColorTemplate">
-            <bs-panel style='padding-bottom:4vh;'>
+            <bs-panel style='padding-bottom:4rem;'>
                     <semantic-query
                             query='
                             SELECT ?colors_rgb_val_split ?colors_hsv_val_split ?colors_hex_val_split WHERE {
@@ -1803,11 +1815,6 @@
                                   ?colors_rgb crm:P90_has_value ?colors_rgb_val .
                                   FILTER(?unit = <http://vocab.getty.edu/aat/300266239>) .
                                   BIND(REPLACE(?colors_rgb_val, "\\),\\(", "\\) \\(") AS ?colors_rgb_val_split) .
-                                    ?access crm:P43_has_dimension ?colors_hsv .
-                                    ?colors_hsv crm:P91_has_unit ?hsv_unit .
-                                    FILTER(?hsv_unit = "HSV") .
-                                  ?colors_hsv crm:P90_has_value ?colors_hsv_val .
-                                   BIND(REPLACE(?colors_hsv_val, "\\),\\(", "\\) \\(") AS ?colors_hsv_val_split) .
                                   ?access crm:P43_has_dimension ?colors_hex .
                                     ?colors_hex crm:P91_has_unit "RGB Hexadecimal" .
                                   ?colors_hex crm:P90_has_value ?colors_hex_val .
@@ -1818,7 +1825,7 @@
                             <template id="colorTemplate">
                                 <div class="bso-component color_scheme">
                                     <div>
-                                        <div style='padding-bottom:1vh;'>
+                                        <div style='padding-bottom:1rem;'>
                                         <b style='font-size:1.1em'>[[i18n "colorScheme" bundle="bso"]]</b>
                                         </div>
                                     <bs-tab-container default-active-key="rgb">
@@ -1834,7 +1841,7 @@
                                             <bs-tab-pane event-key="rgb">
                                                 {{#each bindings}}
                                                     {{#each (split colors_rgb_val_split.value ' ')}} 
-                                                        <div class='bso-component color-scheme-background' id='{{this}}-color' style='height:4vh;width:35vh;background:rgb{{this}};text-align: center;vertical-align: middle;line-height: 4vh;'>
+                                                        <div class='bso-component color-scheme-background' id='{{this}}-color' style='height:4rem;width:100%;background:rgb{{this}};text-align: center;vertical-align: middle;line-height: 4rem;'>
                                                         </div>
                                                         <div class='bso-component bubble' id='{{this}}-bubble'><div class="bso-component bubble-point"></div><b>RGB{{this}}</b></div>
                                                     {{/each}}
@@ -1843,10 +1850,9 @@
                                             <bs-tab-pane event-key="hex">
                                                 {{#each bindings}}
                                                 {{#each (split colors_hex_val_split.value ' ')}} 
-                                                    <div class='bso-component color-scheme-background' id='{{this}}-color' style='height:4vh;width:35vh;background:{{this}};text-align: center;vertical-align: middle;line-height: 4vh;'></div>
+                                                    <div class='bso-component color-scheme-background' id='{{this}}-color' style='height:4rem;width:100%;background:{{this}};text-align: center;vertical-align: middle;line-height: 4rem;'></div>
                                                     <div class='bso-component bubble' id='{{this}}-bubble'><div class="bso-component bubble-point"></div><b>{{this}}</b></div>
                                                 {{/each}}
-                                            
                                             {{/each}}
                                             </bs-tab-pane>
                                         </bs-tab-content>
