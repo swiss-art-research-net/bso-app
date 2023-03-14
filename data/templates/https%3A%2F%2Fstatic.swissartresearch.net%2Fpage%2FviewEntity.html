@@ -212,7 +212,8 @@
                                             ?classification rdfs:label "[[classlabel]]" .
                                             ?classification rdf:value ?val .
                                             ?classification crm:P141_assigned $subject .
-                                        } ORDER BY ASC(?val) LIMIT 20'
+                                            FILTER(?subject != [[> thisForQuery]]) .
+                                        } ORDER BY ASC(?val) LIMIT 1000'
                                 tuple-template="{{> partial:cardObject}}"
                                 options='{
                                   "showFilter": true,
@@ -1393,9 +1394,6 @@
                     <bs-nav-link event-key="labelSimilarity">Label Similarity</bs-nav-link>
                 </bs-nav-item>
                 <bs-nav-item>
-                    <bs-nav-link event-key="roleSimilarity">Actor Role Similarity</bs-nav-link>
-                </bs-nav-item>
-                <bs-nav-item>
                     <bs-nav-link event-key="birthDateSimilarity">Birth Date Similarity</bs-nav-link>
                 </bs-nav-item>
                 <bs-nav-item>
@@ -1433,10 +1431,6 @@
                 <bs-tab-pane event-key="labelSimilarity">
                     <p>[[i18n "actorSimilarityByLabelExplanation" bundle="bso" escapeHTML=false]]</p>
                     [[#> component-objects-table-actor-similarity label='byLabels' noResults='noSimilarActors' classlabel="Label Distance"]][[/ component-objects-table-actor-similarity]]
-                </bs-tab-pane>
-                <bs-tab-pane event-key="roleSimilarity">
-                    <p>[[i18n "actorSimilarityByRoleExplanation" bundle="bso" escapeHTML=false]]</p>
-                    [[#> component-objects-table-actor-similarity label='byRoles' noResults='noSimilarActors' classlabel="Actor Role Distance"]][[/ component-objects-table-actor-similarity]]
                 </bs-tab-pane>
                 <bs-tab-pane event-key="birthDateSimilarity">
                     <p>[[i18n "actorSimilarityByBirthDateExplanation" bundle="bso" escapeHTML=false]]</p>
