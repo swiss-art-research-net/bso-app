@@ -269,7 +269,7 @@
                                 <mp-event-target-refresh id="object-map">
                                     <semantic-map
                                         id="object-map-[[label]]"
-                                        query="SELECT DISTINCT ?subject ?wkt WHERE {
+                                        query='SELECT DISTINCT ?subject ?wkt WHERE {
                                             [[> @partial-block]] 
                                             {
                                                 ?subject a search:Place ;
@@ -280,7 +280,7 @@
                                                 ?subject a search:Type ;
                                                     ^crm:P138_represents/crm:P138_represents/crmdig:L54_is_same-as/wdt:P625 ?wkt .
                                             } 
-                                        }"
+                                        }'
                                         
                                         tuple-template='{{> template }}'
                                         no-result-template='<bs-alert variant="info">[[i18n "noResultsWithCoordinates" bundle="bso"]]</bs-alert>'
