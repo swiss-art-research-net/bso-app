@@ -230,6 +230,71 @@
     </semantic-if>
 [[/inline]]
 
+[[#*inline "component-objects-table-smapshot-coords"]]
+    <semantic-if 
+        query='ASK { BIND([[> thisForQuery]] as $subject) . [[condition]] }'
+        then='{{> template}}'
+        [[#if noResults]]
+            else="<p>[[i18n noResults bundle="bso"]]</p>"
+        [[/if]]
+    >
+        <template id="template">
+            <div class="bso-component field-visualisation">
+                <span class="bso-component label">[[i18n label bundle="bso"]]</span>
+
+                <mp-event-trigger type="Component.Refresh" targets='["object-map"]'>
+                    <bs-tabs default-active-key="grid">
+                        <bs-tab event-key="view" title="[[i18n "view" bundle="bso"]]:"></bs-tab>
+                        <bs-tab event-key="grid" title="[[i18n "grid" bundle="bso"]]">
+                            <div class="bso-component card-container">
+                                <semantic-table
+                                query='SELECT DISTINCT ?subject WHERE {
+                                    [[> @partial-block]]
+                                } LIMIT 100'
+                                tuple-template="{{> partial:cardObject}}"
+                                options='{
+                                  "showFilter": true,
+                                  "pageSizeSelection": "[5,10,20,50]"
+                                }'
+                                [[#if noResults]]
+                                no-result-template="<p>[[i18n noResults bundle="bso"]]</p>"
+                                [[/if]]
+                >
+                                </semantic-table>
+                            </div>
+                        </bs-tab>
+                        <bs-tab event-key="map" title="[[i18n "map" bundle="bso"]]">
+                            <div style="height:40rem;width:100%">
+                                <mp-event-target-refresh id="object-map">
+                                    <semantic-map
+                                        id="object-map-[[label]]"
+                                        query='SELECT DISTINCT ?subject ?wkt WHERE {
+                                            {
+                                            [[> @partial-block]] 
+                                            $subject crm:P128_carries/crm:P138_represents/crm:P168_place_is_defined_by ?wkt .
+                                            FILTER ( datatype(?wkt) = ogcgs:wktLiteral) .
+                                            }
+                                            UNION 
+                                            {
+                                                [[> thisForQuery]] crm:P128_carries/crm:P138_represents/crm:P168_place_is_defined_by ?wkt .
+                                                FILTER ( datatype(?wkt) = ogcgs:wktLiteral) .
+                                            }
+                                        } LIMIT 100'
+                                        
+                                        tuple-template='{{> template }}'
+                                        no-result-template='<bs-alert variant="info">[[i18n "noResultsWithCoordinates" bundle="bso"]]</bs-alert>'
+                                    >
+                                        <template id='template'>{{> partial:cardObject noFallback="true"}}</template>
+                                    </semantic-map>
+                                </mp-event-target-refresh>
+                            </div>
+                        </bs-tab>
+                </bs-tabs>
+                </mp-event-trigger>
+        </template>
+    </semantic-if>
+
+[[/inline]]
 
 [[#*inline "component-objects-table"]]
     <semantic-if 
@@ -1398,26 +1463,25 @@
                 </bs-tab-pane>
                 <bs-tab-pane event-key="imageProximity">
                     <p>[[i18n "imageProximityExplanation" bundle="bso" escapeHTML=false]]</p>
-                    [[#> component-objects-table condition='$subject crm:P128_carries ?work . ?work crm:P138_represents ?place . ?place crm:P168_place_is_defined_by ?coords' label='byLocation' noResults='noTitleSimilaritiesIdentified']]
+                    [[#> component-objects-table-smapshot-coords condition='$subject crm:P128_carries ?work . ?work crm:P138_represents ?place . ?place crm:P168_place_is_defined_by ?coords' label='byLocation' noResults='noTitleSimilaritiesIdentified']]
 
-                    SELECT $subject WHERE {
-                      [[> thisForQuery]] crm:P128_carries ?work .
-                      ?work crm:P138_represents ?place .
-                      ?place crm:P168_place_is_defined_by ?coords .
-                      FILTER ( datatype(?coords) = geoliteral:lat-lon) .
-                      
-                       SERVICE geo:search {
+                    
+                        [[> thisForQuery]] crm:P128_carries ?work .
+                        ?work crm:P138_represents ?place .
+                        ?place crm:P168_place_is_defined_by ?coords .
+                        FILTER ( datatype(?coords) = geoliteral:lat-lon) .
+                        
+                        SERVICE geo:search {
                         ?nearbyplace geo:search "inCircle" .
                         ?nearbyplace geo:predicate crm:P168_place_is_defined_by .
                         ?nearbyplace geo:searchDatatype geoliteral:lat-lon .
                         ?nearbyplace geo:spatialCircleCenter  ?coords .
                         ?nearbyplace geo:spatialCircleRadius "50" .
-                      }
+                        }
+                        
+                        $subject crm:P128_carries ?nearbywork .
+                        ?nearbywork crm:P138_represents ?nearbyplace .
                       
-                      $subject crm:P128_carries ?nearbywork .
-                      ?nearbywork crm:P138_represents ?nearbyplace .
-                      
-                    } LIMIT 100
                     
                     [[/ component-objects-table]]
                 </bs-tab-pane>
