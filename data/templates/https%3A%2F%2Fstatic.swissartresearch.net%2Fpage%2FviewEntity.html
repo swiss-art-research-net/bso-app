@@ -19,7 +19,9 @@
         [[> module-sidebar-person-network]]
         [[> module-sidebar-event-network]]
         [[> module-sidebar-object-network]]
-        [[> module-sidebar-colors]]
+        [[#if (hasPermission "api:ldp:*")]]
+            [[> module-sidebar-colors]]
+        [[/if]]
 
 </div>
 <div class="bso-component main">
