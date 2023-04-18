@@ -338,10 +338,10 @@
                     ?s (crm:P128_carries/crm:P94i_was_created_by|crm:P108i_was_produced_by)/crm:P14_carried_out_by  ?o .
                     FILTER NOT EXISTS {
                         ?assertion crm:P2_has_type type:assertion ;
-                            crm:P140_assigned_attribute_to/(^crm:P128_carries/^crm:P94i_was_created_by|^crm:P108i_was_produced_by) ?s ;
+                            crm:P140_assigned_attribute_to/(^crm:P94i_was_created_by/^crm:P128_carries|^crm:P108i_was_produced_by) ?s ;
                             crm:P177_assigned_property_of_type crm:P14_carried_out_by ;
                             crm:P141_assigned ?o ;
-                            rdf:value "false" .
+                            rdf:value "false"^^xsd:boolean .
                     }
                     OPTIONAL {
                         ?subEvent crm:P2_has_type ?eventType ;
@@ -370,14 +370,14 @@
                         crm:P140_assigned_attribute_to/(^crm:P128_carries/^crm:P94i_was_created_by|^crm:P108i_was_produced_by) ?object ;
                         crm:P177_assigned_property_of_type crm:P14_carried_out_by ;
                         crm:P141_assigned ?s ;
-                        rdf:value "false" .
+                        rdf:value "false"^^xsd:boolean .
                 }
                 FILTER NOT EXISTS {
                     ?assertion crm:P2_has_type type:assertion ;
                         crm:P140_assigned_attribute_to/(^crm:P128_carries/^crm:P94i_was_created_by|^crm:P108i_was_produced_by) ?object ;
                         crm:P177_assigned_property_of_type crm:P14_carried_out_by ;
                         crm:P141_assigned ?o ;
-                        rdf:value "false" .
+                        rdf:value "false"^^xsd:boolean .
                 }
                 OPTIONAL {
                     ?subEvent crm:P2_has_type ?eventType ;
