@@ -335,7 +335,7 @@
             } WHERE {
                 BIND([[> thisForQuery]] as ?s)
                 {
-                    ?s (crm:P128_carries/crm:P94i_was_created_by|crm:P108i_was_produced_by)/crm:P14_carried_out_by  ?o .
+                    ?s (crm:P128_carries/crm:P94i_was_created_by|crm:P108i_was_produced_by)/crm:P9_consists_of?/crm:P14_carried_out_by  ?o .
                     FILTER NOT EXISTS {
                         ?assertion crm:P2_has_type type:assertion ;
                             crm:P140_assigned_attribute_to/(^crm:P94i_was_created_by/^crm:P128_carries|^crm:P108i_was_produced_by) ?s ;
@@ -364,7 +364,7 @@
                 ?s ?p ?o .
             } WHERE {
                 BIND([[> thisForQuery]] as ?s)
-                ?object (crm:P128_carries/crm:P94i_was_created_by|crm:P108i_was_produced_by)/crm:P14_carried_out_by ?s, ?o .
+                ?object (crm:P128_carries/crm:P94i_was_created_by|crm:P108i_was_produced_by)/crm:P9_consists_of?/crm:P14_carried_out_by ?s, ?o .
                 FILTER NOT EXISTS {
                     ?assertion crm:P2_has_type type:assertion ;
                         crm:P140_assigned_attribute_to/(^crm:P94i_was_created_by/^crm:P128_carries|^crm:P108i_was_produced_by) ?object ;
