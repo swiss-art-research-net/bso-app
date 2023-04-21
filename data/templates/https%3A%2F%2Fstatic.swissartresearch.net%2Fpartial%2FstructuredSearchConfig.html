@@ -19,9 +19,7 @@
       "queryPattern": "{
         ?subject a search:Object ;
           rdfs:label ?searchTerm .
-        ?searchTerm bds:search ?__value__ ;
-          bds:relevance ?score ; 
-          bds:matchAllTerms \"true\" .
+          FILTER(REGEX(?searchTerm, ?__value__, \"i\"))
       }"
     }]
   }'
@@ -290,9 +288,7 @@
         "queryPattern": "{
           ?subject a search:Object ; 
             rdfs:label ?searchTerm .
-          ?searchTerm bds:search ?__value__ ;
-            bds:relevance ?score ; 
-            bds:matchAllTerms \"true\" .
+          FILTER(REGEX(?searchTerm, ?__value__, \"i\"))
         }"
       }],
       "<https://platform.swissartresearch.net/Person_born_at_Date>": [{
