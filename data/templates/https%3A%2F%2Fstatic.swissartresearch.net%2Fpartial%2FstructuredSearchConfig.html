@@ -17,7 +17,8 @@
     "<http://www.w3.org/2001/XMLSchema#string>": [{
       "kind": "text",
       "queryPattern": "{
-        ?subject rdfs:label ?searchTerm .
+        ?subject a search:Object ;
+          rdfs:label ?searchTerm .
         ?searchTerm bds:search ?__value__ ;
           bds:relevance ?score ; 
           bds:matchAllTerms \"true\" .
@@ -32,7 +33,7 @@
         {"iri": "<https://platform.swissartresearch.net/search/Type>", "label": "[[i18n "concept" bundle="bso"]]", "thumbnail": "../images/fcs/concepts.svg"},
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E52_Time-Span>", "label": "[[i18n "time" bundle="bso"]]", "thumbnail": "../images/fcs/dates.svg"},
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E57_Material>", "label": "[[i18n "material" bundle="bso"]]", "thumbnail": "../images/fcs/things.svg"},
-        {"iri": "<http://www.w3.org/2001/XMLSchema#string>", "label": "[[i18n "string" bundle="bso"]]", "thumbnail": "../images/fcs/concepts.svg"}
+        {"iri": "<http://www.w3.org/2001/XMLSchema#string>", "label": "[[i18n "text" bundle="bso"]]", "thumbnail": "../images/fcs/concepts.svg"}
       ],
     "relations": [
       {
@@ -287,7 +288,8 @@
       "<https://platform.swissartresearch.net/Object_described_in_String>": [{
         "kind": "text",
         "queryPattern": "{
-          ?subject rdfs:label ?searchTerm .
+          ?subject a search:Object ; 
+            rdfs:label ?searchTerm .
           ?searchTerm bds:search ?__value__ ;
             bds:relevance ?score ; 
             bds:matchAllTerms \"true\" .
