@@ -1,33 +1,33 @@
 [[> partial:pageHeader]]
 
-[[> mdsRowPerson label="birth"]]
+[[> mdsRowPerson label="birth" displayllab="byBirthDates"]]
 
-[[> mdsRowPerson label="birth_years"]]
+[[> mdsRowPerson label="birth_years" displayllab="byBirthYear"]]
 
-[[> mdsRowPerson label="death"]]
+[[> mdsRowPerson label="death" displayllab="byDeathDates"]]
 
-[[> mdsRowPerson label="labels"]]
+[[> mdsRowPerson label="death_years" displayllab="byDeathYears"]]
 
-[[> mdsRowPerson label="death_years"]]
+[[> mdsRowPerson label="labels" displayllab="byLabels"]]
 
-[[> mdsRowPerson label="creations"]]
+[[> mdsRowPerson label="creations" displayllab="byCreations"]]
 
-[[> mdsRowPerson label="creation_roles"]]
+[[> mdsRowPerson label="creation_roles" displayllab="byCreationRoles"]]
 
-[[> mdsRowPerson label="visual_items"]]
+[[> mdsRowPerson label="visual_items" displayllab="byVisualItems"]]
 
-[[> mdsRowPerson label="productions"]]
+[[> mdsRowPerson label="productions" displayllab="byProductions"]]
 
-[[> mdsRowPerson label="production_roles"]]
+[[> mdsRowPerson label="production_roles" displayllab="byProductionRoles"]]
 
-[[> mdsRowPerson label="objects"]]
+[[> mdsRowPerson label="objects" displayllab="byProductionObjects"]]
 
 
 [[#*inline "mdsRowPerson"]]
 <div class="bso-component separator panel">
     <bs-row>
         <bs-col md="2">
-            <h3>[[i18n [label] bundle="bso"]]</h3>
+            <h3>[[i18n [displayllab] bundle="bso"]]</h3>
         </bs-col>
         <bs-col md="10" class="bso-component card-container horizontal-scroll">
             <div class="bso-component card-image-align-top" style="display: inherit;"> 
@@ -48,7 +48,7 @@
         <mp-resource-thumbnail iri="https://static.swissartresearch.net/page/explore/persons/MDS/2D[[label]]">
             <mp-resource-thumbnail-fallback>
                 <div class="bso-component icon" style="opacity:1">
-                    <iframe-embed iri="../assets/no_auth/mds/actor-distances/[[label]]/html/[[dim]].html" width=750 height=540> </iframe-embed>
+                    <iframe-embed iri="/assets/no_auth/mds/actor-distances/[[label]]/html/[[dim]].html" width=750 height=540> </iframe-embed>
                 </div>
             </mp-resource-thumbnail-fallback>
         </mp-resource-thumbnail>

@@ -1,30 +1,20 @@
 /**
  * 
- * This component integrates the Smapshot (https://smapshot.heig-vd.ch/) embed view
- * for displaying a georeferenced image in a 3D landscape. The view is embedded as
- * an iFrame, therefore all functional and visual aspects are controlled by
- * Smapshot.
+ * This component adds the possibility of embedding an iframe (typically some html) in templates.
  * 
  * Usage:
  * 
  * <!-- basic usage -->
- * <smapshot-embed 
- *  iri="https://resource.swissartresearch.net/artwork/nb-162431">
- * </smapshot-embed>
+ * <iframe-embed iri="../assets/no_auth/mds/labels/2D.html" width=750 height=540> 
+ * </iframe-embed>
  *
  * 
  * <!-- with optional width and height attributes -->
- * <smapshot-embed 
- *  iri="https://resource.swissartresearch.net/artwork/nb-162431" 
- *  width="100%"
- *  height="100%">
- * </smapshot-embed>
- * 
- * <!-- point to beta platform -->
- * <smapshot-embed 
- *  iri="https://resource.swissartresearch.net/artwork/nb-162431"
- *  beta="true">
- * </smapshot-embed>
+ * <iframe-embed 
+ *  iri="../assets/no_auth/mds/labels/2D.html"
+ *  width=750
+ *  height=540>
+ * </iframe-embed>
  * 
  */
 
