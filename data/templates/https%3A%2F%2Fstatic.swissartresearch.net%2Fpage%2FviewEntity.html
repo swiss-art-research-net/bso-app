@@ -19,7 +19,9 @@
         [[> module-sidebar-person-network]]
         [[> module-sidebar-event-network]]
         [[> module-sidebar-object-network]]
-        [[> module-sidebar-colors]]
+        [[#if (hasPermission "api:ldp:*")]]
+            [[> module-sidebar-colors]]
+        [[/if]]
 
 </div>
 <div class="bso-component main">
@@ -212,7 +214,8 @@
                                             ?classification rdfs:label "[[classlabel]]" .
                                             ?classification rdf:value ?val .
                                             ?classification crm:P141_assigned $subject .
-                                        } ORDER BY ASC(?val) LIMIT 20'
+                                            FILTER(?subject != [[> thisForQuery]]) .
+                                        } ORDER BY ASC(?val) LIMIT 1000'
                                 tuple-template="{{> partial:cardObject}}"
                                 options='{
                                   "showFilter": true,
@@ -332,7 +335,14 @@
             } WHERE {
                 BIND([[> thisForQuery]] as ?s)
                 {
-                    ?s (crm:P128_carries/crm:P94i_was_created_by|crm:P108i_was_produced_by)/crm:P14_carried_out_by  ?o .
+                    ?s (crm:P128_carries/crm:P94i_was_created_by|crm:P108i_was_produced_by)/crm:P9_consists_of?/crm:P14_carried_out_by  ?o .
+                    FILTER NOT EXISTS {
+                        ?assertion crm:P2_has_type type:assertion ;
+                            crm:P140_assigned_attribute_to/(^crm:P94i_was_created_by/^crm:P128_carries|^crm:P108i_was_produced_by) ?s ;
+                            crm:P177_assigned_property_of_type crm:P14_carried_out_by ;
+                            crm:P141_assigned ?o ;
+                            rdf:value "false"^^xsd:boolean .
+                    }
                     OPTIONAL {
                         ?subEvent crm:P2_has_type ?eventType ;
                             crm:P14_carried_out_by ?o ;
@@ -354,13 +364,27 @@
                 ?s ?p ?o .
             } WHERE {
                 BIND([[> thisForQuery]] as ?s)
-                ?object (crm:P128_carries/crm:P94i_was_created_by|crm:P108i_was_produced_by)/crm:P14_carried_out_by ?s, ?o .
+                ?object (crm:P128_carries/crm:P94i_was_created_by|crm:P108i_was_produced_by)/crm:P9_consists_of?/crm:P14_carried_out_by ?s, ?o .
+                FILTER NOT EXISTS {
+                    ?assertion crm:P2_has_type type:assertion ;
+                        crm:P140_assigned_attribute_to/(^crm:P94i_was_created_by/^crm:P128_carries|^crm:P108i_was_produced_by) ?object ;
+                        crm:P177_assigned_property_of_type crm:P14_carried_out_by ;
+                        crm:P141_assigned ?s ;
+                        rdf:value "false"^^xsd:boolean .
+                }
+                FILTER NOT EXISTS {
+                    ?assertion crm:P2_has_type type:assertion ;
+                        crm:P140_assigned_attribute_to/(^crm:P94i_was_created_by/^crm:P128_carries|^crm:P108i_was_produced_by) ?object ;
+                        crm:P177_assigned_property_of_type crm:P14_carried_out_by ;
+                        crm:P141_assigned ?o ;
+                        rdf:value "false"^^xsd:boolean .
+                }
                 OPTIONAL {
                     ?subEvent crm:P2_has_type ?eventType ;
                         crm:P14_carried_out_by ?o ;
                         ^crm:P9_consists_of/(^crm:P94i_was_created_by/^crm:P128_carries|^crm:P108i_was_produced_by) ?object .
                 }
-                BIND(IF(BOUND(?eventType), ?eventType, search:collaborator) as ?p)
+                BIND(IF(BOUND(?eventType), ?eventType, search:co-occurrence) as ?p)
                 FILTER(?s != ?o)
             }'>
             <semantic-graph-layout-cose-bilkent ideal-edge-length=150></semantic-graph-layout-cose-bilkent>
@@ -1410,9 +1434,6 @@
                     <bs-nav-link event-key="labelSimilarity">Label Similarity</bs-nav-link>
                 </bs-nav-item>
                 <bs-nav-item>
-                    <bs-nav-link event-key="roleSimilarity">Actor Role Similarity</bs-nav-link>
-                </bs-nav-item>
-                <bs-nav-item>
                     <bs-nav-link event-key="birthDateSimilarity">Birth Date Similarity</bs-nav-link>
                 </bs-nav-item>
                 <bs-nav-item>
@@ -1450,10 +1471,6 @@
                 <bs-tab-pane event-key="labelSimilarity">
                     <p>[[i18n "actorSimilarityByLabelExplanation" bundle="bso" escapeHTML=false]]</p>
                     [[#> component-objects-table-actor-similarity label='byLabels' noResults='noSimilarActors' classlabel="Label Distance"]][[/ component-objects-table-actor-similarity]]
-                </bs-tab-pane>
-                <bs-tab-pane event-key="roleSimilarity">
-                    <p>[[i18n "actorSimilarityByRoleExplanation" bundle="bso" escapeHTML=false]]</p>
-                    [[#> component-objects-table-actor-similarity label='byRoles' noResults='noSimilarActors' classlabel="Actor Role Distance"]][[/ component-objects-table-actor-similarity]]
                 </bs-tab-pane>
                 <bs-tab-pane event-key="birthDateSimilarity">
                     <p>[[i18n "actorSimilarityByBirthDateExplanation" bundle="bso" escapeHTML=false]]</p>
