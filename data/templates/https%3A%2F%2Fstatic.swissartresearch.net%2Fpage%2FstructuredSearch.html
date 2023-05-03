@@ -74,6 +74,9 @@
                   OPTIONAL {
                     ?child crm:P89_falls_within ?item .
                   }
+                  FILTER NOT EXISTS {
+                    ?item crmdig:L54_is_same-as/a schema:AdministrativeArea
+                  }
                   BIND(BOUND(?child) AS ?hasChildren)
                 } LIMIT 100"
               }'
