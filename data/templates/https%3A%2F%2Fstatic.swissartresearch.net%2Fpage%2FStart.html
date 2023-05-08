@@ -55,7 +55,7 @@
     <bs-row>
         <bs-col md="2">
             <h3>[[i18n "dossiers" bundle="bso"]]</h3>
-            [[> resourceSummary type='search:Object' condition='crm:P2_has_type <https://resource.swissartresearch.net/type/1525E0B2-4816-3D3F-AEC8-94BDE16CF0EC>' label='dossiers' link='page:browseDossiers']]
+            [[> resourceSummary type='search:Object' condition='a search:Object . FILTER EXISTS { ?child crm:P46i_forms_part_of ?subject } FILTER NOT EXISTS { ?grandchild crm:P46i_forms_part_of/crm:P46i_forms_part_of ?subject }' label='dossiers' link='page:browseDossiers']]
         </bs-col>
         <bs-col md="10" class="bso-component card-container horizontal-scroll">
             [[#> cards type='search:Object' ]]

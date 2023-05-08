@@ -1,3 +1,3 @@
 [[> page:search
 typeLimitation="dossiers"
-queryConstant="SELECT ?subject WHERE { ?subject a search:Object ; crm:P2_has_type <https://resource.swissartresearch.net/type/1525E0B2-4816-3D3F-AEC8-94BDE16CF0EC> .}"]]
+queryConstant="SELECT ?subject WHERE { ?subject a search:Object . FILTER EXISTS { ?child crm:P46i_forms_part_of ?subject } FILTER NOT EXISTS { ?grandchild crm:P46i_forms_part_of/crm:P46i_forms_part_of ?subject } }"]]
