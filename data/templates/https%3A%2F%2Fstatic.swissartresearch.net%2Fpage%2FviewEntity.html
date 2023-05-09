@@ -1548,7 +1548,9 @@
                 </bs-tab-pane>
                 <bs-tab-pane event-key="titleSimilarity">
                     <p>[[i18n "titleSimilarityExplanation" bundle="bso" escapeHTML=false]]</p>
-                    [[#> component-objects-table condition='?classification crm:P140_assigned_attribute_to/^crm:P1_is_identified_by/^crm:P128_carries $subject ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> .' label='byTitle' noResults='noTitleSimilaritiesIdentified']]
+                    <!-- TODO: use service query to query for classifications in secondary and rest in default -->
+
+                    [[#> component-objects-table condition='?classification crm:P140_assigned_attribute_to/^crm:P1_is_identified_by/^crm:P128_carries $subject ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> .' label='byTitle' noResults='noTitleSimilaritiesIdentified' secondary='true']]
 
                         ?classification crm:P140_assigned_attribute_to/^crm:P1_is_identified_by/^crm:P128_carries [[> thisForQuery]] ;
                             crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> ;
