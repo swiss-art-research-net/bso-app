@@ -197,39 +197,46 @@
 [[/inline]]
 
 [[#*inline "component-objects-table-actor-similarity"]]
-    <semantic-if 
-        query='ASK { BIND([[> thisForQuery]] as $subject) . ?classification crm:P140_assigned_attribute_to $subject . ?classification rdfs:label "[[classlabel]]" . }'
-        then='{{> template}}'
-        [[#if noResults]]
-            else="<p>[[i18n noResults bundle="bso"]]</p>"
-        [[/if]]
-    >
-        <template id="template">
-            <div class="bso-component field-visualisation">
-                <span class="bso-component label">[[i18n label bundle="bso"]]</span>
-                            <div class="bso-component card-container">
-                                <semantic-table
-                                query='SELECT DISTINCT ?subject WHERE {
-                                            ?classification crm:P140_assigned_attribute_to [[> thisForQuery]]  .
-                                            ?classification rdfs:label "[[classlabel]]" .
-                                            ?classification rdf:value ?val .
-                                            ?classification crm:P141_assigned $subject .
-                                            FILTER(?subject != [[> thisForQuery]]) .
-                                        } ORDER BY ASC(?val) LIMIT 1000'
-                                tuple-template="{{> partial:cardObject}}"
-                                options='{
-                                  "showFilter": true,
-                                  "pageSizeSelection": "[5,10,20,50]"
-                                }'
-                                [[#if noResults]]
-                                no-result-template="<p>[[i18n noResults bundle="bso"]]</p>"
-                                [[/if]]
-                >
-                                </semantic-table>
-                            </div>
-            </div>
-        </template>
-    </semantic-if>
+    <semantic-context repository="secondary">
+        <semantic-if 
+            query='ASK { BIND([[> thisForQuery]] as $subject) . ?classification crm:P140_assigned_attribute_to $subject . ?classification rdfs:label "[[classlabel]]" . }'
+            then='{{> template}}'
+            [[#if noResults]]
+                else="<p>[[i18n noResults bundle="bso"]]</p>"
+            [[/if]]
+        >
+            <template id="template">
+                <div class="bso-component field-visualisation">
+                    <span class="bso-component label">[[i18n label bundle="bso"]]</span>
+                                <div class="bso-component card-container">
+
+                                    <semantic-context repository="default">
+                                        <semantic-table
+                                        query='SELECT DISTINCT ?subject ?val WHERE {
+                                                    SERVICE secondary:sparql {
+                                                        ?classification crm:P140_assigned_attribute_to [[> thisForQuery]]  .
+                                                        ?classification rdfs:label "[[classlabel]]" .
+                                                        ?classification rdf:value ?val .
+                                                        ?classification crm:P141_assigned $subject .
+                                                        FILTER(?subject != [[> thisForQuery]]) .
+                                                    }
+                                                } ORDER BY ASC(?val) LIMIT 100'
+                                        stuple-template="{{> partial:cardObject}}"
+                                        options='{
+                                        "showFilter": true,
+                                        "pageSizeSelection": "[5,10,20,50]"
+                                        }'
+                                        [[#if noResults]]
+                                        no-result-template="<p>[[i18n noResults bundle="bso"]]</p>"
+                                        [[/if]]
+                        >
+                                        </semantic-table>
+                                    </semantic-context>
+                                </div>
+                </div>
+            </template>
+        </semantic-if>
+    </semantic-context>
 [[/inline]]
 
 [[#*inline "component-objects-table-smapshot-coords"]]
