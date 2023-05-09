@@ -13,6 +13,14 @@
       "queryPattern": "{
         $subject crmdig:L54_is_same-as/crm:P89_falls_within ?__value__ .
       }"
+    }],
+    "<http://www.w3.org/2001/XMLSchema#string>": [{
+      "kind": "text",
+      "queryPattern": "{
+        ?subject a search:Object ;
+          rdfs:label ?searchTerm .
+          FILTER(REGEX(?searchTerm, ?__value__, \"i\"))
+      }"
     }]
   }'
   search-profile='{
@@ -22,7 +30,8 @@
         {"iri": "<https://platform.swissartresearch.net/search/Place>", "label": "[[i18n "place" bundle="bso"]]", "thumbnail": "../images/fcs/places.svg"},
         {"iri": "<https://platform.swissartresearch.net/search/Type>", "label": "[[i18n "concept" bundle="bso"]]", "thumbnail": "../images/fcs/concepts.svg"},
         {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E52_Time-Span>", "label": "[[i18n "time" bundle="bso"]]", "thumbnail": "../images/fcs/dates.svg"},
-        {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E57_Material>", "label": "[[i18n "material" bundle="bso"]]", "thumbnail": "../images/fcs/things.svg"}
+        {"iri": "<http://www.cidoc-crm.org/cidoc-crm/E57_Material>", "label": "[[i18n "material" bundle="bso"]]", "thumbnail": "../images/fcs/things.svg"},
+        {"iri": "<http://www.w3.org/2001/XMLSchema#string>", "label": "[[i18n "text" bundle="bso"]]", "thumbnail": "../images/fcs/concepts.svg"}
       ],
     "relations": [
       {
@@ -90,6 +99,12 @@
         "hasDomain": "<https://platform.swissartresearch.net/search/Object>",
         "hasRange": "<http://www.cidoc-crm.org/cidoc-crm/E57_Material>",
         "label": "[[i18n "madeFrom" bundle="bso"]]"
+      },
+      {
+        "iri": "<https://platform.swissartresearch.net/Object_described_in_String>",
+        "hasDomain": "<https://platform.swissartresearch.net/search/Object>",
+        "hasRange": "<http://www.w3.org/2001/XMLSchema#string>",
+        "label": "[[i18n "describedIn" bundle="bso"]]"
       },
       {
         "iri": "<https://platform.swissartresearch.net/Person_born_at_Date>",
@@ -267,6 +282,14 @@
               crm:P45_consists_of ?__value__ .
             ?__value__ a crm:E57_Material .
           }"
+      }],
+      "<https://platform.swissartresearch.net/Object_described_in_String>": [{
+        "kind": "text",
+        "queryPattern": "{
+          ?subject a search:Object ; 
+            rdfs:label ?searchTerm .
+          FILTER(REGEX(?searchTerm, ?__value__, \"i\"))
+        }"
       }],
       "<https://platform.swissartresearch.net/Person_born_at_Date>": [{
         "kind": "date-range",

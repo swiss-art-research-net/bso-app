@@ -19,7 +19,9 @@
         [[> module-sidebar-person-network]]
         [[> module-sidebar-event-network]]
         [[> module-sidebar-object-network]]
-        [[> module-sidebar-colors]]
+        [[#if (hasPermission "api:ldp:*")]]
+            [[> module-sidebar-colors]]
+        [[/if]]
 
 </div>
 <div class="bso-component main">
@@ -362,6 +364,72 @@
 
 [[/inline]]
 
+[[#*inline "component-objects-table-order-by-val"]]
+    <semantic-if 
+        query='ASK { BIND([[> thisForQuery]] as $subject) . [[condition]] }'
+        then='{{> template}}'
+        [[#if noResults]]
+            else="<p>[[i18n noResults bundle="bso"]]</p>"
+        [[/if]]
+    >
+        <template id="template">
+            <div class="bso-component field-visualisation">
+                <span class="bso-component label">[[i18n label bundle="bso"]]</span>
+
+                <mp-event-trigger type="Component.Refresh" targets='["object-map"]'>
+                    <bs-tabs default-active-key="grid">
+                        <bs-tab event-key="view" title="[[i18n "view" bundle="bso"]]:"></bs-tab>
+                        <bs-tab event-key="grid" title="[[i18n "grid" bundle="bso"]]">
+                            <div class="bso-component card-container">
+                                <semantic-table
+                                query='SELECT DISTINCT ?subject WHERE {
+                                    [[> @partial-block]]
+                                } ORDER BY ASC(?val)'
+                                tuple-template="{{> partial:cardObject}}"
+                                options='{
+                                  "showFilter": true,
+                                  "pageSizeSelection": "[5,10,20,50]"
+                                }'
+                                [[#if noResults]]
+                                no-result-template="<p>[[i18n noResults bundle="bso"]]</p>"
+                                [[/if]]
+                >
+                                </semantic-table>
+                            </div>
+                        </bs-tab>
+                        <bs-tab event-key="map" title="[[i18n "map" bundle="bso"]]">
+                            <div style="height:40rem;width:100%">
+                                <mp-event-target-refresh id="object-map">
+                                    <semantic-map
+                                        id="object-map-[[label]]"
+                                        query="SELECT DISTINCT ?subject ?wkt WHERE {
+                                            [[> @partial-block]] 
+                                            {
+                                                ?subject a search:Place ;
+                                                    crmdig:L54_is_same-as/wdt:P625 ?wkt .
+                                            } UNION {
+                                                ?subject crm:P128_carries?/crm:P138_represents/crmdig:L54_is_same-as/wdt:P625 ?wkt .
+                                            } UNION {
+                                                ?subject a search:Type ;
+                                                    ^crm:P138_represents/crm:P138_represents/crmdig:L54_is_same-as/wdt:P625 ?wkt .
+                                            } 
+                                        } ORDER BY ASC(?val)"
+                                        
+                                        tuple-template='{{> template }}'
+                                        no-result-template='<bs-alert variant="info">[[i18n "noResultsWithCoordinates" bundle="bso"]]</bs-alert>'
+                                    >
+                                        <template id='template'>{{> partial:cardObject noFallback="true"}}</template>
+                                    </semantic-map>
+                                </mp-event-target-refresh>
+                            </div>
+                        </bs-tab>
+                </bs-tabs>
+                </mp-event-trigger>
+        </template>
+    </semantic-if>
+
+[[/inline]]
+
 [[#*inline "component-event-network"]]
     <div class="bso-component graph">
         <semantic-graph height="[[height]]px"
@@ -398,7 +466,14 @@
             } WHERE {
                 BIND([[> thisForQuery]] as ?s)
                 {
-                    ?s (crm:P128_carries/crm:P94i_was_created_by|crm:P108i_was_produced_by)/crm:P14_carried_out_by  ?o .
+                    ?s (crm:P128_carries/crm:P94i_was_created_by|crm:P108i_was_produced_by)/crm:P9_consists_of?/crm:P14_carried_out_by  ?o .
+                    FILTER NOT EXISTS {
+                        ?assertion crm:P2_has_type type:assertion ;
+                            crm:P140_assigned_attribute_to/(^crm:P94i_was_created_by/^crm:P128_carries|^crm:P108i_was_produced_by) ?s ;
+                            crm:P177_assigned_property_of_type crm:P14_carried_out_by ;
+                            crm:P141_assigned ?o ;
+                            rdf:value "false"^^xsd:boolean .
+                    }
                     OPTIONAL {
                         ?subEvent crm:P2_has_type ?eventType ;
                             crm:P14_carried_out_by ?o ;
@@ -420,13 +495,27 @@
                 ?s ?p ?o .
             } WHERE {
                 BIND([[> thisForQuery]] as ?s)
-                ?object (crm:P128_carries/crm:P94i_was_created_by|crm:P108i_was_produced_by)/crm:P14_carried_out_by ?s, ?o .
+                ?object (crm:P128_carries/crm:P94i_was_created_by|crm:P108i_was_produced_by)/crm:P9_consists_of?/crm:P14_carried_out_by ?s, ?o .
+                FILTER NOT EXISTS {
+                    ?assertion crm:P2_has_type type:assertion ;
+                        crm:P140_assigned_attribute_to/(^crm:P94i_was_created_by/^crm:P128_carries|^crm:P108i_was_produced_by) ?object ;
+                        crm:P177_assigned_property_of_type crm:P14_carried_out_by ;
+                        crm:P141_assigned ?s ;
+                        rdf:value "false"^^xsd:boolean .
+                }
+                FILTER NOT EXISTS {
+                    ?assertion crm:P2_has_type type:assertion ;
+                        crm:P140_assigned_attribute_to/(^crm:P94i_was_created_by/^crm:P128_carries|^crm:P108i_was_produced_by) ?object ;
+                        crm:P177_assigned_property_of_type crm:P14_carried_out_by ;
+                        crm:P141_assigned ?o ;
+                        rdf:value "false"^^xsd:boolean .
+                }
                 OPTIONAL {
                     ?subEvent crm:P2_has_type ?eventType ;
                         crm:P14_carried_out_by ?o ;
                         ^crm:P9_consists_of/(^crm:P94i_was_created_by/^crm:P128_carries|^crm:P108i_was_produced_by) ?object .
                 }
-                BIND(IF(BOUND(?eventType), ?eventType, search:collaborator) as ?p)
+                BIND(IF(BOUND(?eventType), ?eventType, search:co-occurrence) as ?p)
                 FILTER(?s != ?o)
             }'>
             <semantic-graph-layout-cose-bilkent ideal-edge-length=150></semantic-graph-layout-cose-bilkent>
@@ -1432,6 +1521,9 @@
                 <bs-nav-item>
                     <bs-nav-link event-key="imageProximity">[[i18n "imageProximity" bundle="bso"]]</bs-nav-link>
                 </bs-nav-item>
+                <bs-nav-item>
+                    <bs-nav-link event-key="colorSimilarity">[[i18n "colorSimilarity" bundle="bso"]]</bs-nav-link>
+                </bs-nav-item>
             </bs-nav>
         </bs-col>
 
@@ -1486,6 +1578,21 @@
                     [[/ component-objects-table]]
                 </bs-tab-pane>
 
+                <bs-tab-pane event-key="colorSimilarity">
+                    <p>[[i18n "colorSimilarityExplanation" bundle="bso" escapeHTML=false]]</p>
+                    [[#> component-objects-table-order-by-val condition='?classification crm:P140_assigned_attribute_to ?access ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/ColorSchemes/blob/main/image_distances_by_color_schemes.py> . $subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?access .' label='byColors' noResults='noColorSimilarities']]
+
+                            [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?access .
+                            ?class crm:P140_assigned_attribute_to ?access .
+                            ?class crm:P141_assigned ?img .
+                            $subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?img .
+                            ?class crm:P33_used_specific_technique	<https://github.com/swiss-art-research-net/ColorSchemes/blob/main/image_distances_by_color_schemes.py>	.
+                            ?class rdf:value ?score .
+                            FILTER(?img != ?access) .
+                    
+                    
+                    [[/ component-objects-table]]
+                </bs-tab-pane>
             </bs-tab-content>
         </bs-col>
     </bs-row>
