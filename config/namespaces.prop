@@ -34,3 +34,7 @@ clip=https://service.swissartresearch.net/clip/
 hint=http://www.bigdata.com/queryHints#
 wgs=http://www.w3.org/2003/01/geo/wgs84_pos#
 gn=http://www.geonames.org/ontology#
+gn=http://www.geonames.org/ontology#
+geoliteral=http://www.bigdata.com/rdf/geospatial/literals/v1#
+geo=http://www.bigdata.com/rdf/geospatial#
+ogcgs=http://www.opengis.net/ont/geosparql#
