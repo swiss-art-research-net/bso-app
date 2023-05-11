@@ -196,7 +196,7 @@
 [[#*inline "component-objects-table-actor-similarity"]]
     <semantic-context repository="secondary">
         <semantic-if 
-            query='ASK { BIND([[> thisForQuery]] as $subject) . ?classification crm:P140_assigned_attribute_to $subject . ?classification rdfs:label "[[classlabel]]" . }'
+            query='ASK { hint:Query hint:optimizer "Runtime" . BIND([[> thisForQuery]] as $subject) .  ?classification crm:P140_assigned_attribute_to $subject . ?classification rdfs:label "[[classlabel]]" . }'
             then='{{> template}}'
             [[#if noResults]]
                 else="<p>[[i18n noResults bundle="bso"]]</p>"
@@ -210,6 +210,7 @@
                                     <semantic-context repository="default">
                                         <semantic-table
                                         query='SELECT DISTINCT ?subject ?val WHERE {
+                                                    hint:Query hint:optimizer "Runtime" .
                                                     SERVICE secondary:sparql {
                                                         ?classification crm:P140_assigned_attribute_to [[> thisForQuery]]  .
                                                         ?classification rdfs:label "[[classlabel]]" .
