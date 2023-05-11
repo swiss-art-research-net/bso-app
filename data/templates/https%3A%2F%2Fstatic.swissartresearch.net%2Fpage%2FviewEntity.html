@@ -19,9 +19,6 @@
         [[> module-sidebar-person-network]]
         [[> module-sidebar-event-network]]
         [[> module-sidebar-object-network]]
-        [[#if (hasPermission "api:ldp:*")]]
-            [[> module-sidebar-colors]]
-        [[/if]]
 
 </div>
 <div class="bso-component main">
@@ -197,8 +194,51 @@
 [[/inline]]
 
 [[#*inline "component-objects-table-actor-similarity"]]
+    <semantic-context repository="secondary">
+        <semantic-if 
+            query='ASK { BIND([[> thisForQuery]] as $subject) . ?classification crm:P140_assigned_attribute_to $subject . ?classification rdfs:label "[[classlabel]]" . }'
+            then='{{> template}}'
+            [[#if noResults]]
+                else="<p>[[i18n noResults bundle="bso"]]</p>"
+            [[/if]]
+        >
+            <template id="template">
+                <div class="bso-component field-visualisation">
+                    <span class="bso-component label">[[i18n label bundle="bso"]]</span>
+                                <div class="bso-component card-container">
+
+                                    <semantic-context repository="default">
+                                        <semantic-table
+                                        query='SELECT DISTINCT ?subject ?val WHERE {
+                                                    SERVICE secondary:sparql {
+                                                        ?classification crm:P140_assigned_attribute_to [[> thisForQuery]]  .
+                                                        ?classification rdfs:label "[[classlabel]]" .
+                                                        ?classification rdf:value ?val .
+                                                        ?classification crm:P141_assigned $subject .
+                                                        FILTER(?subject != [[> thisForQuery]]) .
+                                                    }
+                                                } ORDER BY ASC(?val) LIMIT 100'
+                                        tuple-template="{{> partial:cardObject}}"
+                                        options='{
+                                        "showFilter": true,
+                                        "pageSizeSelection": "[5,10,20,50]"
+                                        }'
+                                        [[#if noResults]]
+                                        no-result-template="<p>[[i18n noResults bundle="bso"]]</p>"
+                                        [[/if]]
+                        >
+                                        </semantic-table>
+                                    </semantic-context>
+                                </div>
+                </div>
+            </template>
+        </semantic-if>
+    </semantic-context>
+[[/inline]]
+
+[[#*inline "component-objects-table-smapshot-coords"]]
     <semantic-if 
-        query='ASK { BIND([[> thisForQuery]] as $subject) . ?classification crm:P140_assigned_attribute_to $subject . ?classification rdfs:label "[[classlabel]]" . }'
+        query='ASK { BIND([[> thisForQuery]] as $subject) . [[condition]] }'
         then='{{> template}}'
         [[#if noResults]]
             else="<p>[[i18n noResults bundle="bso"]]</p>"
@@ -207,15 +247,16 @@
         <template id="template">
             <div class="bso-component field-visualisation">
                 <span class="bso-component label">[[i18n label bundle="bso"]]</span>
+
+                <mp-event-trigger type="Component.Refresh" targets='["object-map"]'>
+                    <bs-tabs default-active-key="grid">
+                        <bs-tab event-key="view" title="[[i18n "view" bundle="bso"]]:"></bs-tab>
+                        <bs-tab event-key="grid" title="[[i18n "grid" bundle="bso"]]">
                             <div class="bso-component card-container">
                                 <semantic-table
                                 query='SELECT DISTINCT ?subject WHERE {
-                                            ?classification crm:P140_assigned_attribute_to [[> thisForQuery]]  .
-                                            ?classification rdfs:label "[[classlabel]]" .
-                                            ?classification rdf:value ?val .
-                                            ?classification crm:P141_assigned $subject .
-                                            FILTER(?subject != [[> thisForQuery]]) .
-                                        } ORDER BY ASC(?val) LIMIT 1000'
+                                    [[> @partial-block]]
+                                } LIMIT 100'
                                 tuple-template="{{> partial:cardObject}}"
                                 options='{
                                   "showFilter": true,
@@ -227,11 +268,39 @@
                 >
                                 </semantic-table>
                             </div>
-            </div>
+                        </bs-tab>
+                        <bs-tab event-key="map" title="[[i18n "map" bundle="bso"]]">
+                            <div style="height:40rem;width:100%">
+                                <mp-event-target-refresh id="object-map">
+                                    <semantic-map
+                                        id="object-map-[[label]]"
+                                        query='SELECT DISTINCT ?subject ?wkt WHERE {
+                                            {
+                                            [[> @partial-block]] 
+                                            $subject crm:P128_carries/crm:P138_represents/crm:P168_place_is_defined_by ?wkt .
+                                            FILTER ( datatype(?wkt) = ogcgs:wktLiteral) .
+                                            }
+                                            UNION 
+                                            {
+                                                [[> thisForQuery]] crm:P128_carries/crm:P138_represents/crm:P168_place_is_defined_by ?wkt .
+                                                FILTER ( datatype(?wkt) = ogcgs:wktLiteral) .
+                                            }
+                                        } LIMIT 100'
+                                        
+                                        tuple-template='{{> template }}'
+                                        no-result-template='<bs-alert variant="info">[[i18n "noResultsWithCoordinates" bundle="bso"]]</bs-alert>'
+                                    >
+                                        <template id='template'>{{> partial:cardObject noFallback="true"}}</template>
+                                    </semantic-map>
+                                </mp-event-target-refresh>
+                            </div>
+                        </bs-tab>
+                </bs-tabs>
+                </mp-event-trigger>
         </template>
     </semantic-if>
-[[/inline]]
 
+[[/inline]]
 
 [[#*inline "component-objects-table"]]
     <semantic-if 
@@ -271,6 +340,72 @@
                                 <mp-event-target-refresh id="object-map">
                                     <semantic-map
                                         id="object-map-[[label]]"
+                                        query='SELECT DISTINCT ?subject ?wkt WHERE {
+                                            [[> @partial-block]] 
+                                            {
+                                                ?subject a search:Place ;
+                                                    crmdig:L54_is_same-as/wdt:P625 ?wkt .
+                                            } UNION {
+                                                ?subject crm:P128_carries?/crm:P138_represents/crmdig:L54_is_same-as/wdt:P625 ?wkt .
+                                            } UNION {
+                                                ?subject a search:Type ;
+                                                    ^crm:P138_represents/crm:P138_represents/crmdig:L54_is_same-as/wdt:P625 ?wkt .
+                                            } 
+                                        }'
+                                        
+                                        tuple-template='{{> template }}'
+                                        no-result-template='<bs-alert variant="info">[[i18n "noResultsWithCoordinates" bundle="bso"]]</bs-alert>'
+                                    >
+                                        <template id='template'>{{> partial:cardObject noFallback="true"}}</template>
+                                    </semantic-map>
+                                </mp-event-target-refresh>
+                            </div>
+                        </bs-tab>
+                </bs-tabs>
+                </mp-event-trigger>
+        </template>
+    </semantic-if>
+
+[[/inline]]
+
+[[#*inline "component-objects-table-order-by-val"]]
+    <semantic-if 
+        query='ASK { BIND([[> thisForQuery]] as $subject) . [[condition]] }'
+        then='{{> template}}'
+        [[#if noResults]]
+            else="<p>[[i18n noResults bundle="bso"]]</p>"
+        [[/if]]
+    >
+        <template id="template">
+            <div class="bso-component field-visualisation">
+                <span class="bso-component label">[[i18n label bundle="bso"]]</span>
+
+                <mp-event-trigger type="Component.Refresh" targets='["object-map"]'>
+                    <bs-tabs default-active-key="grid">
+                        <bs-tab event-key="view" title="[[i18n "view" bundle="bso"]]:"></bs-tab>
+                        <bs-tab event-key="grid" title="[[i18n "grid" bundle="bso"]]">
+                            <div class="bso-component card-container">
+                                <semantic-table
+                                query='SELECT DISTINCT ?subject WHERE {
+                                    [[> @partial-block]]
+                                } ORDER BY ASC(?val)'
+                                tuple-template="{{> partial:cardObject}}"
+                                options='{
+                                  "showFilter": true,
+                                  "pageSizeSelection": "[5,10,20,50]"
+                                }'
+                                [[#if noResults]]
+                                no-result-template="<p>[[i18n noResults bundle="bso"]]</p>"
+                                [[/if]]
+                >
+                                </semantic-table>
+                            </div>
+                        </bs-tab>
+                        <bs-tab event-key="map" title="[[i18n "map" bundle="bso"]]">
+                            <div style="height:40rem;width:100%">
+                                <mp-event-target-refresh id="object-map">
+                                    <semantic-map
+                                        id="object-map-[[label]]"
                                         query="SELECT DISTINCT ?subject ?wkt WHERE {
                                             [[> @partial-block]] 
                                             {
@@ -282,7 +417,7 @@
                                                 ?subject a search:Type ;
                                                     ^crm:P138_represents/crm:P138_represents/crmdig:L54_is_same-as/wdt:P625 ?wkt .
                                             } 
-                                        }"
+                                        } ORDER BY ASC(?val)"
                                         
                                         tuple-template='{{> template }}'
                                         no-result-template='<bs-alert variant="info">[[i18n "noResultsWithCoordinates" bundle="bso"]]</bs-alert>'
@@ -1387,6 +1522,12 @@
                 <bs-nav-item>
                     <bs-nav-link event-key="semanticVisualSimilarity">[[i18n "semanticVisualSimilarity" bundle="bso"]]</bs-nav-link>
                 </bs-nav-item>
+                <bs-nav-item>
+                    <bs-nav-link event-key="imageProximity">[[i18n "imageProximity" bundle="bso"]]</bs-nav-link>
+                </bs-nav-item>
+                <bs-nav-item>
+                    <bs-nav-link event-key="colorSimilarity">[[i18n "colorSimilarity" bundle="bso"]]</bs-nav-link>
+                </bs-nav-item>
             </bs-nav>
         </bs-col>
 
@@ -1394,27 +1535,74 @@
             <bs-tab-content>
                 <bs-tab-pane event-key="visualSimilarity">
                     <p>[[i18n "visualSimilarityExplanation" bundle="bso" escapeHTML=false]]</p>
-                    [[#> component-objects-table condition='?classification crm:P140_assigned_attribute_to/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries $subject ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> .' label='visually' noResults='noVisualSimilaritiesIdentified']]
+                    [[#> component-objects-table condition='SERVICE secondary:sparql { ?classification crm:P140_assigned_attribute_to ?image ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> . } ?image ^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries $subject' label='visually' noResults='noVisualSimilaritiesIdentified']]
 
-                        ?classification crm:P140_assigned_attribute_to/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries [[> thisForQuery]] ;
-                            crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> ;
-                            crm:P141_assigned/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries $subject .
+                        SERVICE secondary:sparql {
+                            ?classification crm:P140_assigned_attribute_to ?image_subject ;
+                                crm:P141_assigned ?image_candidate ;
+                                crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> .
+                        }
+                        ?image_subject ^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries [[> thisForQuery]] .
+                        ?image_candidate ^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries $subject .
                     
                     [[/ component-objects-table]]
                 </bs-tab-pane>
                 <bs-tab-pane event-key="titleSimilarity">
                     <p>[[i18n "titleSimilarityExplanation" bundle="bso" escapeHTML=false]]</p>
-                    [[#> component-objects-table condition='?classification crm:P140_assigned_attribute_to/^crm:P1_is_identified_by/^crm:P128_carries $subject ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> .' label='byTitle' noResults='noTitleSimilaritiesIdentified']]
 
-                        ?classification crm:P140_assigned_attribute_to/^crm:P1_is_identified_by/^crm:P128_carries [[> thisForQuery]] ;
-                            crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> ;
-                            crm:P141_assigned/^crm:P1_is_identified_by/^crm:P128_carries $subject ;
-                            rdf:value ?score .
+                    [[#> component-objects-table condition='SERVICE secondary:sparql { ?classification crm:P140_assigned_attribute_to ?title ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> . } $subject crm:P128_carries/crm:P1_is_identified_by ?title .' label='byTitle' noResults='noTitleSimilaritiesIdentified' secondary='true']]
+
+                        SERVICE secondary:sparql {
+                            ?classification crm:P140_assigned_attribute_to ?title_subject ;
+                                crm:P141_assigned ?title_candidate ;
+                                crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> ;
+                                rdf:value ?score .
+                        }
+                        [[> thisForQuery]] crm:P128_carries/crm:P1_is_identified_by ?title_subject .
+                        ?subject crm:P128_carries/crm:P1_is_identified_by ?title_candidate .
                     
                     [[/ component-objects-table]]
                 </bs-tab-pane>
                 <bs-tab-pane event-key="semanticVisualSimilarity">
                     [[> component-semantic-similarity]]
+                </bs-tab-pane>
+                <bs-tab-pane event-key="imageProximity">
+                    <p>[[i18n "imageProximityExplanation" bundle="bso" escapeHTML=false]]</p>
+                    [[#> component-objects-table-smapshot-coords condition='$subject crm:P128_carries/crm:P138_represents ?place . ?place crm:P168_place_is_defined_by ?coords .' label='byLocation' noResults='noProximitySimilaritiesIdentified']]
+
+                    
+                        [[> thisForQuery]] crm:P128_carries/crm:P138_represents ?place .
+                        ?place crm:P168_place_is_defined_by ?coords .
+                        FILTER ( datatype(?coords) = geoliteral:lat-lon) .
+                        
+                        SERVICE geo:search {
+                            ?nearbyplace geo:search "inCircle" ;
+                                geo:predicate crm:P168_place_is_defined_by ;
+                                geo:searchDatatype geoliteral:lat-lon ;
+                                geo:spatialCircleCenter  ?coords ;
+                                geo:spatialCircleRadius "50" .
+                        }
+                        
+                        $subject crm:P128_carries/crm:P138_represents ?nearbyplace .
+                      
+                    
+                    [[/ component-objects-table]]
+                </bs-tab-pane>
+
+                <bs-tab-pane event-key="colorSimilarity">
+                    <p>[[i18n "colorSimilarityExplanation" bundle="bso" escapeHTML=false]]</p>
+                    [[#> component-objects-table-order-by-val condition='?classification crm:P140_assigned_attribute_to ?access ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/ColorSchemes/blob/main/image_distances_by_color_schemes.py> . $subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?access .' label='byColors' noResults='noColorSimilarities']]
+
+                            [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?access .
+                            ?class crm:P140_assigned_attribute_to ?access .
+                            ?class crm:P141_assigned ?img .
+                            $subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?img .
+                            ?class crm:P33_used_specific_technique	<https://github.com/swiss-art-research-net/ColorSchemes/blob/main/image_distances_by_color_schemes.py>	.
+                            ?class rdf:value ?score .
+                            FILTER(?img != ?access) .
+                    
+                    
+                    [[/ component-objects-table]]
                 </bs-tab-pane>
             </bs-tab-content>
         </bs-col>
@@ -1478,7 +1666,7 @@
                 </bs-tab-pane>
                 <bs-tab-pane event-key="birthYearSimilarity">
                     <p>[[i18n "actorSimilarityByBirthYearExplanation" bundle="bso" escapeHTML=false]]</p>
-                    [[#> component-objects-table-actor-similarity label='byBirthYear' noResults='noSimilarActors' classlabel="Birth Year Distance"]][[/ component-objects-table-actor-similarity]]
+                    [[#> component-objects-table-actor-similarity label='byBirthYears' noResults='noSimilarActors' classlabel="Birth Year Distance"]][[/ component-objects-table-actor-similarity]]
                 </bs-tab-pane>
                 <bs-tab-pane event-key="deathDateSimilarity">
                     <p>[[i18n "actorSimilarityByDeathDateExplanation" bundle="bso" escapeHTML=false]]</p>
