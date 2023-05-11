@@ -1538,11 +1538,15 @@
             <bs-tab-content>
                 <bs-tab-pane event-key="visualSimilarity">
                     <p>[[i18n "visualSimilarityExplanation" bundle="bso" escapeHTML=false]]</p>
-                    [[#> component-objects-table condition='?classification crm:P140_assigned_attribute_to/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries $subject ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> .' label='visually' noResults='noVisualSimilaritiesIdentified']]
+                    [[#> component-objects-table condition='SERVICE secondary:sparql { ?classification crm:P140_assigned_attribute_to ?image ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> . } ?image ^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries $subject' label='visually' noResults='noVisualSimilaritiesIdentified']]
 
-                        ?classification crm:P140_assigned_attribute_to/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries [[> thisForQuery]] ;
-                            crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> ;
-                            crm:P141_assigned/^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries $subject .
+                        SERVICE secondary:sparql {
+                            ?classification crm:P140_assigned_attribute_to ?image_subject ;
+                                crm:P141_assigned ?image_candidate ;
+                                crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> .
+                        }
+                        ?image_subject ^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries [[> thisForQuery]] .
+                        ?image_candidate ^la:access_point/^la:digitally_available_via/^la:digitally_shown_by/^crm:P128_carries $subject .
                     
                     [[/ component-objects-table]]
                 </bs-tab-pane>
@@ -1567,7 +1571,7 @@
                 </bs-tab-pane>
                 <bs-tab-pane event-key="imageProximity">
                     <p>[[i18n "imageProximityExplanation" bundle="bso" escapeHTML=false]]</p>
-                    [[#> component-objects-table-smapshot-coords condition='$subject crm:P128_carries ?work . ?work crm:P138_represents ?place . ?place crm:P168_place_is_defined_by ?coords' label='byLocation' noResults='noTitleSimilaritiesIdentified']]
+                    [[#> component-objects-table-smapshot-coords condition='$subject crm:P128_carries/crm:P138_represents ?place . ?place crm:P168_place_is_defined_by ?coords .' label='byLocation' noResults='noProximitySimilaritiesIdentified']]
 
                     
                         [[> thisForQuery]] crm:P128_carries ?work .
@@ -1576,11 +1580,11 @@
                         FILTER ( datatype(?coords) = geoliteral:lat-lon) .
                         
                         SERVICE geo:search {
-                        ?nearbyplace geo:search "inCircle" .
-                        ?nearbyplace geo:predicate crm:P168_place_is_defined_by .
-                        ?nearbyplace geo:searchDatatype geoliteral:lat-lon .
-                        ?nearbyplace geo:spatialCircleCenter  ?coords .
-                        ?nearbyplace geo:spatialCircleRadius "50" .
+                            ?nearbyplace geo:search "inCircle" .
+                            ?nearbyplace geo:predicate crm:P168_place_is_defined_by .
+                            ?nearbyplace geo:searchDatatype geoliteral:lat-lon .
+                            ?nearbyplace geo:spatialCircleCenter  ?coords .
+                            ?nearbyplace geo:spatialCircleRadius "50" .
                         }
                         
                         $subject crm:P128_carries ?nearbywork .
