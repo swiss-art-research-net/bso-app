@@ -1574,21 +1574,19 @@
                     [[#> component-objects-table-smapshot-coords condition='$subject crm:P128_carries/crm:P138_represents ?place . ?place crm:P168_place_is_defined_by ?coords .' label='byLocation' noResults='noProximitySimilaritiesIdentified']]
 
                     
-                        [[> thisForQuery]] crm:P128_carries ?work .
-                        ?work crm:P138_represents ?place .
+                        [[> thisForQuery]] crm:P128_carries/crm:P138_represents ?place .
                         ?place crm:P168_place_is_defined_by ?coords .
                         FILTER ( datatype(?coords) = geoliteral:lat-lon) .
                         
                         SERVICE geo:search {
-                            ?nearbyplace geo:search "inCircle" .
-                            ?nearbyplace geo:predicate crm:P168_place_is_defined_by .
-                            ?nearbyplace geo:searchDatatype geoliteral:lat-lon .
-                            ?nearbyplace geo:spatialCircleCenter  ?coords .
-                            ?nearbyplace geo:spatialCircleRadius "50" .
+                            ?nearbyplace geo:search "inCircle" ;
+                                geo:predicate crm:P168_place_is_defined_by ;
+                                geo:searchDatatype geoliteral:lat-lon ;
+                                geo:spatialCircleCenter  ?coords ;
+                                geo:spatialCircleRadius "50" .
                         }
                         
-                        $subject crm:P128_carries ?nearbywork .
-                        ?nearbywork crm:P138_represents ?nearbyplace .
+                        $subject crm:P128_carries/crm:P138_represents ?nearbyplace .
                       
                     
                     [[/ component-objects-table]]
