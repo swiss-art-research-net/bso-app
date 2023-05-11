@@ -1550,18 +1550,69 @@
                 <bs-tab-pane event-key="titleSimilarity">
                     <p>[[i18n "titleSimilarityExplanation" bundle="bso" escapeHTML=false]]</p>
 
-                    [[#> component-objects-table condition='SERVICE secondary:sparql { ?classification crm:P140_assigned_attribute_to ?title ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> . } $subject crm:P128_carries/crm:P1_is_identified_by ?title .' label='byTitle' noResults='noTitleSimilaritiesIdentified' secondary='true']]
+                    <semantic-context repository="secondary">
+                        <semantic-if
+                            query='ASK {
+                                BIND([[> thisForQuery]] as ?subject)
+                                BIND(URI(CONCAT(STR(?subject), "/title")) as ?title )
+                                ?classification crm:P140_assigned_attribute_to ?title ; 
+                                    crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> .
+                            }'
+                            then="{{> template}}"
+                            else="<p>[[i18n "noTitleSimilaritiesIdentified" bundle="bso"]]</p>"
+                        >
+                            <template id="template">
+                                <div class="bso-component field-visualisation">
+                                    <span class="bso-component label">[[i18n "byTitle" bundle="bso"]]</span>
+                                    <mp-event-trigger type="Component.Refresh" targets='["object-map"]'>
+                                        <bs-tabs default-active-key="grid">
+                                            <bs-tab event-key="view" title="[[i18n "view" bundle="bso"]]:"></bs-tab>
+                                            <bs-tab event-key="grid" title="[[i18n "grid" bundle="bso"]]">
+                                                <div class="bso-component card-container">
+                                                    <semantic-query
+                                                        query='SELECT DISTINCT ?candidate WHERE {
+                                                            BIND([[> thisForQuery]] as ?subject)
+                                                            BIND(URI(CONCAT(STR(?subject), "/title")) as ?title )
+                                                            ?classification crm:P140_assigned_attribute_to ?title ; 
+                                                                crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> ;
+                                                                crm:P141_assigned ?candidate ;
+                                                                rdf:value ?score .
+                                                        } 
+                                                        ORDER BY DESC(?score)
+                                                        LIMIT 10'
+                                                        template="{{> template}}"
+                                                    >
+                                                        <template id="template">
+                                                            <semantic-context repository="default">
+                                                                <semantic-table
+                                                                    query='SELECT DISTINCT ?subject WHERE {
+                                                                        VALUES (?candidate) {
+                                                                            {{#each bindings}}
+                                                                                (<{{candidate.value}}>)
+                                                                            {{/each}}
+                                                                        }
+                                                                        ?subject crm:P128_carries/crm:P1_is_identified_by ?candidate .
+                                                                    }'
+                                                                    tuple-template="{{> partial:cardObject}}"
+                                                                    options='{
+                                                                    "showFilter": true,
+                                                                    "pageSizeSelection": "[5,10,20,50]"
+                                                                    }'
+                                                                >
+                                                                </semantic-table>
+                                                            </semantic-context>
+                                                        </template>
+                                                    </semantic-query>
+                                                </div>
+                                            </bs-tab>
+                                        </bs-tabs>
+                                    </mp-event-trigger>
+                                </div>
+                            </template>
 
-                        SERVICE secondary:sparql {
-                            ?classification crm:P140_assigned_attribute_to ?title_subject ;
-                                crm:P141_assigned ?title_candidate ;
-                                crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> ;
-                                rdf:value ?score .
-                        }
-                        [[> thisForQuery]] crm:P128_carries/crm:P1_is_identified_by ?title_subject .
-                        ?subject crm:P128_carries/crm:P1_is_identified_by ?title_candidate .
-                    
-                    [[/ component-objects-table]]
+
+                        </semantic-if>
+                    </semantic-context>
                 </bs-tab-pane>
                 <bs-tab-pane event-key="semanticVisualSimilarity">
                     [[> component-semantic-similarity]]
