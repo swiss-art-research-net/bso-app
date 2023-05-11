@@ -1644,7 +1644,7 @@
                 <bs-tab-pane event-key="titleSimilarity">
                     <p>[[i18n "titleSimilarityExplanation" bundle="bso" escapeHTML=false]]</p>
                     
-                    [[#> component-objects-table-dual-repo condition='BIND(URI(CONCAT(STR(?subject), "/title")) as ?title ) ?classification crm:P140_assigned_attribute_to ?title ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> .' candidateQuery='?subject crm:P128_carries/crm:P1_is_identified_by ?candidate .' label='titleSimilarities' noResults='noResultsTitleSimilarities']]
+                    [[#> component-objects-table-dual-repo condition='BIND(URI(CONCAT(STR(?subject), "/title")) as ?title ) ?classification crm:P140_assigned_attribute_to ?title ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> .' candidateQuery='?subject crm:P128_carries/crm:P1_is_identified_by ?candidate .' label='titleSimilarities' noResults='noTitleSimilaritiesIdentified']]
                         BIND(URI(CONCAT(STR(?subject), "/title")) as ?title )
                         ?classification crm:P140_assigned_attribute_to ?title ; 
                             crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> ;
