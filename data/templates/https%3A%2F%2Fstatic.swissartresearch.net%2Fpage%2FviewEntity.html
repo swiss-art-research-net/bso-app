@@ -466,7 +466,6 @@
     </semantic-context>
 [[/inline]]
 
-
 [[#*inline "component-event-network"]]
     <div class="bso-component graph">
         <semantic-graph height="[[height]]px"
@@ -1620,18 +1619,94 @@
 
                 <bs-tab-pane event-key="colorSimilarity">
                     <p>[[i18n "colorSimilarityExplanation" bundle="bso" escapeHTML=false]]</p>
-                    [[#> component-objects-table condition='?classification crm:P140_assigned_attribute_to ?access ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/ColorSchemes/blob/main/image_distances_by_color_schemes.py> . $subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?access .' orderBy='ASC(?score)' label='byColors' noResults='noColorSimilarities']]
-
-                            [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?access .
-                            ?class crm:P140_assigned_attribute_to ?access .
-                            ?class crm:P141_assigned ?img .
-                            $subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?img .
-                            ?class crm:P33_used_specific_technique	<https://github.com/swiss-art-research-net/ColorSchemes/blob/main/image_distances_by_color_schemes.py>	.
-                            ?class rdf:value ?score .
-                            FILTER(?img != ?access) .
-                    
-                    
-                    [[/ component-objects-table]]
+                    <semantic-query
+                        query="SELECT ?image WHERE {
+                            [[> thisForQuery]] crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?image .
+                        } LIMIT 1"
+                        template="{{> color-template}}"
+                    >
+                        <template id="color-template">
+                            <semantic-context repository="secondary">
+                                <div class="bso-component field-visualisation">
+                                    <span class="bso-component label">[[i18n "byColors" bundle="bso"]]</span>
+                                    <mp-event-trigger type="Component.Refresh" targets='["object-map"]'>
+                                        <semantic-query
+                                            query='SELECT DISTINCT ?candidate WHERE {
+                                                    BIND(<{{bindings.0.image.value}}> as ?image)
+                                                    ?class crm:P140_assigned_attribute_to ?image ;
+                                                        crm:P141_assigned ?candidate ;
+                                                        crm:P33_used_specific_technique	<https://github.com/swiss-art-research-net/ColorSchemes/blob/main/image_distances_by_color_schemes.py> ;
+                                                        rdf:value ?score .
+                                                    FILTER(?candidate != ?image) .
+                                                } 
+                                                ORDER BY DESC(?score)
+                                                LIMIT 100'
+                                            template="{{> template}}"
+                                            no-results-template="<p>[[i18n "noColorSimilarities" bundle="bso"]]</p>"
+                                        >
+                                            <template id="template">
+                                                <semantic-context repository="default">
+                                                    <bs-tabs default-active-key="grid">
+                                                        <bs-tab event-key="view" title="[[i18n "view" bundle="bso"]]:"></bs-tab>
+                                                        <bs-tab event-key="grid" title="[[i18n "grid" bundle="bso"]]">
+                                                            <div class="bso-component card-container">
+                                                                <semantic-table
+                                                                    query='SELECT DISTINCT ?subject WHERE {
+                                                                        VALUES (?candidate) {
+                                                                            {{#each bindings}}
+                                                                                (<{{candidate.value}}>)
+                                                                            {{/each}}
+                                                                        }
+                                                                        ?subject  crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?candidate .
+                                                                    }'
+                                                                    tuple-template="{{> partial:cardObject}}"
+                                                                    options='{
+                                                                        "showFilter": true,
+                                                                        "pageSizeSelection": "[5,10,20,50]"
+                                                                    }'
+                                                                >
+                                                                </semantic-table>
+                                                            </div>
+                                                        </bs-tab>
+                                                        <bs-tab event-key="map" title="[[i18n "map" bundle="bso"]]">
+                                                            <div style="height:40rem;width:100%">
+                                                                <mp-event-target-refresh id="object-map">
+                                                                    <semantic-map
+                                                                        id="object-map-[[label]]"
+                                                                        query="SELECT DISTINCT ?subject ?wkt WHERE {
+                                                                            VALUES (?candidate) {
+                                                                                {{#each bindings}}
+                                                                                    (<{{candidate.value}}>)
+                                                                                {{/each}}
+                                                                            }
+                                                                            ?subject  crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?candidate .
+                                                                            {
+                                                                                ?subject a search:Place ;
+                                                                                    crmdig:L54_is_same-as/wdt:P625 ?wkt .
+                                                                            } UNION {
+                                                                                ?subject crm:P128_carries?/crm:P138_represents/crmdig:L54_is_same-as/wdt:P625 ?wkt .
+                                                                            } UNION {
+                                                                                ?subject a search:Type ;
+                                                                                    ^crm:P138_represents/crm:P138_represents/crmdig:L54_is_same-as/wdt:P625 ?wkt .
+                                                                            } 
+                                                                        } ORDER BY ASC(?val)"
+                                                                        
+                                                                        tuple-template='{{> template }}'
+                                                                        no-result-template='<bs-alert variant="info">[[i18n "noResultsWithCoordinates" bundle="bso"]]</bs-alert>'
+                                                                    >
+                                                                        <template id='template'>{{> partial:cardObject noFallback="true"}}</template>
+                                                                    </semantic-map>
+                                                                </mp-event-target-refresh>
+                                                            </div>
+                                                    </bs-tabs>
+                                                </semantic-context>
+                                            </template>
+                                        </semantic-query>
+                                    </mp-event-trigger>
+                                </div>
+                            </semantic-context>
+                        </template>
+                    </semantic-query>
                 </bs-tab-pane>
             </bs-tab-content>
         </bs-col>
