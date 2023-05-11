@@ -368,6 +368,100 @@
 
 [[/inline]]
 
+
+
+[[#*inline "component-objects-table-dual-repo"]]
+    <semantic-context repository="secondary">
+        <semantic-if
+            query='ASK {
+                BIND([[> thisForQuery]] as ?subject)
+                [[condition]]
+            }'
+            then="{{> template}}"
+            [[#if noResults]]
+                else="<p>[[i18n noResults bundle="bso"]]</p>"
+            [[/if]]
+        >
+            <template id="template">
+                <div class="bso-component field-visualisation">
+                    <span class="bso-component label">[[i18n label bundle="bso"]]</span>
+                    <mp-event-trigger type="Component.Refresh" targets='["object-map"]'>
+                        <semantic-query
+                            query='SELECT DISTINCT ?candidate WHERE {
+                                BIND([[> thisForQuery]] as ?subject)
+                                [[> @partial-block]]
+                            } 
+                            ORDER BY DESC(?score)
+                            LIMIT 100'
+                            template="{{> template}}"
+                        >
+                            <template id="template">
+                                <semantic-context repository="default">
+                                    <bs-tabs default-active-key="grid">
+                                        <bs-tab event-key="view" title="[[i18n "view" bundle="bso"]]:"></bs-tab>
+                                        <bs-tab event-key="grid" title="[[i18n "grid" bundle="bso"]]">
+                                            <div class="bso-component card-container">
+                                                <semantic-table
+                                                    query='SELECT DISTINCT ?subject WHERE {
+                                                        VALUES (?candidate) {
+                                                            {{#each bindings}}
+                                                                (<{{candidate.value}}>)
+                                                            {{/each}}
+                                                        }
+                                                        [[candidateQuery]]
+                                                    }'
+                                                    tuple-template="{{> partial:cardObject}}"
+                                                    options='{
+                                                        "showFilter": true,
+                                                        "pageSizeSelection": "[5,10,20,50]"
+                                                    }'
+                                                >
+                                                </semantic-table>
+                                            </div>
+                                        </bs-tab>
+                                        <bs-tab event-key="map" title="[[i18n "map" bundle="bso"]]">
+                                            <div style="height:40rem;width:100%">
+                                                <mp-event-target-refresh id="object-map">
+                                                    <semantic-map
+                                                        id="object-map-[[label]]"
+                                                        query="SELECT DISTINCT ?subject ?wkt WHERE {
+                                                            VALUES (?candidate) {
+                                                                {{#each bindings}}
+                                                                    (<{{candidate.value}}>)
+                                                                {{/each}}
+                                                            }
+                                                            [[candidateQuery]]
+                                                            {
+                                                                ?subject a search:Place ;
+                                                                    crmdig:L54_is_same-as/wdt:P625 ?wkt .
+                                                            } UNION {
+                                                                ?subject crm:P128_carries?/crm:P138_represents/crmdig:L54_is_same-as/wdt:P625 ?wkt .
+                                                            } UNION {
+                                                                ?subject a search:Type ;
+                                                                    ^crm:P138_represents/crm:P138_represents/crmdig:L54_is_same-as/wdt:P625 ?wkt .
+                                                            } 
+                                                        } ORDER BY ASC(?val)"
+                                                        
+                                                        tuple-template='{{> template }}'
+                                                        no-result-template='<bs-alert variant="info">[[i18n "noResultsWithCoordinates" bundle="bso"]]</bs-alert>'
+                                                    >
+                                                        <template id='template'>{{> partial:cardObject noFallback="true"}}</template>
+                                                    </semantic-map>
+                                                </mp-event-target-refresh>
+                                            </div>
+                                    </bs-tabs>
+                                </semantic-context>
+                            </template>
+                        </semantic-query>
+                    </mp-event-trigger>
+                </div>
+            </template>
+
+
+        </semantic-if>
+    </semantic-context>
+[[/inline]]
+
 [[#*inline "component-objects-table-order-by-val"]]
     <semantic-if 
         query='ASK { BIND([[> thisForQuery]] as $subject) . [[condition]] }'
@@ -1549,70 +1643,14 @@
                 </bs-tab-pane>
                 <bs-tab-pane event-key="titleSimilarity">
                     <p>[[i18n "titleSimilarityExplanation" bundle="bso" escapeHTML=false]]</p>
-
-                    <semantic-context repository="secondary">
-                        <semantic-if
-                            query='ASK {
-                                BIND([[> thisForQuery]] as ?subject)
-                                BIND(URI(CONCAT(STR(?subject), "/title")) as ?title )
-                                ?classification crm:P140_assigned_attribute_to ?title ; 
-                                    crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> .
-                            }'
-                            then="{{> template}}"
-                            else="<p>[[i18n "noTitleSimilaritiesIdentified" bundle="bso"]]</p>"
-                        >
-                            <template id="template">
-                                <div class="bso-component field-visualisation">
-                                    <span class="bso-component label">[[i18n "byTitle" bundle="bso"]]</span>
-                                    <mp-event-trigger type="Component.Refresh" targets='["object-map"]'>
-                                        <bs-tabs default-active-key="grid">
-                                            <bs-tab event-key="view" title="[[i18n "view" bundle="bso"]]:"></bs-tab>
-                                            <bs-tab event-key="grid" title="[[i18n "grid" bundle="bso"]]">
-                                                <div class="bso-component card-container">
-                                                    <semantic-query
-                                                        query='SELECT DISTINCT ?candidate WHERE {
-                                                            BIND([[> thisForQuery]] as ?subject)
-                                                            BIND(URI(CONCAT(STR(?subject), "/title")) as ?title )
-                                                            ?classification crm:P140_assigned_attribute_to ?title ; 
-                                                                crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> ;
-                                                                crm:P141_assigned ?candidate ;
-                                                                rdf:value ?score .
-                                                        } 
-                                                        ORDER BY DESC(?score)
-                                                        LIMIT 100'
-                                                        template="{{> template}}"
-                                                    >
-                                                        <template id="template">
-                                                            <semantic-context repository="default">
-                                                                <semantic-table
-                                                                    query='SELECT DISTINCT ?subject WHERE {
-                                                                        VALUES (?candidate) {
-                                                                            {{#each bindings}}
-                                                                                (<{{candidate.value}}>)
-                                                                            {{/each}}
-                                                                        }
-                                                                        ?subject crm:P128_carries/crm:P1_is_identified_by ?candidate .
-                                                                    }'
-                                                                    tuple-template="{{> partial:cardObject}}"
-                                                                    options='{
-                                                                    "showFilter": true,
-                                                                    "pageSizeSelection": "[5,10,20,50]"
-                                                                    }'
-                                                                >
-                                                                </semantic-table>
-                                                            </semantic-context>
-                                                        </template>
-                                                    </semantic-query>
-                                                </div>
-                                            </bs-tab>
-                                        </bs-tabs>
-                                    </mp-event-trigger>
-                                </div>
-                            </template>
-
-
-                        </semantic-if>
-                    </semantic-context>
+                    
+                    [[#> component-objects-table-dual-repo condition='BIND(URI(CONCAT(STR(?subject), "/title")) as ?title ) ?classification crm:P140_assigned_attribute_to ?title ; crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> .' candidateQuery='?subject crm:P128_carries/crm:P1_is_identified_by ?candidate .' label='titleSimilarities' noResults='noResultsTitleSimilarities']]
+                        BIND(URI(CONCAT(STR(?subject), "/title")) as ?title )
+                        ?classification crm:P140_assigned_attribute_to ?title ; 
+                            crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-data-pipeline/blob/main/experiments/title-similarities.ipynb> ;
+                            crm:P141_assigned ?candidate ;
+                            rdf:value ?score .
+                    [[/ component-objects-table-dual-repo]]
                 </bs-tab-pane>
                 <bs-tab-pane event-key="semanticVisualSimilarity">
                     [[> component-semantic-similarity]]
