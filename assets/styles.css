@@ -17,6 +17,9 @@ h3 {
 iframe {
   border: none;
 }
+.inferred {
+  font-style: italic;
+}
 #custom-modal-close-button {
   text-align: right;
   padding-bottom: 0.5rem;

@@ -891,8 +891,18 @@
 [[#*inline "field-visualisation-depicts"]]
 <!-- Depicts -->
 <semantic-query
-    query="SELECT DISTINCT ?subject ?type ?typeClass WHERE {
+    query="SELECT DISTINCT ?subject ?type ?typeClass  ?onelvlbigger_subject ?twolvlbigger_subject WHERE {
         [[> thisForQuery]] crm:P128_carries?/crm:P138_represents ?subject .
+        OPTIONAL {
+            ?subject crmdig:L54_is_same-as ?swisstopo .
+            ?swisstopo <http://www.geonames.org/ontology#parentADM1> ?onelvlbigger_swisstopo .
+            ?onelvlbigger_subject crmdig:L54_is_same-as ?onelvlbigger_swisstopo . 
+          }
+          OPTIONAL {
+            ?subject crmdig:L54_is_same-as ?swisstopo .
+            ?swisstopo <http://www.geonames.org/ontology#parentADM2> ?twolvlbigger_swisstopo . 
+            ?twolvlbigger_subject crmdig:L54_is_same-as ?twolvlbigger_swisstopo . 
+          }
         OPTIONAL {
             ?subject a ?type .
             BIND(STRAFTER(STR(?type), 'search/') as ?typeClass)
@@ -915,6 +925,26 @@
             <ul class="bso-component tags">
                 {{#each bindings}}
                     <li class="bso-tag {{typeClass.value}}"><semantic-link uri="{{subject.value}}"></semantic-link></li>
+                    <semantic-if 
+                    query='ASK { [[> thisForQuery]] crm:P128_carries?/crm:P138_represents ?subject .
+                                    ?subject crmdig:L54_is_same-as ?swisstopo .
+                                    ?swisstopo <http://www.geonames.org/ontology#parentADM2> ?twolvlbigger_swisstopo . 
+                                    ?twolvlbigger_subject crmdig:L54_is_same-as ?twolvlbigger_swisstopo .  }'
+                    then='{{> template-district}}'> 
+                        <template id='template-district'>
+                            <li class="bso-tag {{typeClass.value}}"><semantic-link class="inferred" uri="{{twolvlbigger_subject.value}}"></semantic-link></li>
+                        </template>
+                    </semantic-if>
+                    <semantic-if 
+                    query='ASK { [[> thisForQuery]] crm:P128_carries?/crm:P138_represents ?subject .
+                                    ?subject crmdig:L54_is_same-as ?swisstopo .
+                                    ?swisstopo <http://www.geonames.org/ontology#parentADM1> ?onelvlbigger_swisstopo . 
+                                    ?onelvlbigger_subject crmdig:L54_is_same-as ?onelvlbigger_swisstopo .  }'
+                    then='{{> template-canton}}'> 
+                        <template id='template-canton'>
+                            <li class="bso-tag {{typeClass.value}}"><semantic-link class="inferred" uri="{{onelvlbigger_subject.value}}"></semantic-link></li>
+                        </template>
+                    </semantic-if>
                 {{/each}}
             </ul>
         </div>
