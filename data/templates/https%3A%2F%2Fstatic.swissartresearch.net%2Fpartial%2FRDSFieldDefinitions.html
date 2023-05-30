@@ -6524,6 +6524,7 @@ WHERE {
     "label": "Event Place",
     "domain": "http://www.cidoc-crm.org/cidoc-crm/E5_Event",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#anyURI",
+    "selectPattern": "SELECT ?value WHERE { ?subject crm:P7_took_place_at ?value }",
     "deletePattern": "DELETE { ?subject crm:P7_took_place_at ?value.} WHERE { 
       ?subject crm:P7_took_place_at ?value.
 ?value a crm:E53_Place }",
@@ -7759,14 +7760,18 @@ WHERE{
     "insertPattern": "INSERT { 
       ?subject <http://www.cidoc-crm.org/cidoc-crm/PC02_has_range> ?value.
     } WHERE {}",
-    "autosuggestionPattern": "SELECT ?value ?label WHERE {
+    "autosuggestionPattern": "SELECT DISTINCT ?value (MIN(?label) as ?label) WHERE {
       ?value a search:Person.
-      ?value rdfs:label ?label .
-      ?label bds:search ?__token__  ;
+      ?value rdfs:label ?anyLabel .
+      ?anyLabel bds:search ?__token__  ;
       bds:minRelevance \"0.2\" ;
       bds:relevance ?score ;
       bds:matchAllTerms \"true\" .
-    } LIMIT 10"
+      OPTIONAL {
+        ?value rdfs:prefLabel ?prefLabel .
+      }
+      BIND(COALESCE(?prefLabel, ?anyLabel) AS ?label)
+    } GROUP BY ?value LIMIT 10"
 }
 [[/inline]]
 
@@ -8268,7 +8273,7 @@ WHERE {
   
 } WHERE {BIND(IRI(CONCAT(STR($subject),\"/type/\", MD5(?value))) as ?role_uri). }",
     "autosuggestionPattern": "SELECT ?value ?label WHERE {
-      ?value a search:Type ;
+      ?value a crm:E55_Type ;
         rdfs:label ?label .
       ?label bds:search ?__token__ ;
         bds:matchAllTerms \"true\" .
