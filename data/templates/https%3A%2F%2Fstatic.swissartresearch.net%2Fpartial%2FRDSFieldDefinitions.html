@@ -6524,6 +6524,7 @@ WHERE {
     "label": "Event Place",
     "domain": "http://www.cidoc-crm.org/cidoc-crm/E5_Event",
     "xsdDatatype": "http://www.w3.org/2001/XMLSchema#anyURI",
+    "selectPattern": "SELECT ?value WHERE { ?subject crm:P7_took_place_at ?value }",
     "deletePattern": "DELETE { ?subject crm:P7_took_place_at ?value.} WHERE { 
       ?subject crm:P7_took_place_at ?value.
 ?value a crm:E53_Place }",
