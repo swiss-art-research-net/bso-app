@@ -8272,7 +8272,7 @@ WHERE {
   
 } WHERE {BIND(IRI(CONCAT(STR($subject),\"/type/\", MD5(?value))) as ?role_uri). }",
     "autosuggestionPattern": "SELECT ?value ?label WHERE {
-      ?value a search:Type ;
+      ?value a crm:E55_Type ;
         rdfs:label ?label .
       ?label bds:search ?__token__ ;
         bds:matchAllTerms \"true\" .
