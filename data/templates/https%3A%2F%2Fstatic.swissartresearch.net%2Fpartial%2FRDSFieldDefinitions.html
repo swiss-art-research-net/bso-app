@@ -7759,14 +7759,18 @@ WHERE{
     "insertPattern": "INSERT { 
       ?subject <http://www.cidoc-crm.org/cidoc-crm/PC02_has_range> ?value.
     } WHERE {}",
-    "autosuggestionPattern": "SELECT ?value ?label WHERE {
+    "autosuggestionPattern": "SELECT DISTINCT ?value (MIN(?label) as ?label) WHERE {
       ?value a search:Person.
-      ?value rdfs:label ?label .
-      ?label bds:search ?__token__  ;
+      ?value rdfs:label ?anyLabel .
+      ?anyLabel bds:search ?__token__  ;
       bds:minRelevance \"0.2\" ;
       bds:relevance ?score ;
       bds:matchAllTerms \"true\" .
-    } LIMIT 10"
+      OPTIONAL {
+        ?value rdfs:prefLabel ?prefLabel .
+      }
+      BIND(COALESCE(?prefLabel, ?anyLabel) AS ?label)
+    } GROUP BY ?value LIMIT 10"
 }
 [[/inline]]
 
