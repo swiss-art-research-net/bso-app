@@ -8,41 +8,60 @@
 
         <bs-tabs>
             <bs-tab event-key="cross-collection" title="Cross Collection">
-                <semantic-table
-                    query="
-                        SELECT ?subject ?subject_holder ?object ?object_holder WHERE {
-                            ?object crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?obj_image .
-                            ?subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?subj_image .
-                            ?classification crm:P140_assigned_attribute_to ?subj_image ;
-                                crm:P141_assigned ?obj_image ;
-                                crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> .
-                            ?subject crm:P109_has_current_or_former_curator ?subject_holder .
-                            ?object crm:P109_has_current_or_former_curator ?object_holder .
-                                FILTER(?subject_holder != ?object_holder)
-                        } ORDER BY ?subject ?object
-                        LIMIT 1000"
-                    number-of-displayed-rows='5'
-                    column-configuration='[{
-                        "variableName": "subject",
-                        "displayName": "Object A",
-                        "cellTemplate": "{{> partial:cardObject}}"
-                    },
-                    {
-                        "variableName": "subject_holder",
-                        "displayName": "Collection A",
-                        "showFilter": true
-                    },
-                    {
-                        "variableName": "object",
-                        "displayName": "Object B",
-                        "cellTemplate": "{{> partial:cardObject subject=object}}"
-                    },
-                    {
-                        "variableName": "object_holder",
-                        "displayName": "Collection B",
-                        "showFilter": true
-                    }]'
-                    ></semantic-table>
+                <semantic-context repository="secondary">
+                    <semantic-query
+                        query="
+                            SELECT ?subj_image ?obj_image WHERE {
+                                ?classification crm:P140_assigned_attribute_to ?subj_image ;
+                                    crm:P141_assigned ?obj_image ;
+                                    crm:P33_used_specific_technique <https://github.com/swiss-art-research-net/bso-image-similarity> .
+                                    BIND(IF(CONTAINS(STR(?subj_image),'SFF'), 'sff', IF(CONTAINS(STR(?subj_image), 'nb-'), 'nb', 'zbz')) as ?subj_collection)
+                                    BIND(IF(CONTAINS(STR(?obj_image),'SFF'), 'sff', IF(CONTAINS(STR(?obj_image), 'nb-'), 'nb', 'zbz')) as ?obj_collection)
+                                    FILTER(?subj_collection != ?obj_collection)
+                            } 
+                            LIMIT 1000"
+                        template="{{> similaritiesTable}}"
+                    >
+                        <template id="similaritiesTable">
+                            <semantic-context repository="default">
+                                <semantic-table
+                                    query="SELECT ?subject ?subject_holder ?object ?object_holder WHERE {
+                                        VALUES (?subj_image ?obj_image) {
+                                            {{#each bindings}}
+                                                (<{{subj_image.value}}> <{{obj_image.value}}>)
+                                            {{/each}}
+                                        }
+                                        ?object crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?obj_image .
+                                        ?subject crm:P128_carries/la:digitally_shown_by/la:digitally_available_via/la:access_point ?subj_image .
+                                        ?subject crm:P109_has_current_or_former_curator ?subject_holder .
+                                        ?object crm:P109_has_current_or_former_curator ?object_holder .
+                                    } ORDER BY ?subject ?object"
+                                    column-configuration='[{
+                                        "variableName": "subject",
+                                        "displayName": "Object A",
+                                        "cellTemplate": "{{> partial:cardObject}}"
+                                    },
+                                    {
+                                        "variableName": "subject_holder",
+                                        "displayName": "Collection A",
+                                        "showFilter": true
+                                    },
+                                    {
+                                        "variableName": "object",
+                                        "displayName": "Object B",
+                                        "cellTemplate": "{{> partial:cardObject subject=object}}"
+                                    },
+                                    {
+                                        "variableName": "object_holder",
+                                        "displayName": "Collection B",
+                                        "showFilter": true
+                                    }]'
+                                ></semantic-table>
+                            </semantic-context>
+                        </template>
+                    </semantic-query>
+                        
+                    </semantic-context>
             </bs-tab>
             <bs-tab event-key="examples" title="Examples">
                 <semantic-table
