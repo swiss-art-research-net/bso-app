@@ -1,0 +1,98 @@
+[[> partial:pageHeader]]
+
+
+<div class="bso-component separator panel">
+    <bs-row>
+        <bs-col md="2">
+            <h3>[[i18n "personExploration" bundle="bso"]]</h3>
+            There is currently one available analysis.
+        </bs-col>
+        <bs-col md="10" class="bso-component card-container horizontal-scroll">
+          <div class="bso-component card-image-align-top" style="display: inherit;"> 
+            [[> pageCard uri="https://static.swissartresearch.net/page/explore/persons/MDS" imgsrc="../assets/no_auth/extraction.png"]]
+          </div>
+
+        
+        </bs-col>
+    </bs-row>
+</div>
+
+
+[[#*inline "pageCard"]]
+
+  <div class="bso-component card {{#if mode}}mode-{{mode}}{{else}}mode-crop{{/if}}">
+    <semantic-link
+        key="object-card-mds"
+        uri="[[uri]]"
+        urlqueryparam-view="page"
+    >
+        <div class="card-image" style="width:300px;height:180px">
+            <mp-resource-thumbnail iri="[[uri]]">
+                  <mp-resource-thumbnail-fallback>
+                    <div class="bso-component icon" style="opacity:1">
+                          <img src="[[imgsrc]]">
+                    </div>
+                  </mp-resource-thumbnail-fallback>
+            </mp-resource-thumbnail>
+        </div>
+        <div class="card-body" style="height:50px">
+            <div class="label">
+                <mp-label iri="[[uri]]"></mp-label>
+                <span class="type">
+                    &nbsp;<mp-label iri="[[uri]]"></mp-label>
+                </span>
+            </div>
+        </div>
+    </semantic-link> 
+  </div>
+[[/inline]]
+
+[[#*inline "cards"]]
+    <semantic-query
+        query="SELECT DISTINCT ?subject WHERE {
+            ?subject a [[type]] .
+            BIND(DAY(NOW()) as ?day)
+            BIND(SHA512(CONCAT(STR(?day), STR(?subject))) AS ?random)
+            [[> @partial-block ]]
+        } ORDER BY ?random LIMIT 10"
+        template="{{> template-image-summary}}"
+        >
+        <template id="template-image-summary">
+            {{#each bindings}}
+                {{> partial:cardObject}}
+            {{/each}}
+        </template>
+    </semantic-query>
+[[/inline]]
+
+
+[[#*inline "resourceSummary"]]
+    <semantic-query
+        query="SELECT (COUNT(?subject) as ?num) WHERE {
+            ?subject a [[type]] .
+            [[#if condition]]
+                ?subject [[condition]] .
+            [[/if]]
+        }"
+        template="{{#each bindings}}[[i18n "entitiesSummaryPre" bundle="bso"]] {{num.value}} [[i18n "entitiesSummaryPost" (i18n label bundle="bso") bundle="bso"]]{{/each}}"
+    ></semantic-query>
+    [[#if browse]]
+        <div class="bottom">
+            <semantic-link 
+                iri="page:search"
+                urlqueryparam-browse="[[browse]]"
+            >
+                [[i18n "seeAll" bundle="bso"]]</semantic-link>
+        </div>
+    [[/if]]
+    [[#if link]]
+        <div class="bottom">
+            <semantic-link 
+                iri="[[link]]"
+            >
+                [[i18n "seeAll" bundle="bso"]]</semantic-link>
+        </div>
+    [[/if]]
+[[/inline]]
+
+[[> partial:pageFooter]]

@@ -1,0 +1,134 @@
+[[> partial:pageHeader]]
+
+[[> mdsRowPerson label="birth" displayllab="byBirthDates"]]
+
+[[> mdsRowPerson label="birth_years" displayllab="byBirthYear"]]
+
+[[> mdsRowPerson label="death" displayllab="byDeathDates"]]
+
+[[> mdsRowPerson label="death_years" displayllab="byDeathYears"]]
+
+[[> mdsRowPerson label="labels" displayllab="byLabels"]]
+
+[[> mdsRowPerson label="creations" displayllab="byCreations"]]
+
+[[> mdsRowPerson label="creation_roles" displayllab="byCreationRoles"]]
+
+[[> mdsRowPerson label="visual_items" displayllab="byVisualItems"]]
+
+[[> mdsRowPerson label="productions" displayllab="byProductions"]]
+
+[[> mdsRowPerson label="production_roles" displayllab="byProductionRoles"]]
+
+[[> mdsRowPerson label="objects" displayllab="byProductionObjects"]]
+
+
+[[#*inline "mdsRowPerson"]]
+<div class="bso-component separator panel">
+    <bs-row>
+        <bs-col md="2">
+            <h3>[[i18n [displayllab] bundle="bso"]]</h3>
+        </bs-col>
+        <bs-col md="10" class="bso-component card-container horizontal-scroll">
+            <div class="bso-component card-image-align-top" style="display: inherit;"> 
+                [[> mdsCardPerson label=[label] dim="2D"]]
+                [[> mdsCardPerson label=[label] dim="3D"]]
+            </div>
+        </bs-col>
+    </bs-row>
+</div>
+
+[[/inline]]
+
+
+[[#*inline "mdsCardPerson"]]
+
+<div class="bso-component card {{#if mode}}mode-{{mode}}{{else}}mode-crop{{/if}}">
+    <div class="card-image" style="width:750px;height:540px">
+        <mp-resource-thumbnail iri="https://static.swissartresearch.net/page/explore/persons/MDS/2D[[label]]">
+            <mp-resource-thumbnail-fallback>
+                <div class="bso-component icon" style="opacity:1">
+                    <iframe-embed iri="/assets/no_auth/mds/actor-distances/[[label]]/html/[[dim]].html" width=750 height=540> </iframe-embed>
+                </div>
+            </mp-resource-thumbnail-fallback>
+        </mp-resource-thumbnail>
+    </div>
+    <div class="card-body" style="height:50px">
+        <div class="label">
+            [[dim]]
+        </div>
+    </div>
+</div>
+
+[[/inline]]
+
+[[#*inline "mdsCard"]]
+
+<div class="bso-component card {{#if mode}}mode-{{mode}}{{else}}mode-crop{{/if}}">
+    <div class="card-image" style="width:750px;height:540px">
+        <mp-resource-thumbnail iri="[[uri]]">
+              <mp-resource-thumbnail-fallback>
+                <div class="bso-component icon" style="opacity:1">
+                    <iframe-embed iri="../assets/no_auth/mds/[[iframesrc]]" width=750 height=540> </iframe-embed>
+                </div>
+              </mp-resource-thumbnail-fallback>
+        </mp-resource-thumbnail>
+    </div>
+    <div class="card-body" style="height:50px">
+        <div class="label">
+            [[figcaption]]
+        </div>
+    </div>
+</div>
+
+[[/inline]]
+
+[[#*inline "cards"]]
+    <semantic-query
+        query="SELECT DISTINCT ?subject WHERE {
+            ?subject a [[type]] .
+            BIND(DAY(NOW()) as ?day)
+            BIND(SHA512(CONCAT(STR(?day), STR(?subject))) AS ?random)
+            [[> @partial-block ]]
+        } ORDER BY ?random LIMIT 10"
+        template="{{> template-image-summary}}"
+        >
+        <template id="template-image-summary">
+            {{#each bindings}}
+                {{> partial:cardObject}}
+            {{/each}}
+        </template>
+    </semantic-query>
+[[/inline]]
+
+
+[[#*inline "resourceSummary"]]
+    <semantic-query
+        query="SELECT (COUNT(?subject) as ?num) WHERE {
+            ?subject a [[type]] .
+            [[#if condition]]
+                ?subject [[condition]] .
+            [[/if]]
+        }"
+        template="{{#each bindings}}[[i18n "entitiesSummaryPre" bundle="bso"]] {{num.value}} [[i18n "entitiesSummaryPost" (i18n label bundle="bso") bundle="bso"]]{{/each}}"
+    ></semantic-query>
+    [[#if browse]]
+        <div class="bottom">
+            <semantic-link 
+                iri="page:search"
+                urlqueryparam-browse="[[browse]]"
+            >
+                [[i18n "seeAll" bundle="bso"]]</semantic-link>
+        </div>
+    [[/if]]
+    [[#if link]]
+        <div class="bottom">
+            <semantic-link 
+                iri="[[link]]"
+            >
+                [[i18n "seeAll" bundle="bso"]]</semantic-link>
+        </div>
+    [[/if]]
+[[/inline]]
+
+[[> partial:pageFooter]]
