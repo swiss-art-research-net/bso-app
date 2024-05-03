@@ -303,6 +303,11 @@ ol.page-breadcrumb {
         &.horizontal-scroll {
             overflow-x: scroll;
             flex-flow: unset;
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+            &::-webkit-scrollbar {
+                display: none;
+            }
         }
         .card {
             margin-bottom: 1rem;

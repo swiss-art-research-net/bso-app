@@ -236,6 +236,13 @@ ol.page-breadcrumb {
 .bso-component.card-container.horizontal-scroll {
   overflow-x: scroll;
   flex-flow: unset;
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+.bso-component.card-container.horizontal-scroll::-webkit-scrollbar {
+  display: none;
 }
 .bso-component.card-container .card {
   margin-bottom: 1rem;
