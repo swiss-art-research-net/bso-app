@@ -635,6 +635,7 @@
         VALUES(?type) {
             (search:Object)
         }
+        FILTER(?leaf != ?parent)
     }"
     template="{{> template}}">
     <template id="template">
@@ -1257,6 +1258,11 @@
                 ?appellation crm:P70i_is_documented_in ?meta .
                 ?appellation rdfs:label ?appellation_label .
             }
+        } UNION {
+            ?event crm:P14_carried_out_by ?subject .
+            ?event crm:P01i_is_domain_of ?pc14 .
+            ?pc14 crm:P14.1_in_the_role_of ?role ;
+                crm:P02_has_range ?subject .
         }
     } GROUP BY ?subject ?event ?subevent"
     template="{{> template}}">>
@@ -1273,7 +1279,13 @@
                             {{/ partial:assertStatement}}
                         </ul>
                     </td>
-                    <td>{{#if roles.value}}{{#each (split roles.value ' ')}}[[> addComma]]{{#> partial:assertStatement assertionSubject=../subevent.value assertionPredicate="[[resolvePrefix "crm:P2_has_type"]]" assertionObject=this  assertionObjectUsed="[[>thisIri]]"}}<semantic-link class-name="bso-tag Type" iri="{{assertionObject}}"></semantic-link>{{/ partial:assertStatement}}{{/each}}{{/if}} ({{#each (split global_roles.value ' ')}}[[> addComma]]<mp-label iri="{{this}}"></mp-label>{{/each}})</td>
+                    <td>
+                        {{#if subevent.value}}
+                            {{#if roles.value}}{{#each (split roles.value ' ')}}[[> addComma]]{{#> partial:assertStatement assertionSubject=../subevent.value assertionPredicate="[[resolvePrefix "crm:P2_has_type"]]" assertionObject=this  assertionObjectUsed="[[>thisIri]]"}}<semantic-link class-name="bso-tag Type" iri="{{assertionObject}}"></semantic-link>{{/ partial:assertStatement}}{{/each}}{{/if}} ({{#each (split global_roles.value ' ')}}[[> addComma]]<mp-label iri="{{this}}"></mp-label>{{/each}})
+                        {{else}}
+                            {{#if roles.value}}{{#each (split roles.value ' ')}}[[> addComma]]<semantic-link class-name="bso-tag Type" iri="{{this}}"></semantic-link>{{/each}}{{/if}} ({{#each (split global_roles.value ' ')}}[[> addComma]]<mp-label iri="{{this}}"></mp-label>{{/each}})
+                        {{/if}}
+                    </td>
                 </tr>
                 {{/each}}
             </table>
@@ -1302,7 +1314,9 @@
         query="SELECT DISTINCT ?subject (GROUP_CONCAT(DISTINCT ?role; SEPARATOR=' ') as ?roles) (GROUP_CONCAT(DISTINCT ?global_role; SEPARATOR=' ') as ?global_roles) WHERE {
             BIND(<[[>thisIri]]/meta> as ?meta)
             {
-                [[> thisForQuery]] ^crm:P46i_forms_part_of/crm:P108i_was_produced_by ?event .
+                [[> thisForQuery]] ^crm:P46i_forms_part_of ?parent .
+                ?parent crm:P108i_was_produced_by ?event .
+                FILTER(?parent != [[> thisForQuery]])
                 ?event a ?global_role .
                 ?global_role rdfs:subClassOf* crm:E12_Production .
             } UNION 
