@@ -635,6 +635,7 @@
         VALUES(?type) {
             (search:Object)
         }
+        FILTER(?leaf != ?parent)
     }"
     template="{{> template}}">
     <template id="template">
@@ -1313,7 +1314,9 @@
         query="SELECT DISTINCT ?subject (GROUP_CONCAT(DISTINCT ?role; SEPARATOR=' ') as ?roles) (GROUP_CONCAT(DISTINCT ?global_role; SEPARATOR=' ') as ?global_roles) WHERE {
             BIND(<[[>thisIri]]/meta> as ?meta)
             {
-                [[> thisForQuery]] ^crm:P46i_forms_part_of/crm:P108i_was_produced_by ?event .
+                [[> thisForQuery]] ^crm:P46i_forms_part_of ?parent .
+                ?parent crm:P108i_was_produced_by ?event .
+                FILTER(?parent != [[> thisForQuery]])
                 ?event a ?global_role .
                 ?global_role rdfs:subClassOf* crm:E12_Production .
             } UNION 
