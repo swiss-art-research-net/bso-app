@@ -1504,7 +1504,7 @@
 
 [[#*inline "field-visualisation-technique"]]
 <semantic-query 
-    query="SELECT ?technique WHERE {
+    query="SELECT DISTINCT ?technique WHERE {
         [[> thisForQuery]] crm:P108i_was_produced_by/crm:P32_used_general_technique ?technique .
     }"
     template="{{> template}}"
